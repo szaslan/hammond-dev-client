@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import './Assignments.css';
-import {BrowserRouter as Router, Link } from "react-router-dom";
+import {  Link } from "react-router-dom";
 import Loader from 'react-loader-spinner'
 
 
@@ -22,7 +22,7 @@ class Assignments extends Component{
     componentDidMount(){
         this.setState({loaded: true});
         const { match: { params } } = this.props;
-        this.setState({url: `/courses/${params.course_id}/assignments`});
+        this.setState({url: `/courses/${params.course_id}/assignments/`});
         fetch(`https://canvas.northwestern.edu/api/v1/courses/${params.course_id}/assignments?per_page=500&access_token=${this.state.apiKey}`)
         .then(res => res.json())
         .then(assignments => this.setState({assignments}));
@@ -31,24 +31,28 @@ class Assignments extends Component{
 
     render(){
         return(
-            <div>
+            <div className="all-assignments">
                 {this.state.loaded 
                 ?   
-                    <ul>
-                        {                //maps to a list of the assignments for this course
-                            this.state.assignments.map(assignments =>
-                                <li key={assignments.id}>{assignments.name}</li>)
-                        }
-                    </ul>
+                    <div >
+                        <ul className="assignment-list">
+                            {                //maps to a list of the assignments for this course
+                                this.state.assignments.map(assignments =>
+                                    <Link to={this.state.url + assignments.id}>
+                                    <li className="assignment-name"key={assignments.id}>{assignments.name}</li>
+                                    </Link>
+                                    )
+                            }
+                        </ul>
+                    </div>
                 :
-                <Loader type="Bars" color="black" height={80} width={80} />
-                  
+                    <Loader type="Bars" color="black" height={80} width={80} />
+
                 }
+
         </div>
         );
     }
-
-
 }
 
 export default Assignments;

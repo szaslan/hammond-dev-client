@@ -1,0 +1,16 @@
+.assignment-list{
+    list-style-type: none;
+
+}
+
+.assignment-name{
+    width:75%;
+    border: 1px solid grey;
+    margin: 10px auto;
+    
+}
+
+.all-assignments{
+    width:50vw;
+    float: left;
+}

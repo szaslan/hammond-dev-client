@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import './Courses.css';
-import {BrowserRouter as Router, Link, Redirect } from "react-router-dom";
-import CourseInfo from '../CourseInfo/CourseInfo';
+import {Link } from "react-router-dom";
 import Loader from 'react-loader-spinner'
 
 

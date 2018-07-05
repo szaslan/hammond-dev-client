@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import './students.css';
 import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
+import { Link } from "react-router-dom";
+
 
 class Students extends Component {
 
@@ -20,18 +22,18 @@ class Students extends Component {
 
         }
         this.toggle = this.toggle.bind(this);
-        this.handleClick = this.handleClick.bind(this);
+        // this.handleClick = this.handleClick.bind(this);
         this.filterList = this.filterList.bind(this);
         this.handleChange = this.handleChange.bind(this);
-        this.searchCourses = this.searchCourses.bind(this);
+        // this.searchCourses = this.searchCourses.bind(this);
         this.fetchCourses = this.fetchCourses.bind(this);
     }
 
-    handleClick(){
-        fetch('/api/students').then(res => res.json())
-        .then(students => this.setState({students}, () => console.log('Students fetched....', students )));
-        this.setState({showComponent: !this.state.showComponent});
-    }
+    // handleClick(){
+    //     fetch('/api/students').then(res => res.json())
+    //     .then(students => this.setState({students}, () => console.log('Students fetched....', students )));
+    //     this.setState({showComponent: !this.state.showComponent});
+    // }
 
     toggle() {
         this.setState(prevState => ({
@@ -46,13 +48,13 @@ class Students extends Component {
       }
 
       //search for courses using canvas ID
-      searchCourses(e){
-        e.preventDefault();
-        const userID = this.state.canvasID;
-        this.fetchCourses(userID);
-        console.log(this.state.courses);
-        this.setState({showUserInfo: true});
-      }
+    //   searchCourses(e){
+    //     e.preventDefault();
+    //     const userID = this.state.canvasID;
+    //     this.fetchCourses(userID);
+    //     console.log(this.state.courses);
+    //     this.setState({showUserInfo: true});
+    //   }
 
       fetchCourses(id){
         fetch(`https://canvas.northwestern.edu/api/v1/users/${id}/courses?access_token=${this.state.apiKey}`)
@@ -94,7 +96,7 @@ class Students extends Component {
                         null 
             }
             <input type="text" placeholder="Canvas UserID..." onChange={this.handleChange}/>
-            <button onClick={this.searchCourses}>Go!</button>
+            <button onClick={this.searchCourses}><Link to="/courses">Go!</Link></button>
 
             {this.state.showUserInfo
                 ?

@@ -7,6 +7,7 @@ import CourseInfo from './components/CourseInfo/CourseInfo';
 import Assignments from './components/Assignments/Assignments';
 import { BrowserRouter as Router, Route} from "react-router-dom";
 import CourseStudents from './components/CourseStudents/CourseStudents';
+import AssignmentInfo from './components/AssignmentInfo/AssignmentInfo';
 
 class App extends Component {
 
@@ -21,14 +22,17 @@ class App extends Component {
 
           {/*Need signup page*/}
 
-          <Route path="/students" exact component={Students}/>
+          <Route path="/user" exact component={Students}/>
 
           {/*List of Courses*/}
           <Route path="/courses"  exact component={Courses}/>
           <Route path="/courses/:course_id"  exact component={CourseInfo} />
 
           {/*Show assignments and students*/}
-          <Route path="/courses/:course_id/assignments" exact component={Assignments}/>
+          <Route path="/courses/:course_id/assignments"  component={Assignments}/>
+          <Route path="/courses/:course_id/assignments/:assignment_id" exact component={AssignmentInfo} />
+
+
           <Route path="/courses/:course_id/students" exact component={CourseStudents}/>
         </div>
       </Router>
