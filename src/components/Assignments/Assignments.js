@@ -30,13 +30,13 @@ class Assignments extends Component{
             apiKey: "1876~ypSApnhVIL4RWGQCp5oW7aJqw4NoP0kxvdKRiTVqcpGXVgzeToigIKbVBskcqk8u",
             assignments: [],
             url: '',
-            loaded: false
         }
     }
-     
+     componentWillMount(){
+         this.setState({assignments: null});
+     }
     //fetch assignments for course with course_id passed down
     componentDidMount(){
-        this.setState({loaded: true});
         const { match: { params } } = this.props;
         this.setState({url: `/courses/${params.course_id}/assignments/`});
         fetch(`https://canvas.northwestern.edu/api/v1/courses/${params.course_id}/assignments?per_page=500&access_token=${this.state.apiKey}`)
@@ -47,15 +47,21 @@ class Assignments extends Component{
  
 
     render(){
+
+        if (this.state.assignments === null){
+            return (
+                <Loader type="Circles" color="black" height={80} width={80} />
+            )
+        } else {
         return(
             <div className="all-assignments">
-                {this.state.loaded 
-                ?   
+
                     <div >
                         <Link to={`/courses/${this.props.match.params.course_id}`} >
                             <div>Back to Course Page</div>
                         </Link>
                         <ul className="assignment-list">
+                            <h3>Courses with points possible > 10</h3>
                             {                //maps to a list of the assignments for this course
                                 this.state.assignments.map(assignments =>
                                     <Link to={{pathname: this.state.url + assignments.id, state: {assignment_id: assignments.id} }} key={assignments.id}>
@@ -66,13 +72,11 @@ class Assignments extends Component{
                             }
                         </ul>
                     </div>
-                :
-                    <Loader type="Bars" color="black" height={80} width={80} />
-
-                }
+           
 
         </div>
         );
+    }
     }
 }
 

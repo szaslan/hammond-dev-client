@@ -36,7 +36,7 @@ class AssignmentInfo extends Component{
             this._fetchAssignmentData();
     }
 
-
+    //renders initially
     componentDidUpdate(prevProps){
         if(this.props.match.params.assignment_id !== prevProps.match.params.assignment_id){
             console.log("componendidupdate!");
@@ -52,6 +52,7 @@ class AssignmentInfo extends Component{
     //     }
     // }
 
+    //fetches assigment data
     _fetchAssignmentData(){
         const { match: { params } } = this.props;
         console.log("fetched!");
@@ -70,13 +71,17 @@ class AssignmentInfo extends Component{
 
         if (this.state.assignment === null)
         return(
+            <div className="assignment-info">
             <Loader type="Circles" color="black" height={80} width={80} />
+            </div>
         )
         else {
             return (
                 <div className="assignment-info" >
                 {console.log(this.state.assignment)}
-                <div>{this.state.assignment.name}</div>
+                    <div>{this.state.assignment.name}</div>
+                    <div>Assignment ID: {this.state.assignment.id}</div>
+                    <div>Points Poissible: {this.state.assignment.points_possible}</div>
                 </div>
             )
         }
