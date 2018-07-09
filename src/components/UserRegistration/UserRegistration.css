@@ -1,0 +1,8 @@
+.register-form{
+    width: 100vw;
+}
+
+.register-input{
+    margin: 0 auto;
+    display: flex;
+}

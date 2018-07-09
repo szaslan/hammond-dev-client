@@ -8,6 +8,7 @@ import Assignments from './components/Assignments/Assignments';
 import { BrowserRouter as Router, Route} from "react-router-dom";
 import CourseStudents from './components/CourseStudents/CourseStudents';
 import AssignmentInfo from './components/AssignmentInfo/AssignmentInfo';
+import UserRegistration from './components/UserRegistration/UserRegistration';
 
 class App extends Component {
 
@@ -19,6 +20,7 @@ class App extends Component {
         <div className="App">          
           {/* To login*/}
           <Route path="/" exact component={UserLogin}/>
+          <Route path="/register" exact component={UserRegistration} />
 
           {/*Need signup page*/}
 

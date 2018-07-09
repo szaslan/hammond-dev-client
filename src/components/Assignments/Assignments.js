@@ -4,6 +4,23 @@ import {  Link } from "react-router-dom";
 import Loader from 'react-loader-spinner'
 
 
+//FILTERS ASSIGNMENTS TO ONES WITH POINTS POSSIBLE > 10
+//USE THIS TO FILTER OUT ASSIGNMENTS THAT ARE NOT PEER REVIEWABLE
+//if (currAssignment.peer_reviews == true)
+function FilterAssignments(props){
+    const currAssignment = props.currAssigment;
+
+    if (currAssignment.points_possible > 10){
+        return (
+            <li key={currAssignment.id} className="assignment-name">{currAssignment.name}</li>
+        )
+    }
+    else {
+        return null;
+    }
+}
+
+
 class Assignments extends Component{
     constructor(props){
         super(props);
@@ -16,7 +33,6 @@ class Assignments extends Component{
             loaded: false
         }
     }
-
      
     //fetch assignments for course with course_id passed down
     componentDidMount(){
@@ -28,6 +44,7 @@ class Assignments extends Component{
         .then(assignments => this.setState({assignments}));
     }
 
+ 
 
     render(){
         return(
@@ -35,11 +52,15 @@ class Assignments extends Component{
                 {this.state.loaded 
                 ?   
                     <div >
+                        <Link to={`/courses/${this.props.match.params.course_id}`} >
+                            <div>Back to Course Page</div>
+                        </Link>
                         <ul className="assignment-list">
                             {                //maps to a list of the assignments for this course
                                 this.state.assignments.map(assignments =>
-                                    <Link to={this.state.url + assignments.id}>
-                                    <li className="assignment-name"key={assignments.id}>{assignments.name}</li>
+                                    <Link to={{pathname: this.state.url + assignments.id, state: {assignment_id: assignments.id} }} key={assignments.id}>
+                                    {/* <li className="assignment-name"key={assignments.id} >{assignments.name}</li> */}
+                                    <FilterAssignments currAssigment={assignments}/>
                                     </Link>
                                     )
                             }

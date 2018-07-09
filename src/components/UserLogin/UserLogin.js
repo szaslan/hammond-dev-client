@@ -18,7 +18,7 @@ class UserLogin extends Component {
 
         };
       }
-    
+
       getValidationState() {
         const length = this.state.value.length;
         if (length > 10) return 'success';
@@ -39,13 +39,11 @@ class UserLogin extends Component {
           
           this.setState({loggedIn: true});
         }
-        
-
       }
 
-      
-
-
+      componentDidMount(){
+        console.log("correct");
+      }
     
   render() {
 
@@ -53,23 +51,16 @@ class UserLogin extends Component {
 
       <div style={{maxWidth: 100}}>
 
-      <form onSubmit={this.handleSubmit}>
+      <form action="/login" method="GET">
 
-        <input type="text" placeholder="username" value={this.state.username} onChange={this.handleChange}/>
-        <input type="password" placeholder="password" value={this.state.password} onChange={this.handleChange}/>
-
-            {this.state.loggedIn ? (<Link to="/students" >
-            <input type="submit" value="Submit" />
-            </Link>)
-            :
-            (<Link to="/" >
-            <input type="submit" value="Submit" />
-            </Link>)
-          }
-            
-  
+        <input type="text" placeholder="username" value={this.state.username} onChange={this.handleChange} name="username"/>
+        <input type="password" placeholder="password" value={this.state.password} onChange={this.handleChange} name="password"/>
+        <input type="submit" value="Submit" />
       </form>
 
+      <Link to="/register">
+      <div>register</div>
+      </Link>
       
       </div>
 

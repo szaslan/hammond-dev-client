@@ -23,6 +23,8 @@ class CourseStudents extends Component{
         fetch(`https://canvas.northwestern.edu/api/v1/courses/${params.course_id}/users?per_page=500&access_token=${this.state.apiKey}`)
         .then(res => res.json())
         .then(students => this.setState({students}))
+        .catch();
+                
     }
 
 

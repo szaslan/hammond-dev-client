@@ -29,6 +29,9 @@ class CourseInfo extends Component{
     render(){
         return(
                 <div>
+                    <Link to={`/courses/`} >
+                    <div>All Courses </div>
+                    </Link>
                  {this.state.courseJSON.name}
 
                  <div>
