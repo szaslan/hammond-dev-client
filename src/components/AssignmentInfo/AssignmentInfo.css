@@ -1,5 +1,14 @@
 .assignment-info{
     margin-left: 50%;
+    width: 50vw;
     height: 100vh;
-    padding-top: 10vh;
+    padding-top: 40vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.assigment-labels, .buttons{
+    margin: 10px auto;
+    width: 75%;
 }

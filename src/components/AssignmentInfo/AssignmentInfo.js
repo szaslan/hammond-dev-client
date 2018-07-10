@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
 import './AssignmentInfo.css';
 import Loader from 'react-loader-spinner'
+import { Well, Row, Col, Breadcrumb } from 'react-bootstrap';
+import AnalyzeButton from '../AnalyzeButton/AnalyzeButton';
+
 
 
 
@@ -15,6 +18,7 @@ class AssignmentInfo extends Component{
             assignment: [],
             url: '',
             id: this.props.match.params.assignment_id,
+            assignmentClicked: false,
         }
     }
     //
@@ -55,6 +59,7 @@ class AssignmentInfo extends Component{
     //fetches assigment data
     _fetchAssignmentData(){
         const { match: { params } } = this.props;
+            this.setState({assignmentClicked: true});
         console.log("fetched!");
         this.setState({url: `/courses/${params.course_id}/assignments/`});
         fetch(`https://canvas.northwestern.edu/api/v1/courses/${params.course_id}/assignments/${params.assignment_id}?access_token=${this.state.apiKey}`)
@@ -62,43 +67,33 @@ class AssignmentInfo extends Component{
         .then(assignment => this.setState({assignment}))
     }
 
-   
-
-
-
 
     render(){
 
         if (this.state.assignment === null)
         return(
             <div className="assignment-info">
-            <Loader type="Circles" color="black" height={80} width={80} />
+                <Loader type="TailSpin" color="black" height={80} width={80} />
             </div>
         )
         else {
             return (
-                <div className="assignment-info" >
-                {console.log(this.state.assignment)}
-                    <div>{this.state.assignment.name}</div>
-                    <div>Assignment ID: {this.state.assignment.id}</div>
-                    <div>Points Poissible: {this.state.assignment.points_possible}</div>
-                </div>
+                // <div className="assignment-info" >
+                    //<div className="assigment-labels">{this.state.assignment.name}</div>
+                    //<div className="assigment-labels">Assignment ID: {this.state.assignment.id}</div>
+                   // <div className="assigment-labels">Points Poissible: {this.state.assignment.points_possible}</div>
+                   // <button className="assigment-labels buttons">Analyze!</button>
+                   // <button className="assigment-labels buttons">Finalize!</button>
+
+                    <div className="assignment-info">
+                            <strong>Title:</strong> {this.state.assignment.name}
+                            <AnalyzeButton />
+                    </div>
+                    
+//                </div>
             )
         }
-        // return(
-        //         <div className="assignment-info" >
 
-        //             {this.state.assignment 
-        //         ? 
-                    
-        //             this.state.assignment.name
-              
-        //         :
-        //         <Loader type="Circles" color="black" height={80} width={80} />
-        //     }
-        //             {console.log(this.state.assignment)}
-        //         </div>
-        // );
     }
 
 

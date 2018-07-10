@@ -2,6 +2,10 @@ import React, { Component } from 'react';
 import './Assignments.css';
 import {  Link } from "react-router-dom";
 import Loader from 'react-loader-spinner'
+import { Container, Jumbotron } from 'reactstrap';
+import { Well, Row, Col, Breadcrumb } from 'react-bootstrap';
+import Flexbox from 'flexbox-react';
+import AnalyzeButton from '../AnalyzeButton/AnalyzeButton';
 
 
 //FILTERS ASSIGNMENTS TO ONES WITH POINTS POSSIBLE > 10
@@ -21,6 +25,24 @@ function FilterAssignments(props){
 }
 
 
+
+
+
+// function buttonsInstance(courses, url){
+//     <Col xs={6} className="col4">
+//         {courses.map(courses => 
+//          <div className="div-student">
+//          <Link className="assignment-link" to={{pathname: url + courses.id, state: {assignment_id: courses.id} }} key={courses.id}>
+//          <FilterAssignments currAssigment={courses}/>
+//          </Link>
+//          <br></br>
+//      </div>
+//     )}
+//     </Col>
+// }
+
+
+
 class Assignments extends Component{
     constructor(props){
         super(props);
@@ -30,6 +52,7 @@ class Assignments extends Component{
             apiKey: "1876~ypSApnhVIL4RWGQCp5oW7aJqw4NoP0kxvdKRiTVqcpGXVgzeToigIKbVBskcqk8u",
             assignments: [],
             url: '',
+            title: this.props.location.state.course_id,
         }
     }
      componentWillMount(){
@@ -50,28 +73,52 @@ class Assignments extends Component{
 
         if (this.state.assignments === null){
             return (
-                <Loader type="Circles" color="black" height={80} width={80} />
+                <div className="all-assignments">
+                <Loader type="TailSpin" color="black" height={80} width={80} />
+                </div>
             )
         } else {
         return(
             <div className="all-assignments">
 
-                    <div >
-                        <Link to={`/courses/${this.props.match.params.course_id}`} >
-                            <div>Back to Course Page</div>
-                        </Link>
-                        <ul className="assignment-list">
-                            <h3>Courses with points possible > 10</h3>
-                            {                //maps to a list of the assignments for this course
-                                this.state.assignments.map(assignments =>
-                                    <Link to={{pathname: this.state.url + assignments.id, state: {assignment_id: assignments.id} }} key={assignments.id}>
-                                    {/* <li className="assignment-name"key={assignments.id} >{assignments.name}</li> */}
-                                    <FilterAssignments currAssigment={assignments}/>
-                                    </Link>
-                                    )
-                            }
-                        </ul>
-                    </div>
+                                <div>
+                <Jumbotron className="jumbo" fluid>
+                    <Container className="jumbo-container" fluid>
+                    <Row className="jumbo-row" fluid>
+                            <Col xs={10} className="col1" >
+                                <Row className="row-welcomes">
+                                <h1 className="welcome">&nbsp;</h1>
+                                </Row>
+                                <Row>
+                                <h1 className="name">Assignments</h1>
+                                </Row>
+                            </Col>
+                            <Col xs={1} className="col2">
+                                <Link to ="/">
+                                <button className="pull-right signout-button">Sign Out</button>
+                                </Link>
+                            </Col>
+                        </Row>
+                    </Container>
+                </Jumbotron>
+                <Breadcrumb className="breadcrumb1">
+                    <Breadcrumb.Item className="breadcrumb-item" href="/courses">Home</Breadcrumb.Item>
+                    <Breadcrumb.Item className="breadcrumb-item" href={`/courses/${this.props.match.params.course_id}`}>
+                        {this.state.title}
+                        {console.log(this.props.match.params.title)}
+                    </Breadcrumb.Item>
+                    {console.log(this.state.assignments)}
+                    <Breadcrumb.Item className="breadcrumb-item" active>Assignments</Breadcrumb.Item>
+                </Breadcrumb>
+                <ul className="assignment-list">
+                            {this.state.assignments.map(assignments =>
+                                    <Link className="assignment-link" to={{ pathname: this.state.url + assignments.id, state: { assignment_id: assignments.id } }} key={assignments.id}>
+                                        <FilterAssignments currAssigment={assignments} />
+                                    </Link>                            
+                            )}
+                            
+                    </ul>
+            </div>
            
 
         </div>

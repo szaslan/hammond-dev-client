@@ -14,40 +14,54 @@ class CourseStudents extends Component{
             loaded: false,
         }
     }
+
+    componentWillMount(){
+        this.setState({students: []})
+    }
      
     //fetch assignments for course with course_id passed down
     componentDidMount(){
-        this.setState({loaded: true})
         const { match: { params } } = this.props;
         this.setState({url: `/courses/${params.course_id}/students`});
         fetch(`https://canvas.northwestern.edu/api/v1/courses/${params.course_id}/users?per_page=500&access_token=${this.state.apiKey}`)
         .then(res => res.json())
         .then(students => this.setState({students}))
-        .catch();
+        .catch(this.setState({students: null}))
                 
     }
 
 
     render(){
+
+        if (this.state.students == []){
+            return(
+                <Loader type="TailSpin" color="black" height={80} width={80} />
+            )
+        }
+        else if(this.state.students === null) {
+            return (
+                <h1>Error! No students found!</h1>
+            )
+        }
+        
+        else{
+
+        
         return(
             <div>
-                {this.state.loaded
-                     ?
-                    //maps to a list of the assignments for this course
+    
                     <ul>
                         {
                             this.state.students.map(students =>
                                 <li key={students.id}>{students.name}</li>)
                         }
                     </ul>
-                    :
-                    <Loader type="Bars" color="black" height={80} width={80} />
-        }
         </div>
         );
     }
 
 
+}
 }
 
 export default CourseStudents;
