@@ -6,7 +6,7 @@ import { Container, Jumbotron } from 'reactstrap';
 import { Well, Row, Col, Breadcrumb } from 'react-bootstrap';
 import Flexbox from 'flexbox-react';
 import AnalyzeButton from '../AnalyzeButton/AnalyzeButton';
-
+import AssignmentInfo from '../AssignmentInfo/AssignmentInfo';
 
 //FILTERS ASSIGNMENTS TO ONES WITH POINTS POSSIBLE > 10
 //USE THIS TO FILTER OUT ASSIGNMENTS THAT ARE NOT PEER REVIEWABLE
@@ -14,7 +14,7 @@ import AnalyzeButton from '../AnalyzeButton/AnalyzeButton';
 function FilterAssignments(props){
     const currAssignment = props.currAssigment;
 
-    if (currAssignment.points_possible > 10){
+    if (currAssignment.points_possible > 1){
         return (
             <li key={currAssignment.id} className="assignment-name">{currAssignment.name}</li>
         )
@@ -51,12 +51,13 @@ class Assignments extends Component{
         this.state = {
             apiKey: "1876~ypSApnhVIL4RWGQCp5oW7aJqw4NoP0kxvdKRiTVqcpGXVgzeToigIKbVBskcqk8u",
             assignments: [],
+            loaded: false,
             url: '',
-            title: this.props.location.state.course_id,
+            ...props,
         }
     }
      componentWillMount(){
-         this.setState({assignments: null});
+         this.setState({loaded: true});
      }
     //fetch assignments for course with course_id passed down
     componentDidMount(){
@@ -67,11 +68,13 @@ class Assignments extends Component{
         .then(assignments => this.setState({assignments}));
     }
 
+   
+
  
 
     render(){
 
-        if (this.state.assignments === null){
+        if (!this.state.loaded){
             return (
                 <div className="all-assignments">
                 <Loader type="TailSpin" color="black" height={80} width={80} />
@@ -103,16 +106,16 @@ class Assignments extends Component{
                 </Jumbotron>
                 <Breadcrumb className="breadcrumb1">
                     <Breadcrumb.Item className="breadcrumb-item" href="/courses">Home</Breadcrumb.Item>
-                    <Breadcrumb.Item className="breadcrumb-item" href={`/courses/${this.props.match.params.course_id}`}>
-                        {this.state.title}
-                        {console.log(this.props.match.params.title)}
+                    <Breadcrumb.Item className="breadcrumb-item" href={`/courses/${this.state.match.params.course_id}`}>
+                        {this.state.location.state.name ? this.state.location.state.name : null }
+                        {console.log(this.state.name)}
                     </Breadcrumb.Item>
                     {console.log(this.state.assignments)}
                     <Breadcrumb.Item className="breadcrumb-item" active>Assignments</Breadcrumb.Item>
                 </Breadcrumb>
                 <ul className="assignment-list">
                             {this.state.assignments.map(assignments =>
-                                    <Link className="assignment-link" to={{ pathname: this.state.url + assignments.id, state: { assignment_id: assignments.id } }} key={assignments.id}>
+                                    <Link className="assignment-link" to={{ pathname: this.state.url + assignments.id, state: { assignment_id: assignments.id, name: this.state.location.state.name, course_id: this.state.match.params.course_id } }} key={assignments.id}>
                                         <FilterAssignments currAssigment={assignments} />
                                     </Link>                            
                             )}

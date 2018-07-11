@@ -7,32 +7,56 @@ class UserRegistration extends Component {
         super(props, context); 
 
         this.state = {
-    
+
+          firstName: '',
+          lastName: '',
           email: '',
           password: '',
+          passwordMatch: '',
           success: false,
           errors: {},
+          msg: '',
         }
 
         this.handleSubmit = this.handleSubmit.bind(this);
-        this.handleUsername = this.handleUsername.bind(this);
-        this.handlePassword = this.handlePassword.bind(this);
+        this.handleChange = this.handleChange.bind(this);
       }
 
 
-      handleUsername(e){
-        e.preventDefault();
-        this.setState({email: e.target.value});
-      }
-
-      handlePassword(e){
-        e.preventDefault();
-        this.setState({password: e.target.value});
+      handleChange(e){
+        this.setState({[e.target.name]: e.target.value});
       }
 
 
-      handleSubmit(){
-        fetch('/register', {method: "POST"})
+      handleSubmit(event){
+        event.preventDefault();
+
+        var data = {
+          firstName: this.state.firstName,
+          lastName: this.state.lastName,
+          email: this.state.email,
+          password: this.state.password,
+        }
+        console.log(data);
+
+
+
+        fetch('/register', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'},
+          body: JSON.stringify(data)
+          })
+          .then(function(res){
+            if (res.status > 400){
+              throw new Error("Bad response from server")
+            }
+          })
+          .then(function(data){
+            if( data == "success"){
+              this.setState({msg: "Registration successful!"})
+            }
+          })
         .catch(error => console.log(error));
       
     }
@@ -43,14 +67,15 @@ class UserRegistration extends Component {
 
       <div>
       {/* <form action="/register" method="post"> */}
-        <form className="register-form" action="/register" method="POST" onSubmit={this.handleSubmit}>
-          <input type="text" placeholder="First Name"  name="first_name" className="register-input"/>
-          <input type="text" placeholder="Last Name" name="last_name"className="register-input" />
-          <input type="text" placeholder="Email" name="email" className="register-input" value={this.state.email} onChange={this.handleUsername}/>
-          <input type="password" placeholder="password" name="password" className="register-input" value={this.state.password} onChange={this.handlePassword}/>
-          <input type="password" placeholder="Password Match"  className="register-input" name="passwordMatch"/>
+        <form className="register-form" onSubmit={this.handleSubmit}>
+          <input type="text" placeholder="First Name"  name="firstName" className="register-input"  onChange={this.handleChange}/>
+          <input type="text" placeholder="Last Name" name="lastName"className="register-input"   onChange={this.handleChange}/>
+          <input type="text" placeholder="Email" name="email" className="register-input"  onChange={this.handleChange}/>
+          <input type="password" placeholder="password" name="password" className="register-input" onChange={this.handleChange}/>
+          <input type="password" placeholder="Password Match"  className="register-input" name="passwordMatch" onChange={this.handleChange}/>
           <input type="submit"  className="register-input"/>
         </form>
+
 
         {this.state.success ? 
           <div>Registered!</div>
