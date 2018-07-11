@@ -22,9 +22,6 @@ function renderCourseButton(title, i) {
 class Courses extends Component{
     constructor(props){
         super(props);
-
-        
-
         this.state = {
             apiKey: "1876~ypSApnhVIL4RWGQCp5oW7aJqw4NoP0kxvdKRiTVqcpGXVgzeToigIKbVBskcqk8u",
             courses: [],

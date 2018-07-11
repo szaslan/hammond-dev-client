@@ -25,7 +25,9 @@
    .row-title{
        min-width:500px;
        margin-left:0px!important;
+       text-align:left;
    }
+   
    .name{
      color:var(--navy-plum);
      font-size:50px !important;
@@ -39,6 +41,7 @@
    .col2{
      margin-right:0px !important;
      padding-right:0px !important;
+     text-align:right;
      width: 16vw!important; /*19vw w/o scroll bar; 17vw w/ scroll bar*/
    }
    .signout-button{

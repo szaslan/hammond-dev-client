@@ -30,7 +30,6 @@ export default class Accordion extends Component {
                 )
                 :
                 "none"}
-
             </CardBody>
           </Card>
         </Collapse>
