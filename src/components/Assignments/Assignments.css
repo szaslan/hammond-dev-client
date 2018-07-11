@@ -2,102 +2,38 @@ html * {
     font-family: Sailec-Regular
 }
 
+/* ------------Assignments List Settings------------ */
+.all-assignments{
+  width:50vw;
+  float: left;
+}
 .assignment-list{
     list-style-type: none;
     margin-top:10vh;
-
 }
-
 .assignment-link, .assignment-link:hover {
     text-decoration: none;
     color: black;
-    
 }
-
 .assignment-name{
     width:75%;
     background-color: #E9F0F0;
-
     margin: 25px auto;       
     /* box-shadow: 2px 2px 4px 0 rgba(0,0,0,0.50); */
     font-family: Sailec-Regular;
 }
-
-
-
 .assignment-name:hover{
     transform: translate(0, -5px);
     box-shadow: 0px 12px 5px -8px rgba(0,0,0,0.2);
 }
+  
+  /* ------------Breadcrumbs settings------------ */
+  .breadcrumb1{
+    font-size:18px;
+  }
 
-.all-assignments{
-    width:50vw;
-    float: left;
-}
 
 /*
-deep plum: #25283d
-violet: #8f3985
-lavendar: #a675a1
-dusty rose: #cea2ac
-light peach: #efd9ce
-apricot: #e4b890
-
-new-
-apricot: #ffb997
-grapefruit: #f67e7d
-violet: #843b62
-navy plum: #0b032d
-lavendar: #74546a light #a37494
-*/
-
-:root{
-    --apricot: #ffb997;
-    --light-peach: #efd9ce;
-    --grapefruit: #f67e7d;
-    --violet:#843b62;
-    --navy-plum:#0b032d;
-    --dark-lavendar:#74546a;
-    --light-lavendar1:#a37494;
-    --light-lavendar2:#bd8eae;
-  }
-  
-  body {
-    margin: 0;
-    padding: 0;
-    font-family: sans-serif;
-    background-color:white !important;
-    float:left;
-  }
-  .screen{
-    width:100vw;
-  }
-  
-  .jumbo{
-    padding-top: 15px !important;
-    padding-bottom: 10px !important;
-    background-color: var(--light-lavendar2) !important;
-    margin: 0px !important;
-    padding-left: 15px;
-    min-width: 650px!important;
-    width: 100vw;
-   }
-   .jumbo-container{
-     width:100vw;
-     min-width:800px;
-   }
-  
-  .name{
-    color:var(--navy-plum);
-    font-size:50px !important;
-    float:left;
-  }
-  .welcome{
-    color:var(--navy-plum);
-    font-size:40px !important;
-  
-  }
-
   .row {
       margin-left: 15px !important;
   }
@@ -118,7 +54,6 @@ lavendar: #74546a light #a37494
   }
   .about-button{
     border:none;
-    /*box-shadow:2px 2px gray;*/
     padding:5px;
     padding-left:7px;
     padding-right:7px;
@@ -139,7 +74,6 @@ lavendar: #74546a light #a37494
   }
   .signout-button{
     border:none;
-    /*box-shadow:2px 2px gray;*/
     padding:5px;
     padding-left:7px;
     padding-right:7px;
@@ -210,9 +144,7 @@ lavendar: #74546a light #a37494
     list-style-type: none;
 
   }
-  .breadcrumb1{
-    font-size:18px;
-  }
+  
   .dropdown-toggle{
     font-size:18px!important;
     background-color:lightgray!important;
@@ -266,7 +198,6 @@ lavendar: #74546a light #a37494
     margin:0px;
     margin-top:10px;
     padding-top:0px;
-    /* padding-left:14px; */
     width:100%;
   }
   .card1{
@@ -281,5 +212,5 @@ lavendar: #74546a light #a37494
   }
   .accordion-flexbox{
     padding-top:10px;
-  }
+  }*/
 

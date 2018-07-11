@@ -4,9 +4,6 @@ import Loader from 'react-loader-spinner'
 import { Well, Row, Col, Breadcrumb } from 'react-bootstrap';
 import AnalyzeButton from '../AnalyzeButton/AnalyzeButton';
 
-
-
-
 class AssignmentInfo extends Component{
     constructor(props){
         super(props);
@@ -89,8 +86,6 @@ class AssignmentInfo extends Component{
                             <strong>Title:</strong> {this.state.assignment.name}
                             <AnalyzeButton />
                     </div>
-                    
-//                </div>
             )
         }
 

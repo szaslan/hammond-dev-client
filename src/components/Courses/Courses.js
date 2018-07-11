@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
 import './Courses.css';
 import {Link } from "react-router-dom";
-import Loader from 'react-loader-spinner'
+import Loader from 'react-loader-spinner';
 import { Container, Jumbotron } from 'reactstrap';
 import { Well, Row, Col, Breadcrumb } from 'react-bootstrap';
 import Flexbox from 'flexbox-react';
+import JumbotronComp from '../JumbotronComp/JumbotronComp';
 
 
 const COURSES = ['EECS 348: Intro to Artificial Intelligence', 'EECS 397: Innovation in Journalism and Technology', 'EECS 397: Building Technologies for the Law'];
@@ -60,31 +61,12 @@ class Courses extends Component{
         }
         else {
         return(
-
             <div>
-                <Jumbotron className="jumbo" fluid>
-                    <Container className="jumbo-container" fluid>
-                        <Row className="jumbo-row" fluid>
-                            <Col xs={11} className="col1" >
-                                <Row calssName="row-title">
-                                    <h1 className="welcome">Welcome,</h1>
-                                </Row>
-                                <Row className="row-title">
-                                    <h1 className="name">Professor Hammond</h1>
-                                </Row>
-                            </Col>
-                            <Col xs={1} className="col2">
-                                <Link to="/">
-                                    <button className="pull-right signout-button">Sign Out</button>
-                                </Link>
-                            </Col>
-                        </Row>
-                    </Container>
-                </Jumbotron>
+                <JumbotronComp mainTitle ="Professor Hammond" secondaryTitle="Welcome," />
 
 
                 <Container className="well1-container" fluid>
-                        <Flexbox className="well2-flexbox" minWidth="700px" width="90vw"
+                        <Flexbox className="well1-flexbox" minWidth="700px" width="90vw"
                             flexWrap="wrap" inline="true">
                             {this.state.courses ?
                                 this.state.courses.map(courses =>
