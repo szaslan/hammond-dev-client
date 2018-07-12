@@ -35,7 +35,6 @@ class AnalyzeButton extends Component {
         {
           (this.state.buttonPressed ?
             <div>
-              <Row>
                 <Well className="well2">
                   <strong>Average Grade:</strong> 8.4/10 <br></br>
                   <strong>Completed Peer Reviews:</strong> 20/30
@@ -46,7 +45,6 @@ class AnalyzeButton extends Component {
                     <Accordion name="Missing Peer Reviews" content={HARSHNAME}/>
                   </Flexbox>
                 </Well>
-              </Row>
 
             </div>
             :
