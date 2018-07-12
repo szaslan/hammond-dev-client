@@ -52,6 +52,7 @@ class Assignments extends Component {
             assignments: [],
             url: '',
             title: this.props.location.state.course_id,
+            ...props,
         }
     }
     componentWillMount() {
@@ -85,26 +86,26 @@ class Assignments extends Component {
 
                     <Breadcrumb className="breadcrumb1">
                         <Breadcrumb.Item className="breadcrumb-item" href="/courses">Home</Breadcrumb.Item>
-                        <Breadcrumb.Item className="breadcrumb-item breadcrumb-item1" href={`/courses/${this.props.match.params.course_id}`}>
-                            {this.state.title}
-                            {console.log(this.props.match.params.title)}
+                        <Breadcrumb.Item className="breadcrumb-item breadcrumb-item1" href={`/courses/${this.state.match.params.course_id}`}>
+                            {this.state.location.state.name}
+                            {console.log(this.state.location.state)}
                         </Breadcrumb.Item>
                         {console.log(this.state.assignments)}
                         <Breadcrumb.Item className="breadcrumb-item" active>Assignments</Breadcrumb.Item>
                     </Breadcrumb>
+                    
                     <div className="all-assignments">
-                        
-                            <ul className="assignment-list">
-                                {this.state.assignments.map(assignments =>
-                                    <Link className="assignment-link" to={{ pathname: this.state.url + assignments.id, state: { assignment_id: assignments.id } }} key={assignments.id}>
-                                        <FilterAssignments currAssigment={assignments} />
-                                    </Link>
-                                )}
 
-                            </ul>
-                            
-                        
+                        <ul className="assignment-list">
+                            {this.state.assignments.map(assignments =>
+                                <Link className="assignment-link" to={{ pathname: this.state.url + assignments.id, state: { assignment_id: assignments.id,name:this.state.location.state.name, course_id:this.state.match.params.course_id } }} key={assignments.id}>
+                                    <FilterAssignments currAssigment={assignments} />
+                                </Link>
+                            )}
+
+                        </ul>
                     </div>
+                    
                 </div>
             );
         }
