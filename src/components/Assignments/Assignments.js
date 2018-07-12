@@ -7,7 +7,8 @@ import { Well, Row, Col, Breadcrumb } from 'react-bootstrap';
 import Flexbox from 'flexbox-react';
 import AnalyzeButton from '../AnalyzeButton/AnalyzeButton';
 import JumbotronComp from '../JumbotronComp/JumbotronComp';
-import AssignmentInfo from '../AssignmentInfo/AssignmentInfo'
+import AssignmentInfo from '../AssignmentInfo/AssignmentInfo';
+import '../BreadcrumbComp/BreadcrumbComp.css'
 
 //FILTERS ASSIGNMENTS TO ONES WITH POINTS POSSIBLE > 10
 //USE THIS TO FILTER OUT ASSIGNMENTS THAT ARE NOT PEER REVIEWABLE
@@ -84,7 +85,7 @@ class Assignments extends Component {
 
                     <Breadcrumb className="breadcrumb1">
                         <Breadcrumb.Item className="breadcrumb-item" href="/courses">Home</Breadcrumb.Item>
-                        <Breadcrumb.Item className="breadcrumb-item" href={`/courses/${this.props.match.params.course_id}`}>
+                        <Breadcrumb.Item className="breadcrumb-item breadcrumb-item1" href={`/courses/${this.props.match.params.course_id}`}>
                             {this.state.title}
                             {console.log(this.props.match.params.title)}
                         </Breadcrumb.Item>

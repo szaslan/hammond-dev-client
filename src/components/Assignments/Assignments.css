@@ -5,11 +5,13 @@ html * {
 /* ------------Assignments List Settings------------ */
 .all-assignments{
   width:50vw;
-  float: left;
 }
 .assignment-list{
     list-style-type: none;
-    margin-top:10vh;
+    margin-top:10px;
+    padding-left:25px;
+    text-align:left;
+    max-width:40vw;
 }
 .assignment-link, .assignment-link:hover {
     text-decoration: none;
@@ -18,9 +20,12 @@ html * {
 .assignment-name{
     width:75%;
     background-color: #E9F0F0;
-    margin: 25px auto;       
+    font-size:20px;
+    margin: 25px 0px;       
     /* box-shadow: 2px 2px 4px 0 rgba(0,0,0,0.50); */
     font-family: Sailec-Regular;
+    padding-right:5px;
+    padding-left:5px;
 }
 .assignment-name:hover{
     transform: translate(0, -5px);

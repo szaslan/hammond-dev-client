@@ -5,6 +5,7 @@ import { Well, Row, Col, Breadcrumb } from 'react-bootstrap';
 import Flexbox from 'flexbox-react';
 import { Container, Jumbotron } from 'reactstrap';
 import JumbotronComp from '../JumbotronComp/JumbotronComp'
+import '../BreadcrumbComp/BreadcrumbComp.css';
 
 class CourseInfo extends Component {
     constructor(props) {
@@ -58,7 +59,7 @@ class CourseInfo extends Component {
                 
                 <Breadcrumb className="breadcrumb1">
                     <Breadcrumb.Item className="breadcrumb-item" href="/courses/">Home</Breadcrumb.Item>
-                    <Breadcrumb.Item className="breadcrumb-item" active>{this.state.courseJSON.name}</Breadcrumb.Item>
+                    <Breadcrumb.Item className="breadcrumb-item breadcrumb-item1" active>{this.state.courseJSON.name}</Breadcrumb.Item>
                 </Breadcrumb>
                 <Container className="well1-container" fluid>
                     <Flexbox className="big-buttons-flexbox" minWidth="700px" width="60vw" justifyContent="center"
