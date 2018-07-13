@@ -19,6 +19,7 @@ class AssignmentInfo extends Component{
             url: '',
             id: this.props.match.params.assignment_id,
             assignmentClicked: false,
+            ...props,
         }
     }
     //
@@ -84,7 +85,7 @@ class AssignmentInfo extends Component{
                    // <div className="assigment-labels">Points Poissible: {this.state.assignment.points_possible}</div>
                    // <button className="assigment-labels buttons">Analyze!</button>
                    // <button className="assigment-labels buttons">Finalize!</button>
-
+                   
                     <div className="assignment-info">
                             <strong>Title:</strong> {this.state.assignment.name}
                             <AnalyzeButton />

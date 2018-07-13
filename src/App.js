@@ -5,10 +5,13 @@ import UserLogin from './components/UserLogin/UserLogin';
 import Courses from './components/Courses/Courses';
 import CourseInfo from './components/CourseInfo/CourseInfo';
 import Assignments from './components/Assignments/Assignments';
-import { BrowserRouter as Router, Route} from "react-router-dom";
+import { Router, Route, Switch, Redirect} from "react-router-dom";
 import CourseStudents from './components/CourseStudents/CourseStudents';
 import AssignmentInfo from './components/AssignmentInfo/AssignmentInfo';
 import UserRegistration from './components/UserRegistration/UserRegistration';
+import createBrowserHistory from 'history/createBrowserHistory'
+
+const history = createBrowserHistory();
 
 class App extends Component {
 
@@ -16,7 +19,8 @@ class App extends Component {
   
   render() {
     return (
-      <Router>
+      <Router history={history}>
+        <Switch>
         <div className="App">          
           {/* To login*/}
           <Route path="/" exact component={UserLogin}/>
@@ -37,6 +41,7 @@ class App extends Component {
 
           <Route path="/courses/:course_id/students" exact component={CourseStudents}/>
         </div>
+        </Switch>
       </Router>
 
     );
