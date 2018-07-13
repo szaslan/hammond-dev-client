@@ -44,8 +44,10 @@ function FilterAssignments(props){
 
 
 class Assignments extends Component{
-    constructor(props){
-        super(props);
+    constructor(props, context){
+        super(props, context);
+
+        // this.defaultProps = this.defaultProps.bind(this);
 
         //URL is the current url while taking in the parameters from the props of the previous url
         this.state = {
@@ -56,16 +58,25 @@ class Assignments extends Component{
             ...props,
         }
     }
+
+    static defaultState = {
+        location: {
+            state: {
+                name: "",
+            }
+        }
+    }
      componentWillMount(){
          this.setState({assignments: null});
      }
     //fetch assignments for course with course_id passed down
     componentDidMount(){
         const { match: { params } } = this.props;
-        this.setState({url: `/courses/${params.course_id}/assignments/`});
+        this.setState({url: `/courses/${params.course_id}/${params.assignment_name}/`});
         fetch(`https://canvas.northwestern.edu/api/v1/courses/${params.course_id}/assignments?per_page=500&access_token=${this.state.apiKey}`)
         .then(res => res.json())
-        .then(assignments => this.setState({assignments}));
+        .then(assignments => this.setState({assignments}))
+        .then(this.setState({mounted: true}))
 
     }
 
@@ -107,7 +118,7 @@ class Assignments extends Component{
                 <Breadcrumb className="breadcrumb1">
                     <Breadcrumb.Item className="breadcrumb-item" href="/courses">Home</Breadcrumb.Item>
                     <Breadcrumb.Item className="breadcrumb-item" href={`/courses/${this.state.match.params.course_id}`}>
-                        {this.state.assignments    ? this.state.location.state.name : null }
+                        {this.props.match.params.assignment_name} 
                         {console.log(this.state.name)}
                     </Breadcrumb.Item>
                     {console.log(this.state.assignments)}
@@ -119,7 +130,7 @@ class Assignments extends Component{
                 {this.state.assignments ?
                 
                 this.state.assignments.map(assignments =>
-                    <Link className="assignment-link" to={{ pathname: this.state.url + assignments.id, state: { assignment_id: assignments.id, name: this.state.location.state.name, course_id: this.state.match.params.course_id } }} key={assignments.id}>
+                    <Link className="assignment-link" to={{ pathname: this.state.url + assignments.id, state: { assignment_id: assignments.id, name: this.state.match.params.assignment_name, course_id: this.state.match.params.course_id } }} key={assignments.id}>
                         <FilterAssignments currAssigment={assignments}   />
                     </Link>                            
             )

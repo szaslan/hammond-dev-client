@@ -43,6 +43,9 @@ class Courses extends Component{
         .then(res => res.json())
         .then(courses => this.setState({courses}))
         .then(courses => this.props = courses);
+
+        fetch('/courses')
+        .then(res => console.log(res));
     }
 
     onClick(){

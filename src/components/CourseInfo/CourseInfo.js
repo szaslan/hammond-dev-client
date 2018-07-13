@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import './CourseInfo.css';
-import {Link } from "react-router-dom";
+import {Link, NavLink } from "react-router-dom";
 import { Well, Row, Col, Breadcrumb } from 'react-bootstrap';
 import Flexbox from 'flexbox-react';
 import { Container, Jumbotron } from 'reactstrap';
@@ -52,7 +52,7 @@ class CourseInfo extends Component{
                         </Row>
                     </Container>
                 </Jumbotron>
-                <Breadcrumb className="breadcrumb1">
+                <Breadcrumb className="breadcrumb1">    
                     <Breadcrumb.Item className="breadcrumb-item" href="/courses/">Home</Breadcrumb.Item>
                     <Breadcrumb.Item className="breadcrumb-item" active>{this.state.courseJSON.name}</Breadcrumb.Item>
                 </Breadcrumb>
@@ -63,7 +63,7 @@ class CourseInfo extends Component{
                             <Flexbox 
                             justifyContent="space-around" 
                             flexWrap = "nowrap">
-                            <Link to={{pathname: this.state.url + "/assignments", state: {name: this.state.courseJSON.name}  }}>
+                            <Link to={{pathname: this.state.url + '/'+ this.state.courseJSON.name, state: {name: this.state.courseJSON.name}, }}>
                             <button className="pull-left big-button">Assignments</button>
                             </Link>
                             <Link to={this.state.url + "/students"}>

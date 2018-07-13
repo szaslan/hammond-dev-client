@@ -62,7 +62,7 @@ class AssignmentInfo extends Component{
         const { match: { params } } = this.props;
             this.setState({assignmentClicked: true});
         console.log("fetched!");
-        this.setState({url: `/courses/${params.course_id}/assignments/`});
+        this.setState({url: `/courses/${params.course_id}/${params.assignment_name}/`});
         fetch(`https://canvas.northwestern.edu/api/v1/courses/${params.course_id}/assignments/${params.assignment_id}?access_token=${this.state.apiKey}`)
         .then(res => res.json())
         .then(assignment => this.setState({assignment}))
