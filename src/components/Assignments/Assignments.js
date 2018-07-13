@@ -57,7 +57,7 @@ class Assignments extends Component{
         }
     }
      componentWillMount(){
-         this.setState({loaded: true});
+         this.setState({assignments: null});
      }
     //fetch assignments for course with course_id passed down
     componentDidMount(){
@@ -66,6 +66,7 @@ class Assignments extends Component{
         fetch(`https://canvas.northwestern.edu/api/v1/courses/${params.course_id}/assignments?per_page=500&access_token=${this.state.apiKey}`)
         .then(res => res.json())
         .then(assignments => this.setState({assignments}));
+
     }
 
    
@@ -74,17 +75,16 @@ class Assignments extends Component{
 
     render(){
 
-        if (!this.state.loaded){
-            return (
-                <div className="all-assignments">
-                <Loader type="TailSpin" color="black" height={80} width={80} />
-                </div>
-            )
-        } else {
+        // if (this.state.assignments === null){
+        //     return (
+        //         <div className="all-assignments">
+        //         <Loader type="TailSpin" color="black" height={80} width={80} />
+        //         </div>
+        //     )
+        // } else {
         return(
-            <div className="all-assignments">
-
-                                <div>
+            <div>
+                <div>
                 <Jumbotron className="jumbo" fluid>
                     <Container className="jumbo-container" fluid>
                     <Row className="jumbo-row" fluid>
@@ -107,20 +107,28 @@ class Assignments extends Component{
                 <Breadcrumb className="breadcrumb1">
                     <Breadcrumb.Item className="breadcrumb-item" href="/courses">Home</Breadcrumb.Item>
                     <Breadcrumb.Item className="breadcrumb-item" href={`/courses/${this.state.match.params.course_id}`}>
-                        {this.state.location.state.name ? this.state.location.state.name : null }
+                        {this.state.assignments    ? this.state.location.state.name : null }
                         {console.log(this.state.name)}
                     </Breadcrumb.Item>
                     {console.log(this.state.assignments)}
                     <Breadcrumb.Item className="breadcrumb-item" active>Assignments</Breadcrumb.Item>
                 </Breadcrumb>
+                <div className="all-assignments">
+
                 <ul className="assignment-list">
-                            {this.state.assignments.map(assignments =>
-                                    <Link className="assignment-link" to={{ pathname: this.state.url + assignments.id, state: { assignment_id: assignments.id, name: this.state.location.state.name, course_id: this.state.match.params.course_id } }} key={assignments.id}>
-                                        <FilterAssignments currAssigment={assignments} />
-                                    </Link>                            
-                            )}
+                {this.state.assignments ?
+                
+                this.state.assignments.map(assignments =>
+                    <Link className="assignment-link" to={{ pathname: this.state.url + assignments.id, state: { assignment_id: assignments.id, name: this.state.location.state.name, course_id: this.state.match.params.course_id } }} key={assignments.id}>
+                        <FilterAssignments currAssigment={assignments}   />
+                    </Link>                            
+            )
+        :
+        <Loader type="TailSpin" color="black" height={80} width={80} />
+    }
                             
                     </ul>
+                    </div>
             </div>
            
 
@@ -128,6 +136,6 @@ class Assignments extends Component{
         );
     }
     }
-}
+
 
 export default Assignments;
