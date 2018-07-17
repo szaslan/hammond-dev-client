@@ -20,6 +20,7 @@ class UserRegistration extends Component {
           errors: [],
           msg: '',
           success: false,
+          reDirectTo: '/register'
         }
 
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -52,6 +53,7 @@ class UserRegistration extends Component {
 
         fetch('/register', {
           method: 'POST',
+          credentials: 'include',
           headers: {
             'Content-Type': 'application/json'},
           body: JSON.stringify(data)
@@ -75,8 +77,9 @@ class UserRegistration extends Component {
           .then(function(response){
             console.log(response)
             if (response.status == 200){
-              fetchError.setState({errors: []})
+              fetchError.setState({errors: [], reDirectTo: '/courses'})
               fetchError.setState({success: true})
+              
               throw new Error("breaking promise chain early");
             }
             response.json().then(function(data){
@@ -86,10 +89,10 @@ class UserRegistration extends Component {
                 fetchError.setState({errors: data})
             })
           })
-        
-          
           // .then(res => this.setState({errors: res}))
           .catch(error => console.log(error))
+
+          
 
           // this.MapErrors(this.state.errors);
 
@@ -116,25 +119,7 @@ class UserRegistration extends Component {
       }
     }
 
-    MapErrors(errors){
-      if (!errors || !errors.length){
-        <Redirect  to='/courses' /> 
-        // this.setState({hasError: false})
-        // return null;
-      }
-      // else if (!errors.length){
-      //   this.setState({hasError: false})
-      //   return null;
-      // }
-      else {
-        return (
-          <div>{
-        errors.map(errors => 
-          <li>{errors.msg}</li>)
-          }</div>); 
-      }
-      this.setState({hasError: true})
-    }
+
   render(){
 
     const errors = this.state.errors;
@@ -152,19 +137,24 @@ class UserRegistration extends Component {
           <input type="password" placeholder="Password" name="password" className="register-input" onChange={this.handleChange}/>
           <input type="password" placeholder="Re-enter your password"  className="register-input" name="password2" onChange={this.handleChange}/>
           
-          {errors ? <input type="submit"  className="register-input"/> : <Redirect to="/courses" /> }
+          <input type="submit"  className="register-input"  /> 
           {/* // <input type="submit"  className="register-input"/> */}
+
+          {/*
+          -----THIS IS BAD -
+          */}
+          {errors.length > 0 ? <ul>
+            {
+           (errors.map(errors => 
+          <li>{errors.msg}</li>))}
+          </ul>
+          :
+          <Redirect to={this.state.reDirectTo} /> 
+        }
 
 
           {console.log(errors)}
-          <ul>
-          {this.state.success ? 
-                    <Redirect to="/courses" /> :
-                    (errors.map(errors => 
-            <li>{errors.msg}</li>))   
-          // 
-          }
-          </ul>
+       
           
 
         </form>

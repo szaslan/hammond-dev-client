@@ -23,7 +23,7 @@ class App extends Component {
         <Switch>
         <div className="App">          
           {/* To login*/}
-          <Route path="/" exact component={UserLogin}/>
+          <Route path="/(login|logout)" exact component={UserLogin}/>
           <Route path="/register" exact component={UserRegistration} />
 
           {/*Need signup page*/}

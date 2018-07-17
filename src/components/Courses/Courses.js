@@ -22,13 +22,14 @@ class Courses extends Component{
     constructor(props){
         super(props);
 
-        
+        this.signOut = this.signOut.bind(this);
 
         this.state = {
             apiKey: "1876~ypSApnhVIL4RWGQCp5oW7aJqw4NoP0kxvdKRiTVqcpGXVgzeToigIKbVBskcqk8u",
             courses: [],
             loaded: false,
             showCourse: false,
+            auth: false,
         }
     }
 
@@ -37,6 +38,9 @@ class Courses extends Component{
     }
 
     componentDidMount(){
+
+        let get = this;
+
         this.setState({loaded: true});
         fetch(`https://canvas.northwestern.edu/api/v1/users/83438/courses?per_page=500&access_token=${this.state.apiKey}`
     )
@@ -44,12 +48,28 @@ class Courses extends Component{
         .then(courses => this.setState({courses}))
         .then(courses => this.props = courses);
 
-        fetch('/courses')
-        .then(res => console.log(res));
+        fetch('/courses', {
+            credentials: 'include'
+        })
+        .then(function(res){
+            if (res.status == 200){
+                get.setState({auth: true})
+                console.log(res)
+            }
+            
+        })
+        .catch(err => console.log(err));
     }
 
     onClick(){
         this.setState({showCourse: true});
+    }
+
+    signOut(){
+        fetch('/logout', {
+            credentials: 'include'
+        })
+        .then(response => console.log(response))
     }
 
 
@@ -61,7 +81,7 @@ class Courses extends Component{
 
             );
         }
-        else {
+        else if (this.state.auth == true){
         return(
 
             <div>
@@ -77,8 +97,8 @@ class Courses extends Component{
                                 </Row>
                             </Col>
                             <Col xs={1} className="col2">
-                                <Link to="/">
-                                    <button className="pull-right signout-button">Sign Out</button>
+                                <Link to="/logout">
+                                    <button className="pull-right signout-button" onClick={this.signOut}>Sign Out</button>
                                 </Link>
                             </Col>
                         </Row>
@@ -110,6 +130,11 @@ class Courses extends Component{
             </div>
                 
         );
+    }
+    else{
+        return (
+            <div>Not Authenticated</div>
+        )
     }
     }
 
