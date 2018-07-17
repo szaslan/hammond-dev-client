@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
 import './AssignmentInfo.css';
 import Loader from 'react-loader-spinner'
-import { Well, Row, Col, Breadcrumb } from 'react-bootstrap';
+import { Well, Row, Col, Breadcrumb, Button } from 'react-bootstrap';
 import AnalyzeButton from '../AnalyzeButton/AnalyzeButton';
 import CalendarComp from '../CalendarComp/CalendarComp';
-import DueDate from '../DueDate/DueDate';
 
+import DueDateButton from '../DueDateButton/DueDateButton';
+import Flexbox from 'flexbox-react'
 class AssignmentInfo extends Component {
     constructor(props) {
         super(props);
@@ -85,9 +86,8 @@ class AssignmentInfo extends Component {
                 // <button className="assigment-labels buttons">Finalize!</button>
 
                 <div className="assignment-info">
-                    <DueDate />
-                    
-                    <strong>Title:</strong> {this.state.assignment.name}
+                    <p><strong>Title:</strong> {this.state.assignment.name}</p>
+                    <DueDateButton />
                     <AnalyzeButton />
                 </div>
 
