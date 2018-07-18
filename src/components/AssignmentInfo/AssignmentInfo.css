@@ -5,10 +5,197 @@
     padding-top: 40vh;
     display: flex;
     flex-direction: column;
-    align-items: center;
+    text-align:left;
+    font-size:20px;
 }
-
+.flex-dropdown{
+    padding-top:15px;
+    padding-left:0px;
+}
+.analyze{
+    border:none;
+    box-shadow:none;
+    font-size:20px;
+    background-color:var(--light-lavendar2);
+    margin-right:10px;
+    margin-top:0px;
+    margin-bottom:10px;
+    padding:5px;
+    padding-left:10px;
+    padding-right:10px;
+    
+}
+.well2{
+    border-radius:0px;
+    background:white;
+    border:0px solid;
+    box-shadow:none;
+    font-size: 20px;
+    margin:0px;
+    margin-top:10px;
+    padding-top:0px;
+    width:100%;
+}
+.accordion-flexbox{
+    padding-top:10px;
+}
+.button-student{
+    margin-bottom:10px;
+    border:none;
+    background-color: lightgray;
+    padding:5px;
+    padding-left:10px;
+    padding-right:10px;
+    font-size:20px;
+    margin-left:0px;
+}
+.card1{
+    margin-bottom:10px !important;
+    border:none!important;
+}
+.cardbody1{
+    background-color:white;
+    margin-top:0px !important;
+    padding:0px!important;
+    width:100% !important;
+}
 .assigment-labels, .buttons{
     margin: 10px auto;
     width: 75%;
 }
+
+
+  /* .row {
+      margin-left: 15px !important;
+  }
+  .well1{
+    border-radius:0px;
+    background:white;
+    border:0px solid;
+    box-shadow:none;
+    font-size: 20px;
+    height:60vh;
+    margin:0px;
+  }
+  .bottom{
+    background-color:var(--navy-plum);
+    height:20vh;
+    border:0px solid;
+    border-radius:0px;
+  }
+  .about-button{
+    border:none;
+    padding:5px;
+    padding-left:7px;
+    padding-right:7px;
+    background-color:var(--navy-plum);
+    font-size:12px;
+    color:var(--light-peach);
+  }
+  .bottom-container{
+    padding:0px !important;
+    
+  }
+  .jumbo-row{
+    content: "";
+    clear: both;
+  }
+  .col1{
+    width: 80vw !important;
+  }
+  .signout-button{
+    border:none;
+    padding:5px;
+    padding-left:7px;
+    padding-right:7px;
+    background-color:var(--navy-plum);
+    font-size:12px;
+    color:var(--light-peach);
+    font-size: 14px;
+    right:0px;
+    
+    margin-right:0px;
+    left:100px !important;
+    width:70px;
+    
+  }
+  .col2{
+    margin-right:0px !important;
+    padding-right:0px !important;
+    width: 17vw!important;
+  }
+  
+  .col3{
+    background-color:white;
+    padding-left:10px;
+    padding-right:10px;
+  }
+  .well1-row{
+    width:70vw;
+    max-width: 800px;
+    margin: auto!important;
+  }
+  .body-row{
+    padding:15px;
+    padding-left:30px;
+  }
+  
+  .div-student{
+    padding-left:0px;
+    float:left;
+  
+  }
+  .student-content{
+    border:none;
+    border-radius:0px;
+    font-size:20px;
+    margin-left:15px;
+    box-shadow:none;
+    height:500px;
+    background-color: white;
+    padding-top:0px;
+    padding-left:0px;
+    text-align:left;
+  }
+  .col4{
+    padding-left:0px;
+    margin-left:0px;
+    display:flex;
+    flex-direction: column;
+    align-items:flex-start;
+    list-style-type: none;
+
+  }
+  
+  .dropdown-toggle{
+    font-size:18px!important;
+    background-color:lightgray!important;
+    color:black!important;
+    border:none !important;
+    border-radius:0px !important;
+    box-shadow:none !important;
+    margin-bottom:15px !important;
+    padding-left:10px !important;
+    margin-right:10px !important;
+  
+  }
+  .dropdown-menu{
+    font-size:18px !important;
+    border:none !important;
+    border-radius:0px !important;
+    box-shadow:none !important;
+    background-color: lightgray!important;
+    
+  }
+  
+  .dropdown-item{
+    padding:10px!important;
+    padding-top:0px!important;
+    padding-bottom:0px!important;
+    color: black!important;
+    
+  }
+  
+  
+  
+   */
