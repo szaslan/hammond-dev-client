@@ -34,7 +34,7 @@ class JumbotronComp extends Component {
                             </Row>
                         </Col>
                         <Col xs={1} className="col2">
-                            <Link to="/">
+                            <Link to="/logout">
                                 <button className="pull-right signout-button" onClick={this.signOut}>Sign Out</button>
                             </Link>
                         </Col>

@@ -17,8 +17,8 @@ class UserLogin extends Component {
           loggedIn: false,
           email: '',
           password: '',
-          url: '',
-          errors: '',
+          url: '/login',
+          errors: [],
 
         };
       }
@@ -70,7 +70,7 @@ class UserLogin extends Component {
           else if (response.status == 300){
             response.json().then(function(data){
               fetchError.setState({errors: data})
-              console.log(this.state.errors)
+              console.log(fetchError.state.errors)
             })
           }
           //   response.json().then(function(data){
@@ -99,7 +99,7 @@ class UserLogin extends Component {
       
     
   render() {
-
+    const errors = this.state.errors;
     return (
 
       // <div style={{maxWidth: 100}}>
@@ -129,13 +129,18 @@ class UserLogin extends Component {
                                   <Input type="password" name="password" id="examplePassword" placeholder="Password"  onChange={this.handleChange} name="password" />
                               </FormGroup>
                               {/*<button className="submit-button">Submit</button>*/}
-
-                              {this.state.url ? <Redirect to={this.state.url} /> :
-                                  <button type="submit" value="Submit" className="submit-button" onClick={this.handleSubmit} >Submit</button>
-                              }   
+                              <button type="submit" value="Submit" className="submit-button" onClick={this.handleSubmit} >Submit</button>
                               <Link to="/register">
                                 <button className="create-account">Create an Account</button>
                               </Link>
+                              {errors.length > 0 ?
+                              <ul>
+                                {errors.map(error => <li>{error.msg}</li>)}
+                              </ul>
+                                  :
+                                  <Redirect to={this.state.url} />
+                              }   
+                              
                           </Form>
   
                       </div>

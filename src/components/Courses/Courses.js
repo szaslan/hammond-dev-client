@@ -8,16 +8,6 @@ import Flexbox from 'flexbox-react';
 import JumbotronComp from '../JumbotronComp/JumbotronComp';
 
 
-const COURSES = ['EECS 348: Intro to Artificial Intelligence', 'EECS 397: Innovation in Journalism and Technology', 'EECS 397: Building Technologies for the Law'];
-
-function renderCourseButton(title, i) {
-    return (
-        <Link to="/course-home-page">
-            <button className="course-button">{title}</button>
-        </Link>
-    );
-}
-
 
 class Courses extends Component{
     constructor(props){
@@ -29,6 +19,7 @@ class Courses extends Component{
             loaded: false,
             showCourse: false,
             auth: false,
+            user: [],
         }
     }
 
@@ -51,6 +42,14 @@ class Courses extends Component{
             credentials: 'include'
         })
         .then(function(res){
+            res.json().then(function(data){
+                get.setState({user: data})
+                console.log(data);
+            })
+                if (res.status === 404){
+                    get.setState({auth: false})
+                    throw new Error("404")
+                }
             if (res.status == 200){
                 get.setState({auth: true})
                 console.log(res)
@@ -83,7 +82,7 @@ class Courses extends Component{
         else if (this.state.auth == true){
         return(
             <div>
-                <JumbotronComp mainTitle ="Professor Hammond" secondaryTitle="Welcome," />
+                <JumbotronComp mainTitle ={this.state.user.first_name} secondaryTitle="Welcome," />
 
                 <Container className="well1-container" fluid>
                         <Flexbox className="well1-flexbox" minWidth="700px" width="90vw"

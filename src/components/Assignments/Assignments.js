@@ -69,20 +69,13 @@ class Assignments extends Component{
         .then(res => res.json())
         .then(assignments => this.setState({assignments}))
         .then(this.setState({mounted: true}))
+    }
 
     
 
    
 
     render() {
-
-        if (this.state.assignments === null) {
-            return (
-                <div className="all-assignments">
-                    <Loader type="TailSpin" color="black" height={80} width={80} />
-                </div>
-            )
-        } else {
             return (
                 // <div className="all-assignments">
 

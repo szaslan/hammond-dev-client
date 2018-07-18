@@ -1,10 +1,11 @@
 html * {
-    font-family: Sailec-Regular
+    font-family: 'Nunito', sans-serif;
 }
 
 /* ------------Assignments List Settings------------ */
 .all-assignments{
   width:50vw;
+  float: left;
 }
 .assignment-list{
     list-style-type: none;
