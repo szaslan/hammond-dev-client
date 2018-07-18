@@ -7,8 +7,19 @@ import { Row, Col } from 'react-bootstrap';
 class JumbotronComp extends Component {
     constructor(props){
         super(props);
+        
+     this.signOut = this.signOut.bind(this);
        
     }
+ 
+      signOut(){
+        fetch('/logout', {
+            credentials: 'include'
+        })
+        .then(response => console.log(response))
+    }
+
+
     render() {
         return (
             <Jumbotron className="jumbo" fluid>
@@ -24,7 +35,7 @@ class JumbotronComp extends Component {
                         </Col>
                         <Col xs={1} className="col2">
                             <Link to="/">
-                                <button className="pull-right signout-button">Sign Out</button>
+                                <button className="pull-right signout-button" onClick={this.signOut}>Sign Out</button>
                             </Link>
                         </Col>
                     </Row>
