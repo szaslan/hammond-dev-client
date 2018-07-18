@@ -12,6 +12,7 @@
     "loaders.css": "^0.1.2",
     "lodash": "^4.17.10",
     "moment": "^2.22.2",
+    "npm": "^6.2.0",
     "postinstall": "^0.2.2",
     "rc-calendar": "^9.6.2",
     "rc-time-picker": "^3.3.1",
@@ -26,6 +27,7 @@
     "react-router": "^4.3.1",
     "react-router-dom": "^4.3.1",
     "react-scripts": "^1.1.4",
+    "react-validation": "^3.0.7",
     "reactstrap": "^6.2.0",
     "sass": "^1.8.0"
   },

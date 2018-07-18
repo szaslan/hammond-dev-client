@@ -19,6 +19,7 @@ class AssignmentInfo extends Component {
             url: '',
             id: this.props.match.params.assignment_id,
             assignmentClicked: false,
+            ...props,
         }
     }
     //
@@ -61,7 +62,7 @@ class AssignmentInfo extends Component {
         const { match: { params } } = this.props;
         this.setState({ assignmentClicked: true });
         console.log("fetched!");
-        this.setState({ url: `/courses/${params.course_id}/assignments/` });
+        this.setState({url: `/courses/${params.course_id}/${params.assignment_name}/`});
         fetch(`https://canvas.northwestern.edu/api/v1/courses/${params.course_id}/assignments/${params.assignment_id}?access_token=${this.state.apiKey}`)
             .then(res => res.json())
             .then(assignment => this.setState({ assignment }))
@@ -77,14 +78,7 @@ class AssignmentInfo extends Component {
                 </div>
             )
         else {
-            return (
-                // <div className="assignment-info" >
-                //<div className="assigment-labels">{this.state.assignment.name}</div>
-                //<div className="assigment-labels">Assignment ID: {this.state.assignment.id}</div>
-                // <div className="assigment-labels">Points Poissible: {this.state.assignment.points_possible}</div>
-                // <button className="assigment-labels buttons">Analyze!</button>
-                // <button className="assigment-labels buttons">Finalize!</button>
-
+            return (               
                 <div className="assignment-info">
                     <p><strong>Title:</strong> {this.state.assignment.name}</p>
                     <DueDateButton />

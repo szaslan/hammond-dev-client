@@ -34,26 +34,7 @@ class CourseInfo extends Component {
     render() {
         
         return (
-            <div>
-                {/* <Jumbotron className="jumbo" fluid>
-                    <Container className="jumbo-container" fluid>
-                        <Row className="jumbo-row" fluid>
-                            <Col xs={10} className="col1" >
-                                <Row className="row-title">
-                                    <h1 className="welcome">&nbsp;</h1>
-                                </Row>
-                                <Row className="row-title">
-                                    <h1 className="name">{this.state.courseJSON.name}</h1>
-                                </Row>
-                            </Col>
-                            <Col xs={1} className="col2">
-                                <Link to="/">
-                                    <button className="pull-right signout-button">Sign Out</button>
-                                </Link>
-                            </Col>
-                        </Row>
-                    </Container>
-                </Jumbotron> */}
+            <div>          
                 <JumbotronComp  mainTitle= {this.state.courseJSON.name}
                 secondaryTitle="&nbsp;"/>
                 
@@ -67,8 +48,9 @@ class CourseInfo extends Component {
                         <Flexbox
                             justifyContent="space-around"
                             flexWrap="nowrap">
-                            <Link to={{ pathname: this.state.url + "/assignments", state: { name: this.state.courseJSON.name } }}>
+                             <Link to={{pathname: this.state.url + '/'+ this.state.courseJSON.name, state: {name: this.state.courseJSON.name}, }}>
                                 <button className="pull-left big-button">Assignments</button>
+
                             </Link>
                             <Link to={this.state.url + "/students"}>
                                 <button className="pull-right big-button">Students</button>

@@ -8,7 +8,7 @@ import Flexbox from 'flexbox-react';
 import AnalyzeButton from '../AnalyzeButton/AnalyzeButton';
 import JumbotronComp from '../JumbotronComp/JumbotronComp';
 import AssignmentInfo from '../AssignmentInfo/AssignmentInfo';
-import '../BreadcrumbComp/BreadcrumbComp.css'
+import '../BreadcrumbComp/BreadcrumbComp.css';
 
 //FILTERS ASSIGNMENTS TO ONES WITH POINTS POSSIBLE > 10
 //USE THIS TO FILTER OUT ASSIGNMENTS THAT ARE NOT PEER REVIEWABLE
@@ -16,7 +16,8 @@ import '../BreadcrumbComp/BreadcrumbComp.css'
 function FilterAssignments(props) {
     const currAssignment = props.currAssigment;
 
-    if (currAssignment.points_possible > 10) {
+
+    if (currAssignment.points_possible > 1){
         return (
             <li key={currAssignment.id} className="assignment-name">{currAssignment.name}</li>
         )
@@ -42,32 +43,36 @@ function FilterAssignments(props) {
 
 
 
-class Assignments extends Component {
-    constructor(props) {
-        super(props);
+class Assignments extends Component{
+    constructor(props, context){
+        super(props, context);
 
         //URL is the current url while taking in the parameters from the props of the previous url
         this.state = {
             apiKey: "1876~ypSApnhVIL4RWGQCp5oW7aJqw4NoP0kxvdKRiTVqcpGXVgzeToigIKbVBskcqk8u",
             assignments: [],
+            loaded: false,
             url: '',
-            title: this.props.location.state.course_id,
             ...props,
         }
     }
+
     componentWillMount() {
         this.setState({ assignments: null });
     }
     //fetch assignments for course with course_id passed down
     componentDidMount() {
         const { match: { params } } = this.props;
-        this.setState({ url: `/courses/${params.course_id}/assignments/` });
+
+      this.setState({url: `/courses/${params.course_id}/${params.assignment_name}/`});
         fetch(`https://canvas.northwestern.edu/api/v1/courses/${params.course_id}/assignments?per_page=500&access_token=${this.state.apiKey}`)
-            .then(res => res.json())
-            .then(assignments => this.setState({ assignments }));
-    }
+        .then(res => res.json())
+        .then(assignments => this.setState({assignments}))
+        .then(this.setState({mounted: true}))
 
+    
 
+   
 
     render() {
 
@@ -87,21 +92,24 @@ class Assignments extends Component {
                     <Breadcrumb className="breadcrumb1">
                         <Breadcrumb.Item className="breadcrumb-item" href="/courses">Home</Breadcrumb.Item>
                         <Breadcrumb.Item className="breadcrumb-item breadcrumb-item1" href={`/courses/${this.state.match.params.course_id}`}>
-                            {this.state.location.state.name}
-                            {console.log(this.state.location.state)}
+                            {this.props.match.params.assignment_name}
                         </Breadcrumb.Item>
-                        {console.log(this.state.assignments)}
                         <Breadcrumb.Item className="breadcrumb-item" active>Assignments</Breadcrumb.Item>
                     </Breadcrumb>
                     
                     <div className="all-assignments">
 
                         <ul className="assignment-list">
-                            {this.state.assignments.map(assignments =>
-                                <Link className="assignment-link" to={{ pathname: this.state.url + assignments.id, state: { assignment_id: assignments.id,name:this.state.location.state.name, course_id:this.state.match.params.course_id } }} key={assignments.id}>
-                                    <FilterAssignments currAssigment={assignments} />
-                                </Link>
-                            )}
+                                            {this.state.assignments ?
+                
+                    this.state.assignments.map(assignments =>
+                        <Link className="assignment-link" to={{ pathname: this.state.url + assignments.id, state: { assignment_id: assignments.id, name: this.state.match.params.assignment_name, course_id: this.state.match.params.course_id } }} key={assignments.id}>
+                            <FilterAssignments currAssigment={assignments}   />
+                        </Link>                            
+                          )
+                      :
+                      <Loader type="TailSpin" color="black" height={80} width={80} />
+                                  }
 
                         </ul>
                     </div>
@@ -110,6 +118,6 @@ class Assignments extends Component {
             );
         }
     }
-}
+
 
 export default Assignments;

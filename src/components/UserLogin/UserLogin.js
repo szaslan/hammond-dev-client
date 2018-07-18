@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
-import '../../styles/UserLogin/UserLogin.css';
-import { Link } from "react-router-dom";
+import './UserLogin.css';
+import { Link, Redirect } from "react-router-dom";
+import { Col, Row } from 'react-bootstrap';
+import { Label, Container, Form, FormGroup, Input } from 'reactstrap';
 
 
 class UserLogin extends Component {
@@ -13,8 +15,10 @@ class UserLogin extends Component {
         this.state = {
           value: '',
           loggedIn: false,
-          username: '',
-          password: ''
+          email: '',
+          password: '',
+          url: '',
+          errors: '',
 
         };
       }
@@ -27,42 +31,116 @@ class UserLogin extends Component {
         return null;
       }
     
-      handleChange(e) {
-        this.setState({username: e.target.username });
-        this.setState({password: e.target.password});
-      }
-
-      handleSubmit(e){
-        e.preventDefault();
-
-        if (this.state.username !== '' && this.state.password !== ''){
-          
-          this.setState({loggedIn: true});
-        }
-      }
 
       componentDidMount(){
         console.log("correct");
       }
+
+      handleChange(e){
+        this.setState({[e.target.name]: e.target.value});
+      }
+
+      handleSubmit(event){
+        event.preventDefault();
+
+        const errors = this.state.errors;
+
+        var data = {
+          email: this.state.email,
+          password: this.state.password,
+        }
+
+        let fetchError = this;
+
+      fetch('/login', {
+        method: 'POST',
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json'},
+        body: JSON.stringify(data)
+        })
+        .then(function(response){
+          console.log(response)
+          if (response.status == 200){
+            fetchError.setState({url: "/courses"})
+          }
+          else if(response.status == 400){
+            fetchError.setState({url: ''})
+          }
+          else if (response.status == 300){
+            response.json().then(function(data){
+              fetchError.setState({errors: data})
+              console.log(this.state.errors)
+            })
+          }
+          //   response.json().then(function(data){
+          //     fetchError.setState({url: data.url})
+          //   })
+          // }
+
+
+          // if (response.status == 200){
+          //   fetchError.setState({errors: [], reDirectTo: '/courses'})
+          //   fetchError.setState({success: true})
+            
+          //   throw new Error("breaking promise chain early");
+          })
+        //   response.json().then(function(data){
+        //     console.log(data)
+        
+        //     console.log("data length: " + data.length)
+        //     if (data.length > 0)
+        //       fetchError.setState({errors: data})
+        //   })
+        // })
+        .catch(error => console.log(error))
+      }
+      
+      
     
   render() {
 
     return (
 
-      <div style={{maxWidth: 100}}>
+      // <div style={{maxWidth: 100}}>
 
-      <form action="/login" method="GET">
+      // <form action="/login" method="GET">
 
-        <input type="text" placeholder="username" value={this.state.username} onChange={this.handleChange} name="username"/>
-        <input type="password" placeholder="password" value={this.state.password} onChange={this.handleChange} name="password"/>
-        <input type="submit" value="Submit" />
-      </form>
+      //   <input type="text" placeholder="username" value={this.state.username} onChange={this.handleChange} name="username"/>
+      //   <input type="password" placeholder="password" value={this.state.password} onChange={this.handleChange} name="password"/>
+      //   <input type="submit" value="Submit" />
+      // </form>
 
-      <Link to="/register">
-      <div>register</div>
-      </Link>
+      // <Link to="/register">
+      // <div>register</div>
+      // </Link>
       
-      </div>
+      // </div>
+                  <Row className="screen" >
+
+                  <Col className="right-side-col" fluid>
+                      <div className="login-group">
+                          <h1 className="please-signin">Please Sign In</h1>
+                          <Form>
+                              <FormGroup>
+                                  <Input type="email" name="email" id="exampleEmail" placeholder="Email address"  onChange={this.handleChange} name="email"/>
+                              </FormGroup>
+                              <FormGroup>
+                                  <Input type="password" name="password" id="examplePassword" placeholder="Password"  onChange={this.handleChange} name="password" />
+                              </FormGroup>
+                              {/*<button className="submit-button">Submit</button>*/}
+
+                              {this.state.url ? <Redirect to={this.state.url} /> :
+                                  <button type="submit" value="Submit" className="submit-button" onClick={this.handleSubmit} >Submit</button>
+                              }   
+                              <Link to="/register">
+                                <button className="create-account">Create an Account</button>
+                              </Link>
+                          </Form>
+  
+                      </div>
+                  </Col>
+              </Row>
 
     );
   }
