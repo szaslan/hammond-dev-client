@@ -1,8 +1,12 @@
-.register-form{
-    width: 100vw;
+.register-group{
+    width:500px;
+    padding-top:30vh;
+    height:80vh;
+    margin:auto;
 }
 
 .register-input{
     margin: 0 auto;
     display: flex;
+    
 }

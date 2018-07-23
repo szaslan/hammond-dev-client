@@ -10,6 +10,7 @@ import CourseStudents from './components/CourseStudents/CourseStudents';
 import AssignmentInfo from './components/AssignmentInfo/AssignmentInfo';
 import UserRegistration from './components/UserRegistration/UserRegistration';
 import createBrowserHistory from 'history/createBrowserHistory'
+import Landing from './components/Landing/Landing';
 
 const history = createBrowserHistory();
 
@@ -21,7 +22,10 @@ class App extends Component {
     return (
       <Router history={history}>
         <Switch>
-        <div className="App">          
+        <div className="App"> 
+          {/*Landing Page*/} 
+          <Route path="/" exact component={Landing} />
+
           {/* To login*/}
           <Route path="/(login|logout)" exact component={UserLogin}/>
           <Route path="/register" exact component={UserRegistration} />
@@ -41,8 +45,8 @@ class App extends Component {
           
           <Route path="/courses/:course_id/:assignment_name/:assignment_id" exact component={AssignmentInfo} />
 
-
           <Route path="/courses/:course_id/students" exact component={CourseStudents}/>
+
         </div>
         </Switch>
       </Router>

@@ -1,0 +1,59 @@
+:root{
+    --apricot: #ffb997;
+    --light-peach: #efd9ce;
+    --grapefruit: #f67e7d;
+    --violet:#843b62;
+    --navy-plum:#0b032d;
+    --dark-lavendar:#74546a;
+    --light-lavendar:#a37494;
+  }
+.entire-screen{
+    height:100vh;
+    background-image: url('../deering-interior-square3.jpg');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-attachment: scroll;
+    background-position: 50% 30%;
+    min-width: 500px;
+    
+}
+.welcome-message{
+    color:white;
+    font-size:90px;
+    
+}
+.title-message{
+    color:white;
+    font-size:120px;
+    margin-top:0px;
+    margin-bottom:5vh;
+    
+}
+.cool-button{
+    margin-left:5vw;
+    margin-right:5vw;
+    padding:10px;
+    padding-left:15px;
+    padding-right:15px;
+    font-size:35px;
+    background-color:var(--violet);
+    color:white;
+    border:none;
+    white-space:nowrap;
+    
+    
+}
+.flexbox-of-buttons{
+    width:40vw;
+    margin:auto;
+    
+}
+.screen-content{
+    padding-top:30vh;
+    height:80vh;
+    min-width:500px;
+
+}
+/* .background-image{
+    width:100%;
+} */
