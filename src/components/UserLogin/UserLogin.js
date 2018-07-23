@@ -12,23 +12,17 @@ class UserLogin extends Component {
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
 
+
     this.state = {
       value: '',
       loggedIn: false,
       email: '',
       password: '',
       url: '/login',
-      errors: [],
+      errors: '',
+      reDirect: false,
 
     };
-  }
-
-  getValidationState() {
-    const length = this.state.value.length;
-    if (length > 10) return 'success';
-    else if (length > 5) return 'warning';
-    else if (length > 0) return 'error';
-    return null;
   }
 
 
@@ -39,8 +33,7 @@ class UserLogin extends Component {
   handleChange(e) {
     this.setState({ [e.target.name]: e.target.value });
   }
-
-  handleSubmit(event) {
+  handleSubmit(event){
     event.preventDefault();
 
     const errors = this.state.errors;
@@ -52,49 +45,29 @@ class UserLogin extends Component {
 
     let fetchError = this;
 
-    fetch('/login', {
-      method: 'POST',
-      credentials: 'include',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(data)
+  fetch('/login', {
+    method: 'POST',
+    redirect: 'follow',
+    credentials: 'include',
+    headers: {
+      'Content-Type': 'application/json'},
+    body: JSON.stringify(data)
     })
-      .then(function (response) {
-        console.log(response)
-        if (response.status == 200) {
-          fetchError.setState({ url: "/courses" })
-        }
-        else if (response.status == 400) {
-          fetchError.setState({ url: '' })
-        }
-        else if (response.status == 300) {
-          response.json().then(function (data) {
-            fetchError.setState({ errors: data })
-            console.log(fetchError.state.errors)
-          })
-        }
-        //   response.json().then(function(data){
-        //     fetchError.setState({url: data.url})
-        //   })
-        // }
-
-
-        // if (response.status == 200){
-        //   fetchError.setState({errors: [], reDirectTo: '/courses'})
-        //   fetchError.setState({success: true})
-
-        //   throw new Error("breaking promise chain early");
+    .then(function(response){
+      console.log(response)
+      if (response.status == 200){
+        fetchError.setState({reDirect: true})
+        // fetchError.setState({errors: ""});
+        fetchError.setState({url: "/courses"})
+      }
+      else if(response.status == 400){
+        fetchError.setState({errors: "Invalid username or password"})
+      }
       })
-      //   response.json().then(function(data){
-      //     console.log(data)
 
-      //     console.log("data length: " + data.length)
-      //     if (data.length > 0)
-      //       fetchError.setState({errors: data})
-      //   })
-      // })
-      .catch(error => console.log(error))
+    .catch(error => console.log(error))
+
+
   }
 
 
@@ -148,13 +121,12 @@ class UserLogin extends Component {
               <button className="new-button">Register</button>
               </Link>
             </Flexbox>
-            {errors.length > 0 ?
-              <ul>
-                {errors.map(error => <li>{error.msg}</li>)}
-              </ul>
-              :
-              <Redirect to={this.state.url} />
+            {errors ?
+              <div>{errors}</div>
+                :
+                null
             }
+            {this.state.reDirect ? <Redirect to="/courses"/> : null}
           </Form>
         </div>
       </div>

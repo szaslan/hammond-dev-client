@@ -8,21 +8,21 @@ const history = createBrowserHistory();
 
 
 class UserRegistration extends Component {
-  constructor(props, ) {
-    super(props);
+    constructor(props, ) {
+        super(props); 
 
-    this.state = {
+        this.state = {
 
-      firstName: '',
-      lastName: '',
-      email: '',
-      password: '',
-      password2: '',
-      errors: [],
-      msg: '',
-      success: false,
-      reDirectTo: '/register'
-    }
+          firstName: '',
+          lastName: '',
+          email: '',
+          password: '',
+          password2: '',
+          errors: [],
+          msg: '',
+          success: false,
+          reDirect: false,
+        }
 
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleChange = this.handleChange.bind(this);
@@ -41,60 +41,85 @@ class UserRegistration extends Component {
 
     const errors = this.state.errors;
 
-    var data = {
-      firstName: this.state.firstName,
-      lastName: this.state.lastName,
-      email: this.state.email,
-      password: this.state.password,
-      password2: this.state.password2
+        var data = {
+          firstName: this.state.firstName,
+          lastName: this.state.lastName,
+          email: this.state.email,
+          password: this.state.password,
+          password2: this.state.password2
+        }
+        // console.log(data);
+
+        let fetchError = this;
+
+        fetch('/register', {
+          method: 'POST',
+          credentials: 'include',
+          headers: {
+            'Content-Type': 'application/json'},
+          body: JSON.stringify(data)
+          })
+          // .then(function(res){
+          //     if (res.status > 400){
+          //     throw new Error("Bad response from server")
+          //   }
+          //   else if (res == "success"){
+          //     this.setState({msg: res});
+          //     console.log(this.state.msg)
+          //   }
+          // })
+
+
+          // .then(res => this.CheckStatus(res))
+
+          /*THIS IS THE PROBLEM,
+          ITS TRYING TO PARSE AN EMPTY ARRAY */
+
+          .then(function(response){
+            console.log(response)
+            if (response.status == 200){
+              fetchError.setState({errors: [], reDirect: true})
+              fetchError.setState({success: true})
+              
+              throw new Error("breaking promise chain early");
+            }
+            response.json().then(function(data){
+              console.log(data)
+              console.log("data length: " + data.length)
+              if (data.length > 0)
+                fetchError.setState({errors: data})
+            })
+          })
+          // .then(res => this.setState({errors: res}))
+          .catch(error => console.log(error))
+
+          
+
+          // this.MapErrors(this.state.errors);
+
+        // fetch('/courses',{
+        //   method: 'GET'
+        // })
+        // .then(res => console.log(res))
+        // .catch(err => console.log(err))     
+  
+    }
+    //check status of response
+    CheckStatus(data){
+      if(data.status == 200)
+      {
+        console.log(data.status)
+        return data.json();
+      } else if (data.status == 300){
+        console.log(data)
+        data = data.json();
+        this.setState({errors: data})
+        console.log(this.state.errors)
+      } else if (data.status == 400){
+        throw new Error("BAd response from server");
+      }
     }
     // console.log(data);
-
-    let fetchError = this;
-
-    fetch('/register', {
-      method: 'POST',
-      credentials: 'include',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(data)
-    })
-      // .then(function(res){
-      //     if (res.status > 400){
-      //     throw new Error("Bad response from server")
-      //   }
-      //   else if (res == "success"){
-      //     this.setState({msg: res});
-      //     console.log(this.state.msg)
-      //   }
-      // })
-
-
-      // .then(res => this.CheckStatus(res))
-
-      /*THIS IS THE PROBLEM,
-      ITS TRYING TO PARSE AN EMPTY ARRAY */
-
-      .then(function (response) {
-        console.log(response)
-        if (response.status == 200) {
-          fetchError.setState({ errors: [], reDirectTo: '/courses' })
-          fetchError.setState({ success: true })
-
-          throw new Error("breaking promise chain early");
-        }
-        response.json().then(function (data) {
-          console.log(data)
-          console.log("data length: " + data.length)
-          if (data.length > 0)
-            fetchError.setState({ errors: data })
-        })
-      })
-      // .then(res => this.setState({errors: res}))
-      .catch(error => console.log(error))
-
-
 
     // this.MapErrors(this.state.errors);
 
@@ -102,26 +127,8 @@ class UserRegistration extends Component {
     //   method: 'GET'
     // })
     // .then(res => console.log(res))
-    // .catch(err => console.log(err))     
-
-  }
-  //check status of response
-  CheckStatus(data) {
-    if (data.status == 200) {
-      console.log(data.status)
-      return data.json();
-    } else if (data.status == 300) {
-      console.log(data)
-      data = data.json();
-      this.setState({ errors: data })
-      console.log(this.state.errors)
-    } else if (data.status == 400) {
-      throw new Error("BAd response from server");
-    }
-  }
-
-
-  render() {
+    // .catch(err => console.log(err))  
+    render(){  
 
     const errors = this.state.errors;
 
@@ -167,13 +174,18 @@ class UserRegistration extends Component {
             <button className="new-button">Submit</button>
             {errors.length > 0 ? <ul>
               {
-                (errors.map(errors =>
-                  <li>{errors.msg}</li>))}
+             (errors.map(errors => 
+            <li>{errors.msg}</li>))}
             </ul>
-              :
-              <Redirect to={this.state.reDirectTo} />
-            }
-            {console.log(errors)}
+            :
+            null
+          }
+  
+          {this.state.reDirect ? 
+                    <Redirect to='/courses' />
+                    :
+                    null 
+                  }
           </Form>
         </div>
       </div>

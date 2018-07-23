@@ -11,11 +11,11 @@ import AssignmentInfo from './components/AssignmentInfo/AssignmentInfo';
 import UserRegistration from './components/UserRegistration/UserRegistration';
 import createBrowserHistory from 'history/createBrowserHistory'
 import Landing from './components/Landing/Landing';
+import AuthenticatedComponent from './components/AuthenticatedComponent/AuthenticatedComponent';
 
 const history = createBrowserHistory();
 
 class App extends Component {
-
 
   
   render() {
