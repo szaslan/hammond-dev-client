@@ -18,19 +18,12 @@ class UserLogin extends Component {
           email: '',
           password: '',
           url: '/login',
-          errors: [],
+          errors: '',
+          reDirect: false,
 
         };
       }
 
-      getValidationState() {
-        const length = this.state.value.length;
-        if (length > 10) return 'success';
-        else if (length > 5) return 'warning';
-        else if (length > 0) return 'error';
-        return null;
-      }
-    
 
       componentDidMount(){
         console.log("correct");
@@ -54,6 +47,7 @@ class UserLogin extends Component {
 
       fetch('/login', {
         method: 'POST',
+        redirect: 'follow',
         credentials: 'include',
         headers: {
           'Content-Type': 'application/json'},
@@ -62,39 +56,20 @@ class UserLogin extends Component {
         .then(function(response){
           console.log(response)
           if (response.status == 200){
+            fetchError.setState({reDirect: true})
+            // fetchError.setState({errors: ""});
             fetchError.setState({url: "/courses"})
           }
           else if(response.status == 400){
-            fetchError.setState({url: ''})
+            fetchError.setState({errors: "Invalid username or password"})
           }
-          else if (response.status == 300){
-            response.json().then(function(data){
-              fetchError.setState({errors: data})
-              console.log(fetchError.state.errors)
-            })
-          }
-          //   response.json().then(function(data){
-          //     fetchError.setState({url: data.url})
-          //   })
-          // }
-
-
-          // if (response.status == 200){
-          //   fetchError.setState({errors: [], reDirectTo: '/courses'})
-          //   fetchError.setState({success: true})
-            
-          //   throw new Error("breaking promise chain early");
           })
-        //   response.json().then(function(data){
-        //     console.log(data)
-        
-        //     console.log("data length: " + data.length)
-        //     if (data.length > 0)
-        //       fetchError.setState({errors: data})
-        //   })
-        // })
+
         .catch(error => console.log(error))
+
+
       }
+    
       
       
     
@@ -102,20 +77,6 @@ class UserLogin extends Component {
     const errors = this.state.errors;
     return (
 
-      // <div style={{maxWidth: 100}}>
-
-      // <form action="/login" method="GET">
-
-      //   <input type="text" placeholder="username" value={this.state.username} onChange={this.handleChange} name="username"/>
-      //   <input type="password" placeholder="password" value={this.state.password} onChange={this.handleChange} name="password"/>
-      //   <input type="submit" value="Submit" />
-      // </form>
-
-      // <Link to="/register">
-      // <div>register</div>
-      // </Link>
-      
-      // </div>
                   <Row className="screen" >
 
                   <Col className="right-side-col" fluid>
@@ -133,14 +94,14 @@ class UserLogin extends Component {
                               <Link to="/register">
                                 <button className="create-account">Create an Account</button>
                               </Link>
-                              {errors.length > 0 ?
-                              <ul>
-                                {errors.map(error => <li>{error.msg}</li>)}
-                              </ul>
-                                  :
-                                  <Redirect to={this.state.url} />
-                              }   
                               
+                              {errors ?
+                                <div>{errors}</div>
+                                  :
+                                  null
+                              }
+                              {(this.state.reDirect ? <Redirect to="/courses"/> : null)}   
+                            
                           </Form>
   
                       </div>

@@ -15,12 +15,18 @@ class CourseInfo extends Component {
             courseJSON: [],
             courseID: '',
             url: '',
-            
+            auth: false,
+            ...props
         }
-        
+    
     }
     
 
+    // componentWillMount(){
+    //     if(this.state.location.state.auth){
+    //         this.setState({auth: true})
+    //     }
+    // }
     componentDidMount() {
         const { match: { params } } = this.props;
         this.setState({ url: `/courses/${params.course_id}` });
@@ -32,6 +38,12 @@ class CourseInfo extends Component {
 
 
     render() {
+
+        // if (!this.state.auth){
+        //     return(
+        //         <div>Not authenticated</div>
+        //     )
+        // }
         
         return (
             <div>          

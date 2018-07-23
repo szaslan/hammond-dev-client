@@ -20,7 +20,7 @@ class UserRegistration extends Component {
           errors: [],
           msg: '',
           success: false,
-          reDirectTo: '/register'
+          reDirect: false,
         }
 
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -77,7 +77,7 @@ class UserRegistration extends Component {
           .then(function(response){
             console.log(response)
             if (response.status == 200){
-              fetchError.setState({errors: [], reDirectTo: '/courses'})
+              fetchError.setState({errors: [], reDirect: true})
               fetchError.setState({success: true})
               
               throw new Error("breaking promise chain early");
@@ -137,7 +137,7 @@ class UserRegistration extends Component {
           <input type="password" placeholder="Password" name="password" className="register-input" onChange={this.handleChange}/>
           <input type="password" placeholder="Re-enter your password"  className="register-input" name="password2" onChange={this.handleChange}/>
           
-          <input type="submit"  className="register-input"  /> 
+          <button type="submit"  className="register-input" >Submit</button>
           {/* // <input type="submit"  className="register-input"/> */}
 
           {/*
@@ -149,11 +149,14 @@ class UserRegistration extends Component {
           <li>{errors.msg}</li>))}
           </ul>
           :
-          <Redirect to={this.state.reDirectTo} /> 
+          null
         }
 
-
-          {console.log(errors)}
+        {this.state.reDirect ? 
+                  <Redirect to='/courses' />
+                  :
+                  null 
+                }
        
           
 

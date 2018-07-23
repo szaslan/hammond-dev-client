@@ -7,8 +7,6 @@ import { Well, Row, Col, Breadcrumb } from 'react-bootstrap';
 import Flexbox from 'flexbox-react';
 import JumbotronComp from '../JumbotronComp/JumbotronComp';
 
-
-
 class Courses extends Component{
     constructor(props){
         super(props);
@@ -89,7 +87,7 @@ class Courses extends Component{
                             flexWrap="wrap" inline="true">
                             {this.state.courses ?
                                 this.state.courses.map(courses =>
-                                    <Link to={`/courses/${courses.id}`}>
+                                    <Link to= {`/courses/${courses.id}`}>
                                         <button className="course-button">{courses.name}</button>
                                     </Link>)
                                     :
@@ -111,7 +109,12 @@ class Courses extends Component{
     }
     else{
         return (
-            <div>Not Authenticated</div>
+            <div>
+                <div>Not Authenticated</div>
+                <Link to="/login">
+                    <button>Sign in</button>
+                </Link>
+            </div>  
         )
     }
     }
