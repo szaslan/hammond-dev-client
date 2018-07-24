@@ -12,6 +12,7 @@ class CourseStudents extends Component {
             students: [],
             url: '',
             loaded: false,
+            ...props
         }
     }
 
@@ -43,35 +44,40 @@ class CourseStudents extends Component {
 
 
     render(){
-    
-        if(this.state.students === null) {
-            return (
-                <h1>Error! No students found!</h1>
-            )
-        }
-
-        else {
-
-
             return (
                 <div>
                     <JumbotronComp mainTitle="Students" secondaryTitle="&nbsp;" />
+
+                      <Breadcrumb className="breadcrumb1">
+                        <Breadcrumb.Item className="breadcrumb-item" href="/courses">Home</Breadcrumb.Item>
+                        <Breadcrumb.Item className="breadcrumb-item breadcrumb-item1" href={`/courses/${this.state.match.params.course_id}`}>
+                            {this.state.location.state.name}
+                        </Breadcrumb.Item>
+                        <Breadcrumb.Item className="breadcrumb-item" active>Students</Breadcrumb.Item>
+                    </Breadcrumb>
+
                     {/* <Breadcrumb className="breadcrumb1">
                         <Breadcrumb.Item className="breadcrumb-item" href="/courses/">Home</Breadcrumb.Item>
                         <Breadcrumb.Item className="breadcrumb-item breadcrumb-item1" active>{this.state.courseJSON.name}</Breadcrumb.Item>
                     </Breadcrumb> */}
+
+                    {this.state.students ?
+                    
+                
                     <ul>
                         {
                             this.state.students.map(students =>
                                 <li key={students.id}>{students.name}</li>)
                         }
                     </ul>
+                    :
+                    <Loader type="TailSpin" color="black" height={80} width={80} />
+                    }
                 </div>
             );
         }
 
 
     }
-}
 
 export default CourseStudents;
