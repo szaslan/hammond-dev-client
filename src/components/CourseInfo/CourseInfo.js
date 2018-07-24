@@ -6,6 +6,7 @@ import Flexbox from 'flexbox-react';
 import { Container, Jumbotron } from 'reactstrap';
 import JumbotronComp from '../JumbotronComp/JumbotronComp'
 import '../BreadcrumbComp/BreadcrumbComp.css';
+import { resolve } from 'path';
 
 class CourseInfo extends Component {
     constructor(props) {
@@ -29,10 +30,24 @@ class CourseInfo extends Component {
     // }
     componentDidMount() {
         const { match: { params } } = this.props;
+        
         this.setState({ url: `/courses/${params.course_id}` });
-        fetch(`https://canvas.northwestern.edu/api/v1/courses/${params.course_id}?access_token=${this.state.apiKey}`)
-            .then(res => res.json())
-            .then(courseJSON => this.setState({ courseJSON }));
+
+        
+        var data = {
+            course_id: params.course_id,
+        }
+
+        console.log(data);
+        fetch('/api/courseinfo',{
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        })
+        .then(res => res.json())
+        .then(courseJSON => this.setState({courseJSON}))
         
     }
 
@@ -64,7 +79,7 @@ class CourseInfo extends Component {
                                 <button className="pull-left big-button">Assignments</button>
 
                             </Link>
-                            <Link to={this.state.url + "/students"}>
+                            <Link to={{pathname: this.state.url + "/students", state: {name: this.state.courseJSON.name}}}>
                                 <button className="pull-right big-button">Students</button>
                             </Link>
                         </Flexbox>

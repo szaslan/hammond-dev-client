@@ -63,12 +63,24 @@ class Assignments extends Component{
     //fetch assignments for course with course_id passed down
     componentDidMount() {
         const { match: { params } } = this.props;
-
       this.setState({url: `/courses/${params.course_id}/${params.assignment_name}/`});
-        fetch(`https://canvas.northwestern.edu/api/v1/courses/${params.course_id}/assignments?per_page=500&access_token=${this.state.apiKey}`)
+        
+        let data = {
+            course_id: params.course_id,
+        }
+
+        fetch('/api/assignments',{
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        })
         .then(res => res.json())
         .then(assignments => this.setState({assignments}))
         .then(this.setState({mounted: true}))
+
+
     }
 
     

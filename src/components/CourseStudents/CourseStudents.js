@@ -23,7 +23,7 @@ class CourseStudents extends Component{
     componentDidMount(){
         const { match: { params } } = this.props;
         this.setState({url: `/courses/${params.course_id}/students`});
-        fetch(`https://canvas.northwestern.edu/api/v1/courses/${params.course_id}/users?per_page=500&access_token=${this.state.apiKey}`)
+        fetch(`https://cors-anywhere.herokuapp.com/https://canvas.northwestern.edu/api/v1/courses/${params.course_id}/users?per_page=500&access_token=${this.state.apiKey}`)
         .then(res => res.json())
         .then(students => this.setState({students}))
         .catch(this.setState({students: null}))

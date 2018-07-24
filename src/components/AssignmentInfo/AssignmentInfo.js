@@ -14,7 +14,6 @@ class AssignmentInfo extends Component {
 
         this._fetchAssignmentData = this._fetchAssignmentData.bind(this);
         this.state = {
-            apiKey: "1876~ypSApnhVIL4RWGQCp5oW7aJqw4NoP0kxvdKRiTVqcpGXVgzeToigIKbVBskcqk8u",
             assignment: [],
             url: '',
             id: this.props.match.params.assignment_id,
@@ -63,9 +62,23 @@ class AssignmentInfo extends Component {
         this.setState({ assignmentClicked: true });
         console.log("fetched!");
         this.setState({url: `/courses/${params.course_id}/${params.assignment_name}/`});
-        fetch(`https://canvas.northwestern.edu/api/v1/courses/${params.course_id}/assignments/${params.assignment_id}?access_token=${this.state.apiKey}`)
+
+        let data = {
+            course_id: params.course_id,
+            assignment_id: params.assignment_id
+        }
+
+        fetch('/api/assignmentinfo',{
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        })
             .then(res => res.json())
             .then(assignment => this.setState({ assignment }))
+
+        
     }
 
 
@@ -82,7 +95,7 @@ class AssignmentInfo extends Component {
                 <div className="assignment-info">
                     <p><strong>Title:</strong> {this.state.assignment.name}</p>
                     <DueDateButton />
-                    <AnalyzeButton />
+                    <AnalyzeButton varName="hello"/>
                 </div>
 
             )

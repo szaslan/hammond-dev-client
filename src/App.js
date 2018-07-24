@@ -21,7 +21,6 @@ class App extends Component {
   render() {
     return (
       <Router history={history}>
-        <Switch>
         <div className="App"> 
           {/*Landing Page*/} 
           <Route path="/" exact component={Landing} />
@@ -48,7 +47,6 @@ class App extends Component {
           <Route path="/courses/:course_id/students" exact component={CourseStudents}/>
 
         </div>
-        </Switch>
       </Router>
 
     );

@@ -12,7 +12,6 @@ class Courses extends Component{
         super(props);
         this.signOut = this.signOut.bind(this);
         this.state = {
-            apiKey: "1876~ypSApnhVIL4RWGQCp5oW7aJqw4NoP0kxvdKRiTVqcpGXVgzeToigIKbVBskcqk8u",
             courses: [],
             loaded: false,
             showCourse: false,
@@ -26,23 +25,17 @@ class Courses extends Component{
     }
 
     componentDidMount(){
-
         let get = this;
 
         this.setState({loaded: true});
-        fetch(`https://canvas.northwestern.edu/api/v1/users/83438/courses?per_page=500&access_token=${this.state.apiKey}`
-    )
-        .then(res => res.json())
-        .then(courses => this.setState({courses}))
-        .then(courses => this.props = courses);
 
-        fetch('/courses', {
+        fetch('/api/courses', {
             credentials: 'include'
         })
         .then(function(res){
+            console.log(res)
             res.json().then(function(data){
-                get.setState({user: data})
-                console.log(data);
+                get.setState({user: data.first_name, courses: data.courses})
             })
                 if (res.status === 404){
                     get.setState({auth: false})
@@ -80,7 +73,7 @@ class Courses extends Component{
         else if (this.state.auth == true){
         return(
             <div>
-                <JumbotronComp mainTitle ={this.state.user.first_name} secondaryTitle="Welcome," />
+                <JumbotronComp mainTitle ={this.state.user} secondaryTitle="Welcome," />
 
                 <Container className="well1-container" fluid>
                         <Flexbox className="well1-flexbox" minWidth="700px" width="90vw"
