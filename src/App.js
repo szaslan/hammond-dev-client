@@ -21,7 +21,6 @@ class App extends Component {
   render() {
     return (
       <Router history={history}>
-        <Switch>
         <div className="App"> 
           {/*Landing Page*/} 
           <Route path="/" exact component={Landing} />
@@ -41,14 +40,13 @@ class App extends Component {
           {/*Show assignments and students*/}
 
           {/* <Route path="/courses/:course_id/assignments"  component={Assignments} /> */}
-          <Route path="/courses/:course_id/:assignment_name" component={Assignments} />
+          <Route path="/courses/:course_id/:assignment_name/assignments"  component={Assignments} />
           
-          <Route path="/courses/:course_id/:assignment_name/:assignment_id" exact component={AssignmentInfo} />
+          <Route path="/courses/:course_id/:assignment_name/assignments/:assignment_id" exact component={AssignmentInfo} />
 
           <Route path="/courses/:course_id/students" exact component={CourseStudents}/>
 
         </div>
-        </Switch>
       </Router>
 
     );
