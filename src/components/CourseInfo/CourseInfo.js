@@ -12,7 +12,6 @@ class CourseInfo extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            apiKey: "1876~ypSApnhVIL4RWGQCp5oW7aJqw4NoP0kxvdKRiTVqcpGXVgzeToigIKbVBskcqk8u",
             courseJSON: [],
             courseID: '',
             url: '',
@@ -75,7 +74,7 @@ class CourseInfo extends Component {
                         <Flexbox
                             justifyContent="space-around"
                             flexWrap="nowrap">
-                             <Link to={{pathname: this.state.url + '/'+ this.state.courseJSON.name, state: {name: this.state.courseJSON.name}, }}>
+                             <Link to={{pathname: this.state.url + '/'+ this.state.courseJSON.name + "/assignments", state: {name: this.state.courseJSON.name}, }}>
                                 <button className="pull-left big-button">Assignments</button>
 
                             </Link>

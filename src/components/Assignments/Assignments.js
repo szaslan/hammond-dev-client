@@ -49,7 +49,6 @@ class Assignments extends Component{
 
         //URL is the current url while taking in the parameters from the props of the previous url
         this.state = {
-            apiKey: "1876~ypSApnhVIL4RWGQCp5oW7aJqw4NoP0kxvdKRiTVqcpGXVgzeToigIKbVBskcqk8u",
             assignments: [],
             loaded: false,
             url: '',
@@ -63,7 +62,7 @@ class Assignments extends Component{
     //fetch assignments for course with course_id passed down
     componentDidMount() {
         const { match: { params } } = this.props;
-      this.setState({url: `/courses/${params.course_id}/${params.assignment_name}/`});
+      this.setState({url: `/courses/${params.course_id}/${params.assignment_name}/assignments/`});
         
         let data = {
             course_id: params.course_id,

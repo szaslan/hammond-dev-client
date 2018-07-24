@@ -8,7 +8,6 @@ class CourseStudents extends Component{
 
         //URL is the current url while taking in the parameters from the props of the previous url
         this.state = {
-            apiKey: "1876~ypSApnhVIL4RWGQCp5oW7aJqw4NoP0kxvdKRiTVqcpGXVgzeToigIKbVBskcqk8u",
             students: [],
             url: '',
             loaded: false,
@@ -23,7 +22,18 @@ class CourseStudents extends Component{
     componentDidMount(){
         const { match: { params } } = this.props;
         this.setState({url: `/courses/${params.course_id}/students`});
-        fetch(`https://cors-anywhere.herokuapp.com/https://canvas.northwestern.edu/api/v1/courses/${params.course_id}/users?per_page=500&access_token=${this.state.apiKey}`)
+
+        let data = {
+            course_id: params.course_id
+        }
+
+        fetch('/api/coursestudents',{
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        })
         .then(res => res.json())
         .then(students => this.setState({students}))
         .catch(this.setState({students: null}))
@@ -32,13 +42,8 @@ class CourseStudents extends Component{
 
 
     render(){
-
-        if (this.state.students == []){
-            return(
-                <Loader type="TailSpin" color="black" height={80} width={80} />
-            )
-        }
-        else if(this.state.students === null) {
+    
+        if(this.state.students === null) {
             return (
                 <h1>Error! No students found!</h1>
             )
@@ -49,7 +54,6 @@ class CourseStudents extends Component{
         
         return(
             <div>
-    
                     <ul>
                         {
                             this.state.students.map(students =>

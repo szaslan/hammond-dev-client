@@ -61,7 +61,7 @@ class AssignmentInfo extends Component {
         const { match: { params } } = this.props;
         this.setState({ assignmentClicked: true });
         console.log("fetched!");
-        this.setState({url: `/courses/${params.course_id}/${params.assignment_name}/`});
+        this.setState({url: `/courses/${params.course_id}/${params.assignment_name}/assignments`});
 
         let data = {
             course_id: params.course_id,
