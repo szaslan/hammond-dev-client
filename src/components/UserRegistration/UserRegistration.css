@@ -1,6 +1,6 @@
 .register-group{
     width:500px;
-    padding-top:30vh;
+    padding-top:13vh;
     height:80vh;
     margin:auto;
 }
@@ -8,5 +8,16 @@
 .register-input{
     margin: 0 auto;
     display: flex;
+    border:none;
+    
+}
+.errors{
+    background:white;
+    list-style-type:circle;
+    text-align:left;
+    padding:10px;
+    padding-left:25px;
+    margin-top:10px;
+    border-radius:5px;
     
 }

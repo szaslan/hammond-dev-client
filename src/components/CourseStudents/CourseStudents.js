@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
-import Loader from 'react-loader-spinner'
+import Loader from 'react-loader-spinner';
+import JumbotronComp from '../JumbotronComp/JumbotronComp';
+import {Breadcrumb} from 'react-bootstrap';
 
-
-class CourseStudents extends Component{
-    constructor(props){
+class CourseStudents extends Component {
+    constructor(props) {
         super(props);
 
         //URL is the current url while taking in the parameters from the props of the previous url
@@ -15,53 +16,57 @@ class CourseStudents extends Component{
         }
     }
 
-    componentWillMount(){
-        this.setState({students: []})
+    componentWillMount() {
+        this.setState({ students: [] })
     }
-     
+
     //fetch assignments for course with course_id passed down
-    componentDidMount(){
+    componentDidMount() {
         const { match: { params } } = this.props;
-        this.setState({url: `/courses/${params.course_id}/students`});
+        this.setState({ url: `/courses/${params.course_id}/students` });
         fetch(`https://canvas.northwestern.edu/api/v1/courses/${params.course_id}/users?per_page=500&access_token=${this.state.apiKey}`)
-        .then(res => res.json())
-        .then(students => this.setState({students}))
-        .catch(this.setState({students: null}))
-                
+            .then(res => res.json())
+            .then(students => this.setState({ students }))
+            .catch(this.setState({ students: null }))
+
     }
 
 
-    render(){
+    render() {
 
-        if (this.state.students == []){
-            return(
+        if (this.state.students == []) {
+            return (
                 <Loader type="TailSpin" color="black" height={80} width={80} />
             )
         }
-        else if(this.state.students === null) {
+        else if (this.state.students === null) {
             return (
                 <h1>Error! No students found!</h1>
             )
         }
-        
-        else{
 
-        
-        return(
-            <div>
-    
+        else {
+
+
+            return (
+                <div>
+                    <JumbotronComp mainTitle="Students" secondaryTitle="&nbsp;" />
+                    {/* <Breadcrumb className="breadcrumb1">
+                        <Breadcrumb.Item className="breadcrumb-item" href="/courses/">Home</Breadcrumb.Item>
+                        <Breadcrumb.Item className="breadcrumb-item breadcrumb-item1" active>{this.state.courseJSON.name}</Breadcrumb.Item>
+                    </Breadcrumb> */}
                     <ul>
                         {
                             this.state.students.map(students =>
                                 <li key={students.id}>{students.name}</li>)
                         }
                     </ul>
-        </div>
-        );
+                </div>
+            );
+        }
+
+
     }
-
-
-}
 }
 
 export default CourseStudents;

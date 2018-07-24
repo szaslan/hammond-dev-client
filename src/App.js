@@ -41,7 +41,7 @@ class App extends Component {
           {/*Show assignments and students*/}
 
           {/* <Route path="/courses/:course_id/assignments"  component={Assignments} /> */}
-          <Route path="/courses/:course_id/:assignment_name"  component={Assignments} />
+          <Route path="/courses/:course_id/:assignment_name" component={Assignments} />
           
           <Route path="/courses/:course_id/:assignment_name/:assignment_id" exact component={AssignmentInfo} />
 

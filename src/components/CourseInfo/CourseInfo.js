@@ -62,7 +62,6 @@ class CourseInfo extends Component {
                             flexWrap="nowrap">
                              <Link to={{pathname: this.state.url + '/'+ this.state.courseJSON.name, state: {name: this.state.courseJSON.name}, }}>
                                 <button className="pull-left big-button">Assignments</button>
-
                             </Link>
                             <Link to={this.state.url + "/students"}>
                                 <button className="pull-right big-button">Students</button>

@@ -122,11 +122,11 @@ class UserLogin extends Component {
               </Link>
             </Flexbox>
             {errors ?
-              <div>{errors}</div>
+              <ul className="errors">{errors}</ul>
                 :
                 null
             }
-            {this.state.reDirect ? <Redirect to="/courses"/> : null}
+            {this.state.reDirect ? <Redirect to="/courses" /> : null}
           </Form>
         </div>
       </div>
