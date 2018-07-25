@@ -17,7 +17,7 @@ function FilterAssignments(props) {
     const currAssignment = props.currAssigment;
 
 
-    if (currAssignment.points_possible > 1){
+    if (currAssignment.peer_reviews){
         return (
             <li key={currAssignment.id} className="assignment-name">{currAssignment.name}</li>
         )

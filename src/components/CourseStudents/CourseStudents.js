@@ -51,7 +51,7 @@ class CourseStudents extends Component {
                       <Breadcrumb className="breadcrumb1">
                         <Breadcrumb.Item className="breadcrumb-item" href="/courses">Home</Breadcrumb.Item>
                         <Breadcrumb.Item className="breadcrumb-item breadcrumb-item1" href={`/courses/${this.state.match.params.course_id}`}>
-                            {this.state.location.state.name}
+                            {this.props.match.params.assignment_name}
                         </Breadcrumb.Item>
                         <Breadcrumb.Item className="breadcrumb-item" active>Students</Breadcrumb.Item>
                     </Breadcrumb>

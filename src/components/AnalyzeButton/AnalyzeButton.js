@@ -73,8 +73,8 @@ class AnalyzeButton extends Component {
                 .then(() => this.sendGradesToCanvas())
                 .then(() => this.setState({analyzeDisplayText: false}))
                 .then(() => this.setState({finalizeDisplayText: true}))
-                .then(() => document.getElementById("analyze").disabled = true)
-                .then(() => document.getElementById("finalize").disabled = true)
+                // .then(() => document.getElementById("analyze").disabled = true)
+                // .then(() => document.getElementById("finalize").disabled = true)
                 .then(() => this.attachNamesToDatabaseTables())
               })
             }
@@ -151,10 +151,17 @@ class AnalyzeButton extends Component {
     return (
       <div>
         <Flexbox className="flex-dropdown" maxWidth="300px" flexWrap="wrap" justify-content="space-around"  >
-          <button onClick={this.handleClick} className="analyze" id="analyze">
-            Analyze
-          </button>
-          <button className="analyze" id="finalize" onClick={this.handleFinalizeClick}>Finalize</button>
+         
+          {this.state.finalizeDisplayText ?
+          null
+          :
+          <div>
+              <button onClick={this.handleClick} className="analyze" id="analyze">
+              Analyze
+            </button>
+              <button className="analyze" id="finalize" onClick={this.handleFinalizeClick}>Finalize</button>
+          </div>
+        }
         </Flexbox>
         {this.state.finalizeDisplayText ?
           <div>

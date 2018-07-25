@@ -77,7 +77,7 @@ class CourseInfo extends Component {
                              <Link to={{pathname: this.state.url + '/'+ this.state.courseJSON.name + "/assignments/", state: {name: this.state.courseJSON.name}, }}>
                                 <button className="pull-left big-button">Assignments</button>
                             </Link>
-                            <Link to={{pathname: this.state.url + "/students", state: {name: this.state.courseJSON.name}}}>
+                            <Link to={{pathname: this.state.url + "/"+this.state.courseJSON.name + "/students", state: {name: this.state.courseJSON.name}}}>
                                 <button className="pull-right big-button">Students</button>
                             </Link>
                         </Flexbox>

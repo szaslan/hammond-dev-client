@@ -44,7 +44,7 @@ class App extends Component {
           
           <Route path="/courses/:course_id/:assignment_name/assignments/:assignment_id" exact component={AssignmentInfo} />
 
-          <Route path="/courses/:course_id/students" exact component={CourseStudents}/>
+          <Route path="/courses/:course_id/:assignment_name/students" exact component={CourseStudents}/>
 
         </div>
       </Router>
