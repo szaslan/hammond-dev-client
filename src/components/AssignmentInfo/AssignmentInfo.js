@@ -3,6 +3,7 @@ import './AssignmentInfo.css';
 import Loader from 'react-loader-spinner'
 import { Well, Row, Col, Breadcrumb } from 'react-bootstrap';
 import AnalyzeButton from '../AnalyzeButton/AnalyzeButton';
+import { getCiphers } from 'crypto';
 
 function FilterRubricAssessments(props) {
     const currPeerReview = props.currPeerReview;
@@ -25,7 +26,6 @@ class AssignmentInfo extends Component{
 
         this._fetchAssignmentData = this._fetchAssignmentData.bind(this);
         this.state = {
-            apiKey: "1876~H4edcIGWB68NtnF4eCsFLVEvBMa0NEqBmFNhxeX6LGWOQoOlmugN7tAwOIKmdB9H",
             assignment: [],
             url: '',
             id: this.props.match.params.assignment_id,
@@ -76,7 +76,18 @@ class AssignmentInfo extends Component{
         console.log("1: fetching assignment data from canvas");
         this.setState({url: `/courses/${params.course_id}/assignments/`});
 
-        fetch(`https://canvas.northwestern.edu/api/v1/courses/${params.course_id}/assignments/${params.assignment_id}?access_token=${this.state.apiKey}`)
+        let data = {
+            course_id: params.course_id,
+            assignment_id: params.assignment_id
+        }
+
+        fetch('/api/assignmentinfo', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        })
         .then(res => res.json())
         .then(res => this.setState({assignment: res}))
     }
@@ -101,7 +112,7 @@ class AssignmentInfo extends Component{
                 <div>
                    <div className="assignment-info">
                            <strong>Title:</strong> {this.state.assignment.name}
-                           <AnalyzeButton assignment_info={this.state.assignment} course_id={this.props.match.params.course_id} assignment_id={this.props.match.params.assignment_id} apiKey={this.state.apiKey}/>
+                           <AnalyzeButton assignment_info={this.state.assignment} course_id={this.props.match.params.course_id} assignment_id={this.props.match.params.assignment_id} />
                    </div>
        
                    {/* <ul>

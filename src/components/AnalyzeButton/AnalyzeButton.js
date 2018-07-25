@@ -12,14 +12,19 @@ var message = "";
 
 class AnalyzeButton extends Component {
   constructor(props) {
+
     super(props);
+        
+    
     this.state = {
       buttonPressed: false,
       analyzeDisplayText: false,
       finalizeDisplayText: false,
       peerreviewJSON: [],
       rubricJSON: [],
+
     };
+
     this.handleClick = this.handleClick.bind(this);
     this.handleFinalizeClick = this.handleFinalizeClick.bind(this);
     this.sendGradesToCanvas = this.sendGradesToCanvas.bind(this);
@@ -29,8 +34,19 @@ class AnalyzeButton extends Component {
   }
 
   fetchPeerReviewData(finalizing) {
+
+    let data = {
+      course_id: this.props.course_id,
+        assignment_id: this.props.assignment_id
+    }
     console.log("3: fetching peer review data from canvas")
-    fetch(`https://canvas.northwestern.edu/api/v1/courses/${this.props.course_id}/assignments/${this.props.assignment_id}/peer_reviews?access_token=${this.props.apiKey}`)
+    fetch(`/api/save_all_peer_reviews_outer`, {
+      method: "POST",
+      headers:{
+        'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(data)
+    })
     .then(res => {
         res.json()
         .then(data => {
@@ -50,12 +66,25 @@ class AnalyzeButton extends Component {
   }
 
   fetchRubricData(finalizing) {
+
+    let data = {
+      course_id: this.props.course_id,
+      rubric_settings: this.props.assignment_info.rubric_settings.id
+    }
+
     console.log("5: fetching rubric data from canvas");
-    fetch(`https://canvas.northwestern.edu/api/v1/courses/${this.props.course_id}/rubrics/${this.props.assignment_info.rubric_settings.id}?access_token=${this.props.apiKey}&include=peer_assessments`)
+    fetch('/api/save_all_rubrics_outer',{
+      method: "POST",
+      headers:{
+        'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(data)
+    })
     .then(res => {
         res.json()
         .then(data => {
             this.setState({rubricJSON: data})
+            console.log(data)
             if (finalizing) {
               fetch('/api/save_all_rubrics', {
                 method: 'POST',
