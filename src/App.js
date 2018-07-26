@@ -11,6 +11,8 @@ import AssignmentInfo from './components/AssignmentInfo/AssignmentInfo';
 import UserRegistration from './components/UserRegistration/UserRegistration';
 import createBrowserHistory from 'history/createBrowserHistory'
 import Landing from './components/Landing/Landing';
+import StudentInfo from './components/StudentInfo/StudentInfo';
+import NotFound from './components/NotFound/NotFound';
 import AuthenticatedComponent from './components/AuthenticatedComponent/AuthenticatedComponent';
 
 const history = createBrowserHistory();
@@ -29,10 +31,6 @@ class App extends Component {
           <Route path="/(login|logout)" exact component={UserLogin}/>
           <Route path="/register" exact component={UserRegistration} />
 
-          {/*Need signup page*/}
-
-          <Route path="/user" exact component={Students}/>
-
           {/*List of Courses*/}
           <Route path="/courses"  exact component={Courses}/>
           <Route path="/courses/:course_id"  exact component={CourseInfo} />
@@ -44,7 +42,11 @@ class App extends Component {
           
           <Route path="/courses/:course_id/:assignment_name/assignments/:assignment_id" exact component={AssignmentInfo} />
 
-          <Route path="/courses/:course_id/:assignment_name/students" exact component={CourseStudents}/>
+          <Route path="/courses/:course_id/:assignment_name/students"  component={CourseStudents}/>
+
+          <Route path="/courses/:course_id/:assignment_name/students/:student_id" exact component={StudentInfo} />
+
+          <Route component={NotFound} exact/>
 
         </div>
       </Router>

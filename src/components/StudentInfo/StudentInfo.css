@@ -1,0 +1,11 @@
+.student-info{
+    margin-left: 50%;
+    width: 50vw;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+}
+
+.dropdowns {
+    width: 50%;
+}

@@ -36,7 +36,7 @@ class UserLogin extends Component {
   handleSubmit(event){
     event.preventDefault();
 
-    const errors = this.state.errors;
+    console.log('CLICKED')
 
     var data = {
       email: this.state.email,
@@ -45,27 +45,25 @@ class UserLogin extends Component {
 
     let fetchError = this;
 
-  fetch('/login', {
-    method: 'POST',
-    redirect: 'follow',
-    credentials: 'include',
-    headers: {
-      'Content-Type': 'application/json'},
-    body: JSON.stringify(data)
+    fetch('/login', {
+      method: 'POST',
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(data)
     })
-    .then(function(response){
-      console.log(response)
-      if (response.status == 200){
-        fetchError.setState({reDirect: true})
-        // fetchError.setState({errors: ""});
-        fetchError.setState({url: "/courses"})
-      }
-      else if(response.status == 400){
-        fetchError.setState({errors: "Invalid username or password"})
-      }
+      .then(function(response) {
+        console.log(response)
+        if (response.status == 200) {
+          console.log('200 STATUS')
+          fetchError.setState({ reDirect: true })
+        }
+        else if (response.status == 401 || response.status == 400) {
+          fetchError.setState({ errors: "Invalid username or password" })
+        }
       })
-
-    .catch(error => console.log(error))
+      .catch(error => console.log(error))
 
 
   }

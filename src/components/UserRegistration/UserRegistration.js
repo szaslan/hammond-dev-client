@@ -23,11 +23,11 @@ class UserRegistration extends Component {
       msg: '',
       success: false,
       reDirect: false,
+      emailExists: false,
     }
 
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleChange = this.handleChange.bind(this);
-    this.CheckStatus = this.CheckStatus.bind(this);
 
   }
 
@@ -85,6 +85,9 @@ class UserRegistration extends Component {
 
           throw new Error("breaking promise chain early");
         }
+        else if (response.status == 404){
+          fetchError.setState({emailExists: true})
+        }
         response.json().then(function (data) {
           console.log(data)
           console.log("data length: " + data.length)
@@ -99,63 +102,15 @@ class UserRegistration extends Component {
 
     // this.MapErrors(this.state.errors);
 
-    // fetch('/courses',{
-    //   method: 'GET'
-    // })
-    // .then(res => console.log(res))
-    // .catch(err => console.log(err))     
 
   }
-  //check status of response
-  CheckStatus(data) {
-    if (data.status == 200) {
-      console.log(data.status)
-      return data.json();
-    } else if (data.status == 300) {
-      console.log(data)
-      data = data.json();
-      this.setState({ errors: data })
-      console.log(this.state.errors)
-    } else if (data.status == 400) {
-      throw new Error("Bad response from server");
-    }
-  }
-  // console.log(data);
 
-  // this.MapErrors(this.state.errors);
-
-  // fetch('/courses',{
-  //   method: 'GET'
-  // })
-  // .then(res => console.log(res))
-  // .catch(err => console.log(err))  
   render() {
 
     const errors = this.state.errors;
 
 
     return (
-
-      // <div className="entire-screen">
-      //   <h1>Sign Up</h1>
-      //   <form className="register-form" onSubmit={this.handleSubmit}>
-      //     <input type="text" placeholder="First Name"  name="firstName" className="register-input"  onChange={this.handleChange}/>
-      //     <input type="text" placeholder="Last Name" name="lastName"className="register-input"   onChange={this.handleChange}/>
-      //     <input type="text" placeholder="Email" name="email" className="register-input"  onChange={this.handleChange}/>
-      //     <input type="password" placeholder="Password" name="password" className="register-input" onChange={this.handleChange}/>
-      //     <input type="password" placeholder="Re-enter your password"  className="register-input" name="password2" onChange={this.handleChange}/>
-      //     <input type="submit"  className="register-input"  /> 
-      //     {errors.length > 0 ? <ul>
-      //       {
-      //      (errors.map(errors => 
-      //     <li>{errors.msg}</li>))}
-      //     </ul>
-      //     :
-      //     <Redirect to={this.state.reDirectTo} /> 
-      //   }
-      //     {console.log(errors)}
-      //   </form>
-      // </div>
       <div className="entire-screen">
         <div className="register-group">
           <h1 className="welcome-message"><strong>Sign Up</strong></h1>
@@ -179,6 +134,7 @@ class UserRegistration extends Component {
               :
               null
             }
+            {this.state.emailExists ? <div>"Sorry that email already exists"</div> : null}
 
             {this.state.reDirect ?
               <Redirect to='/courses' />

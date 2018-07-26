@@ -102,26 +102,13 @@ class AssignmentInfo extends Component{
         )
         else {
             return (
-                // <div className="assignment-info" >
-                    //<div className="assigment-labels">{this.state.assignment.name}</div>
-                    //<div className="assigment-labels">Assignment ID: {this.state.assignment.id}</div>
-                   // <div className="assigment-labels">Points Poissible: {this.state.assignment.points_possible}</div>
-                   // <button className="assigment-labels buttons">Analyze!</button>
-                   // <button className="assigment-labels buttons">Finalize!</button>
+
                    
                 <div>
                    <div className="assignment-info">
                            <strong>Title:</strong> {this.state.assignment.name}
                            <AnalyzeButton assignment_info={this.state.assignment} course_id={this.props.match.params.course_id} assignment_id={this.props.match.params.assignment_id} />
                    </div>
-       
-                   {/* <ul>
-                       {this.state.rubricJSON.assessments.map(assessments =>
-                           {this.state.peerreviewJSON.map(peerreviewJSON => 
-                               <FilterRubricAssessments currPeerReview={peerreviewJSON} currAssessment={assessments}/>
-                           )}
-                       )}
-                   </ul> */}
                </div>
                     
 //                </div>
