@@ -25,6 +25,7 @@ class StudentInfo extends Component{
     constructor(props){
         super(props);
 
+
         this.getPeerReviews = this.getPeerReviews.bind(this);
         this.toggleReview = this.toggleReview.bind(this);
         this.toggleAssignment = this.toggleAssignment.bind(this);
@@ -171,7 +172,9 @@ class StudentInfo extends Component{
         this.setState({
           value: event.target.innerText,
           selectedAssignment: Number(event.target.id),
-          value2: 'Select a Peer Review'
+          value2: 'Select a Peer Review',
+          scoreGiven: '',
+          finalScore: ''
         }, () => {
             this.getPeerReviews();
             console.log('ran get peer reviews')
@@ -196,6 +199,8 @@ class StudentInfo extends Component{
 
           console.log(data);
 
+          let get = this;
+
           fetch('/api/peer_review_grade',{
               method: 'POST',
               headers: {
@@ -205,7 +210,7 @@ class StudentInfo extends Component{
           })
           .then(res => res.json())
           .then(function(data){
-              this.setState({scoreGiven: data.score_given,
+              get.setState({scoreGiven: data.score_given,
                             finalScore: data.final_score})
 
           })
@@ -257,8 +262,14 @@ class StudentInfo extends Component{
                                 
                         }
 
-                        <div>{this.state.scoreGiven}</div>
-                        <div>{this.state.finalScore}</div>
+                        {this.state.scoreGiven ?
+                        <div>
+                            <div>{this.props.location.state.student_name} gave {this.state.value2} a score of  {this.state.scoreGiven}</div>
+                            <div>{this.state.value2} received a final grade of {this.state.finalScore}</div>
+                        </div>
+                        :
+                        <div>{this.props.location.state.student} did not complete this peer review </div>
+                        }
 
 
              

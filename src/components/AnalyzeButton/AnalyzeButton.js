@@ -53,14 +53,27 @@ class AnalyzeButton extends Component {
       this.setState({finalizeDisplayText: true})
     }
     else {
-      fetch(`/api/save_all_peer_reviews_outer`)
+      console.log("else statement ran")
+      let outerData = {
+          course_id: this.props.course_id,
+            assignment_id: this.props.assignment_id
+        }
+      fetch('/api/save_all_peer_reviews_outer', {
+        method: "POST",
+        headers:{
+          'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(outerData)
+    })
       .then(res => {
           res.json()
           .then(result => {
               this.setState({peerreviewJSON: result})
+              console.log("peer review length: " + this.state.peerreviewJSON)
 
               var data = {
                 peer_reviews: this.state.peerreviewJSON,
+                course_id: this.props.course_id,
                 assignment_id: this.props.assignment_id,
                 points_possible: this.props.assignment_info.points_possible,
               }
@@ -90,34 +103,34 @@ class AnalyzeButton extends Component {
       })
       }
 
-    let data = {
-      course_id: this.props.course_id,
-        assignment_id: this.props.assignment_id
-    }
-    console.log("3: fetching peer review data from canvas")
-    fetch(`/api/save_all_peer_reviews_outer`, {
-      method: "POST",
-      headers:{
-        'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(data)
-    })
-    .then(res => {
-        res.json()
-        .then(data => {
-            this.setState({peerreviewJSON: data})
-            fetch('/api/save_all_peer_reviews', {
-                method: 'POST',
-                headers:{
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(this.state.peerreviewJSON)
-            })
-            .then(() => {
-                this.fetchRubricData(finalizing);
-            })
-        })
-    })
+    // let data = {
+    //   course_id: this.props.course_id,
+    //     assignment_id: this.props.assignment_id
+    // }
+    // console.log("3: fetching peer review data from canvas")
+    // fetch(`/api/save_all_peer_reviews_outer`, {
+    //   method: "POST",
+    //   headers:{
+    //     'Content-Type': 'application/json'
+    // },
+    // body: JSON.stringify(data)
+    // })
+    // .then(res => {
+    //     res.json()
+    //     .then(data => {
+    //         this.setState({peerreviewJSON: data})
+    //         fetch('/api/save_all_peer_reviews', {
+    //             method: 'POST',
+    //             headers:{
+    //                 'Content-Type': 'application/json'
+    //             },
+    //             body: JSON.stringify(this.state.peerreviewJSON)
+    //         })
+    //         .then(() => {
+    //             this.fetchRubricData(finalizing);
+    //         })
+    //     })
+    // })
   }
 
   fetchRubricData(finalizing) {
