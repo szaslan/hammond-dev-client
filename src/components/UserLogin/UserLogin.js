@@ -66,11 +66,7 @@ class UserLogin extends Component {
       })
 
     .catch(error => console.log(error))
-
-
   }
-
-
 
   render() {
     const errors = this.state.errors;
