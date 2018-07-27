@@ -36,31 +36,38 @@ class StudentInfo extends Component{
             
             student: [],
             assignments: [],
-            peerReviews: [],
+            peer_reviews: [],
             url: '',
             id: this.props.match.params.assignment_id,
             dropdownOpen: false,
             peerReviewOpen: false,
             selectedAssignment: '',
+            selectedStudent: '',
             value: 'Select an Assignment',
             value2: 'Select a Peer Review',
+            noPeerReview: false,
+            scoreGiven: '',
+            finalScore: '',
+            errorMessage: 'No peer reviews for this student!',
             ...props,
+            
         }
     }
  //if props are changed, this runs
-    static getDerivedStateFromProps(nextProps, prevState){
-        if (nextProps.match.params.assignment_id !== prevState.id){
-            return {
-            id: nextProps.match.params.assignment_id,
-            assignment: null
-            }
-        }
-        return null;
-    }
+    // static getDerivedStateFromProps(nextProps, prevState){
+    //     if (nextProps.match.params.assignment_id !== prevState.id){
+    //         return {
+    //         id: nextProps.match.params.assignment_id,
+    //         assignment: null
+    //         }
+    //     }
+    //     return null;
+    // }
 
         //everytime a new assignment is clicked on, component re-renders and new assignment is fetched
         componentDidMount(){
             console.log("component mounted!");
+            this.setState({errorMessage: " "})
             this._fetchAssignmentData();
     }
 
@@ -68,10 +75,13 @@ class StudentInfo extends Component{
     componentDidUpdate(prevProps){
         if(this.props.location.state.student_name !== prevProps.location.state.student_name){
             console.log("component did update!");
+
+                this.setState({errorMessage: ""})
+            
             this.setState({value: "Select an Assignment",
                             value2: "Select a Peer Review",
-                            peer_reviews: null})
-            this._fetchAssignmentData();
+                            peer_reviews: []})
+            // this._fetchAssignmentData();
         }  
     }
 
@@ -108,7 +118,6 @@ class StudentInfo extends Component{
             assignment_id: this.state.selectedAssignment,
         }
         console.log('getPeerReview()');
-        console.log(data);
 
         let get = this;
 
@@ -119,11 +128,29 @@ class StudentInfo extends Component{
             },
             body: JSON.stringify(data)
         })
-        .then(res => res.json())
-        .then(function(data){
-            console.log(data);
-            get.setState({peer_reviews: data})
+        .then(function(res){ 
+            console.log(res)
+            if (res.status == 404)
+            {
+                get.setState({errorMessage: "No peer reviews for this student!"})
+                
+            }
+            else res.json().then(function(data){
+    
+                console.log(data);
+                get.setState({peer_reviews: data})
+                    // if (get.state.peer_reviews == []){
+                    //     get.setState({errorMessage: "No peer reviews for this student!"})
+                    //     console.log(get.state.errorMessage)
+                
+                    // }    
+            
+               
+             
+            })
         })
+        
+    
     }
 
     toggleAssignment() {
@@ -140,6 +167,7 @@ class StudentInfo extends Component{
 
     select(event) {
         console.log(event.target)
+        
         this.setState({
           value: event.target.innerText,
           selectedAssignment: Number(event.target.id),
@@ -154,7 +182,32 @@ class StudentInfo extends Component{
       selectPeerReview(event){
           console.log(event.target)
           this.setState({
-              value2: event.target.innerText
+              value2: event.target.innerText,
+              selectedStudent: Number(event.target.id)
+          })
+
+          
+
+          let data = {
+              assignment_id: this.state.selectedAssignment,
+              assessor_id: this.props.location.state.student_id,
+              user_id: Number(event.target.id)
+          }
+
+          console.log(data);
+
+          fetch('/api/peer_review_grade',{
+              method: 'POST',
+              headers: {
+                  'Content-Type': 'application/json'
+              },
+              body: JSON.stringify(data)
+          })
+          .then(res => res.json())
+          .then(function(data){
+              this.setState({scoreGiven: data.score_given,
+                            finalScore: data.final_score})
+
           })
       }
 
@@ -164,7 +217,7 @@ class StudentInfo extends Component{
             return (   
                 <div className="student-info">
                         {/*THIS BELOW SHOULD BE THIS.STATE.STUDENT*/}
-                        <div>{this.props.location.state.student_name}</div>
+                        <div className="student-name">{this.props.location.state.student_name}</div>
                             <Dropdown className="dropdowns" isOpen={this.state.dropdownOpen} toggle ={this.toggleAssignment} >
                             <DropdownToggle caret>
                                 {this.state.value}
@@ -180,7 +233,8 @@ class StudentInfo extends Component{
                                 </DropdownMenu>
                             </Dropdown>
 
-                            {this.state.peer_reviews?
+                            {this.state.peer_reviews.length > 0
+                                ?
 
                         <Dropdown  className="dropdowns" isOpen={this.state.peerReviewOpen} toggle={this.toggleReview} >
                             <DropdownToggle caret>
@@ -189,14 +243,22 @@ class StudentInfo extends Component{
                                 <DropdownMenu >
                                     {
                                         this.state.peer_reviews.map(currPeerReivew => 
-                                            <DropdownItem onClick={this.selectPeerReview}>{currPeerReivew}</DropdownItem>
+                                            <DropdownItem id={currPeerReivew.id} onClick={this.selectPeerReview}>{currPeerReivew.name}</DropdownItem>
                                         )
                                     }
                                    
                                 </DropdownMenu>
                             </Dropdown>
-                            :
-                            null}
+                                :
+                                                                
+                                <div>{this.state.errorMessage}</div>
+                               
+                                
+                                
+                        }
+
+                        <div>{this.state.scoreGiven}</div>
+                        <div>{this.state.finalScore}</div>
 
 
              
