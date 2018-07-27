@@ -7,6 +7,8 @@ import { Container, Jumbotron } from 'reactstrap';
 import JumbotronComp from '../JumbotronComp/JumbotronComp'
 import '../BreadcrumbComp/BreadcrumbComp.css';
 import { resolve } from 'path';
+import Loader from 'react-loader-spinner'
+
 
 class CourseInfo extends Component {
     constructor(props) {
@@ -16,6 +18,7 @@ class CourseInfo extends Component {
             courseID: '',
             url: '',
             auth: false,
+            loaded: false,
             ...props
         }
     
@@ -46,7 +49,7 @@ class CourseInfo extends Component {
             body: JSON.stringify(data)
         })
         .then(res => res.json())
-        .then(courseJSON => this.setState({courseJSON}))
+        .then(courseJSON => this.setState({courseJSON, loaded: true}))
         
     }
 
@@ -58,6 +61,8 @@ class CourseInfo extends Component {
         //         <div>Not authenticated</div>
         //     )
         // }
+
+    
         
         return (
             <div>          
@@ -68,6 +73,7 @@ class CourseInfo extends Component {
                     <Breadcrumb.Item className="breadcrumb-item" href="/courses/">Home</Breadcrumb.Item>
                     <Breadcrumb.Item className="breadcrumb-item breadcrumb-item1" active>{this.state.courseJSON.name}</Breadcrumb.Item>
                 </Breadcrumb>
+                {this.state.loaded ? 
                 <Container className="well1-container" fluid>
                     <Flexbox className="big-buttons-flexbox" minWidth="700px" width="60vw" justifyContent="center"
                         minHeight="50vh" flexDirection="column">
@@ -77,12 +83,16 @@ class CourseInfo extends Component {
                              <Link to={{pathname: this.state.url + '/'+ this.state.courseJSON.name + "/assignments/", state: {name: this.state.courseJSON.name}, }}>
                                 <button className="pull-left big-button">Assignments</button>
                             </Link>
-                            <Link to={{pathname: this.state.url + "/students", state: {name: this.state.courseJSON.name}}}>
+                            <Link to={{pathname: this.state.url + "/"+this.state.courseJSON.name + "/students", state: {name: this.state.courseJSON.name}}}>
                                 <button className="pull-right big-button">Students</button>
                             </Link>
+                           
                         </Flexbox>
                     </Flexbox>
                 </Container>
+                 :
+                 <Loader type="TailSpin" color="black" height={80} width={80} />
+                 }
             </div>
 
         );

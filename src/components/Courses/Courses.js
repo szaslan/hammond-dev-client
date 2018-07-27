@@ -30,7 +30,7 @@ class Courses extends Component{
         this.setState({loaded: true});
 
         fetch('/api/courses', {
-            credentials: 'include'
+            credentials: 'same-origin'
         })
         .then(function(res){
             console.log(res)
@@ -71,23 +71,29 @@ class Courses extends Component{
             );
         }
         else if (this.state.auth == true){
+            
         return(
             <div>
                 <JumbotronComp mainTitle ={this.state.user} secondaryTitle="Welcome," />
-
                 <Container className="well1-container" fluid>
                         <Flexbox className="well1-flexbox" minWidth="700px" width="90vw"
                             flexWrap="wrap" inline="true">
-                            {this.state.courses ?
+                            {this.state.courses.length > 0 
+                            ?    
+                            this.state.courses ?
                                 this.state.courses.map(courses =>
                                     <Link to= {`/courses/${courses.id}`}>
                                         <button className="course-button">{courses.name}</button>
                                     </Link>)
                                     :
                                 null
-                            }
+                            
+                            :
+                            <h1>No classes as a teacher</h1>
+                                    }
                         </Flexbox>
                 </Container>
+               
 
                 <Well className="bottom" fluid>
                     <Container className="bottom-container" fluid>

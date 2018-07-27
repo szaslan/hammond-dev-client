@@ -2,10 +2,7 @@ import React, { Component } from 'react';
 import './Assignments.css';
 import { Link } from "react-router-dom";
 import Loader from 'react-loader-spinner'
-import { Container, Jumbotron } from 'reactstrap';
 import { Well, Row, Col, Breadcrumb } from 'react-bootstrap';
-import Flexbox from 'flexbox-react';
-import AnalyzeButton from '../AnalyzeButton/AnalyzeButton';
 import JumbotronComp from '../JumbotronComp/JumbotronComp';
 import AssignmentInfo from '../AssignmentInfo/AssignmentInfo';
 import '../BreadcrumbComp/BreadcrumbComp.css';
