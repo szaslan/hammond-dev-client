@@ -48,7 +48,7 @@ class AssignmentInfo extends Component{
 
         //everytime a new assignment is clicked on, component re-renders and new assignment is fetched
         componentDidMount(){
-            console.log("component mounted!");
+            console.log("assignmentinfo mounted!");
             this._fetchAssignmentData();
     }
 
@@ -107,7 +107,13 @@ class AssignmentInfo extends Component{
                 <div>
                    <div className="assignment-info">
                            <strong>Title:</strong> {this.state.assignment.name}
-                           <AnalyzeButton assignment_info={this.state.assignment} course_id={this.props.match.params.course_id} assignment_id={this.props.match.params.assignment_id} />
+                           <AnalyzeButton 
+                                assignment_info={this.state.assignment} 
+                                course_id={this.props.match.params.course_id} 
+                                assignment_id={this.props.match.params.assignment_id} 
+                                apiKey={this.state.apiKey}
+                            />
+
                    </div>
                </div>
                     

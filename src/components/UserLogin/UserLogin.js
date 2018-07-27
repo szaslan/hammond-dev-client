@@ -63,12 +63,9 @@ class UserLogin extends Component {
           fetchError.setState({ errors: "Invalid username or password" })
         }
       })
+
       .catch(error => console.log(error))
-
-
   }
-
-
 
   render() {
     const errors = this.state.errors;

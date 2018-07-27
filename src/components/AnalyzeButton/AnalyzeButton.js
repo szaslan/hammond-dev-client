@@ -4,6 +4,8 @@ import { Well, Row, Panel } from 'react-bootstrap';
 import Flexbox from 'flexbox-react';
 import 'bootstrap/dist/css/bootstrap.css';
 import Accordion from '../Accordion/Accordion';
+import Loader from 'react-loader-spinner'
+
 import '../Assignments/Assignments.css'
 
 const HARSHNAME = ['James','Elizabeth','John'];
@@ -20,8 +22,15 @@ class AnalyzeButton extends Component {
       buttonPressed: false,
       analyzeDisplayText: false,
       finalizeDisplayText: false,
+      finalizePressed: false,
       peerreviewJSON: [],
       rubricJSON: [],
+      harsh_students: [],
+      lenient_students: [],
+      incomplete_students: [],
+      harsh_students_loaded: false,
+      lenient_students_loaded: false,
+      incomplete_students_loaded: false,
 
     };
 
@@ -31,9 +40,55 @@ class AnalyzeButton extends Component {
     this.fetchPeerReviewData = this.fetchPeerReviewData.bind(this);
     this.fetchRubricData = this.fetchRubricData.bind(this);
     this.attachNamesToDatabaseTables = this.attachNamesToDatabaseTables.bind(this);
+    this.attachNamesToDatabaseTablesFinalizing = this.attachNamesToDatabaseTablesFinalizing.bind(this)
+    this.sortStudentsForAccordion = this.sortStudentsForAccordion.bind(this);
   }
 
+
+
   fetchPeerReviewData(finalizing) {
+    if (localStorage.getItem("finalizePressed_" + this.props.assignment_id)) {
+      this.setState({analyzeDisplayText: false})
+      this.setState({finalizePressed: true})
+      this.setState({finalizeDisplayText: true})
+    }
+    else {
+      fetch(`/api/save_all_peer_reviews_outer`)
+      .then(res => {
+          res.json()
+          .then(result => {
+              this.setState({peerreviewJSON: result})
+
+              var data = {
+                peer_reviews: this.state.peerreviewJSON,
+                assignment_id: this.props.assignment_id,
+                points_possible: this.props.assignment_info.points_possible,
+              }
+
+              fetch('/api/save_all_peer_reviews', {
+                  method: 'POST',
+                  headers:{
+                      'Content-Type': 'application/json'
+                  },
+                  body: JSON.stringify(data)
+              })
+              .then(() => {
+                  this.fetchRubricData(finalizing);
+              })
+          })
+      })
+      .then(() => {
+        if (finalizing) {
+          localStorage.setItem("finalizePressed_" + this.props.assignment_id, true);
+          this.setState({analyzeDisplayText: false})
+          this.setState({finalizePressed: true})
+          this.setState({finalizeDisplayText: true})
+        }
+        else {
+          localStorage.setItem("analyzePressed_" + this.props.assignment_id, true);
+        }
+      })
+      }
 
     let data = {
       course_id: this.props.course_id,
@@ -86,41 +141,73 @@ class AnalyzeButton extends Component {
             this.setState({rubricJSON: data})
             console.log(data)
             if (finalizing) {
+              var data = {
+                rubrics: this.state.rubricJSON,
+                assignment_id: this.props.assignment_id,
+              }
+
               fetch('/api/save_all_rubrics', {
                 method: 'POST',
                 headers:{
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify(this.state.rubricJSON)
+                body: JSON.stringify(data)
               })
               .then(() => {
+                var data = {
+                  assignment_id: this.props.assignment_id,
+                  points_possible: this.props.assignment_info.points_possible,
+                }
                 fetch('/api/peer_reviews_finalizing', {
-                  method: 'GET',
+                  method: 'POST',
+                  headers:{
+                    'Content-Type': 'application/json'
+                  },
+                  body: JSON.stringify(data),
                 })
                 .then(res => res.json())
                 .then(res => message = res.message)
+                .then(() => {
+                  localStorage.setItem("finalizeDisplayTextNumCompleted_" + this.props.assignment_id, message.num_completed);
+                  localStorage.setItem("finalizeDisplayTextNumAssigned_" + this.props.assignment_id, message.num_assigned);
+                  localStorage.setItem("finalizeDisplayTextAverage_" + this.props.assignment_id, message.average);
+                  localStorage.setItem("finalizeDisplayTextOutOf_" + this.props.assignment_id, message.out_of);
+                })
                 .then(() => this.sendGradesToCanvas())
                 .then(() => this.setState({analyzeDisplayText: false}))
                 .then(() => this.setState({finalizeDisplayText: true}))
-                // .then(() => document.getElementById("analyze").disabled = true)
-                // .then(() => document.getElementById("finalize").disabled = true)
-                .then(() => this.attachNamesToDatabaseTables())
+                .then(() => this.attachNamesToDatabaseTablesFinalizing())
+
               })
             }
             else {
+              var data = {
+                rubrics: this.state.rubricJSON,
+                assignment_id: this.props.assignment_id,
+              }
+
               fetch('/api/save_all_rubrics', {
                 method: 'POST',
                 headers:{
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify(this.state.rubricJSON)
+                body: JSON.stringify(data)
               })
               .then(() => {
                 fetch('/api/peer_reviews_analyzing', {
-                  method: 'GET',
+                  method: 'POST',
+                  headers:{
+                    'Content-Type': 'application/json'
+                  },
+                  body: JSON.stringify(data)
                 })
                 .then(res => res.json())
                 .then(res => message = res.message)
+                .then(() => {
+                  localStorage.setItem("analyzeDisplayTextNumCompleted_" + this.props.assignment_id, message.num_completed);
+                  localStorage.setItem("analyzeDisplayTextNumAssigned_" + this.props.assignment_id, message.num_assigned);
+                  localStorage.setItem("analyzeDisplayTextMessage_" + this.props.assignment_id, message.message);
+                })
                 .then(() => this.setState({analyzeDisplayText: true}))
                 .then(() => this.setState({finalizeDisplayText: false}))
                 .then(() => this.attachNamesToDatabaseTables())
@@ -147,8 +234,8 @@ class AnalyzeButton extends Component {
     })
   }
 
-  attachNamesToDatabaseTables() {
-    console.log("10: attaching names to database tables");
+  attachNamesToDatabaseTablesFinalizing() {
+    console.log("10f: attaching names to database tables");
     var data = {
         course_id: this.props.course_id,
         apiKey: this.props.apiKey
@@ -160,6 +247,82 @@ class AnalyzeButton extends Component {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify(data),
+    })
+    .then(() => this.sortStudentsForAccordion())
+  }
+
+  attachNamesToDatabaseTables() {
+    console.log("10a: attaching names to database tables");
+    var data = {
+        course_id: this.props.course_id,
+        apiKey: this.props.apiKey
+    }
+
+    fetch('/api/attach_names_in_database', {
+      method: 'POST',
+      headers:{
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(data),
+    })
+  }
+
+  componentDidMount(){
+    console.log("mounted")
+    if (localStorage.getItem("analyzePressed_" + this.props.assignment_id)) {
+  
+      this.setState({analyzeDisplayText: true})
+      this.setState({finalizeDisplayText: false})
+    }
+    if (localStorage.getItem("finalizePressed_" + this.props.assignment_id)) {
+      this.setState({analyzeDisplayText: false})
+      this.setState({finalizePressed: true})
+      this.setState({finalizeDisplayText: true})
+    }
+
+    if (localStorage.getItem("harsh_students_" + this.props.assignment_id) != null) {
+      this.setState({
+        harsh_students: JSON.parse(localStorage.getItem("harsh_students_" + this.props.assignment_id)),
+        lenient_students: JSON.parse(localStorage.getItem("lenient_students_" + this.props.assignment_id)),
+        incomplete_students: JSON.parse(localStorage.getItem("incomplete_students_" + this.props.assignment_id))
+      })
+
+      this.setState({
+        harsh_students_loaded: true,
+        lenient_students_loaded: true,
+        incomplete_students_loaded: true
+      })
+    }
+  }
+
+  sortStudentsForAccordion() {
+    console.log("12: sorting students for accordion")
+    var data = {
+      assignment_id: this.props.assignment_id,
+    }
+    
+    fetch('/api/sort_students_for_accordion', {
+      method: 'POST',
+      headers:{
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(data),
+    })
+    .then(res => res.json())
+    .then(res => {
+      localStorage.setItem("harsh_students_" + this.props.assignment_id, JSON.stringify(res.all_students.harsh_students))
+      localStorage.setItem("lenient_students_" + this.props.assignment_id, JSON.stringify(res.all_students.lenient_students))
+      localStorage.setItem("incomplete_students_" + this.props.assignment_id, JSON.stringify(res.all_students.incomplete_students))
+      this.setState({
+        harsh_students: res.all_students.harsh_students,
+        lenient_students: res.all_students.lenient_students,
+        incomplete_students: res.all_students.incomplete_students
+      })
+      this.setState({
+        harsh_students_loaded: true,
+        lenient_students_loaded: true,
+        incomplete_students_loaded: true
+      })
     })
   }
 
@@ -177,26 +340,41 @@ class AnalyzeButton extends Component {
   }
 
   render() {
+
     return (
       <div>
-        <Flexbox className="flex-dropdown" maxWidth="300px" flexWrap="wrap" justify-content="space-around"  >
-         
-          {this.state.finalizeDisplayText ?
+        {this.state.finalizePressed ?
           null
           :
           <div>
-              <button onClick={this.handleClick} className="analyze" id="analyze">
+            <Flexbox className="flex-dropdown" maxWidth="300px" flexWrap="wrap" justify-content="space-around"  >
+            <button onClick={this.handleClick} className="analyze" id="analyze">
               Analyze
             </button>
-              <button className="analyze" id="finalize" onClick={this.handleFinalizeClick}>Finalize</button>
+            <button className="analyze" id="finalize" onClick={this.handleFinalizeClick}>Finalize</button>
+            </Flexbox>
           </div>
         }
-        </Flexbox>
+
         {this.state.finalizeDisplayText ?
           <div>
-            <strong>Completed Peer Reviews:</strong> {message.num_completed} / {message.num_assigned}
+            <strong>Completed Peer Reviews:</strong> {localStorage.getItem("finalizeDisplayTextNumCompleted_" + this.props.assignment_id)} / {localStorage.getItem("finalizeDisplayTextNumAssigned_" + this.props.assignment_id)}
             <br></br>
-            <strong>Average Grade:</strong> {message.average} / {message.out_of}
+            <strong>Average Grade:</strong> {localStorage.getItem("finalizeDisplayTextAverage_" + this.props.assignment_id)} / {localStorage.getItem("finalizeDisplayTextOutOf_" + this.props.assignment_id)}
+            
+            {this.state.harsh_students_loaded && this.state.lenient_students_loaded && this.state.incomplete_students_loaded ? 
+              <Row>
+                <Well className="well2">
+                  <Flexbox className="accordion-flexbox" flexDirection="column" minWidth="300px" maxWidth="500px" width="100%" flexWrap="wrap">
+                      <Accordion name="Definitely Harsh" content={this.state.harsh_students}/>
+                      <Accordion name="Definitely Lenient" content={this.state.lenient_students}/>
+                      <Accordion name="Missing Peer Reviews" content={this.state.incomplete_students}/>
+                  </Flexbox>
+                </Well>
+              </Row>
+              :
+              <Loader type="TailSpin" color="black" height={80} width={80} />
+            }
           </div>
           :
           null
@@ -205,17 +383,12 @@ class AnalyzeButton extends Component {
           this.state.analyzeDisplayText ?
             <div>
               <div>
-                {message.message}
+              {localStorage.getItem("analyzeDisplayTextMessage_" + this.props.assignment_id)}
               </div>
               <div>
                 <Row>
                   <Well className="well2">
-                    <strong>Completed Peer Reviews:</strong> {message.num_completed} / {message.num_assigned}
-                    <Flexbox className="accordion-flexbox" flexDirection="column" minWidth="300px" maxWidth="500px" width="100%" flexWrap="wrap">
-                      <Accordion name="Definitely Harsh" content={HARSHNAME} />
-                      <Accordion name="Definitely Lenient"  />
-                      <Accordion name="Missing Peer Reviews" content={HARSHNAME}/>
-                    </Flexbox>
+                    <strong>Completed Peer Reviews:</strong> {localStorage.getItem("analyzeDisplayTextNumCompleted_" + this.props.assignment_id)} / {localStorage.getItem("analyzeDisplayTextNumAssigned_" + this.props.assignment_id)}
                   </Well>
                 </Row>
               </div>
