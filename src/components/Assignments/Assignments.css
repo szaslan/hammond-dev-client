@@ -28,6 +28,16 @@ html * {
     padding-right:5px;
     padding-left:5px;
 }
+
+.not-pr{
+  background-color:#e5e5e5;
+
+}
+
+.not-pr:hover{
+  transform: none !important;
+  box-shadow: none !important;
+}
 .assignment-name:hover{
     transform: translate(0, -5px);
     box-shadow: 0px 12px 5px -8px rgba(0,0,0,0.2);

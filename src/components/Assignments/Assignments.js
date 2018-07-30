@@ -16,11 +16,14 @@ function FilterAssignments(props) {
 
     if (currAssignment.peer_reviews){
         return (
-            <li key={currAssignment.id} className="assignment-name">{currAssignment.name}</li>
+            <Link className="assignment-link" to={{ pathname: props.link, state: { assignment_id: props.assignment_id, name: props.name, course_id: props.course_id} }} key={props.id}>
+                <li key={currAssignment.id} className="assignment-name">{currAssignment.name}</li>
+            </Link>
         )
     }
     else {
-        return null;
+        return  <li key={currAssignment.id} className="assignment-name not-pr">{currAssignment.name}</li>
+        ;
     }
 }
 
@@ -104,9 +107,12 @@ class Assignments extends Component{
                                             {this.state.assignments ?
                 
                     this.state.assignments.map(assignments =>
-                        <Link className="assignment-link" to={{ pathname: this.state.url + assignments.id, state: { assignment_id: assignments.id, name: this.state.match.params.assignment_name, course_id: this.state.match.params.course_id } }} key={assignments.id}>
-                            <FilterAssignments currAssigment={assignments}   />
-                        </Link>                            
+                            <FilterAssignments link={this.state.url + assignments.id} assignment_id={assignments.id} name={this.state.match.params.assignment_name} course_id={this.state.match.params.course_id} currAssigment={assignments}  id={assignments.id} />
+                        
+                        // this.state.assignments.map(assignments =>
+                        //     <Link className="assignment-link" to={{ pathname: this.state.url + assignments.id, state: { assignment_id: assignments.id, name: this.state.match.params.assignment_name, course_id: this.state.match.params.course_id } }} key={assignments.id}>
+                        //         <FilterAssignments currAssigment={assignments}   />
+                        //     </Link>       
                           )
                       :
                       <Loader type="TailSpin" color="black" height={80} width={80} />

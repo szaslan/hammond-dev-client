@@ -46,7 +46,7 @@ class App extends Component {
 
           <Route path="/courses/:course_id/:assignment_name/students/:student_id" exact component={StudentInfo} />
 
-          <Route component={NotFound} exact/>
+          {/* <Route component={NotFound} exact/> */}
 
         </div>
       </Router>

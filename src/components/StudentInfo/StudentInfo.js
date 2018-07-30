@@ -50,6 +50,7 @@ class StudentInfo extends Component{
             scoreGiven: '',
             finalScore: '',
             errorMessage: 'No peer reviews for this student!',
+            message: '',
             ...props,
             
         }
@@ -81,6 +82,9 @@ class StudentInfo extends Component{
             
             this.setState({value: "Select an Assignment",
                             value2: "Select a Peer Review",
+                            finalScore: "",
+                            message: '',
+                            scoreGiven: "",
                             peer_reviews: []})
             // this._fetchAssignmentData();
         }  
@@ -95,6 +99,7 @@ class StudentInfo extends Component{
         let data = {
             course_id: params.course_id,
         }
+        
 
         fetch('/api/assignments',{
             method: 'POST',
@@ -118,6 +123,9 @@ class StudentInfo extends Component{
             student_id: this.props.location.state.student_id,
             assignment_id: this.state.selectedAssignment,
         }
+        let finalizeId = {
+            assigment_id: this.state.selectedAssignment
+        }
         console.log('getPeerReview()');
 
         let get = this;
@@ -136,7 +144,8 @@ class StudentInfo extends Component{
                 get.setState({errorMessage: "No peer reviews for this student!"})
                 
             }
-            else res.json().then(function(data){
+            else if (res.status == 200){
+                res.json().then(function(data){
     
                 console.log(data);
                 get.setState({peer_reviews: data})
@@ -149,7 +158,28 @@ class StudentInfo extends Component{
                
              
             })
+        } else{
+      
+                 
+        fetch('/api/has_finalize_been_pressed', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: finalizeId
         })
+        .then(function(response){
+            console.log(response)
+            if (response.status == 400){
+                console.log("400 repsonse")
+                get.setState({peer_reviews: []})
+                get.setState({errorMessage: "Assignment hasn't been finalized!"})
+            }
+            
+            })
+        }
+        })
+  
         
     
     }
@@ -173,12 +203,18 @@ class StudentInfo extends Component{
           value: event.target.innerText,
           selectedAssignment: Number(event.target.id),
           value2: 'Select a Peer Review',
+          message: '',
           scoreGiven: '',
           finalScore: ''
         }, () => {
             this.getPeerReviews();
             console.log('ran get peer reviews')
         })
+
+        let get = this;
+
+   
+
         console.log(this.state.selectedAssignment)
       }
 
@@ -188,8 +224,6 @@ class StudentInfo extends Component{
               value2: event.target.innerText,
               selectedStudent: Number(event.target.id)
           })
-
-          
 
           let data = {
               assignment_id: this.state.selectedAssignment,
@@ -208,13 +242,32 @@ class StudentInfo extends Component{
               },
               body: JSON.stringify(data)
           })
-          .then(res => res.json())
-          .then(function(data){
+          .then(function(res){
+              if (res.status == 404){
+                  console.log("no score recieved yet")
+              }
+            else {
+              res.json().then(function(data){
               get.setState({scoreGiven: data.score_given,
                             finalScore: data.final_score})
+                if (data.score_given == null){
+                get.setState({message: <div>{get.props.location.state.student_name} did not complete this peer review</div>})
+                } else {
+                    get.setState({message: 
+                        <div>
+                            <div>{get.props.location.state.student_name} gave {get.state.value2} a score of {get.state.scoreGiven}</div> 
+                            <div>{get.state.value2} received a final grade of {get.state.finalScore}</div>
+                        </div>})
+                }
+              
 
           })
-      }
+        }
+
+        
+        })
+    }
+    
 
 
 
@@ -257,20 +310,23 @@ class StudentInfo extends Component{
                                 :
                                                                 
                                 <div>{this.state.errorMessage}</div>
-                               
-                                
-                                
+ 
                         }
 
-                        {this.state.scoreGiven ?
+                        {console.log("scoreGiven: " + this.state.scoreGive === null)}
+
+                        {/* {this.state.scoreGiven === null 
+                        ?
+                        <div>{this.props.location.state.student_name} did not complete this peer review </div>
+                        :
                         <div>
                             <div>{this.props.location.state.student_name} gave {this.state.value2} a score of  {this.state.scoreGiven}</div>
                             <div>{this.state.value2} received a final grade of {this.state.finalScore}</div>
                         </div>
-                        :
-                        <div>{this.props.location.state.student} did not complete this peer review </div>
-                        }
+                        
+                        } */}
 
+                        {this.state.message}
 
              
                </div>
