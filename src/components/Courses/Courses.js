@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import './Courses.css';
-import {Link } from "react-router-dom";
+import {Link, Redirect } from "react-router-dom";
+import history from '../../history'
 import Loader from 'react-loader-spinner';
 import { Container, Jumbotron } from 'reactstrap';
 import { Well, Row, Col, Breadcrumb } from 'react-bootstrap';
@@ -30,20 +31,32 @@ class Courses extends Component{
         this.setState({loaded: true});
 
         fetch('/api/courses', {
-            credentials: 'same-origin'
+            credentials: 'include',
+            headers: {
+                'Content-Type': 'application/json'
+                
+            },
+            redirect: 'follow'
         })
         .then(function(res){
             console.log(res)
-            res.json().then(function(data){
-                get.setState({user: data.first_name, courses: data.courses})
-            })
-                if (res.status === 404){
-                    get.setState({auth: false})
-                    throw new Error("404")
+    
+                if (res.status === 401){
+                    console.log("4040404")
+                    history.push("/login")
+                    throw new Error();
+                    
+                    // return <Redirect to="/" />
+                    // window.location.href="/login"
                 }
-            if (res.status == 200){
-                get.setState({auth: true})
-                console.log(res)
+            // if (res.status == 200)
+            {
+                // get.setState({auth: true})
+                // console.log(res)
+                res.json().then(function(data){
+                    console.log(data)
+                    get.setState({user: data.first_name, courses: data.courses})
+                })
             }
             
         })
@@ -64,13 +77,13 @@ class Courses extends Component{
 
     render(){
 
-        if (this.state.courses === null){
+        if (this.state.courses === null ){
             return(
                 <Loader className="loader" type="TailSpin" color="black" height={80} width={80} />
 
             );
         }
-        else if (this.state.auth == true){
+        else{
             
         return(
             <div>
@@ -106,16 +119,16 @@ class Courses extends Component{
                 
         );
     }
-    else{
-        return (
-            <div>
-                <div>Not Authenticated</div>
-                <Link to="/login">
-                    <button>Sign in</button>
-                </Link>
-            </div>  
-        )
-    }
+    // else{
+    //     return (
+    //         <div>
+    //             <div>Not Authenticated</div>
+    //             <Link to="/login">
+    //                 <button>Sign in</button>
+    //             </Link>
+    //         </div>  
+    //     )
+    // }
     }
 
 

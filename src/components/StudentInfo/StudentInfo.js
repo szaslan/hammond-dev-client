@@ -3,6 +3,7 @@ import './StudentInfo.css';
 import Loader from 'react-loader-spinner'
 import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 import { EventEmitter } from 'events';
+import history from '../../history'
 
 
 //filter for only peer reviewable assignments
@@ -106,10 +107,21 @@ class StudentInfo extends Component{
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify(data)
+            body: JSON.stringify(data),
+            credentials: 'include'
         })
-        .then(res => res.json())
-        .then(assignments => this.setState({assignments}))
+        .then(res => {
+            if (res.status === 401){
+                console.log("4040404")
+                history.push("/login")
+                throw new Error();
+            } else {
+                res.json().then(data => {
+                    this.setState({assignments: data})
+                })
+            }
+        })
+        .catch(err => console.log("Not auth"))
 
 
        /* NEED TO FETCH STUDENT INFO AND SET STATE TO FETCHED INFO WHEN PROPS ARE UPDATED

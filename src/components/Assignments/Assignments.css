@@ -20,7 +20,7 @@ html * {
 }
 .assignment-name{
     width:75%;
-    background-color: #E9F0F0;
+    background-color: var(--light-lavendar2);
     font-size:20px;
     margin: 25px 0px;       
     /* box-shadow: 2px 2px 4px 0 rgba(0,0,0,0.50); */
@@ -30,7 +30,7 @@ html * {
 }
 
 .not-pr{
-  background-color:#e5e5e5;
+  background-color:#a3a3a3;
 
 }
 

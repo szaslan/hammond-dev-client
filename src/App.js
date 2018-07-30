@@ -9,13 +9,12 @@ import { Router, Route, Switch, Redirect} from "react-router-dom";
 import CourseStudents from './components/CourseStudents/CourseStudents';
 import AssignmentInfo from './components/AssignmentInfo/AssignmentInfo';
 import UserRegistration from './components/UserRegistration/UserRegistration';
-import createBrowserHistory from 'history/createBrowserHistory'
+import history from './history'
 import Landing from './components/Landing/Landing';
 import StudentInfo from './components/StudentInfo/StudentInfo';
 import NotFound from './components/NotFound/NotFound';
 import AuthenticatedComponent from './components/AuthenticatedComponent/AuthenticatedComponent';
 
-const history = createBrowserHistory();
 
 class App extends Component {
 

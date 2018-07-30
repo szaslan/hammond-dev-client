@@ -3,6 +3,7 @@ import './CourseInfo.css';
 import { Link } from "react-router-dom";
 import { Well, Row, Col, Breadcrumb } from 'react-bootstrap';
 import Flexbox from 'flexbox-react';
+import history from '../../history'
 import { Container, Jumbotron } from 'reactstrap';
 import JumbotronComp from '../JumbotronComp/JumbotronComp'
 import '../BreadcrumbComp/BreadcrumbComp.css';
@@ -39,18 +40,33 @@ class CourseInfo extends Component {
         var data = {
             course_id: params.course_id,
         }
-
         console.log(data);
         fetch('/api/courseinfo',{
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
+            credentials: 'include',
             body: JSON.stringify(data)
         })
-        .then(res => res.json())
-        .then(courseJSON => this.setState({courseJSON, loaded: true}))
         
+        .then(res => {
+            if (res.status === 401){
+                console.log("4040404")
+                history.push("/login")
+                throw new Error();
+                
+                // return <Redirect to="/" />
+                // window.location.href="/login"
+            }  
+            {
+                res.json().then(data =>
+                {
+                    this.setState({courseJSON: data, loaded: true})
+                })
+            }
+        })
+        .catch(err => console.log("no auth"))
     }
 
 

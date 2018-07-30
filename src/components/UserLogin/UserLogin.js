@@ -4,6 +4,7 @@ import { Link, Redirect } from "react-router-dom";
 import { Col, Row } from 'react-bootstrap';
 import { Label, Container, Form, FormGroup, Input } from 'reactstrap';
 import Flexbox from 'flexbox-react';
+import history from '../../history'
 
 class UserLogin extends Component {
   constructor(props, context) {
@@ -28,6 +29,7 @@ class UserLogin extends Component {
 
   componentDidMount() {
     console.log("correct");
+    console.log(history.goBack)
   }
 
   handleChange(e) {
@@ -57,7 +59,8 @@ class UserLogin extends Component {
         console.log(response)
         if (response.status == 200) {
           console.log('200 STATUS')
-          fetchError.setState({ reDirect: true })
+          history.push("/courses");
+          // fetchError.setState({ reDirect: true })
         }
         else if (response.status == 401 || response.status == 400) {
           fetchError.setState({ errors: "Invalid username or password" })
@@ -121,7 +124,7 @@ class UserLogin extends Component {
                 :
                 null
             }
-            {this.state.reDirect ? <Redirect to="/courses" /> : null}
+            {/* {this.state.reDirect ? <Redirect to={{pathname: "/courses", state: {auth: true}}} /> : null} */}
           </Form>
         </div>
       </div>

@@ -5,6 +5,7 @@ import {Breadcrumb} from 'react-bootstrap';
 import './CourseStudents.css'
 import StudentInfo from '../StudentInfo/StudentInfo';
 import { Link } from "react-router-dom";
+import history from '../../history'
 
 
 class CourseStudents extends Component {
@@ -38,11 +39,22 @@ class CourseStudents extends Component {
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify(data)
+            body: JSON.stringify(data),
+            credentials: 'include'
         })
-        .then(res => res.json())
-        .then(students => this.setState({students}))
-        .catch(this.setState({students: null}))
+        .then(res => {
+            if (res.status === 401){
+                console.log("4040404")
+                history.push("/login")
+                throw new Error();
+            } else {
+                res.json().then(res => {
+                this.setState({students: res})
+            })
+        }
+    })
+        .catch(err => { console.log("not authorized") })
+        
                 
     }
 

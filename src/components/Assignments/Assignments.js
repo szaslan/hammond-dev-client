@@ -6,6 +6,7 @@ import { Well, Row, Col, Breadcrumb } from 'react-bootstrap';
 import JumbotronComp from '../JumbotronComp/JumbotronComp';
 import AssignmentInfo from '../AssignmentInfo/AssignmentInfo';
 import '../BreadcrumbComp/BreadcrumbComp.css';
+import history from '../../history'
 
 //FILTERS ASSIGNMENTS TO ONES WITH POINTS POSSIBLE > 10
 //USE THIS TO FILTER OUT ASSIGNMENTS THAT ARE NOT PEER REVIEWABLE
@@ -73,13 +74,22 @@ class Assignments extends Component{
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify(data)
+            body: JSON.stringify(data),
+            credentials: 'include'
         })
-        .then(res => res.json())
-        .then(assignments => this.setState({assignments}))
-        .then(this.setState({mounted: true}))
-
-
+        .then(res => {
+            if (res.status === 401){
+                console.log("4040404")
+                history.push("/login")
+                throw new Error();
+            } else {
+                res.json().then(data => {
+                    this.setState({assignments: data,
+                                   mounted: true})
+                })
+            }
+        })
+        .catch(err => console.log("Not Authorized.")) 
     }
 
     
