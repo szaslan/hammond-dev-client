@@ -325,19 +325,6 @@ class StudentInfo extends Component{
  
                         }
 
-                        {console.log("scoreGiven: " + this.state.scoreGive === null)}
-
-                        {/* {this.state.scoreGiven === null 
-                        ?
-                        <div>{this.props.location.state.student_name} did not complete this peer review </div>
-                        :
-                        <div>
-                            <div>{this.props.location.state.student_name} gave {this.state.value2} a score of  {this.state.scoreGiven}</div>
-                            <div>{this.state.value2} received a final grade of {this.state.finalScore}</div>
-                        </div>
-                        
-                        } */}
-
                         {this.state.message}
 
              
