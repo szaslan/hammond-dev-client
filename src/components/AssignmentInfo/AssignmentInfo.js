@@ -108,7 +108,7 @@ class AssignmentInfo extends Component{
                    <div className="assignment-info">
                            <strong>Title:</strong> {this.state.assignment.name}
                            <AnalyzeButton 
-                                assignment_info={this.state.assignment} 
+                                assignment_info={this.state.assignment}
                                 course_id={this.props.match.params.course_id} 
                                 assignment_id={this.props.match.params.assignment_id} 
                                 apiKey={this.state.apiKey}

@@ -8,8 +8,6 @@ import Loader from 'react-loader-spinner'
 
 import '../Assignments/Assignments.css'
 
-const HARSHNAME = ['James','Elizabeth','John'];
-
 var message = "";
 
 class AnalyzeButton extends Component {
@@ -39,7 +37,7 @@ class AnalyzeButton extends Component {
     this.sendGradesToCanvas = this.sendGradesToCanvas.bind(this);
     this.fetchPeerReviewData = this.fetchPeerReviewData.bind(this);
     this.fetchRubricData = this.fetchRubricData.bind(this);
-    this.attachNamesToDatabaseTables = this.attachNamesToDatabaseTables.bind(this);
+    this.attachNamesToDatabaseTablesAnalyzing = this.attachNamesToDatabaseTablesAnalyzing.bind(this);
     this.attachNamesToDatabaseTablesFinalizing = this.attachNamesToDatabaseTablesFinalizing.bind(this)
     this.sortStudentsForAccordion = this.sortStudentsForAccordion.bind(this);
   }
@@ -53,42 +51,41 @@ class AnalyzeButton extends Component {
       this.setState({finalizeDisplayText: true})
     }
     else {
-      console.log("else statement ran")
       let outerData = {
-          course_id: this.props.course_id,
-            assignment_id: this.props.assignment_id
-        }
+        course_id: this.props.course_id,
+        assignment_id: this.props.assignment_id
+      }
+      console.log("3: fetching peer review data from canvas")
       fetch('/api/save_all_peer_reviews_outer', {
         method: "POST",
         headers:{
           'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(outerData)
-    })
+        },
+        body: JSON.stringify(outerData)
+      })
       .then(res => {
-          res.json()
-          .then(result => {
-              this.setState({peerreviewJSON: result})
-              console.log("peer review length: " + this.state.peerreviewJSON)
+        res.json()
+        .then(result => {
+          this.setState({peerreviewJSON: result})
 
-              var data = {
-                peer_reviews: this.state.peerreviewJSON,
-                course_id: this.props.course_id,
-                assignment_id: this.props.assignment_id,
-                points_possible: this.props.assignment_info.points_possible,
-              }
+          var data = {
+            peer_reviews: this.state.peerreviewJSON,
+            course_id: this.props.course_id,
+            assignment_id: this.props.assignment_id,
+            points_possible: this.props.assignment_info.points_possible,
+          }
 
-              fetch('/api/save_all_peer_reviews', {
-                  method: 'POST',
-                  headers:{
-                      'Content-Type': 'application/json'
-                  },
-                  body: JSON.stringify(data)
-              })
-              .then(() => {
-                  this.fetchRubricData(finalizing);
-              })
+          fetch('/api/save_all_peer_reviews', {
+            method: 'POST',
+            headers:{
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
           })
+          .then(() => {
+            this.fetchRubricData(finalizing);
+          })
+        })
       })
       .then(() => {
         if (finalizing) {
@@ -101,36 +98,7 @@ class AnalyzeButton extends Component {
           localStorage.setItem("analyzePressed_" + this.props.assignment_id, true);
         }
       })
-      }
-
-    // let data = {
-    //   course_id: this.props.course_id,
-    //     assignment_id: this.props.assignment_id
-    // }
-    // console.log("3: fetching peer review data from canvas")
-    // fetch(`/api/save_all_peer_reviews_outer`, {
-    //   method: "POST",
-    //   headers:{
-    //     'Content-Type': 'application/json'
-    // },
-    // body: JSON.stringify(data)
-    // })
-    // .then(res => {
-    //     res.json()
-    //     .then(data => {
-    //         this.setState({peerreviewJSON: data})
-    //         fetch('/api/save_all_peer_reviews', {
-    //             method: 'POST',
-    //             headers:{
-    //                 'Content-Type': 'application/json'
-    //             },
-    //             body: JSON.stringify(this.state.peerreviewJSON)
-    //         })
-    //         .then(() => {
-    //             this.fetchRubricData(finalizing);
-    //         })
-    //     })
-    // })
+    }
   }
 
   fetchRubricData(finalizing) {
@@ -190,7 +158,6 @@ class AnalyzeButton extends Component {
                 .then(() => this.setState({analyzeDisplayText: false}))
                 .then(() => this.setState({finalizeDisplayText: true}))
                 .then(() => this.attachNamesToDatabaseTablesFinalizing())
-
               })
             }
             else {
@@ -223,7 +190,7 @@ class AnalyzeButton extends Component {
                 })
                 .then(() => this.setState({analyzeDisplayText: true}))
                 .then(() => this.setState({finalizeDisplayText: false}))
-                .then(() => this.attachNamesToDatabaseTables())
+                .then(() => this.attachNamesToDatabaseTablesAnalyzing())
               })
             }
         })
@@ -264,7 +231,7 @@ class AnalyzeButton extends Component {
     .then(() => this.sortStudentsForAccordion())
   }
 
-  attachNamesToDatabaseTables() {
+  attachNamesToDatabaseTablesAnalyzing() {
     console.log("10a: attaching names to database tables");
     var data = {
         course_id: this.props.course_id,
@@ -277,6 +244,20 @@ class AnalyzeButton extends Component {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify(data),
+    })
+    .then(() => {
+      var data = {
+        assignment_id: this.props.assignment_id,
+        assignment_name: this.props.assignment_info.name
+      }
+      
+      fetch('/api/send_incomplete_messages', {
+        method: 'POST',
+        headers:{
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data),
+      })
     })
   }
 
