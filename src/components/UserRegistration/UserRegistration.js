@@ -85,9 +85,6 @@ class UserRegistration extends Component {
 
           throw new Error("breaking promise chain early");
         }
-        else if (response.status == 404){
-          fetchError.setState({emailExists: true})
-        }
         response.json().then(function (data) {
           console.log(data)
           console.log("data length: " + data.length)
@@ -126,6 +123,7 @@ class UserRegistration extends Component {
             </FormGroup>
             <button className="new-button">Submit</button>
             <Well>
+              {this.state.emailExists ? errors.push("Sorry that email already exists") : null }
             {errors.length > 0 ? <ul className="errors">
               {
                 (errors.map(errors =>
@@ -134,7 +132,7 @@ class UserRegistration extends Component {
               :
               null
             }
-            {this.state.emailExists ? <div>"Sorry that email already exists"</div> : null}
+            {/* {this.state.emailExists ? <div>Sorry that email already exists</div> : null} */}
 
             {this.state.reDirect ?
               <Redirect to='/courses' />
