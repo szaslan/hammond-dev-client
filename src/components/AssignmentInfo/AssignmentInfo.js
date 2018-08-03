@@ -4,6 +4,7 @@ import Loader from 'react-loader-spinner'
 import { Well, Row, Col, Breadcrumb } from 'react-bootstrap';
 import AnalyzeButton from '../AnalyzeButton/AnalyzeButton';
 import { getCiphers } from 'crypto';
+import CalendarComp from '../CalendarComp/CalendarComp';
 
 function FilterRubricAssessments(props) {
     const currPeerReview = props.currPeerReview;
@@ -102,9 +103,25 @@ class AssignmentInfo extends Component {
             )
         else {
             return (
+
                 <div>
                     <div className="assignment-info">
-                        <strong>Title:</strong> {this.state.assignment.name}
+                        <div className="assignment-info-content">
+                            <p><strong>Title:</strong> {this.state.assignment.name}</p>
+                            <CalendarComp
+                                name="Due Date 1"
+                                assignment_id={this.props.match.params.assignment_id} 
+                                number = "1"/>
+                            <CalendarComp
+                                name="Due Date 2"
+                                assignment_id={this.props.match.params.assignment_id}
+                                number = "2" />
+                            <CalendarComp
+                                name="Due Date 3"
+                                assignment_id={this.props.match.params.assignment_id}
+                                number = "3" />
+                        </div>
+
                         <AnalyzeButton
                             assignment_info={this.state.assignment}
                             course_id={this.props.match.params.course_id}

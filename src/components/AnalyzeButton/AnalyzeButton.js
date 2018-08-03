@@ -1,14 +1,16 @@
 import React, { Component } from 'react';
 import { Well, Row, Panel } from 'react-bootstrap';
-
+import { UncontrolledTooltip } from 'reactstrap';
 import Flexbox from 'flexbox-react';
 import 'bootstrap/dist/css/bootstrap.css';
 import Accordion from '../Accordion/Accordion';
-import Loader from 'react-loader-spinner'
-
-import '../Assignments/Assignments.css'
+import Loader from 'react-loader-spinner';
+import '../Assignments/Assignments.css';
 import FinalizeResults from '../FinalizeResults/FinalizeResults';
 import AnalyzeResults from '../AnalyzeResults/AnalyzeResults';
+
+import '../Assignments/Assignments.css'
+
 
 class AnalyzeButton extends Component {
 	constructor(props) {
@@ -31,6 +33,8 @@ class AnalyzeButton extends Component {
 			},
 			assigned_new_peer_reviews: false,
 			deleted_old_peer_reviews: false,
+      tooltipOpen1: false,
+      tooltipOpen2: false,
 		};
 
 		this.sendIncompleteMessages = this.sendIncompleteMessages.bind(this);
@@ -40,6 +44,14 @@ class AnalyzeButton extends Component {
 		this.handleFinalizeClick = this.handleFinalizeClick.bind(this);
 		this.unpressAnalyze = this.unpressAnalyze.bind(this);
 	}
+  
+  
+  toggle() {
+    this.setState({
+      tooltipOpen1: !this.state.tooltipOpen1,
+      tooltipOpen2: !this.state.tooltipOpen2
+    })
+  }
 
 	sendIncompleteMessages() {
 		if (window.confirm('Do you want to Canvas message each student with missing peer reviews?')) {
@@ -137,16 +149,25 @@ class AnalyzeButton extends Component {
 			<div>
 				{
 					!this.state.finalizePressed && !this.state.finalizeDisplayText ?
-						<div>
-							<Flexbox className="flex-dropdown" maxWidth="300px" flexWrap="wrap" justify-content="space-around" >
-								<button className="analyze" id="analyze" onClick={this.handleAnalyzeClick}>
-									Analyze
-								</button>
-								<button className="analyze" id="finalize" onClick={this.handleFinalizeClick}>
-									Finalize
-								</button>
-							</Flexbox>
-						</div>
+              <div>
+            <Flexbox className="flex-dropdown" minWidth="600px" flexWrap="wrap" justify-content="space-around"  >
+              <span id="analyze-button-1">
+                <button onClick={this.handleClick} className="analyze" id="analyze">Analyze</button>
+              </span>
+              <UncontrolledTooltip delay={{ show: "1200" }} placement="top" target="analyze-button-1">
+                Click to view statistics for submitted peer reviews
+              </UncontrolledTooltip>
+              <span id="finalize-button-1">
+                <button className="analyze" id="finalize" onClick={this.handleFinalizeClick}>Finalize</button>
+              </span>
+              <UncontrolledTooltip delay={{ show: "1200" }} placement="top" target="finalize-button-1">
+                Click to send grades to the Canvas gradebook
+               </UncontrolledTooltip>
+              {/* <Tooltip placement="top" delay={{ show: "1200" }} isOpen={this.state.tooltipOpen2} target="finalize-button-1" toggle={this.toggle}>
+                Click to send grades to gradebook on Canvas
+              </Tooltip> */}
+            </Flexbox>
+          </div>
 						:
 						null
 				}
