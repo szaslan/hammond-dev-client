@@ -8,6 +8,7 @@ import Loader from 'react-loader-spinner';
 import '../Assignments/Assignments.css';
 import FinalizeResults from '../FinalizeResults/FinalizeResults';
 import AnalyzeResults from '../AnalyzeResults/AnalyzeResults';
+import DueDate from '../DueDate/DueDate';
 
 import '../Assignments/Assignments.css'
 
@@ -16,10 +17,6 @@ class AnalyzeButton extends Component {
 	constructor(props) {
 		super(props);
 
-		var deadline_1 = new Date(2018, 7, 1, 15, 13, 0).toLocaleString();
-		let deadline_2 = new Date(2018, 7, 1, 15, 14, 0).toLocaleString();
-		let deadline_3 = new Date(2018, 7, 1, 15, 15, 0).toLocaleString();
-
 		this.state = {
 			analyzePressed: false,
 			finalizePressed: false,
@@ -27,14 +24,14 @@ class AnalyzeButton extends Component {
 			finalizeDisplayText: false,
 			curr_time: null,
 			deadlines: {
-				deadline_1: deadline_1,
-				deadline_2: deadline_2,
-				deadline_3: deadline_3
+				deadline_1: null,
+				deadline_2: null,
+				deadline_3: null
 			},
 			assigned_new_peer_reviews: false,
 			deleted_old_peer_reviews: false,
-      tooltipOpen1: false,
-      tooltipOpen2: false,
+			tooltipOpen1: false,
+			tooltipOpen2: false,
 		};
 
 		this.sendIncompleteMessages = this.sendIncompleteMessages.bind(this);
@@ -42,16 +39,14 @@ class AnalyzeButton extends Component {
 		this.deleteOldPeerReviews = this.deleteOldPeerReviews.bind(this);
 		this.handleAnalyzeClick = this.handleAnalyzeClick.bind(this);
 		this.handleFinalizeClick = this.handleFinalizeClick.bind(this);
-		this.unpressAnalyze = this.unpressAnalyze.bind(this);
 	}
-  
-  
-  toggle() {
-    this.setState({
-      tooltipOpen1: !this.state.tooltipOpen1,
-      tooltipOpen2: !this.state.tooltipOpen2
-    })
-  }
+
+	toggle() {
+		this.setState({
+			tooltipOpen1: !this.state.tooltipOpen1,
+			tooltipOpen2: !this.state.tooltipOpen2
+		})
+	}
 
 	sendIncompleteMessages() {
 		if (window.confirm('Do you want to Canvas message each student with missing peer reviews?')) {
@@ -106,32 +101,58 @@ class AnalyzeButton extends Component {
 	}
 
 	handleAnalyzeClick() {
+		console.log("handle analyze click")
 		this.setState({ analyzePressed: true })
 	}
 
 	handleFinalizeClick() {
+		console.log("handle finalize click")
 		this.setState({ finalizePressed: true })
-	}
-
-	unpressAnalyze() {
-		this.setState({
-			analyzePressed: false
-		})
 	}
 
 	componentDidMount() {
 		console.log("mounted")
 
 		if (localStorage.getItem("analyzePressed_" + this.props.assignment_id)) {
+			console.log("found saved analyze pressed history")
 			this.setState({
 				analyzeDisplayText: true
 			})
 		}
 
 		if (localStorage.getItem("finalizePressed_" + this.props.assignment_id)) {
+			console.log("found saved finalize pressed history")
 			this.setState({
 				finalizeDisplayText: true,
 				finalizePressed: true
+			})
+		}
+
+		if (localStorage.getItem("calendarDate_" + this.props.assignment_id + "_1")) {
+			this.setState({
+				deadlines: {
+					deadline_1: localStorage.getItem("calendarDate_" + this.props.assignment_id + "_1"),
+					deadline_2: this.state.deadlines.deadline_2,
+					deadline_3: this.state.deadlines.deadline_3,
+				}
+			})
+		}
+		if (localStorage.getItem("calendarDate_" + this.props.assignment_id + "_2")) {
+			this.setState({
+				deadlines: {
+					deadline_1: this.state.deadlines.deadline_1,
+					deadline_2: localStorage.getItem("calendarDate_" + this.props.assignment_id + "_2"),
+					deadline_3: this.state.deadlines.deadline_3,
+				}
+			})
+		}
+		if (localStorage.getItem("calendarDate_" + this.props.assignment_id + "_3")) {
+			this.setState({
+				deadlines: {
+					deadline_1: this.state.deadlines.deadline_1,
+					deadline_2: this.state.deadlines.deadline_2,
+					deadline_3: localStorage.getItem("calendarDate_" + this.props.assignment_id + "_3"),
+				}
 			})
 		}
 
@@ -147,27 +168,41 @@ class AnalyzeButton extends Component {
 	render() {
 		return (
 			<div>
+				<div className="assignment-info-content">
+					<DueDate
+						name="Due Date 1"
+						assignment_id={this.props.assignment_id}
+						number="1" />
+					<DueDate
+						name="Due Date 2"
+						assignment_id={this.props.assignment_id}
+						number="2" />
+					<DueDate
+						name="Due Date 3"
+						assignment_id={this.props.assignment_id}
+						number="3" />
+				</div>
 				{
 					!this.state.finalizePressed && !this.state.finalizeDisplayText ?
-              <div>
-            <Flexbox className="flex-dropdown" minWidth="600px" flexWrap="wrap" justify-content="space-around"  >
-              <span id="analyze-button-1">
-                <button onClick={this.handleClick} className="analyze" id="analyze">Analyze</button>
-              </span>
-              <UncontrolledTooltip delay={{ show: "1200" }} placement="top" target="analyze-button-1">
-                Click to view statistics for submitted peer reviews
-              </UncontrolledTooltip>
-              <span id="finalize-button-1">
-                <button className="analyze" id="finalize" onClick={this.handleFinalizeClick}>Finalize</button>
-              </span>
-              <UncontrolledTooltip delay={{ show: "1200" }} placement="top" target="finalize-button-1">
-                Click to send grades to the Canvas gradebook
-               </UncontrolledTooltip>
-              {/* <Tooltip placement="top" delay={{ show: "1200" }} isOpen={this.state.tooltipOpen2} target="finalize-button-1" toggle={this.toggle}>
+						<div>
+							<Flexbox className="flex-dropdown" minWidth="600px" flexWrap="wrap" justify-content="space-around"  >
+								<span id="analyze-button-1">
+									<button onClick={this.handleAnalyzeClick} className="analyze" id="analyze">Analyze</button>
+								</span>
+								<UncontrolledTooltip delay={{ show: "1200" }} placement="top" target="analyze-button-1">
+									Click to view statistics for submitted peer reviews
+              					</UncontrolledTooltip>
+								<span id="finalize-button-1">
+									<button className="analyze" id="finalize" onClick={this.handleFinalizeClick}>Finalize</button>
+								</span>
+								<UncontrolledTooltip delay={{ show: "1200" }} placement="top" target="finalize-button-1">
+									Click to send grades to the Canvas gradebook
+               					</UncontrolledTooltip>
+								{/* <Tooltip placement="top" delay={{ show: "1200" }} isOpen={this.state.tooltipOpen2} target="finalize-button-1" toggle={this.toggle}>
                 Click to send grades to gradebook on Canvas
               </Tooltip> */}
-            </Flexbox>
-          </div>
+							</Flexbox>
+						</div>
 						:
 						null
 				}
@@ -236,13 +271,13 @@ class AnalyzeButton extends Component {
 				}
 
 				{
-					this.state.deadlines.deadline_1 == this.state.curr_time ?
+					localStorage.getItem("calendarDate_" + this.props.assignment_id + "_1") != null && localStorage.getItem("calendarDate_" + this.props.assignment_id + "_1") == this.state.curr_time ?
 						this.sendIncompleteMessages()
 						:
 						null
 				}
 				{
-					this.state.deadlines.deadline_2 == this.state.curr_time && !this.state.assigned_new_peer_reviews && !this.state.deleted_old_peer_reviews ?
+					localStorage.getItem("calendarDate_" + this.props.assignment_id + "_2") != null && localStorage.getItem("calendarDate_" + this.props.assignment_id + "_2") == this.state.curr_time && !this.state.assigned_new_peer_reviews && !this.state.deleted_old_peer_reviews ?
 						<div>
 							{this.deleteOldPeerReviews()}
 							{this.assignNewPeerReviews()}
@@ -251,7 +286,7 @@ class AnalyzeButton extends Component {
 						null
 				}
 				{
-					this.state.deadlines.deadline_3 == this.state.curr_time && !this.state.finalizePressed ?
+					localStorage.getItem("calendarDate_" + this.props.assignment_id + "_3") != null && localStorage.getItem("calendarDate_" + this.props.assignment_id + "_3") == this.state.curr_time && !this.state.finalizePressed ?
 						this.handleFinalizeClick()
 						:
 						null

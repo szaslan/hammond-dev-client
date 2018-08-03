@@ -7,6 +7,7 @@ import './DueDate.css';
 import '../CalendarComp/CalendarComp.css';
 import { Tooltip } from 'reactstrap';
 import { Collapse, Button, CardBody, Card } from 'reactstrap';
+
 // import packageJson from '../../package.json';
 
 class DueDate extends Component {
@@ -37,8 +38,8 @@ class DueDate extends Component {
     }
 
     handleChange = m => {
-        this.setState({dueDateDisplay: m.format('llll') });
-        console.log(this.state.m.format('llll'))
+        this.setState({dueDateDisplay: m.format('l') + ", " + m.format('LTS')});
+        // console.log(this.state.m.format('llll'))
     };
     handleClick1() {
         this.setState(prevState => ({
@@ -50,11 +51,11 @@ class DueDate extends Component {
         this.setState({buttonPressed: false})
         // this.setState({dueDateDisplay: this.state.dueDate})
         console.log('saved', this.state.dueDate);
-        localStorage.setItem("calendarDate" + this.props.assignment_id + this.props.number, this.state.dueDateDisplay);
+        localStorage.setItem("calendarDate_" + this.props.assignment_id + "_" + this.props.number, this.state.dueDateDisplay);
     };
 
     componentDidMount(){
-        this.setState({dueDateDisplay: localStorage.getItem("calendarDate" + this.props.assignment_id + this.props.number)})
+        this.setState({dueDateDisplay: localStorage.getItem("calendarDate_" + this.props.assignment_id + "_" + this.props.number)})
     }
 
 

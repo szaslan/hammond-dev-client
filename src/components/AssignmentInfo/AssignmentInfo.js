@@ -109,18 +109,6 @@ class AssignmentInfo extends Component {
                     <div className="assignment-info">
                         <div className="assignment-info-content">
                             <p><strong>Title:</strong> {this.state.assignment.name}</p>
-                            <DueDate
-                                name="Due Date 1"
-                                assignment_id={this.props.match.params.assignment_id} 
-                                number = "1"/>
-                            <DueDate
-                                name="Due Date 2"
-                                assignment_id={this.props.match.params.assignment_id}
-                                number = "2" />
-                            <DueDate
-                                name="Due Date 3"
-                                assignment_id={this.props.match.params.assignment_id}
-                                number = "3" />
                         </div>
 
                         <AnalyzeButton

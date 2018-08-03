@@ -30,7 +30,7 @@ class CalendarComp extends Component {
     }
 
     componentDidMount(){
-        this.setState({dueDate: localStorage.getItem("calendarDate" + this.props.assignment_id + this.props.number)})
+        this.setState({dueDate: localStorage.getItem("calendarDate_" + this.props.assignment_id + "_" + this.props.number)})
     }
 
 
