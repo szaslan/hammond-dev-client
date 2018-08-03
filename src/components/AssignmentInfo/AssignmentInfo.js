@@ -19,8 +19,8 @@ function FilterRubricAssessments(props) {
     }
 }
 
-class AssignmentInfo extends Component{
-    constructor(props){
+class AssignmentInfo extends Component {
+    constructor(props) {
         super(props);
 
 
@@ -35,46 +35,46 @@ class AssignmentInfo extends Component{
             ...props,
         }
     }
- 
-    static getDerivedStateFromProps(nextProps, prevState){
-        if (nextProps.match.params.assignment_id !== prevState.id){
+
+    static getDerivedStateFromProps(nextProps, prevState) {
+        if (nextProps.match.params.assignment_id !== prevState.id) {
             return {
-            id: nextProps.match.params.assignment_id,
-            assignment: null
+                id: nextProps.match.params.assignment_id,
+                assignment: null
             }
         }
         return null;
     }
 
-        //everytime a new assignment is clicked on, component re-renders and new assignment is fetched
-        componentDidMount(){
-            console.log("assignmentinfo mounted!");
-            this._fetchAssignmentData();
+    //everytime a new assignment is clicked on, component re-renders and new assignment is fetched
+    componentDidMount() {
+        console.log("assignmentinfo mounted!");
+        this._fetchAssignmentData();
     }
 
     //renders initially
-    componentDidUpdate(prevProps){
-        if(this.props.match.params.assignment_id !== prevProps.match.params.assignment_id){
+    componentDidUpdate(prevProps) {
+        if (this.props.match.params.assignment_id !== prevProps.match.params.assignment_id) {
             console.log("component did update!");
             this._fetchAssignmentData();
-        }  
+        }
     }
 
     //
-    // componentWillReceiveProps(nextProps){
-    //     if (nextProps.match.params.assignment_id !== this.props.match.params.assignment_id){
+    // componentWillReceiveProps(nextProps) {
+    //     if (nextProps.match.params.assignment_id !== this.props.match.params.assignment_id) {
     //         this.setState({id: nextProps.match.params.assignment_id});
     //         console.log(nextProps);
     //     }
     // }
 
     //fetches assigment data
-    _fetchAssignmentData(){
+    _fetchAssignmentData() {
         const { match: { params } } = this.props;
-        this.setState({assignmentClicked: true});
-        
+        this.setState({ assignmentClicked: true });
+
         console.log("1: fetching assignment data from canvas");
-        this.setState({url: `/courses/${params.course_id}/assignments/`});
+        this.setState({ url: `/courses/${params.course_id}/assignments/` });
 
         let data = {
             course_id: params.course_id,
@@ -88,36 +88,31 @@ class AssignmentInfo extends Component{
             },
             body: JSON.stringify(data)
         })
-        .then(res => res.json())
-        .then(res => this.setState({assignment: res}))
+            .then(res => res.json())
+            .then(res => this.setState({ assignment: res }))
     }
 
-    render(){
+    render() {
 
         if (this.state.assignment === null)
-        return(
-            <div className="assignment-info">
-                <Loader type="TailSpin" color="black" height={80} width={80} />
-            </div>
-        )
+            return (
+                <div className="assignment-info">
+                    <Loader type="TailSpin" color="black" height={80} width={80} />
+                </div>
+            )
         else {
             return (
-
-                   
                 <div>
-                   <div className="assignment-info">
-                           <strong>Title:</strong> {this.state.assignment.name}
-                           <AnalyzeButton 
-                                assignment_info={this.state.assignment}
-                                course_id={this.props.match.params.course_id} 
-                                assignment_id={this.props.match.params.assignment_id} 
-                                apiKey={this.state.apiKey}
-                            />
+                    <div className="assignment-info">
+                        <strong>Title:</strong> {this.state.assignment.name}
+                        <AnalyzeButton
+                            assignment_info={this.state.assignment}
+                            course_id={this.props.match.params.course_id}
+                            assignment_id={this.props.match.params.assignment_id}
+                        />
 
-                   </div>
-               </div>
-                    
-//                </div>
+                    </div>
+                </div>
             )
         }
 
