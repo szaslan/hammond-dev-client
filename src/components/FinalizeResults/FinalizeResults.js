@@ -18,12 +18,40 @@ class FinalizeResults extends Component {
             finalizeDisplayText: false,
         };
 
+        this.pullBoxPlotFromCanvas = this.pullBoxPlotFromCanvas.bind(this);
         this.sendGradesToCanvas = this.sendGradesToCanvas.bind(this);
         this.fetchPeerReviewData = this.fetchPeerReviewData.bind(this);
         this.fetchRubricData = this.fetchRubricData.bind(this);
         this.attachNamesToDatabase = this.attachNamesToDatabase.bind(this)
         this.sortStudentsForAccordion = this.sortStudentsForAccordion.bind(this);
         this.findFlaggedGrades = this.findFlaggedGrades.bind(this);
+    }
+
+    pullBoxPlotFromCanvas() {
+        let data = {
+            course_id: this.props.course_id,
+            assignment_id: this.props.assignment_id
+        }
+
+        console.log("fetching box plot points from canvas")
+
+        fetch('/api/pull_box_plot_from_canvas', {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        })
+            .then(res => {
+                res.json()
+                    .then(result => {
+                        localStorage.setItem("min_" + this.props.assignment_id, result.min_score);
+                        localStorage.setItem("q1_" + this.props.assignment_id, result.first_quartile);
+                        localStorage.setItem("median_" + this.props.assignment_id, result.median);
+                        localStorage.setItem("q3_" + this.props.assignment_id, result.third_quartile);
+                        localStorage.setItem("max_" + this.props.assignment_id, result.max_score);
+                    })
+            })
     }
 
     fetchPeerReviewData() {
@@ -157,27 +185,25 @@ class FinalizeResults extends Component {
             .then(() => {
                 this.sortStudentsForAccordion()
                 this.findFlaggedGrades()
+                this.pullBoxPlotFromCanvas()
             })
     }
 
     sortStudentsForAccordion() {
         console.log("12: sorting students for accordion")
-        let data = {
-            assignment_id: this.props.assignment_id,
-        }
 
         fetch('/api/sort_students_for_accordion', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify(data),
         })
             .then(res => res.json())
             .then(res => {
                 localStorage.setItem("harsh_students_" + this.props.assignment_id, JSON.stringify(res.harsh_students))
                 localStorage.setItem("lenient_students_" + this.props.assignment_id, JSON.stringify(res.lenient_students))
-                localStorage.setItem("incomplete_students_" + this.props.assignment_id, JSON.stringify(res.incomplete_students))
+                localStorage.setItem("some_incomplete_students_" + this.props.assignment_id, JSON.stringify(res.some_incomplete_students))
+                localStorage.setItem("all_incomplete_students_" + this.props.assignment_id, JSON.stringify(res.all_incomplete_students))
             })
     }
 
@@ -211,14 +237,24 @@ class FinalizeResults extends Component {
                                     <div>
                                         <strong>Completed Peer Reviews:</strong> {localStorage.getItem("finalizeDisplayTextNumCompleted_" + this.props.assignment_id)} / {localStorage.getItem("finalizeDisplayTextNumAssigned_" + this.props.assignment_id)}
                                         <br></br>
-                                        <strong>Average Grade:</strong> {localStorage.getItem("finalizeDisplayTextAverage_" + this.props.assignment_id)} / {localStorage.getItem("finalizeDisplayTextOutOf_" + this.props.assignment_id)}
+                                        <strong>Min Score:</strong> {localStorage.getItem("min_" + this.props.assignment_id)}
+                                        <br></br>
+                                        <strong>First Quartile:</strong> {localStorage.getItem("q1_" + this.props.assignment_id)}
+                                        <br></br>
+                                        <strong>Median Score:</strong> {localStorage.getItem("median_" + this.props.assignment_id)}
+                                        <br></br>
+                                        <strong>Third Quartile:</strong> {localStorage.getItem("q3_" + this.props.assignment_id)}
+                                        <br></br>
+                                        <strong>Max Score:</strong> {localStorage.getItem("max_" + this.props.assignment_id)}
+                                        {/* <strong>Average Grade:</strong> {localStorage.getItem("finalizeDisplayTextAverage_" + this.props.assignment_id)} / {localStorage.getItem("finalizeDisplayTextOutOf_" + this.props.assignment_id)} */}
 
                                         <Row>
                                             <Well className="well2">
                                                 <Flexbox className="accordion-flexbox" flexDirection="column" minWidth="300px" maxWidth="500px" width="100%" flexWrap="wrap">
-                                                <Accordion name="Definitely Harsh" content={JSON.parse(localStorage.getItem("harsh_students_" + this.props.assignment_id))} />
+                                                    <Accordion name="Definitely Harsh" content={JSON.parse(localStorage.getItem("harsh_students_" + this.props.assignment_id))} />
                                                     <Accordion name="Definitely Lenient" content={JSON.parse(localStorage.getItem("lenient_students_" + this.props.assignment_id))} />
-                                                    <Accordion name="Missing Peer Reviews" content={JSON.parse(localStorage.getItem("incomplete_students_" + this.props.assignment_id))} />
+                                                    <Accordion name="Missing Some Peer Reviews" content={JSON.parse(localStorage.getItem("some_incomplete_students_" + this.props.assignment_id))} />
+                                                    <Accordion name="Missing All Peer Reviews" content={JSON.parse(localStorage.getItem("all_incomplete_students_" + this.props.assignment_id))} />
                                                     <Accordion name="Flagged Grades" content={JSON.parse(localStorage.getItem("flagged_students_" + this.props.assignment_id))} />
                                                 </Flexbox>
                                             </Well>
@@ -231,20 +267,28 @@ class FinalizeResults extends Component {
                         :
                         <div>
                             {
-                                localStorage.getItem("harsh_students_" + this.props.assignment_id) ?
+                                localStorage.getItem("harsh_students_" + this.props.assignment_id) && localStorage.getItem("max_" + this.props.assignment_id) ?
                                     <div>
                                         <strong>Completed Peer Reviews:</strong> {localStorage.getItem("finalizeDisplayTextNumCompleted_" + this.props.assignment_id)} / {localStorage.getItem("finalizeDisplayTextNumAssigned_" + this.props.assignment_id)}
-
                                         <br></br>
-
-                                        <strong>Average Grade:</strong> {localStorage.getItem("finalizeDisplayTextAverage_" + this.props.assignment_id)} / {localStorage.getItem("finalizeDisplayTextOutOf_" + this.props.assignment_id)}
+                                        <strong>Min Score:</strong> {localStorage.getItem("min_" + this.props.assignment_id)}
+                                        <br></br>
+                                        <strong>First Quartile:</strong> {localStorage.getItem("q1_" + this.props.assignment_id)}
+                                        <br></br>
+                                        <strong>Median Score:</strong> {localStorage.getItem("median_" + this.props.assignment_id)}
+                                        <br></br>
+                                        <strong>Third Quartile:</strong> {localStorage.getItem("q3_" + this.props.assignment_id)}
+                                        <br></br>
+                                        <strong>Max Score:</strong> {localStorage.getItem("max_" + this.props.assignment_id)}
+                                        {/* <strong>Average Grade:</strong> {localStorage.getItem("finalizeDisplayTextAverage_" + this.props.assignment_id)} / {localStorage.getItem("finalizeDisplayTextOutOf_" + this.props.assignment_id)} */}
 
                                         <Row>
                                             <Well className="well2">
                                                 <Flexbox className="accordion-flexbox" flexDirection="column" minWidth="300px" maxWidth="500px" width="100%" flexWrap="wrap">
                                                     <Accordion name="Definitely Harsh" content={JSON.parse(localStorage.getItem("harsh_students_" + this.props.assignment_id))} />
                                                     <Accordion name="Definitely Lenient" content={JSON.parse(localStorage.getItem("lenient_students_" + this.props.assignment_id))} />
-                                                    <Accordion name="Missing Peer Reviews" content={JSON.parse(localStorage.getItem("incomplete_students_" + this.props.assignment_id))} />
+                                                    <Accordion name="Missing Some Peer Reviews" content={JSON.parse(localStorage.getItem("some_incomplete_students_" + this.props.assignment_id))} />
+                                                    <Accordion name="Missing All Peer Reviews" content={JSON.parse(localStorage.getItem("all_incomplete_students_" + this.props.assignment_id))} />
                                                     <Accordion name="Flagged Grades" content={JSON.parse(localStorage.getItem("flagged_students_" + this.props.assignment_id))} />
                                                 </Flexbox>
                                             </Well>

@@ -55,14 +55,48 @@ class AnalyzeButton extends Component {
 				assignment_name: this.props.assignment_info.name,
 				course_id: this.props.course_id,
 			}
-
-			fetch('/api/send_incomplete_messages', {
-				method: 'POST',
+			console.log("3: fetching peer review data from canvas")
+			fetch('/api/save_all_peer_reviews_outer', {
+				method: "POST",
 				headers: {
 					'Content-Type': 'application/json'
 				},
-				body: JSON.stringify(data),
+				body: JSON.stringify(data)
 			})
+				.then(res => {
+					res.json()
+						.then(result => {
+							let data = {
+								peer_reviews: result,
+								course_id: this.props.course_id,
+								assignment_id: this.props.assignment_id,
+								points_possible: this.props.assignment_info.points_possible,
+							}
+
+							fetch('/api/save_all_peer_reviews', {
+								method: 'POST',
+								headers: {
+									'Content-Type': 'application/json'
+								},
+								body: JSON.stringify(data)
+							})
+								.then(() => {
+									var data = {
+										assignment_id: this.props.assignment_id,
+										assignment_name: this.props.assignment_info.name,
+										course_id: this.props.course_id,
+									}
+									
+									fetch('/api/send_incomplete_messages', {
+										method: 'POST',
+										headers: {
+											'Content-Type': 'application/json'
+										},
+										body: JSON.stringify(data),
+									})
+								})
+						})
+				})
 		}
 	}
 
@@ -168,20 +202,25 @@ class AnalyzeButton extends Component {
 	render() {
 		return (
 			<div>
-				<div className="assignment-info-content">
-					<DueDate
-						name="Due Date 1"
-						assignment_id={this.props.assignment_id}
-						number="1" />
-					<DueDate
-						name="Due Date 2"
-						assignment_id={this.props.assignment_id}
-						number="2" />
-					<DueDate
-						name="Due Date 3"
-						assignment_id={this.props.assignment_id}
-						number="3" />
-				</div>
+				{
+					!this.state.finalizePressed ?
+						<div className="assignment-info-content">
+							<DueDate
+								name="Due Date 1"
+								assignment_id={this.props.assignment_id}
+								number="1" />
+							<DueDate
+								name="Due Date 2"
+								assignment_id={this.props.assignment_id}
+								number="2" />
+							<DueDate
+								name="Due Date 3"
+								assignment_id={this.props.assignment_id}
+								number="3" />
+						</div>
+						:
+						null
+				}
 				{
 					!this.state.finalizePressed && !this.state.finalizeDisplayText ?
 						<div>
@@ -272,7 +311,9 @@ class AnalyzeButton extends Component {
 
 				{
 					localStorage.getItem("calendarDate_" + this.props.assignment_id + "_1") != null && localStorage.getItem("calendarDate_" + this.props.assignment_id + "_1") == this.state.curr_time ?
-						this.sendIncompleteMessages()
+						<div>
+							{this.sendIncompleteMessages()}
+						</div>
 						:
 						null
 				}

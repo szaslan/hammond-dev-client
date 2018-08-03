@@ -19,6 +19,7 @@ class DueDate extends Component {
             m: moment(),
             dueDate: '',
             dueDateDisplay: '',
+            dueDateActual: '',
             tooltipOpen: false,
             buttonPressed: false,
         };
@@ -38,8 +39,11 @@ class DueDate extends Component {
     }
 
     handleChange = m => {
-        this.setState({dueDateDisplay: m.format('l') + ", " + m.format('LTS')});
-        // console.log(this.state.m.format('llll'))
+        this.setState({dueDateDisplay: m.format('llll')});
+        this.setState({dueDateActual: m.format('l') + ", " + m.format('LTS')});
+        var new_date = new Date(this.state.dueDateDisplay)
+        var formatted = moment(new_date).format('llll')
+        console.log("formatted: " + formatted)
     };
     handleClick1() {
         this.setState(prevState => ({
@@ -51,11 +55,15 @@ class DueDate extends Component {
         this.setState({buttonPressed: false})
         // this.setState({dueDateDisplay: this.state.dueDate})
         console.log('saved', this.state.dueDate);
-        localStorage.setItem("calendarDate_" + this.props.assignment_id + "_" + this.props.number, this.state.dueDateDisplay);
+        localStorage.setItem("calendarDate_" + this.props.assignment_id + "_" + this.props.number, this.state.dueDateActual);
     };
 
-    componentDidMount(){
-        this.setState({dueDateDisplay: localStorage.getItem("calendarDate_" + this.props.assignment_id + "_" + this.props.number)})
+    componentDidMount() {
+        if (localStorage.getItem("calendarDate_" + this.props.assignment_id + "_" + this.props.number)) {
+            var actual_date = new Date(localStorage.getItem("calendarDate_" + this.props.assignment_id + "_" + this.props.number));
+            var formatted_date = moment(actual_date).format('llll');
+            this.setState({dueDateDisplay: formatted_date})
+        }
     }
 
 
