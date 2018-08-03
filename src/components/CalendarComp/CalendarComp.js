@@ -28,6 +28,13 @@ class CalendarComp extends Component {
             tooltipOpen: !this.state.tooltipOpen
         })
     }
+
+    componentDidMount(){
+        this.setState({dueDate: localStorage.getItem("calendarDate" + this.props.assignment_id + this.props.number)})
+    }
+
+
+
     render() {
         return (
 
@@ -39,7 +46,8 @@ class CalendarComp extends Component {
                     <Tooltip placement="right" delay={{show:"1200"}} isOpen={this.state.tooltipOpen} target={"TooltipExample"+this.props.number} toggle={this.toggle}>
                         Click to set a due date
                     </Tooltip>
-                    {localStorage.getItem("calendarDate" + this.props.assignment_id + this.props.number)}
+                    {/* {localStorage.getItem("calendarDate" + this.props.assignment_id + this.props.number)} */}
+                    {this.state.dueDate}
                 </p>
                 {
                     (this.state.buttonPressed ?
