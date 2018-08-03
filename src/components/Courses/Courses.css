@@ -7,7 +7,13 @@
     --dark-lavendar:#74546a;
     --light-lavendar1:#a37494;
     --light-lavendar2:#bd8eae;
-  }
+    --jumbo-background:#B27C53;
+    --accent-color-dark:#6D213C;
+    --body-buttons:#C4B46D;
+    --body-background: white;
+    --accent-color-light: #EDC874;
+    --accent-color-dark2:#005908;
+    }
 
   .loader{
     
@@ -16,7 +22,8 @@
     margin: 0;
     padding: 0;
     font-family: sans-serif;
-    background-color:white !important;
+    /* background-color:white !important; */
+    background-color:var(--body-background) !important;
   }
 
   /* ------------Top Section Settings------------ */
@@ -30,6 +37,7 @@
   }
   .course-button{
     background-color: lightgray;
+    /* background-color: var(--body-buttons); */
     border:none;
     color: var(--navy-plum);
     font-size:20px;
