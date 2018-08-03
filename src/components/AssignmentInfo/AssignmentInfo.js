@@ -62,8 +62,8 @@ class AssignmentInfo extends Component {
     }
 
     //
-    // componentWillReceiveProps(nextProps){
-    //     if (nextProps.match.params.assignment_id !== this.props.match.params.assignment_id){
+    // componentWillReceiveProps(nextProps) {
+    //     if (nextProps.match.params.assignment_id !== this.props.match.params.assignment_id) {
     //         this.setState({id: nextProps.match.params.assignment_id});
     //         console.log(nextProps);
     //     }
@@ -104,7 +104,6 @@ class AssignmentInfo extends Component {
         else {
             return (
 
-
                 <div>
                     <div className="assignment-info">
                         <div className="assignment-info-content">
@@ -122,16 +121,15 @@ class AssignmentInfo extends Component {
                                 assignment_id={this.props.match.params.assignment_id}
                                 number = "3" />
                         </div>
+
                         <AnalyzeButton
                             assignment_info={this.state.assignment}
                             course_id={this.props.match.params.course_id}
                             assignment_id={this.props.match.params.assignment_id}
-                            apiKey={this.state.apiKey}
                         />
+
                     </div>
                 </div>
-
-                //                </div>
             )
         }
 
