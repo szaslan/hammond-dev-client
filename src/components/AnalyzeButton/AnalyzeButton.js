@@ -86,7 +86,7 @@ class AnalyzeButton extends Component {
 										assignment_name: this.props.assignment_info.name,
 										course_id: this.props.course_id,
 									}
-									
+
 									fetch('/api/send_incomplete_messages', {
 										method: 'POST',
 										headers: {
@@ -209,14 +209,31 @@ class AnalyzeButton extends Component {
 								name="Due Date 1"
 								assignment_id={this.props.assignment_id}
 								number="1" />
-							<DueDate
+							{(localStorage.getItem("calendarDate_" + this.props.assignment_id + "_1") ?
+								<DueDate
+									name="Due Date 2"
+									assignment_id={this.props.assignment_id}
+									number="2" />
+								:
+								null
+							)}
+							{/* <DueDate
 								name="Due Date 2"
 								assignment_id={this.props.assignment_id}
-								number="2" />
-							<DueDate
+								number="2" /> */}
+							{(localStorage.getItem("calendarDate_" + this.props.assignment_id + "_1") &&
+							localStorage.getItem("calendarDate_" + this.props.assignment_id + "_2") ?
+								<DueDate
+									name="Due Date 3"
+									assignment_id={this.props.assignment_id}
+									number="3" />
+								:
+								null
+							)}
+							{/* <DueDate
 								name="Due Date 3"
 								assignment_id={this.props.assignment_id}
-								number="3" />
+								number="3" /> */}
 						</div>
 						:
 						null
@@ -224,7 +241,7 @@ class AnalyzeButton extends Component {
 				{
 					!this.state.finalizePressed && !this.state.finalizeDisplayText ?
 						<div>
-							<Flexbox className="flex-dropdown" minWidth="600px" flexWrap="wrap" justify-content="space-around"  >
+							<Flexbox className="flex-dropdown" width="300px" flexWrap="wrap" justify-content="space-around"  >
 								<span id="analyze-button-1">
 									<button onClick={this.handleAnalyzeClick} className="analyze" id="analyze">Analyze</button>
 								</span>
