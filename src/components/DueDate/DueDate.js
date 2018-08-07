@@ -8,7 +8,7 @@ import '../CalendarComp/CalendarComp.css';
 import { Tooltip } from 'reactstrap';
 import { Alert } from 'react-bootstrap';
 
-// import packageJson from '../../package.json';
+var infoIcon = require('../InfoIcon.svg')
 
 class DueDate extends Component {
 
@@ -22,6 +22,7 @@ class DueDate extends Component {
             dueDateActual: '',
             tooltipOpen: false,
             buttonPressed: false,
+            message: '',
         };
         this.handleClick1 = this.handleClick1.bind(this);
         this.handleChange = this.handleChange.bind(this);
@@ -45,6 +46,11 @@ class DueDate extends Component {
     }
 
     handleChange = m => {
+        /*this.setState({ dueDateDisplay: m.format('llll') });
+        this.setState({ dueDateActual: m.format('l') + ", " + m.format('LTS') });
+        var new_date = new Date(this.state.dueDateDisplay)
+        var formatted = moment(new_date).format('llll')
+        console.log("formatted: " + formatted)*/
         //this.setState({ dueDateDisplay: m.format('llll') }, () => {
             // localStorage.setItem(("calendarDate_" + this.props.assignment_id + "_" + this.props.number), this.state.dueDateActual);
             //localStorage.setItem(("calendarDate_" + this.props.assignment_id + "_" + this.props.number), this.state.dueDateDisplay);
@@ -64,7 +70,12 @@ class DueDate extends Component {
     }
 
     handleSave = () => {
+
+        this.setState({ buttonPressed: false })
+        // this.setState({dueDateDisplay: this.state.dueDate})
+
         localStorage.setItem(("calendarDate_" + this.props.assignment_id + "_" + this.props.number), this.state.dueDateDisplay);
+
         console.log('saved', this.state.dueDate);
 
         var actual_date = new Date(this.state.m.format('llll'));
@@ -116,10 +127,14 @@ class DueDate extends Component {
     };
 
     componentDidMount() {
+        this.setState({
+            message: this.props.message
+        })
+
         if (localStorage.getItem("calendarDate_" + this.props.assignment_id + "_" + this.props.number)) {
             var actual_date = new Date(localStorage.getItem("calendarDate_" + this.props.assignment_id + "_" + this.props.number));
             var formatted_date = moment(actual_date).format('llll');
-            // console.log('stuffff',actual_date.getTime());
+
             this.setState({ dueDateDisplay: formatted_date })
         }
     }
@@ -130,17 +145,21 @@ class DueDate extends Component {
             <div className="app">
 
                 <p>
+                    <button onClick={this.handleClick1} >{this.props.name}</button>
                     <span style={{ textDecoration: "underline", color: "blue" }} href="#" id={"TooltipExample" + this.props.number}>
-                        <button onClick={this.handleClick1} >{this.props.name}</button>
+                        <img src={infoIcon} width="20"/>
                     </span>
-                    <Tooltip placement="right" delay={{ show: "1200" }} isOpen={this.state.tooltipOpen} target={"TooltipExample" + this.props.number} toggle={this.toggle}>
-                        Click to set a due date
+                    <Tooltip placement="right" isOpen={this.state.tooltipOpen} target={"TooltipExample" + this.props.number} toggle={this.toggle}>
+                        {this.state.message}
+
                     </Tooltip>
                     {this.state.dueDateDisplay}
                 </p>
 
 
                 {this.state.buttonPressed ?
+
+
                     (this.isAcceptable ?
                         (this.isAfter ?
                             <form>
@@ -174,7 +193,6 @@ class DueDate extends Component {
                     )
                     :
                     null
-
                 }
 
 
