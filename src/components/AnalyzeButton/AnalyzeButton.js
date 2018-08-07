@@ -162,18 +162,29 @@ class AnalyzeButton extends Component {
 							<DueDate
 								name="Due Date 1"
 								assignment_id={this.props.assignment_id}
+
 								number="1"
 								message={message1} />
-							<DueDate
-								name="Due Date 2"
-								assignment_id={this.props.assignment_id}
-								number="2"
-								message={message2} />
-							<DueDate
-								name="Due Date 3"
-								assignment_id={this.props.assignment_id}
-								number="3"
-								message={message3} />
+							{(localStorage.getItem("calendarDate_" + this.props.assignment_id + "_1") ?
+								<DueDate
+									name="Due Date 2"
+									assignment_id={this.props.assignment_id}
+									number="2" 
+      								message={message2}/>
+								:
+								null
+							)}
+{(localStorage.getItem("calendarDate_" + this.props.assignment_id + "_1") &&
+							localStorage.getItem("calendarDate_" + this.props.assignment_id + "_2") ?
+								<DueDate
+									name="Due Date 3"
+									assignment_id={this.props.assignment_id}
+									number="3"
+  message={message3}/>
+								:
+								null
+							)}
+								 />
 						</div>
 						:
 						null
@@ -181,7 +192,7 @@ class AnalyzeButton extends Component {
 				{
 					!this.state.finalizePressed && !this.state.finalizeDisplayText ?
 						<div>
-							<Flexbox className="flex-dropdown" minWidth="600px" flexWrap="wrap" justify-content="space-around"  >
+							<Flexbox className="flex-dropdown" width="300px" flexWrap="wrap" justify-content="space-around"  >
 								<span id="analyze-button-1">
 									<button onClick={this.handleAnalyzeClick} className="analyze" id="analyze">Analyze</button>
 								</span>
