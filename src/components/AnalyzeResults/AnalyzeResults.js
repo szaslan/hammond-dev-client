@@ -27,37 +27,19 @@ class AnalyzeResults extends Component {
     fetchPeerReviewData() {
         let data = {
             course_id: this.props.course_id,
-            assignment_id: this.props.assignment_id
+            assignment_id: this.props.assignment_id,
+            points_possible: this.props.assignment_info.points_possible,
         }
         console.log("3: fetching peer review data from canvas")
-        fetch('/api/save_all_peer_reviews_outer', {
+        fetch('/api/save_all_peer_reviews', {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify(data)
         })
-            .then(res => {
-                res.json()
-                    .then(result => {
-                        let data = {
-                            peer_reviews: result,
-                            course_id: this.props.course_id,
-                            assignment_id: this.props.assignment_id,
-                            points_possible: this.props.assignment_info.points_possible,
-                        }
-
-                        fetch('/api/save_all_peer_reviews', {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json'
-                            },
-                            body: JSON.stringify(data)
-                        })
-                            .then(() => {
-                                this.fetchRubricData();
-                            })
-                    })
+            .then(() => {
+                this.fetchRubricData()
             })
             .then(() => {
                 localStorage.setItem("analyzePressed_" + this.props.assignment_id, true);
@@ -67,55 +49,39 @@ class AnalyzeResults extends Component {
     fetchRubricData() {
         var data = {
             course_id: this.props.course_id,
-            rubric_settings: this.props.assignment_info.rubric_settings.id
+            assignment_id: this.props.assignment_id,
+            rubric_settings: this.props.assignment_info.rubric_settings.id,
         }
 
         console.log("5: fetching rubric data from canvas");
-        fetch('/api/save_all_rubrics_outer', {
+        fetch('/api/save_all_rubrics', {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify(data)
         })
-            .then(res => {
-                res.json()
-                    .then(result => {
-                        var data = {
-                            rubrics: result,
-                            assignment_id: this.props.assignment_id,
-                        }
-
-                        fetch('/api/save_all_rubrics', {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json'
-                            },
-                            body: JSON.stringify(data)
-                        })
-                            .then(() => {
-                                fetch('/api/peer_reviews_analyzing', {
-                                    method: 'POST',
-                                    headers: {
-                                        'Content-Type': 'application/json'
-                                    },
-                                    body: JSON.stringify(data)
-                                })
-                                    .then(res => res.json())
-                                    .then(res => message = res.message)
-                                    .then(() => {
-                                        localStorage.setItem("analyzeDisplayTextNumCompleted_" + this.props.assignment_id, message.num_completed);
-                                        localStorage.setItem("analyzeDisplayTextNumAssigned_" + this.props.assignment_id, message.num_assigned);
-                                        localStorage.setItem("analyzeDisplayTextMessage_" + this.props.assignment_id, message.message);
-                                    })
-                                    .then(() => {
-                                        this.setState({
-                                            analyzeDisplayText: true,
-                                        })
-                                    })
-                                    .then(() => this.attachNamesToDatabase())
-                            })
+            .then(() => {
+                fetch('/api/peer_reviews_analyzing', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                })
+                    .then(res => res.json())
+                    .then(res => message = res.message)
+                    .then(() => {
+                        localStorage.setItem("analyzeDisplayTextNumCompleted_" + this.props.assignment_id, message.num_completed);
+                        localStorage.setItem("analyzeDisplayTextNumAssigned_" + this.props.assignment_id, message.num_assigned);
+                        localStorage.setItem("analyzeDisplayTextMessage_" + this.props.assignment_id, message.message);
                     })
+                    .then(() => {
+                        this.setState({
+                            analyzeDisplayText: true,
+                        })
+                    })
+                    .then(() => this.attachNamesToDatabase())
             })
     }
 

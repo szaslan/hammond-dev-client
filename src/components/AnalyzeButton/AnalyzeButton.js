@@ -12,6 +12,10 @@ import DueDate from '../DueDate/DueDate';
 
 import '../Assignments/Assignments.css'
 
+var message1 = "Click the button to set the first due date. This due date represents when all peer reviews are due by. Any peer review submitted to Canvas after this date will be considered late. At the time of the due date, all peer reviews are downloaded from Canvas. Any student who has not yet completed all their peer reviews for the assignment will get a Canvas message reminding them that they are now late and still need to complete x number of peer reviews.";
+var message2 = "Click the button to set the second due date. This due date represents the last point to submit late peer reviews. Once this deadline passes, all incomplete peer reviews will be deleted from Canvas, preventing students from submitting them. In addition, those incomplete peer reviews will be reassigned to other students. The pool of students to pick from for reassignment is all students who were deemed could be harsh, could be lenient, could be fair, or definitely fair, had completed all of their reviews for this assignment, and had not already reviewed the person for this assignment. From this pool of people, one student is randomly selected and given this new peer review. In addition, a message is sent to each student who is given more peer reviews, letting them know that they have done such a great job in the past, that they have to cover for slackers."
+var message3 = "Click the button to set the third due date. This due date represents the deadline for reassigned peer reviews. Once this deadline passes, the 'finalize' button is pressed. This results in a grade for each submission being calculated by the grading algorithm and automatically sent to the Canvas gradebook. If you do not want the grades to be published immediately, ensure that you have muted the assignment on Canvas before this point."
+
 
 class AnalyzeButton extends Component {
 	constructor(props) {
@@ -23,11 +27,6 @@ class AnalyzeButton extends Component {
 			analyzeDisplayText: false,
 			finalizeDisplayText: false,
 			curr_time: null,
-			deadlines: {
-				deadline_1: null,
-				deadline_2: null,
-				deadline_3: null
-			},
 			assigned_new_peer_reviews: false,
 			deleted_old_peer_reviews: false,
 			tooltipOpen1: false,
@@ -41,61 +40,30 @@ class AnalyzeButton extends Component {
 		this.handleFinalizeClick = this.handleFinalizeClick.bind(this);
 	}
 
-	toggle() {
-		this.setState({
-			tooltipOpen1: !this.state.tooltipOpen1,
-			tooltipOpen2: !this.state.tooltipOpen2
-		})
-	}
-
 	sendIncompleteMessages() {
 		if (window.confirm('Do you want to Canvas message each student with missing peer reviews?')) {
 			var data = {
+				course_id: this.props.course_id,
 				assignment_id: this.props.assignment_id,
 				assignment_name: this.props.assignment_info.name,
-				course_id: this.props.course_id,
+				points_possible: this.props.assignment_info.points_possible,
 			}
 			console.log("3: fetching peer review data from canvas")
-			fetch('/api/save_all_peer_reviews_outer', {
+			fetch('/api/save_all_peer_reviews', {
 				method: "POST",
 				headers: {
 					'Content-Type': 'application/json'
 				},
 				body: JSON.stringify(data)
 			})
-				.then(res => {
-					res.json()
-						.then(result => {
-							let data = {
-								peer_reviews: result,
-								course_id: this.props.course_id,
-								assignment_id: this.props.assignment_id,
-								points_possible: this.props.assignment_info.points_possible,
-							}
-
-							fetch('/api/save_all_peer_reviews', {
-								method: 'POST',
-								headers: {
-									'Content-Type': 'application/json'
-								},
-								body: JSON.stringify(data)
-							})
-								.then(() => {
-									var data = {
-										assignment_id: this.props.assignment_id,
-										assignment_name: this.props.assignment_info.name,
-										course_id: this.props.course_id,
-									}
-									
-									fetch('/api/send_incomplete_messages', {
-										method: 'POST',
-										headers: {
-											'Content-Type': 'application/json'
-										},
-										body: JSON.stringify(data),
-									})
-								})
-						})
+				.then(() => {
+					fetch('/api/send_incomplete_messages', {
+						method: 'POST',
+						headers: {
+							'Content-Type': 'application/json'
+						},
+						body: JSON.stringify(data),
+					})
 				})
 		}
 	}
@@ -118,20 +86,34 @@ class AnalyzeButton extends Component {
 	}
 
 	deleteOldPeerReviews() {
-		this.setState({ deleted_old_peer_reviews: true })
-
-		var data = {
-			assignment_id: this.props.assignment_id,
+		let data = {
 			course_id: this.props.course_id,
+			assignment_id: this.props.assignment_id,
+			points_possible: this.props.assignment_info.points_possible,
 		}
 
-		fetch('/api/delete_peer_reviews', {
-			method: 'POST',
+		console.log("3: fetching peer review data from canvas")
+		fetch('/api/save_all_peer_reviews', {
+			method: "POST",
 			headers: {
 				'Content-Type': 'application/json'
 			},
-			body: JSON.stringify(data),
+			body: JSON.stringify(data)
 		})
+			.then(() => {
+				this.setState({ deleted_old_peer_reviews: true })
+
+				fetch('/api/delete_peer_reviews', {
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/json'
+					},
+					body: JSON.stringify(data),
+				})
+					.then(() => {
+						this.assignNewPeerReviews()
+					})
+			})
 	}
 
 	handleAnalyzeClick() {
@@ -162,34 +144,6 @@ class AnalyzeButton extends Component {
 			})
 		}
 
-		if (localStorage.getItem("calendarDate_" + this.props.assignment_id + "_1")) {
-			this.setState({
-				deadlines: {
-					deadline_1: localStorage.getItem("calendarDate_" + this.props.assignment_id + "_1"),
-					deadline_2: this.state.deadlines.deadline_2,
-					deadline_3: this.state.deadlines.deadline_3,
-				}
-			})
-		}
-		if (localStorage.getItem("calendarDate_" + this.props.assignment_id + "_2")) {
-			this.setState({
-				deadlines: {
-					deadline_1: this.state.deadlines.deadline_1,
-					deadline_2: localStorage.getItem("calendarDate_" + this.props.assignment_id + "_2"),
-					deadline_3: this.state.deadlines.deadline_3,
-				}
-			})
-		}
-		if (localStorage.getItem("calendarDate_" + this.props.assignment_id + "_3")) {
-			this.setState({
-				deadlines: {
-					deadline_1: this.state.deadlines.deadline_1,
-					deadline_2: this.state.deadlines.deadline_2,
-					deadline_3: localStorage.getItem("calendarDate_" + this.props.assignment_id + "_3"),
-				}
-			})
-		}
-
 		setInterval(() => {
 			this.setState({
 				curr_time: new Date().toLocaleString()
@@ -208,15 +162,18 @@ class AnalyzeButton extends Component {
 							<DueDate
 								name="Due Date 1"
 								assignment_id={this.props.assignment_id}
-								number="1" />
+								number="1"
+								message={message1} />
 							<DueDate
 								name="Due Date 2"
 								assignment_id={this.props.assignment_id}
-								number="2" />
+								number="2"
+								message={message2} />
 							<DueDate
 								name="Due Date 3"
 								assignment_id={this.props.assignment_id}
-								number="3" />
+								number="3"
+								message={message3} />
 						</div>
 						:
 						null
@@ -237,9 +194,6 @@ class AnalyzeButton extends Component {
 								<UncontrolledTooltip delay={{ show: "1200" }} placement="top" target="finalize-button-1">
 									Click to send grades to the Canvas gradebook
                					</UncontrolledTooltip>
-								{/* <Tooltip placement="top" delay={{ show: "1200" }} isOpen={this.state.tooltipOpen2} target="finalize-button-1" toggle={this.toggle}>
-                Click to send grades to gradebook on Canvas
-              </Tooltip> */}
 							</Flexbox>
 						</div>
 						:
@@ -312,6 +266,7 @@ class AnalyzeButton extends Component {
 				{
 					localStorage.getItem("calendarDate_" + this.props.assignment_id + "_1") != null && localStorage.getItem("calendarDate_" + this.props.assignment_id + "_1") == this.state.curr_time ?
 						<div>
+							{console.log("due date 1")}
 							{this.sendIncompleteMessages()}
 						</div>
 						:
@@ -320,15 +275,18 @@ class AnalyzeButton extends Component {
 				{
 					localStorage.getItem("calendarDate_" + this.props.assignment_id + "_2") != null && localStorage.getItem("calendarDate_" + this.props.assignment_id + "_2") == this.state.curr_time && !this.state.assigned_new_peer_reviews && !this.state.deleted_old_peer_reviews ?
 						<div>
+							{console.log("due date 2")}
 							{this.deleteOldPeerReviews()}
-							{this.assignNewPeerReviews()}
 						</div>
 						:
 						null
 				}
 				{
 					localStorage.getItem("calendarDate_" + this.props.assignment_id + "_3") != null && localStorage.getItem("calendarDate_" + this.props.assignment_id + "_3") == this.state.curr_time && !this.state.finalizePressed ?
-						this.handleFinalizeClick()
+						<div>
+							{console.log("due date 3")}
+							{this.handleFinalizeClick()}
+						</div>
 						:
 						null
 				}

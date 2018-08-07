@@ -8,13 +8,13 @@ import '../CalendarComp/CalendarComp.css';
 import { Tooltip } from 'reactstrap';
 import { Collapse, Button, CardBody, Card } from 'reactstrap';
 
-// import packageJson from '../../package.json';
+var infoIcon = require('../InfoIcon.svg')
 
 class DueDate extends Component {
 
-    constructor(props){
+    constructor(props) {
         super(props);
-    
+
         this.state = {
             m: moment(),
             dueDate: '',
@@ -22,6 +22,7 @@ class DueDate extends Component {
             dueDateActual: '',
             tooltipOpen: false,
             buttonPressed: false,
+            message: '',
         };
         this.handleClick1 = this.handleClick1.bind(this);
         this.handleChange = this.handleChange.bind(this);
@@ -39,8 +40,8 @@ class DueDate extends Component {
     }
 
     handleChange = m => {
-        this.setState({dueDateDisplay: m.format('llll')});
-        this.setState({dueDateActual: m.format('l') + ", " + m.format('LTS')});
+        this.setState({ dueDateDisplay: m.format('llll') });
+        this.setState({ dueDateActual: m.format('l') + ", " + m.format('LTS') });
         var new_date = new Date(this.state.dueDateDisplay)
         var formatted = moment(new_date).format('llll')
         console.log("formatted: " + formatted)
@@ -52,17 +53,21 @@ class DueDate extends Component {
     }
 
     handleSave = () => {
-        this.setState({buttonPressed: false})
+        this.setState({ buttonPressed: false })
         // this.setState({dueDateDisplay: this.state.dueDate})
         console.log('saved', this.state.dueDate);
         localStorage.setItem("calendarDate_" + this.props.assignment_id + "_" + this.props.number, this.state.dueDateActual);
     };
 
     componentDidMount() {
+        this.setState({
+            message: this.props.message
+        })
+
         if (localStorage.getItem("calendarDate_" + this.props.assignment_id + "_" + this.props.number)) {
             var actual_date = new Date(localStorage.getItem("calendarDate_" + this.props.assignment_id + "_" + this.props.number));
             var formatted_date = moment(actual_date).format('llll');
-            this.setState({dueDateDisplay: formatted_date})
+            this.setState({ dueDateDisplay: formatted_date })
         }
     }
 
@@ -72,11 +77,12 @@ class DueDate extends Component {
             <div className="app">
 
                 <p>
-                    <span style={{ textDecoration: "underline", color: "blue" }} href="#" id={"TooltipExample"+this.props.number}>
-                        <button onClick={this.handleClick1} >{this.props.name}</button>
+                    <button onClick={this.handleClick1} >{this.props.name}</button>
+                    <span style={{ textDecoration: "underline", color: "blue" }} href="#" id={"TooltipExample" + this.props.number}>
+                        <img src={infoIcon} width="20"/>
                     </span>
-                    <Tooltip placement="right" delay={{show:"1200"}} isOpen={this.state.tooltipOpen} target={"TooltipExample"+this.props.number} toggle={this.toggle}>
-                        Click to set a due date
+                    <Tooltip placement="right" isOpen={this.state.tooltipOpen} target={"TooltipExample" + this.props.number} toggle={this.toggle}>
+                        {this.state.message}
                     </Tooltip>
                     {this.state.dueDateDisplay}
                 </p>
@@ -84,22 +90,22 @@ class DueDate extends Component {
 
 
                 {this.state.buttonPressed ?
-                <form>
-                   
-                    <InputMoment
-                        moment={this.state.m}
-                        onChange={this.handleChange}
-                        onSave={this.handleSave}
-                        minStep={1} // default
-                        hourStep={1} // default
-                        prevMonthIcon="ion-ios-arrow-left" // default
-                        nextMonthIcon="ion-ios-arrow-right" // default
-                    />
+                    <form>
+
+                        <InputMoment
+                            moment={this.state.m}
+                            onChange={this.handleChange}
+                            onSave={this.handleSave}
+                            minStep={1} // default
+                            hourStep={1} // default
+                            prevMonthIcon="ion-ios-arrow-left" // default
+                            nextMonthIcon="ion-ios-arrow-right" // default
+                        />
 
 
-                </form>
-                :
-                null
+                    </form>
+                    :
+                    null
                 }
 
 
