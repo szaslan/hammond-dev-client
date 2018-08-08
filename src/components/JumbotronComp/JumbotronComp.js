@@ -7,11 +7,11 @@ import { Row, Col } from 'react-bootstrap';
 class JumbotronComp extends Component {
     constructor(props){
         super(props);
-        
+
      this.signOut = this.signOut.bind(this);
-       
+
     }
- 
+
       signOut(){
         fetch('/logout', {
             credentials: 'include'

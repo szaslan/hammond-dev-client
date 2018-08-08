@@ -108,9 +108,9 @@ class UserRegistration extends Component {
 
 
     return (
-      <div className="entire-screen">
+      <div className="entire-screen-login">
         <div className="register-group">
-          <h1 className="welcome-message"><strong>Sign Up</strong></h1>
+          <h1 className="welcome-message-login">Sign Up</h1>
           <Form className="register-form" onSubmit={this.handleSubmit}>
             <FormGroup>
               <Input type="text" placeholder="First Name" name="firstName" className="register-input" onChange={this.handleChange} />

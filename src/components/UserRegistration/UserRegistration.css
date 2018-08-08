@@ -1,23 +1,25 @@
 .register-group{
     width:500px;
-    padding-top:13vh;
+    padding-top:18vh;
     height:80vh;
     margin:auto;
 }
 
 .register-input{
     margin: 0 auto;
+    margin-top: 3.5px;
     display: flex;
     border:none;
-    
+
 }
 .errors{
-    background:white;
-    list-style-type:circle;
-    text-align:left;
+    background:#efd9ce;
+    list-style-type: none;
+    text-align: center;
     padding:10px;
-    padding-left:25px;
+    /*padding-left:25px;
+    border-radius:5px;*/
+    color:#f2928e;
     margin-top:10px;
-    border-radius:5px;
-    
+    font-family: 'Open Sans';
 }

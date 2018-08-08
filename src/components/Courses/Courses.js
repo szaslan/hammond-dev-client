@@ -34,18 +34,18 @@ class Courses extends Component{
             credentials: 'include',
             headers: {
                 'Content-Type': 'application/json'
-                
+
             },
             redirect: 'follow'
         })
         .then(function(res){
             console.log(res)
-    
+
                 if (res.status === 401){
                     console.log("4040404")
                     history.push("/login")
                     throw new Error();
-                    
+
                     // return <Redirect to="/" />
                     // window.location.href="/login"
                 }
@@ -58,7 +58,7 @@ class Courses extends Component{
                     get.setState({user: data.first_name, courses: data.courses})
                 })
             }
-            
+
         })
         .catch(err => console.log(err));
     }
@@ -84,15 +84,18 @@ class Courses extends Component{
             );
         }
         else{
-            
+
         return(
             <div>
                 <JumbotronComp mainTitle ={this.state.user} secondaryTitle="Welcome," />
                 <Container className="well1-container" fluid>
                         <Flexbox className="well1-flexbox" minWidth="700px" width="90vw"
                             flexWrap="wrap" inline="true">
-                            {this.state.courses.length > 0 
-                            ?    
+                            <h1 className="pagetitle">Courses</h1>
+                            <Flexbox className="well1-flexbox" minWidth="700px" width="90vw"
+                                flexWrap="wrap" inline="true">
+                            {this.state.courses.length > 0
+                            ?
                             this.state.courses ?
                                 this.state.courses.map(courses =>
                                     <Link to= {`/courses/${courses.id}`}>
@@ -100,23 +103,23 @@ class Courses extends Component{
                                     </Link>)
                                     :
                                 null
-                            
+
                             :
                             <h1>No classes as a teacher</h1>
                                     }
+                          </Flexbox>
                         </Flexbox>
                 </Container>
-               
+
 
                 <Well className="bottom" fluid>
                     <Container className="bottom-container" fluid>
                         <button className="about-button" >About Us</button>
-                        <br></br>
                         <button className="about-button">About untitled</button>
                     </Container>
                 </Well>
             </div>
-                
+
         );
     }
     // else{
@@ -126,7 +129,7 @@ class Courses extends Component{
     //             <Link to="/login">
     //                 <button>Sign in</button>
     //             </Link>
-    //         </div>  
+    //         </div>
     //     )
     // }
     }

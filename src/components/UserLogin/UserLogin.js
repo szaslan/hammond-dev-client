@@ -103,9 +103,9 @@ class UserLogin extends Component {
       //     </div>
       //   </Col>
       // </Row>
-      <div className="entire-screen">
-        <div className="login-group"> 
-          <h1 className="welcome-message"><strong>Sign In</strong></h1>
+      <div className="entire-screen-login">
+        <div className="login-group">
+          <h1 className="welcome-message-login">Sign In</h1>
           <Form>
             <FormGroup>
               <Input type="email" name="email" id="exampleEmail" placeholder="Email address" onChange={this.handleChange} name="email" />
@@ -134,4 +134,3 @@ class UserLogin extends Component {
 }
 
 export default UserLogin;
- 
