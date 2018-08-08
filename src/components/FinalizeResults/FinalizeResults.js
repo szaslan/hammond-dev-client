@@ -3,8 +3,8 @@ import { Well, Row, Panel } from 'react-bootstrap';
 import Flexbox from 'flexbox-react';
 import 'bootstrap/dist/css/bootstrap.css';
 import Accordion from '../Accordion/Accordion';
-import Loader from 'react-loader-spinner'
-import { Boxplot, computeBoxplotStats } from 'react-boxplot'
+import Loader from 'react-loader-spinner';
+import { Boxplot, computeBoxplotStats } from 'react-boxplot';
 import { Tooltip } from 'reactstrap';
 
 import '../Assignments/Assignments.css'

@@ -121,7 +121,7 @@ class DueDate extends Component {
         }
         else { 
             this.isAfter = true;
-            this.setState({ buttonPressed: false });
+            //this.setState({ buttonPressed: false });
         }
 
     };
