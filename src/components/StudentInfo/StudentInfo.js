@@ -412,6 +412,7 @@ class StudentInfo extends Component {
             selectedAssignment: Number(event.target.id),
             value2: 'Select a Peer Review',
             message: '',
+            peer_reviews: [],
             scoreGiven: '',
             finalScore: ''
         }, () => {
