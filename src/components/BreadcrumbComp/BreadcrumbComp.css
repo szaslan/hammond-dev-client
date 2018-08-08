@@ -1,5 +1,5 @@
 .breadcrumb1{
-    font-size:20px;
+    font-size:18px;
     display:flex;
     flex-wrap:nowrap!important;
     min-width:750px!important;
@@ -7,6 +7,9 @@
     overflow:hidden;
     text-overflow: ellipsis!important;
     border-radius:0px!important;
+    height: 35px;
+    line-height: 2vh;
+    font-family: 'Open Sans';
 }
 .breadcrumb-item1{
     max-width: 70vw;

@@ -248,3 +248,7 @@ input {
     font-size:20px;
     border-radius:0px
 }
+
+.tooltip-inner {
+    max-width: 350px !important;
+}

@@ -1,403 +1,310 @@
 import React, { Component } from 'react';
 import { Well, Row, Panel } from 'react-bootstrap';
-
+import { UncontrolledTooltip } from 'reactstrap';
 import Flexbox from 'flexbox-react';
 import 'bootstrap/dist/css/bootstrap.css';
 import Accordion from '../Accordion/Accordion';
-import Loader from 'react-loader-spinner'
+import Loader from 'react-loader-spinner';
+import '../Assignments/Assignments.css';
+import FinalizeResults from '../FinalizeResults/FinalizeResults';
+import AnalyzeResults from '../AnalyzeResults/AnalyzeResults';
+import DueDate from '../DueDate/DueDate';
 
 import '../Assignments/Assignments.css'
 
-var message = "";
+//var message1 = "Click the button to set the first due date. This due date represents when all peer reviews are due by. Any peer review submitted to Canvas after this date will be considered late. At the time of the due date, all peer reviews are downloaded from Canvas. Any student who has not yet completed all their peer reviews for the assignment will get a Canvas message reminding them that they are now late and still need to complete x number of peer reviews.";
+var message1 = "Peer reviews submitted after this date will be considered late. Any student who has not submitted reviews by this date will receive a notification message from Canvas.";
+//var message2 = "Click the button to set the second due date. This due date represents the last point to submit late peer reviews. Once this deadline passes, all incomplete peer reviews will be deleted from Canvas, preventing students from submitting them. In addition, those incomplete peer reviews will be reassigned to other students. The pool of students to pick from for reassignment is all students who were deemed could be harsh, could be lenient, could be fair, or definitely fair, had completed all of their reviews for this assignment, and had not already reviewed the person for this assignment. From this pool of people, one student is randomly selected and given this new peer review. In addition, a message is sent to each student who is given more peer reviews, letting them know that they have done such a great job in the past, that they have to cover for slackers."
+var message2 = "Late peer reviews submitted after this date will be reassigned to students who have completed all of their reviews for this assignment.";
+//var message3 = "Click the button to set the third due date. This due date represents the deadline for reassigned peer reviews. Once this deadline passes, the 'finalize' button is pressed. This results in a grade for each submission being calculated by the grading algorithm and automatically sent to the Canvas gradebook. If you do not want the grades to be published immediately, ensure that you have muted the assignment on Canvas before this point."
+var message3 = "Reassigned peer reviews must be submitted by this deadline. After this date, any unsubmitted peer reviews will be deleted from Canvas.";
 
 class AnalyzeButton extends Component {
-  constructor(props) {
+	constructor(props) {
+		super(props);
 
-    super(props);
-        
-    
-    this.state = {
-      buttonPressed: false,
-      analyzeDisplayText: false,
-      finalizeDisplayText: false,
-      finalizePressed: false,
-      peerreviewJSON: [],
-      rubricJSON: [],
-      harsh_students: [],
-      lenient_students: [],
-      incomplete_students: [],
-      harsh_students_loaded: false,
-      lenient_students_loaded: false,
-      incomplete_students_loaded: false,
+		this.state = {
+			analyzePressed: false,
+			finalizePressed: false,
+			analyzeDisplayText: false,
+			finalizeDisplayText: false,
+			curr_time: null,
+			assigned_new_peer_reviews: false,
+			deleted_old_peer_reviews: false,
+			tooltipOpen1: false,
+			tooltipOpen2: false,
+		};
 
-    };
+		this.sendIncompleteMessages = this.sendIncompleteMessages.bind(this);
+		this.assignNewPeerReviews = this.assignNewPeerReviews.bind(this);
+		this.deleteOldPeerReviews = this.deleteOldPeerReviews.bind(this);
+		this.handleAnalyzeClick = this.handleAnalyzeClick.bind(this);
+		this.handleFinalizeClick = this.handleFinalizeClick.bind(this);
+	}
 
-    this.handleClick = this.handleClick.bind(this);
-    this.handleFinalizeClick = this.handleFinalizeClick.bind(this);
-    this.sendGradesToCanvas = this.sendGradesToCanvas.bind(this);
-    this.fetchPeerReviewData = this.fetchPeerReviewData.bind(this);
-    this.fetchRubricData = this.fetchRubricData.bind(this);
-    this.attachNamesToDatabaseTablesAnalyzing = this.attachNamesToDatabaseTablesAnalyzing.bind(this);
-    this.attachNamesToDatabaseTablesFinalizing = this.attachNamesToDatabaseTablesFinalizing.bind(this)
-    this.sortStudentsForAccordion = this.sortStudentsForAccordion.bind(this);
-  }
+	sendIncompleteMessages() {
+		if (window.confirm('Do you want to Canvas message each student with missing peer reviews?')) {
+			var data = {
+				course_id: this.props.course_id,
+				assignment_id: this.props.assignment_id,
+				assignment_name: this.props.assignment_info.name,
+				points_possible: this.props.assignment_info.points_possible,
+			}
+			console.log("3: fetching peer review data from canvas")
+			fetch('/api/save_all_peer_reviews', {
+				method: "POST",
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify(data)
+			})
+				.then(() => {
+					fetch('/api/send_incomplete_messages', {
+						method: 'POST',
+						headers: {
+							'Content-Type': 'application/json'
+						},
+						body: JSON.stringify(data),
+					})
+				})
+		}
+	}
 
+	assignNewPeerReviews() {
+		this.setState({ assigned_new_peer_reviews: true })
 
+		var data = {
+			assignment_id: this.props.assignment_id,
+			course_id: this.props.course_id,
+		}
 
-  fetchPeerReviewData(finalizing) {
-    if (localStorage.getItem("finalizePressed_" + this.props.assignment_id)) {
-      this.setState({analyzeDisplayText: false})
-      this.setState({finalizePressed: true})
-      this.setState({finalizeDisplayText: true})
-    }
-    else {
-      let outerData = {
-        course_id: this.props.course_id,
-        assignment_id: this.props.assignment_id
-      }
-      console.log("3: fetching peer review data from canvas")
-      fetch('/api/save_all_peer_reviews_outer', {
-        method: "POST",
-        headers:{
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(outerData)
-      })
-      .then(res => {
-        res.json()
-        .then(result => {
-          this.setState({peerreviewJSON: result})
+		fetch('/api/assign_new_peer_reviews', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify(data),
+		})
+	}
 
-          var data = {
-            peer_reviews: this.state.peerreviewJSON,
-            course_id: this.props.course_id,
-            assignment_id: this.props.assignment_id,
-            points_possible: this.props.assignment_info.points_possible,
-          }
+	deleteOldPeerReviews() {
+		let data = {
+			course_id: this.props.course_id,
+			assignment_id: this.props.assignment_id,
+			points_possible: this.props.assignment_info.points_possible,
+		}
 
-          fetch('/api/save_all_peer_reviews', {
-            method: 'POST',
-            headers:{
-              'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(data)
-          })
-          .then(() => {
-            this.fetchRubricData(finalizing);
-          })
-        })
-      })
-      .then(() => {
-        if (finalizing) {
-          localStorage.setItem("finalizePressed_" + this.props.assignment_id, true);
-          this.setState({analyzeDisplayText: false})
-          this.setState({finalizePressed: true})
-          this.setState({finalizeDisplayText: true})
-        }
-        else {
-          localStorage.setItem("analyzePressed_" + this.props.assignment_id, true);
-        }
-      })
-    }
-  }
+		console.log("3: fetching peer review data from canvas")
+		fetch('/api/save_all_peer_reviews', {
+			method: "POST",
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify(data)
+		})
+			.then(() => {
+				this.setState({ deleted_old_peer_reviews: true })
 
-  fetchRubricData(finalizing) {
+				fetch('/api/delete_peer_reviews', {
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/json'
+					},
+					body: JSON.stringify(data),
+				})
+					.then(() => {
+						this.assignNewPeerReviews()
+					})
+			})
+	}
 
-    let data = {
-      course_id: this.props.course_id,
-      rubric_settings: this.props.assignment_info.rubric_settings.id
-    }
+	handleAnalyzeClick() {
+		console.log("handle analyze click")
+		this.setState({ analyzePressed: true })
+	}
 
-    console.log("5: fetching rubric data from canvas");
-    fetch('/api/save_all_rubrics_outer',{
-      method: "POST",
-      headers:{
-        'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(data)
-    })
-    .then(res => {
-        res.json()
-        .then(data => {
-            this.setState({rubricJSON: data})
-            console.log(data)
-            if (finalizing) {
-              var data = {
-                rubrics: this.state.rubricJSON,
-                assignment_id: this.props.assignment_id,
-              }
+	handleFinalizeClick() {
+		console.log("handle finalize click")
+		this.setState({ finalizePressed: true })
+	}
 
-              fetch('/api/save_all_rubrics', {
-                method: 'POST',
-                headers:{
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(data)
-              })
-              .then(() => {
-                var data = {
-                  assignment_id: this.props.assignment_id,
-                  points_possible: this.props.assignment_info.points_possible,
-                }
-                fetch('/api/peer_reviews_finalizing', {
-                  method: 'POST',
-                  headers:{
-                    'Content-Type': 'application/json'
-                  },
-                  body: JSON.stringify(data),
-                })
-                .then(res => res.json())
-                .then(res => message = res.message)
-                .then(() => {
-                  localStorage.setItem("finalizeDisplayTextNumCompleted_" + this.props.assignment_id, message.num_completed);
-                  localStorage.setItem("finalizeDisplayTextNumAssigned_" + this.props.assignment_id, message.num_assigned);
-                  localStorage.setItem("finalizeDisplayTextAverage_" + this.props.assignment_id, message.average);
-                  localStorage.setItem("finalizeDisplayTextOutOf_" + this.props.assignment_id, message.out_of);
-                })
-                .then(() => this.sendGradesToCanvas())
-                .then(() => this.setState({analyzeDisplayText: false}))
-                .then(() => this.setState({finalizeDisplayText: true}))
-                .then(() => this.attachNamesToDatabaseTablesFinalizing())
-              })
-            }
-            else {
-              var data = {
-                rubrics: this.state.rubricJSON,
-                assignment_id: this.props.assignment_id,
-              }
+	componentDidMount() {
+		console.log("mounted")
 
-              fetch('/api/save_all_rubrics', {
-                method: 'POST',
-                headers:{
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(data)
-              })
-              .then(() => {
-                fetch('/api/peer_reviews_analyzing', {
-                  method: 'POST',
-                  headers:{
-                    'Content-Type': 'application/json'
-                  },
-                  body: JSON.stringify(data)
-                })
-                .then(res => res.json())
-                .then(res => message = res.message)
-                .then(() => {
-                  localStorage.setItem("analyzeDisplayTextNumCompleted_" + this.props.assignment_id, message.num_completed);
-                  localStorage.setItem("analyzeDisplayTextNumAssigned_" + this.props.assignment_id, message.num_assigned);
-                  localStorage.setItem("analyzeDisplayTextMessage_" + this.props.assignment_id, message.message);
-                })
-                .then(() => this.setState({analyzeDisplayText: true}))
-                .then(() => this.setState({finalizeDisplayText: false}))
-                .then(() => this.attachNamesToDatabaseTablesAnalyzing())
-              })
-            }
-        })
-    })
-  }
+		if (localStorage.getItem("analyzePressed_" + this.props.assignment_id)) {
+			console.log("found saved analyze pressed history")
+			this.setState({
+				analyzeDisplayText: true
+			})
+		}
 
-  sendGradesToCanvas() {
-    console.log("8: sending grades to canvas");
-    var data = {
-        course_id: this.props.course_id,
-        assignment_id: this.props.assignment_id,
-        apiKey: this.props.apiKey
-    }
+		if (localStorage.getItem("finalizePressed_" + this.props.assignment_id)) {
+			console.log("found saved finalize pressed history")
+			this.setState({
+				finalizeDisplayText: true,
+				finalizePressed: true
+			})
+		}
 
-    fetch('/api/send_grades_to_canvas', {
-        method: 'POST',
-        headers:{
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(data),
-    })
-  }
+		setInterval(() => {
+			this.setState({
+				curr_time: new Date().toLocaleString()
+			})
+		},
+			1000
+		)
+	}
 
-  attachNamesToDatabaseTablesFinalizing() {
-    console.log("10f: attaching names to database tables");
-    var data = {
-        course_id: this.props.course_id,
-        apiKey: this.props.apiKey
-    }
+	render() {
+		return (
+			<div>
+				{
+					!this.state.finalizePressed ?
+						<div className="assignment-info-content">
+							<DueDate
+								name="Due Date 1"
+								assignment_id={this.props.assignment_id}
 
-    fetch('/api/attach_names_in_database', {
-      method: 'POST',
-      headers:{
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(data),
-    })
-    .then(() => this.sortStudentsForAccordion())
-  }
+								number="1"
+								message={message1} />
+							{(localStorage.getItem("calendarDate_" + this.props.assignment_id + "_1") ?
+								<DueDate
+									name="Due Date 2"
+									assignment_id={this.props.assignment_id}
+									number="2" 
+      								message={message2}/>
+								:
+								null
+							)}
+{(localStorage.getItem("calendarDate_" + this.props.assignment_id + "_1") &&
+							localStorage.getItem("calendarDate_" + this.props.assignment_id + "_2") ?
+								<DueDate
+									name="Due Date 3"
+									assignment_id={this.props.assignment_id}
+									number="3"
+  message={message3}/>
+								:
+								null
+							)}
 
-  attachNamesToDatabaseTablesAnalyzing() {
-    console.log("10a: attaching names to database tables");
-    var data = {
-        course_id: this.props.course_id,
-        apiKey: this.props.apiKey
-    }
+						</div>
+						:
+						null
+				}
+				{
+					!this.state.finalizePressed && !this.state.finalizeDisplayText ?
+						<div>
+							<Flexbox className="flex-dropdown" width="300px" flexWrap="wrap" justify-content="space-around"  >
+								<span id="analyze-button-1">
+									<button onClick={this.handleAnalyzeClick} className="analyze" id="analyze">Analyze</button>
+								</span>
+								<UncontrolledTooltip delay={{ show: "1200" }} placement="top" target="analyze-button-1">
+									Click to view statistics for submitted peer reviews
+              					</UncontrolledTooltip>
+								<span id="finalize-button-1">
+									<button className="analyze" id="finalize" onClick={this.handleFinalizeClick}>Finalize</button>
+								</span>
+								<UncontrolledTooltip delay={{ show: "1200" }} placement="top" target="finalize-button-1">
+									Click to send grades to the Canvas gradebook
+               					</UncontrolledTooltip>
+							</Flexbox>
+						</div>
+						:
+						null
+				}
+				{
+					this.state.finalizePressed && !this.state.finalizeDisplayText ?
+						<div>
+							{console.log("finalize pressed")}
+							<FinalizeResults
+								assignment_info={this.props.assignment_info}
+								course_id={this.props.course_id}
+								assignment_id={this.props.assignment_id}
+								pressed={true}
+							/>
+							{
+								this.setState({
+									finalizeDisplayText: true,
+								})
+							}
+						</div>
+						:
+						null
 
-    fetch('/api/attach_names_in_database', {
-      method: 'POST',
-      headers:{
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(data),
-    })
-    .then(() => {
-      var data = {
-        assignment_id: this.props.assignment_id,
-        assignment_name: this.props.assignment_info.name
-      }
-      
-      fetch('/api/send_incomplete_messages', {
-        method: 'POST',
-        headers:{
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(data),
-      })
-    })
-  }
+				}
+				{
+					this.state.finalizePressed && this.state.finalizeDisplayText ?
+						<div>
+							<FinalizeResults
+								assignment_info={this.props.assignment_info}
+								course_id={this.props.course_id}
+								assignment_id={this.props.assignment_id}
+								pressed={false}
+							/>
+						</div>
+						:
+						null
+				}
+				{
+					!this.state.finalizePressed && this.state.analyzeDisplayText ?
+						<AnalyzeResults
+							assignment_info={this.props.assignment_info}
+							course_id={this.props.course_id}
+							assignment_id={this.props.assignment_id}
+							pressed={false}
+						/>
+						:
+						null
+				}
+				{
+					!this.state.finalizePressed && this.state.analyzePressed ?
+						<div>
+							<AnalyzeResults
+								assignment_info={this.props.assignment_info}
+								course_id={this.props.course_id}
+								assignment_id={this.props.assignment_id}
+								pressed={true}
+							/>
+							{
+								this.setState({
+									analyzeDisplayText: true,
+									analyzePressed: false
+								})
+							}
+						</div>
+						:
+						null
+				}
 
-  componentDidMount(){
-    console.log("mounted")
-    if (localStorage.getItem("analyzePressed_" + this.props.assignment_id)) {
-  
-      this.setState({analyzeDisplayText: true})
-      this.setState({finalizeDisplayText: false})
-    }
-    if (localStorage.getItem("finalizePressed_" + this.props.assignment_id)) {
-      this.setState({analyzeDisplayText: false})
-      this.setState({finalizePressed: true})
-      this.setState({finalizeDisplayText: true})
-    }
-
-    if (localStorage.getItem("harsh_students_" + this.props.assignment_id) != null) {
-      this.setState({
-        harsh_students: JSON.parse(localStorage.getItem("harsh_students_" + this.props.assignment_id)),
-        lenient_students: JSON.parse(localStorage.getItem("lenient_students_" + this.props.assignment_id)),
-        incomplete_students: JSON.parse(localStorage.getItem("incomplete_students_" + this.props.assignment_id))
-      })
-
-      this.setState({
-        harsh_students_loaded: true,
-        lenient_students_loaded: true,
-        incomplete_students_loaded: true
-      })
-    }
-  }
-
-  sortStudentsForAccordion() {
-    console.log("12: sorting students for accordion")
-    var data = {
-      assignment_id: this.props.assignment_id,
-    }
-    
-    fetch('/api/sort_students_for_accordion', {
-      method: 'POST',
-      headers:{
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(data),
-    })
-    .then(res => res.json())
-    .then(res => {
-      localStorage.setItem("harsh_students_" + this.props.assignment_id, JSON.stringify(res.all_students.harsh_students))
-      localStorage.setItem("lenient_students_" + this.props.assignment_id, JSON.stringify(res.all_students.lenient_students))
-      localStorage.setItem("incomplete_students_" + this.props.assignment_id, JSON.stringify(res.all_students.incomplete_students))
-      this.setState({
-        harsh_students: res.all_students.harsh_students,
-        lenient_students: res.all_students.lenient_students,
-        incomplete_students: res.all_students.incomplete_students
-      })
-      this.setState({
-        harsh_students_loaded: true,
-        lenient_students_loaded: true,
-        incomplete_students_loaded: true
-      })
-    })
-  }
-
-  handleClick() {
-    console.log("2: button clicked")
-    this.setState(prevState => ({
-      buttonPressed: !prevState.buttonPressed
-    }));
-    this.fetchPeerReviewData(false);
-  }
-
-  handleFinalizeClick() {
-    console.log("2: button clicked")
-    this.fetchPeerReviewData(true);
-  }
-
-  render() {
-
-    return (
-      <div>
-        {this.state.finalizePressed ?
-          null
-          :
-          <div>
-            <Flexbox className="flex-dropdown" maxWidth="300px" flexWrap="wrap" justify-content="space-around"  >
-            <button onClick={this.handleClick} className="analyze" id="analyze">
-              Analyze
-            </button>
-            <button className="analyze" id="finalize" onClick={this.handleFinalizeClick}>Finalize</button>
-            </Flexbox>
-          </div>
-        }
-
-        {this.state.finalizeDisplayText ?
-          <div>
-            <strong>Completed Peer Reviews:</strong> {localStorage.getItem("finalizeDisplayTextNumCompleted_" + this.props.assignment_id)} / {localStorage.getItem("finalizeDisplayTextNumAssigned_" + this.props.assignment_id)}
-            <br></br>
-            <strong>Average Grade:</strong> {localStorage.getItem("finalizeDisplayTextAverage_" + this.props.assignment_id)} / {localStorage.getItem("finalizeDisplayTextOutOf_" + this.props.assignment_id)}
-            
-            {this.state.harsh_students_loaded && this.state.lenient_students_loaded && this.state.incomplete_students_loaded ? 
-              <Row>
-                <Well className="well2">
-                  <Flexbox className="accordion-flexbox" flexDirection="column" minWidth="300px" maxWidth="500px" width="100%" flexWrap="wrap">
-                      <Accordion name="Definitely Harsh" content={this.state.harsh_students}/>
-                      <Accordion name="Definitely Lenient" content={this.state.lenient_students}/>
-                      <Accordion name="Missing Peer Reviews" content={this.state.incomplete_students}/>
-                  </Flexbox>
-                </Well>
-              </Row>
-              :
-              <Loader type="TailSpin" color="black" height={80} width={80} />
-            }
-          </div>
-          :
-          null
-        }
-        {
-          this.state.analyzeDisplayText ?
-            <div>
-              <div>
-              {localStorage.getItem("analyzeDisplayTextMessage_" + this.props.assignment_id)}
-              </div>
-              <div>
-                <Row>
-                  <Well className="well2">
-                    <strong>Completed Peer Reviews:</strong> {localStorage.getItem("analyzeDisplayTextNumCompleted_" + this.props.assignment_id)} / {localStorage.getItem("analyzeDisplayTextNumAssigned_" + this.props.assignment_id)}
-                  </Well>
-                </Row>
-              </div>
-            </div>
-            :
-            <Row>
-            </Row>
-          
-        }
-      </div>
-    )
-  }
+				{
+					localStorage.getItem("calendarDate_" + this.props.assignment_id + "_1") != null && localStorage.getItem("calendarDate_" + this.props.assignment_id + "_1") == this.state.curr_time ?
+						<div>
+							{console.log("due date 1")}
+							{this.sendIncompleteMessages()}
+						</div>
+						:
+						null
+				}
+				{
+					localStorage.getItem("calendarDate_" + this.props.assignment_id + "_2") != null && localStorage.getItem("calendarDate_" + this.props.assignment_id + "_2") == this.state.curr_time && !this.state.assigned_new_peer_reviews && !this.state.deleted_old_peer_reviews ?
+						<div>
+							{console.log("due date 2")}
+							{this.deleteOldPeerReviews()}
+						</div>
+						:
+						null
+				}
+				{
+					localStorage.getItem("calendarDate_" + this.props.assignment_id + "_3") != null && localStorage.getItem("calendarDate_" + this.props.assignment_id + "_3") == this.state.curr_time && !this.state.finalizePressed ?
+						<div>
+							{console.log("due date 3")}
+							{this.handleFinalizeClick()}
+						</div>
+						:
+						null
+				}
+			</div>
+		)
+	}
 }
 export default AnalyzeButton;
-
-
-
-
