@@ -67,11 +67,6 @@ class Students extends Component {
         this.setState({ canvasID: e.target.value });
     }
 
-
-
-
-
-
     render() {
         return (
             <div>
