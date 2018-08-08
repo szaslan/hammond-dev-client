@@ -184,7 +184,7 @@ class AnalyzeButton extends Component {
 								:
 								null
 							)}
-								 />
+						
 						</div>
 						:
 						null
