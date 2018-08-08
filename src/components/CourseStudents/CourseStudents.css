@@ -1,28 +1,38 @@
 .all-courses{
-    width:50vw;
+    width:45vw;
     float: left;
   }
   .courses-list{
       list-style-type: none;
       margin-top:10px;
-      padding-left:25px;
+      /*padding-left:25px;*/
       text-align:left;
       max-width:40vw;
+      margin-left: 10vh;
   }
 
   .course-name{
-    width:75%;
-    background-color: #E9F0F0;
-    font-size:20px;
-    margin: 25px 0px;       
+    width:55%;
+    background-color: #ffffff;
+    border: 2px solid #e2d3c5;
+    /*background-color: var(--light-lavendar2)*/
+    font-size:18px;
+    margin: 25px 0px;
+    margin-left: 25px;
     /* box-shadow: 2px 2px 4px 0 rgba(0,0,0,0.50); */
     font-family: Sailec-Regular;
     padding-right:5px;
     padding-left:5px;
+    text-align: center;
+    border-radius: 3px;
+    opacity: .9;
+    font-family: 'Open Sans';
 }
+
 .course-name:hover{
-    transform: translate(0, -5px);
-    box-shadow: 0px 12px 5px -8px rgba(0,0,0,0.2);
+    transform: translate(0, -1px);
+    box-shadow: 0px 10px 5px -8px rgba(0,0,0,0.1);
+    opacity: 1;
 }
 
 .course-link, .course-link:hover {

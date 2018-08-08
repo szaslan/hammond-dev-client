@@ -16,29 +16,40 @@
     }
 
   .loader{
-    
+
   }
+
+  .pagetitle{
+    margin-bottom: 25px;
+    font-family: 'Playfair Display';
+  }
+
   body {
     margin: 0;
     padding: 0;
-    font-family: sans-serif;
+    font-family: 'Playfair Display';
     /* background-color:white !important; */
     background-color:var(--body-background) !important;
+    height:100%;
   }
 
   /* ------------Top Section Settings------------ */
-  
+
+
   /* ------------Middle Section Settings------------ */
   .well1-container{
       padding-top:15px;
       width:100vw;
       margin-left:0px;
-      min-height:60vh;
+      min-height:74vh;
   }
   .course-button{
-    background-color: lightgray;
+    background-color: #ffffff;
+    /*background-color:#f2f2f2;*/
     /* background-color: var(--body-buttons); */
-    border:none;
+    border: 2px solid #efd9ce;
+    /*box-shadow: 0 2px 6px 0 lightgray, 0 4px 10px 0 lightgray;*/
+    border-radius: 5px;
     color: var(--navy-plum);
     font-size:20px;
     width:200px;
@@ -48,21 +59,29 @@
     text-align:center;
     overflow:hidden;
     text-overflow: ellipsis;
+    font-family: 'Open Sans';
   }
+
+.course-button:hover{
+  box-shadow: 0 2px 6px 0 lightgray, 0 4px 10px 0 lightgray;
+}
+
   .well1-flexbox{
-    margin-left:5px!important;
+    margin-left:25px!important;
+    margin-top:15px;
   }
 
 /* ------------Bottom Section Settings------------ */
   .bottom{
     background-color:var(--navy-plum);
-    height:20vh;
+    height:10vh;
     border:0px solid;
     border-radius:0px;
     width:100vw;
     margin-bottom:0px;
     min-width:650px;
-  } 
+    bottom: 0px;
+  }
   .bottom-container{
     padding-left:15px !important;
     text-align:left;
@@ -70,11 +89,10 @@
   .about-button{
     border:none;
     /*box-shadow:2px 2px gray;*/
-    padding:5px;
-    padding-left:7px;
-    padding-right:7px;
+    padding-top: 25px;
+    padding-left: 25px;
     background-color:var(--navy-plum);
     font-size:12px;
     color:var(--light-peach);
+    font-family: 'Open Sans';
   }
-  

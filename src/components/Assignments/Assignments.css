@@ -10,7 +10,7 @@ html * {
 .assignment-list{
     list-style-type: none;
     margin-top:10px;
-    padding-left:25px;
+    padding-left:10vh;
     text-align:left;
     max-width:40vw;
 }
@@ -19,30 +19,42 @@ html * {
     color: black;
 }
 .assignment-name{
-    width:75%;
-    background-color: var(--light-lavendar2);
-    font-size:20px;
-    margin: 25px 0px;       
-    /* box-shadow: 2px 2px 4px 0 rgba(0,0,0,0.50); */
-    font-family: Sailec-Regular;
+    width:55%;
+    /*background-color: var(--light-lavendar2);*/
+    border: 2px solid #c7e2c5;
+    opacity: .9;
+    font-size:18px;
+    margin: 30px 0px;
+    margin-left: 25px;
+    /*box-shadow: 2px 2px 4px 0 rgba(0,0,0,0.50);*/
+    /*font-family: Sailec-Regular;*/
+    font-family: 'Open Sans';
     padding-right:5px;
     padding-left:5px;
+    border-radius: 3px;
+    text-align: center;
 }
 
 .not-pr{
-  background-color:#a3a3a3;
-
+  /*background-color:#a3a3a3;*/
+  border: 2px solid #e2c6c5;
 }
 
 .not-pr:hover{
   transform: none !important;
   box-shadow: none !important;
+  border: 2px solid #e2c6c5 !important;
+  /*background-color:#a3a3a3 !important;*/
 }
+
 .assignment-name:hover{
-    transform: translate(0, -5px);
-    box-shadow: 0px 12px 5px -8px rgba(0,0,0,0.2);
+    transform: translate(0, -1px);
+    box-shadow: 0px 10px 5px -8px rgba(0,0,0,0.1);
+    border: 2px solid #c7e2c5;
+    /*background-color: var(--light-lavendar2);*/
+    opacity: 1;
 }
-  
+
   /* ------------Breadcrumbs settings------------ */
   /*.breadcrumb1{
     font-size:18px;
@@ -79,7 +91,7 @@ html * {
   }
   .bottom-container{
     padding:0px !important;
-    
+
   }
   .jumbo-row{
     content: "";
@@ -98,18 +110,18 @@ html * {
     color:var(--light-peach);
     font-size: 14px;
     right:0px;
-    
+
     margin-right:0px;
     left:100px !important;
     width:70px;
-    
+
   }
   .col2{
     margin-right:0px !important;
     padding-right:0px !important;
     width: 17vw!important;
   }
-  
+
   .col3{
     background-color:white;
     padding-left:10px;
@@ -137,7 +149,7 @@ html * {
   .div-student{
     padding-left:0px;
     float:left;
-  
+
   }
   .student-content{
     border:none;
@@ -160,7 +172,7 @@ html * {
     list-style-type: none;
 
   }
-  
+
   .dropdown-toggle{
     font-size:18px!important;
     background-color:lightgray!important;
@@ -171,7 +183,7 @@ html * {
     margin-bottom:15px !important;
     padding-left:10px !important;
     margin-right:10px !important;
-  
+
   }
   .dropdown-menu{
     font-size:18px !important;
@@ -179,7 +191,7 @@ html * {
     border-radius:0px !important;
     box-shadow:none !important;
     background-color: lightgray!important;
-    
+
   }
   .flex-dropdown{
     padding-top:15px;
@@ -190,7 +202,7 @@ html * {
     padding-top:0px!important;
     padding-bottom:0px!important;
     color: black!important;
-    
+
   }
   .analyze{
     border:none;
@@ -203,7 +215,7 @@ html * {
     padding:5px;
     padding-left:10px;
     padding-right:10px;
-    
+
   }
   .well2{
     border-radius:0px;
@@ -229,4 +241,3 @@ html * {
   .accordion-flexbox{
     padding-top:10px;
   }*/
-

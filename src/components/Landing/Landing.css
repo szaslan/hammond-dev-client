@@ -7,6 +7,7 @@
     --dark-lavendar:#74546a;
     --light-lavendar:#a37494;
   }
+
 .entire-screen{
     height:100vh;
     background-image: url('../deering-interior-square3.jpg');
@@ -15,19 +16,19 @@
     background-attachment: fixed;
     background-position: 50% 30%;
     min-width: 500px;
-    
+
 }
 .welcome-message{
     color:white;
     font-size:90px;
-    
+
 }
 .title-message{
     color:white;
     font-size:120px;
     margin-top:0px;
     margin-bottom:5vh;
-    
+
 }
 .cool-button{
     margin-left:5vw;
@@ -40,13 +41,13 @@
     color:white;
     border:none;
     white-space:nowrap;
-    
-    
+
+
 }
 .flexbox-of-buttons{
     width:40vw;
     margin:auto;
-    
+
 }
 .screen-content{
     padding-top:30vh;
@@ -57,7 +58,7 @@
 button{
     cursor:pointer;
     cursor:hand;
-    
+
 }
 /* .background-image{
     width:100%;
