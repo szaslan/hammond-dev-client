@@ -5,7 +5,7 @@
     padding-top: 5vh;
     display: flex;
     flex-direction: column;
-
+    font-family: "Open Sans";
     text-align: left;
 }
 
@@ -19,5 +19,7 @@
 }
 
 .assignment-info-content{
-    
+  font-size: 30px;
+  margin-top: -3vh;
+  font-family: "Open Sans";
 }

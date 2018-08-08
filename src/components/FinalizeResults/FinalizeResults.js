@@ -6,6 +6,7 @@ import Accordion from '../Accordion/Accordion';
 import Loader from 'react-loader-spinner';
 import { Boxplot, computeBoxplotStats } from 'react-boxplot';
 import { Tooltip } from 'reactstrap';
+import PieChart from 'react-minimal-pie-chart';
 
 import '../Assignments/Assignments.css'
 
@@ -239,6 +240,8 @@ class FinalizeResults extends Component {
                                         <br></br>
                                         <br></br>
                                         <strong>Completed All Reviews: </strong>{localStorage.getItem("completed_all_reviews_" + this.props.assignment_id)} / {Number(localStorage.getItem("completed_all_reviews_out_of_" + this.props.assignment_id)) + Number(localStorage.getItem("completed_all_reviews_" + this.props.assignment_id))}
+                                        <br></br>
+                                        <br></br>
                                         <Boxplot
                                             width={400} height={25} orientation="horizontal"
                                             min={0} max={100}
@@ -251,6 +254,13 @@ class FinalizeResults extends Component {
                                                 outliers: [],
                                             }} />
                                         <br></br>
+                                        <PieChart
+                                            data={[
+                                              { value: 10, color: '#E38627' },
+                                              { value: 15, color: '#C13C37' },
+                                              { value: 20, color: '#6A2135' },
+                                            ]}
+                                            />
                                         <Row>
                                             <Well className="well2">
                                                 <Flexbox className="accordion-flexbox" flexDirection="column" minWidth="300px" maxWidth="500px" width="100%" flexWrap="wrap">
@@ -273,23 +283,25 @@ class FinalizeResults extends Component {
                                 localStorage.getItem("completed_all_reviews_" + this.props.assignment_id) ?
                                     // localStorage.getItem("harsh_students_" + this.props.assignment_id) && localStorage.getItem("max_" + this.props.assignment_id) ?
                                     <div>
+                                    <span className="boxplot" id={"TooltipBoxplot"}>
+                                        <Boxplot
+                                            width={400} height={25} orientation="horizontal"
+                                            min={0} max={100}
+                                            stats={{
+                                                whiskerLow: localStorage.getItem("min_" + this.props.assignment_id),
+                                                quartile1: localStorage.getItem("q1_" + this.props.assignment_id),
+                                                quartile2: localStorage.getItem("median_" + this.props.assignment_id),
+                                                quartile3: localStorage.getItem("q3_" + this.props.assignment_id),
+                                                whiskerHigh: localStorage.getItem("max_" + this.props.assignment_id),
+                                                outliers: [],
+                                            }} />
+                                    </span>
+                                    <br></br>
+                                    <br></br>
                                         <strong>Completed Peer Reviews:</strong> {localStorage.getItem("finalizeDisplayTextNumCompleted_" + this.props.assignment_id)} / {localStorage.getItem("finalizeDisplayTextNumAssigned_" + this.props.assignment_id)}
                                         <br></br>
                                         <br></br>
                                         <strong>Completed All Reviews: </strong>{localStorage.getItem("completed_all_reviews_" + this.props.assignment_id)} / {Number(localStorage.getItem("completed_all_reviews_out_of_" + this.props.assignment_id)) + Number(localStorage.getItem("completed_all_reviews_" + this.props.assignment_id))}
-                                        <span id={"TooltipBoxplot"}>
-                                            <Boxplot
-                                                width={400} height={25} orientation="horizontal"
-                                                min={0} max={100}
-                                                stats={{
-                                                    whiskerLow: localStorage.getItem("min_" + this.props.assignment_id),
-                                                    quartile1: localStorage.getItem("q1_" + this.props.assignment_id),
-                                                    quartile2: localStorage.getItem("median_" + this.props.assignment_id),
-                                                    quartile3: localStorage.getItem("q3_" + this.props.assignment_id),
-                                                    whiskerHigh: localStorage.getItem("max_" + this.props.assignment_id),
-                                                    outliers: [],
-                                                }} />
-                                        </span>
                                         <Tooltip placement="right" delay={{ show: "300" }} isOpen={this.state.tooltipOpen} target={"TooltipBoxplot"} toggle={this.toggle}>
                                             <strong>Min Score:</strong> {localStorage.getItem("min_" + this.props.assignment_id)}
                                             <br></br>
@@ -301,10 +313,15 @@ class FinalizeResults extends Component {
                                             <br></br>
                                             <strong>Max Score:</strong> {localStorage.getItem("max_" + this.props.assignment_id)}
                                         </Tooltip>
-
                                         <br></br>
                                         <br></br>
-                                       
+                                        <PieChart
+                                            data={[
+                                              { value: 10, color: '#E38627' },
+                                              { value: 15, color: '#C13C37' },
+                                              { value: 20, color: '#6A2135' },
+                                            ]}
+                                            />
                                         <Row>
                                             <Well className="well2">
                                                 <Flexbox className="accordion-flexbox" flexDirection="column" minWidth="300px" maxWidth="500px" width="100%" flexWrap="wrap">
