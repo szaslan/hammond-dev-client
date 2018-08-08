@@ -12,10 +12,12 @@ import DueDate from '../DueDate/DueDate';
 
 import '../Assignments/Assignments.css'
 
-var message1 = "Click the button to set the first due date. This due date represents when all peer reviews are due by. Any peer review submitted to Canvas after this date will be considered late. At the time of the due date, all peer reviews are downloaded from Canvas. Any student who has not yet completed all their peer reviews for the assignment will get a Canvas message reminding them that they are now late and still need to complete x number of peer reviews.";
-var message2 = "Click the button to set the second due date. This due date represents the last point to submit late peer reviews. Once this deadline passes, all incomplete peer reviews will be deleted from Canvas, preventing students from submitting them. In addition, those incomplete peer reviews will be reassigned to other students. The pool of students to pick from for reassignment is all students who were deemed could be harsh, could be lenient, could be fair, or definitely fair, had completed all of their reviews for this assignment, and had not already reviewed the person for this assignment. From this pool of people, one student is randomly selected and given this new peer review. In addition, a message is sent to each student who is given more peer reviews, letting them know that they have done such a great job in the past, that they have to cover for slackers."
-var message3 = "Click the button to set the third due date. This due date represents the deadline for reassigned peer reviews. Once this deadline passes, the 'finalize' button is pressed. This results in a grade for each submission being calculated by the grading algorithm and automatically sent to the Canvas gradebook. If you do not want the grades to be published immediately, ensure that you have muted the assignment on Canvas before this point."
-
+//var message1 = "Click the button to set the first due date. This due date represents when all peer reviews are due by. Any peer review submitted to Canvas after this date will be considered late. At the time of the due date, all peer reviews are downloaded from Canvas. Any student who has not yet completed all their peer reviews for the assignment will get a Canvas message reminding them that they are now late and still need to complete x number of peer reviews.";
+var message1 = "Peer reviews submitted after this date will be considered late. Any student who has not submitted reviews by this date will receive a notification message from Canvas.";
+//var message2 = "Click the button to set the second due date. This due date represents the last point to submit late peer reviews. Once this deadline passes, all incomplete peer reviews will be deleted from Canvas, preventing students from submitting them. In addition, those incomplete peer reviews will be reassigned to other students. The pool of students to pick from for reassignment is all students who were deemed could be harsh, could be lenient, could be fair, or definitely fair, had completed all of their reviews for this assignment, and had not already reviewed the person for this assignment. From this pool of people, one student is randomly selected and given this new peer review. In addition, a message is sent to each student who is given more peer reviews, letting them know that they have done such a great job in the past, that they have to cover for slackers."
+var message2 = "Late peer reviews submitted after this date will be reassigned to students who have completed all of their reviews for this assignment.";
+//var message3 = "Click the button to set the third due date. This due date represents the deadline for reassigned peer reviews. Once this deadline passes, the 'finalize' button is pressed. This results in a grade for each submission being calculated by the grading algorithm and automatically sent to the Canvas gradebook. If you do not want the grades to be published immediately, ensure that you have muted the assignment on Canvas before this point."
+var message3 = "Reassigned peer reviews must be submitted by this deadline. After this date, any unsubmitted peer reviews will be deleted from Canvas.";
 
 class AnalyzeButton extends Component {
 	constructor(props) {
@@ -184,7 +186,7 @@ class AnalyzeButton extends Component {
 								:
 								null
 							)}
-						
+
 						</div>
 						:
 						null
