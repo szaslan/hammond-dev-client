@@ -1,6 +1,4 @@
-html * {
-    font-family: 'Nunito', sans-serif;
-}
+
 
 /* ------------Assignments List Settings------------ */
 .all-assignments{
@@ -20,7 +18,7 @@ html * {
 }
 .assignment-name{
     width:75%;
-    background-color: var(--light-lavendar2);
+    background-color: #F4E9CD ;
     font-size:20px;
     margin: 25px 0px;       
     /* box-shadow: 2px 2px 4px 0 rgba(0,0,0,0.50); */
@@ -28,6 +26,7 @@ html * {
     padding-right:5px;
     padding-left:5px;
 }
+
 
 .not-pr{
   background-color:#a3a3a3;

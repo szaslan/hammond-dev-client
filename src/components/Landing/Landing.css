@@ -7,6 +7,130 @@
     --dark-lavendar:#74546a;
     --light-lavendar:#a37494;
   }
+
+  .landing-navbar{ 
+      display: flex;
+      width: 100vw;
+      justify-content: space-between;
+      align-items: center;
+  }
+
+  .landing{ 
+    background-color: #FFEFE1;  
+      display: flex;
+      height: 2000px;
+      width: 100vw;
+      font-family: 'Playfair Display', serif;
+      flex-wrap: wrap;
+      overflow: hidden;
+
+  }
+
+  .sign-in {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    width: 400px;
+  }
+
+
+  .landing-register, .landing-login {
+    /* Register: */
+    height: 57 px;
+    font-family: 'Playfair Display', serif;
+    font-size: 24px;
+color: #000000;
+letter-spacing: 0;
+text-align: center;
+  }
+
+
+
+  .landing-title{
+    font-family: 'Playfair Display', serif;
+    /* Peerify: */
+    font-weight: 700;
+    width: 152px;
+    height: 74px;;
+    font-size: 36px;
+    color: #000000;
+    letter-spacing: 0;
+    text-align: center;
+}
+.description{
+    display: flex;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+    overflow: hidden;
+    width: 100vw;
+    -ms-flex-align: center;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 50px;
+
+    animation-name: file;
+    animation-duration: 2s;
+  animation-timing-function: ease-out;
+  animation-iteration-count: 1;	
+  animation-direction: normal;
+  animation-delay: 0s;
+  animation-play-state: running;
+  animation-fill-mode: forwards;
+
+}
+
+@media only screen and (max-width: 870px) {
+    .description-file-icon{
+        width: 100%;
+        margin: 30px none;
+        margin-right: 0 !important; 
+    }
+    .description {
+        justify-content: center;
+    }
+    .description-text{
+        margin-left: 0 !important;
+    }
+   
+}
+
+
+.description-text{
+    font-family: 'Playfair Display', serif;
+    text-align: left;
+    margin-left: 10vw;
+    font-size: 48px;
+    width: 440px;
+    color: #000000;
+    letter-spacing: 0;
+}
+  .description-file-icon {
+      margin-right: 12vw;
+ 
+  }
+
+  @keyframes file {
+      0% {
+          margin-top: 60px;
+          display: none;
+      }
+
+      5%{display: none}
+      10%{display: flex;}
+      100% {
+        margin-top: 47px;
+      }
+  }
+
+  .description-small {
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 300;
+    text-align: left;
+    margin-left: 10vw;
+    width: 550px;
+    font-size: 20px;
+  }
+  
 .entire-screen{
     height:100vh;
     background-image: url('../deering-interior-square3.jpg');
@@ -43,6 +167,7 @@
     
     
 }
+
 .flexbox-of-buttons{
     width:40vw;
     margin:auto;
