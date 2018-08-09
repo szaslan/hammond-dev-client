@@ -107,7 +107,7 @@ class AssignmentInfo extends Component {
 
                 <div>
                     <div className="assignment-info">
-                        <div className="assignment-info-content">
+                        <div className="assignment-info-title">
                             <p><strong>Title:</strong> {this.state.assignment.name}</p>
                         </div>
 
