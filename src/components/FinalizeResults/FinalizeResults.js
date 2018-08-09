@@ -6,8 +6,8 @@ import Accordion from '../Accordion/Accordion';
 import Loader from 'react-loader-spinner';
 import { Boxplot, computeBoxplotStats } from 'react-boxplot';
 import { Tooltip } from 'reactstrap';
-// import PieChart from 'react-minimal-pie-chart';
-import ReactSvgPieChart from "react-svg-piechart"
+import ReactSvgPieChart from "react-svg-piechart";
+import Popup from 'reactjs-popup';
 
 import '../Assignments/Assignments.css'
 
@@ -237,11 +237,11 @@ class FinalizeResults extends Component {
                                 localStorage.getItem("completed_all_reviews_" + this.props.assignment_id) ?
                                     // localStorage.getItem("finalizePressed_" + this.props.assignment_id) && localStorage.getItem("harsh_students_" + this.props.assignment_id) ?
                                     <div>
-                                        
+
                                         <strong>Completed Peer Reviews: </strong>{localStorage.getItem("finalizeDisplayTextNumCompleted_" + this.props.assignment_id)} / {localStorage.getItem("finalizeDisplayTextNumAssigned_" + this.props.assignment_id)}
-                                        
+
                                         {/* <strong>Completed All Reviews: </strong>{localStorage.getItem("completed_all_reviews_" + this.props.assignment_id)} / {Number(localStorage.getItem("completed_all_reviews_out_of_" + this.props.assignment_id)) + Number(localStorage.getItem("completed_all_reviews_" + this.props.assignment_id))} */}
-                                        
+
                                         <Boxplot
                                             width={400} height={25} orientation="horizontal"
                                             min={0} max={100}
@@ -303,7 +303,7 @@ class FinalizeResults extends Component {
                                 localStorage.getItem("completed_all_reviews_" + this.props.assignment_id) ?
                                     // localStorage.getItem("harsh_students_" + this.props.assignment_id) && localStorage.getItem("max_" + this.props.assignment_id) ?
                                     <div>
-                                        
+
                                         <span className="boxplot" id={"TooltipBoxplot"}>
                                             <Boxplot
                                                 width={400} height={25} orientation="horizontal"
@@ -334,7 +334,7 @@ class FinalizeResults extends Component {
                                             <br></br>
                                             <strong>Max Score:</strong> {localStorage.getItem("max_" + this.props.assignment_id)}
                                         </Tooltip>
-                                        
+
                                         <Row>
                                             <Well className="well2">
                                                 <Flexbox className="accordion-flexbox" flexDirection="column" minWidth="300px" maxWidth="500px" width="100%" flexWrap="wrap">
@@ -342,8 +342,17 @@ class FinalizeResults extends Component {
                                                     {/* <Accordion name="Definitely Lenient" content={JSON.parse(localStorage.getItem("lenient_students_" + this.props.assignment_id))} /> */}
                                                     {/* <Accordion name="Missing Some Peer Reviews" content={JSON.parse(localStorage.getItem("some_incomplete_students_" + this.props.assignment_id))} /> */}
                                                     {/* <Accordion name="Missing All Peer Reviews" content={JSON.parse(localStorage.getItem("all_incomplete_students_" + this.props.assignment_id))} /> */}
-                                                    <Accordion name="Flagged Grades" content={JSON.parse(localStorage.getItem("flagged_students_" + this.props.assignment_id))} />
+                                                    {/*<Accordion name="Flagged Grades" content={JSON.parse(localStorage.getItem("flagged_students_" + this.props.assignment_id))} /> */}
                                                 </Flexbox>
+                                                <Popup className="popup"
+                                                  trigger={<button className="button-student"> Flagged Grades </button>}
+                                                  modal
+                                                  closeOnDocumentClick
+                                                  >
+                                                  <span><h5>Flagged Grades</h5></span>
+                                                  <hr /> 
+                                                  <span>{JSON.parse(localStorage.getItem("flagged_students_" + this.props.assignment_id))}</span>
+                                                  </Popup>
                                             </Well>
                                         </Row>
                                         <br></br>
