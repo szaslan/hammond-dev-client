@@ -6,7 +6,8 @@ import Accordion from '../Accordion/Accordion';
 import Loader from 'react-loader-spinner';
 import { Boxplot, computeBoxplotStats } from 'react-boxplot';
 import { Tooltip } from 'reactstrap';
-import PieChart from 'react-minimal-pie-chart';
+// import PieChart from 'react-minimal-pie-chart';
+import PieChart from "react-svg-piechart"
 
 import '../Assignments/Assignments.css'
 
@@ -254,13 +255,15 @@ class FinalizeResults extends Component {
                                                 outliers: [],
                                             }} />
                                         <br></br>
+                                        <Flexbox>
                                         <PieChart
                                             data={[
-                                              { value: 10, color: '#E38627' },
+                                              { value: 100, color: '#E38627' },
                                               { value: 15, color: '#C13C37' },
                                               { value: 20, color: '#6A2135' },
                                             ]}
                                             />
+                                        </Flexbox>
                                         <Row>
                                             <Well className="well2">
                                                 <Flexbox className="accordion-flexbox" flexDirection="column" minWidth="300px" maxWidth="500px" width="100%" flexWrap="wrap">
@@ -315,12 +318,16 @@ class FinalizeResults extends Component {
                                         </Tooltip>
                                         <br></br>
                                         <br></br>
-                                        <PieChart
+                                        <PieChart className="piechart"
+                                            // viewBoxSize={50}
+                                            expandSize={3}
                                             data={[
-                                              { value: 10, color: '#E38627' },
+                                              { value: 15, color: '#E38627' },
                                               { value: 15, color: '#C13C37' },
                                               { value: 20, color: '#6A2135' },
                                             ]}
+                                            expandOnHover
+
                                             />
                                         <Row>
                                             <Well className="well2">
