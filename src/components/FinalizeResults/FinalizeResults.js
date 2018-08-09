@@ -7,7 +7,7 @@ import Loader from 'react-loader-spinner';
 import { Boxplot, computeBoxplotStats } from 'react-boxplot';
 import { Tooltip } from 'reactstrap';
 // import PieChart from 'react-minimal-pie-chart';
-import PieChart from "react-svg-piechart"
+import ReactSvgPieChart from "react-svg-piechart"
 
 import '../Assignments/Assignments.css'
 
@@ -254,16 +254,33 @@ class FinalizeResults extends Component {
                                                 whiskerHigh: localStorage.getItem("max_" + this.props.assignment_id),
                                                 outliers: [],
                                             }} />
-                                        <br></br>
-                                        <Flexbox>
-                                        <PieChart
-                                            data={[
-                                              { value: 100, color: '#E38627' },
-                                              { value: 15, color: '#C13C37' },
-                                              { value: 20, color: '#6A2135' },
-                                            ]}
-                                            />
-                                        </Flexbox>
+                                            <br></br>
+                                            <br></br>
+                                            <Row>
+                                            <Flexbox flexDirection="column" width="200px" flexWrap="wrap">
+                                            <ReactSvgPieChart className="piechart"
+                                                expandSize={3}
+                                                expandOnHover="false"
+                                                data={[
+                                                  { value: 105, color: '#E38627' },
+                                                  { value: 15, color: '#C13C37' },
+                                                  { value: 20, color: '#6A2135' },
+                                                ]}
+                                                />
+                                            </Flexbox>
+                                            <Flexbox flexDirection="column" width="200px" flexWrap="wrap">
+                                            <ReactSvgPieChart className="piechart"
+                                                expandSize={3}
+                                                expandOnHover="false"
+                                                data={[
+                                                  { value: 105, color: '#E38627' },
+                                                  { value: 15, color: '#C13C37' },
+                                                  { value: 20, color: '#6A2135' },
+                                                ]}
+                                                />
+                                            </Flexbox>
+                                            </Row>
+                                            <br></br>
                                         <Row>
                                             <Well className="well2">
                                                 <Flexbox className="accordion-flexbox" flexDirection="column" minWidth="300px" maxWidth="500px" width="100%" flexWrap="wrap">
@@ -318,17 +335,31 @@ class FinalizeResults extends Component {
                                         </Tooltip>
                                         <br></br>
                                         <br></br>
-                                        <PieChart className="piechart"
-                                            // viewBoxSize={50}
+                                        <Row>
+                                        <Flexbox flexDirection="column" width="200px" flexWrap="wrap">
+                                        <ReactSvgPieChart className="piechart"
                                             expandSize={3}
+                                            expandOnHover="false"
                                             data={[
-                                              { value: 15, color: '#E38627' },
+                                              { value: 105, color: '#E38627' },
                                               { value: 15, color: '#C13C37' },
                                               { value: 20, color: '#6A2135' },
                                             ]}
-                                            expandOnHover
-
                                             />
+                                        </Flexbox>
+                                        <Flexbox flexDirection="column" width="200px" flexWrap="wrap">
+                                        <ReactSvgPieChart className="piechart"
+                                            expandSize={3}
+                                            expandOnHover="false"
+                                            data={[
+                                              { value: 105, color: '#E38627' },
+                                              { value: 15, color: '#C13C37' },
+                                              { value: 20, color: '#6A2135' },
+                                            ]}
+                                            />
+                                        </Flexbox>
+                                        </Row>
+                                        <br></br>
                                         <Row>
                                             <Well className="well2">
                                                 <Flexbox className="accordion-flexbox" flexDirection="column" minWidth="300px" maxWidth="500px" width="100%" flexWrap="wrap">
