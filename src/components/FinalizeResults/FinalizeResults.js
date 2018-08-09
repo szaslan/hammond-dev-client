@@ -344,13 +344,13 @@ class FinalizeResults extends Component {
                                                     {/* <Accordion name="Missing All Peer Reviews" content={JSON.parse(localStorage.getItem("all_incomplete_students_" + this.props.assignment_id))} /> */}
                                                     {/*<Accordion name="Flagged Grades" content={JSON.parse(localStorage.getItem("flagged_students_" + this.props.assignment_id))} /> */}
                                                 </Flexbox>
-                                                <Popup className="popup"
+                                                <Popup className="pop-up"
                                                   trigger={<button className="button-student"> Flagged Grades </button>}
                                                   modal
                                                   closeOnDocumentClick
                                                   >
                                                   <span><h5>Flagged Grades</h5></span>
-                                                  <hr /> 
+                                                  <hr />
                                                   <span>{JSON.parse(localStorage.getItem("flagged_students_" + this.props.assignment_id))}</span>
                                                   </Popup>
                                             </Well>
