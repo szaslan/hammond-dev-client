@@ -187,10 +187,13 @@ class FinalizeResults extends Component {
             .then(res => {
                 progress = 70
                 progress_bar_message = "70%";
-                localStorage.setItem("harsh_students_" + this.props.assignment_id, JSON.stringify(res.harsh_students))
-                localStorage.setItem("lenient_students_" + this.props.assignment_id, JSON.stringify(res.lenient_students))
-                localStorage.setItem("some_incomplete_students_" + this.props.assignment_id, JSON.stringify(res.some_incomplete_students))
-                localStorage.setItem("all_incomplete_students_" + this.props.assignment_id, JSON.stringify(res.all_incomplete_students))
+                localStorage.setItem("spazzy_" + this.props.assignment_id, JSON.stringify(res.spazzy))
+                localStorage.setItem("definitely_harsh_" + this.props.assignment_id, JSON.stringify(res.definitely_harsh))
+                localStorage.setItem("could_be_harsh_" + this.props.assignment_id, JSON.stringify(res.could_be_harsh))
+                localStorage.setItem("could_be_lenient_" + this.props.assignment_id, JSON.stringify(res.could_be_lenient))
+                localStorage.setItem("definitely_lenient_" + this.props.assignment_id, JSON.stringify(res.definitely_lenient))
+                localStorage.setItem("could_be_fair_" + this.props.assignment_id, JSON.stringify(res.could_be_fair))
+                localStorage.setItem("definitely_fair_" + this.props.assignment_id, JSON.stringify(res.definitely_fair))
             })
     }
 
@@ -252,8 +255,9 @@ class FinalizeResults extends Component {
             .then(res => {
                 progress = 100
                 progress_bar_message = "100%";
-                localStorage.setItem("completed_all_reviews_" + this.props.assignment_id, res.count)
-                localStorage.setItem("completed_all_reviews_out_of_" + this.props.assignment_id, res.count2)
+                localStorage.setItem("completed_all_reviews_" + this.props.assignment_id, res.completed_all)
+                localStorage.setItem("completed_some_reviews_" + this.props.assignment_id, res.completed_some)
+                localStorage.setItem("completed_no_reviews_" + this.props.assignment_id, res.completed_none)
             })
             .then(() => this.setState({ finishedLoading: true }))
     }
@@ -319,9 +323,9 @@ class FinalizeResults extends Component {
                                                     expandSize={3}
                                                     expandOnHover="false"
                                                     data={[
-                                                        { value: 105, color: '#E38627' },
-                                                        { value: 10, color: '#C13C37' },
-                                                        { value: 20, color: '#6A2135' },
+                                                        { value: Number(localStorage.getItem("completed_all_reviews_" + this.props.assignment_id)), color: '#E38627' },
+                                                        { value: Number(localStorage.getItem("completed_no_reviews_" + this.props.assignment_id)), color: '#C13C37' },
+                                                        { value: Number(localStorage.getItem("completed_some_reviews_" + this.props.assignment_id)), color: '#6A2135' },
                                                     ]}
                                                     // onSectorHover={() => {
                                                     //     console.log("You hovered over.");
@@ -342,13 +346,13 @@ class FinalizeResults extends Component {
                                                     expandSize={3}
                                                     expandOnHover="false"
                                                     data={[
-                                                        { value: 2, color: '#C9CBA3' },
-                                                        { value: 4, color: '#FFE1A8' },
-                                                        { value: 7, color: '#E26D5C' },
-                                                        { value: 6, color: '#723D46' },
-                                                        { value: 16, color: '#472D30' },
-                                                        { value: 8, color: '#197278' },
-                                                        { value: 11, color: '#772E25' }
+                                                        { value: Number(localStorage.getItem("spazzy_" + this.props.assignment_id)), color: '#C9CBA3' },
+                                                        { value: Number(localStorage.getItem("definitely_harsh_" + this.props.assignment_id)), color: '#FFE1A8' },
+                                                        { value: Number(localStorage.getItem("could_be_harsh_" + this.props.assignment_id)), color: '#E26D5C' },
+                                                        { value: Number(localStorage.getItem("could_be_lenient_" + this.props.assignment_id)), color: '#723D46' },
+                                                        { value: Number(localStorage.getItem("definitely_lenient_" + this.props.assignment_id)), color: '#472D30' },
+                                                        { value: Number(localStorage.getItem("could_be_fair_" + this.props.assignment_id)), color: '#197278' },
+                                                        { value: Number(localStorage.getItem("definitely_fair_" + this.props.assignment_id)), color: '#772E25' }
                                                     ]}
                                                     onSectorHover={(d) => {
                                                         if (d) {
@@ -435,9 +439,9 @@ class FinalizeResults extends Component {
                                                     expandSize={3}
                                                     expandOnHover="false"
                                                     data={[
-                                                        { value: 105, color: '#E38627' },
-                                                        { value: 10, color: '#C13C37' },
-                                                        { value: 20, color: '#6A2135' },
+                                                        { value: Number(localStorage.getItem("completed_all_reviews_" + this.props.assignment_id)), color: '#E38627' },
+                                                        { value: Number(localStorage.getItem("completed_no_reviews_" + this.props.assignment_id)), color: '#C13C37' },
+                                                        { value: Number(localStorage.getItem("completed_some_reviews_" + this.props.assignment_id)), color: '#6A2135' },
                                                     ]}
                                                     // onSectorHover={() => {
                                                     //     console.log("You hovered over.");
@@ -458,13 +462,13 @@ class FinalizeResults extends Component {
                                                     expandSize={3}
                                                     expandOnHover="false"
                                                     data={[
-                                                        { value: 2, color: '#C9CBA3' },
-                                                        { value: 4, color: '#FFE1A8' },
-                                                        { value: 7, color: '#E26D5C' },
-                                                        { value: 6, color: '#723D46' },
-                                                        { value: 16, color: '#472D30' },
-                                                        { value: 8, color: '#197278' },
-                                                        { value: 11, color: '#772E25' }
+                                                        { value: Number(localStorage.getItem("spazzy_" + this.props.assignment_id)), color: '#C9CBA3' },
+                                                        { value: Number(localStorage.getItem("definitely_harsh_" + this.props.assignment_id)), color: '#FFE1A8' },
+                                                        { value: Number(localStorage.getItem("could_be_harsh_" + this.props.assignment_id)), color: '#E26D5C' },
+                                                        { value: Number(localStorage.getItem("could_be_lenient_" + this.props.assignment_id)), color: '#723D46' },
+                                                        { value: Number(localStorage.getItem("definitely_lenient_" + this.props.assignment_id)), color: '#472D30' },
+                                                        { value: Number(localStorage.getItem("could_be_fair_" + this.props.assignment_id)), color: '#197278' },
+                                                        { value: Number(localStorage.getItem("definitely_fair_" + this.props.assignment_id)), color: '#772E25' }
                                                     ]}
                                                     onSectorHover={(d) => {
                                                         if (d) {
