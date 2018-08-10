@@ -58,7 +58,7 @@
 }
 
 .boxplot{
-  margin-left: -15vh;
+  margin-left: 2vh;
 }
 
 .well2{
@@ -77,6 +77,16 @@
 .pop-up{
   border-radius: 3px;
   text-align: center;
+}
+
+.graphTitle{
+  font-family: 'Open Sans';
+  font-size: 16px;
+  text-align: center;
+}
+
+.chartbox{
+  padding: 10px;
 }
 /* .cardbody1{
   margin-top: 4px;

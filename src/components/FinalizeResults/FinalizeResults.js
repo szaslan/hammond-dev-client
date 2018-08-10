@@ -269,28 +269,30 @@ class FinalizeResults extends Component {
                                         <br></br>
                                         <br></br>
                                         <Row>
-                                            <Flexbox flexDirection="column" width="200px" flexWrap="wrap">
-                                                <ReactSvgPieChart className="piechart"
-                                                    expandSize={3}
-                                                    expandOnHover="false"
-                                                    data={[
-                                                        { value: 105, color: '#E38627' },
-                                                        { value: 15, color: '#C13C37' },
-                                                        { value: 20, color: '#6A2135' },
-                                                    ]}
-                                                />
-                                            </Flexbox>
-                                            <Flexbox flexDirection="column" width="200px" flexWrap="wrap">
-                                                <ReactSvgPieChart className="piechart"
-                                                    expandSize={3}
-                                                    expandOnHover="false"
-                                                    data={[
-                                                        { value: 105, color: '#E38627' },
-                                                        { value: 15, color: '#C13C37' },
-                                                        { value: 20, color: '#6A2135' },
-                                                    ]}
-                                                />
-                                            </Flexbox>
+                                        <Flexbox className="chartbox" flexDirection="column" width="200px" flexWrap="wrap">
+                                        <h5 className="graphTitle">Completion</h5>
+                                        <ReactSvgPieChart className="piechart"
+                                            expandSize={3}
+                                            expandOnHover="false"
+                                            data={[
+                                              { value: 105, color: '#E38627' },
+                                              { value: 15, color: '#C13C37' },
+                                              { value: 20, color: '#6A2135' },
+                                            ]}
+                                            />
+                                        </Flexbox>
+                                        <Flexbox className="chartbox"  flexDirection="column" width="200px" flexWrap="wrap">
+                                        <h5 className="graphTitle">Grading Classification</h5>
+                                        <ReactSvgPieChart className="piechart"
+                                            expandSize={3}
+                                            expandOnHover="false"
+                                            data={[
+                                              { value: 105, color: '#E38627' },
+                                              { value: 15, color: '#C13C37' },
+                                              { value: 20, color: '#6A2135' },
+                                            ]}
+                                            />
+                                        </Flexbox>
                                         </Row>
                                     </div>
                                     :
@@ -356,27 +358,32 @@ class FinalizeResults extends Component {
                                             </Well>
                                         </Row>
                                         <br></br>
-                                        <br></br>
                                         <Row>
-                                        <Flexbox flexDirection="column" width="200px" flexWrap="wrap">
+                                        <Flexbox className="chartbox" flexDirection="column" width="200px" flexWrap="wrap">
+                                        <h5 className="graphTitle">Completion</h5>
                                         <ReactSvgPieChart className="piechart"
                                             expandSize={3}
                                             expandOnHover="false"
                                             data={[
                                               { value: 105, color: '#E38627' },
-                                              { value: 15, color: '#C13C37' },
+                                              { value: 10, color: '#C13C37' },
                                               { value: 20, color: '#6A2135' },
                                             ]}
                                             />
                                         </Flexbox>
-                                        <Flexbox flexDirection="column" width="200px" flexWrap="wrap">
+                                        <Flexbox className="chartbox"  flexDirection="column" width="200px" flexWrap="wrap">
+                                        <h5 className="graphTitle">Grading Classification</h5>
                                         <ReactSvgPieChart className="piechart"
                                             expandSize={3}
                                             expandOnHover="false"
                                             data={[
-                                              { value: 105, color: '#E38627' },
-                                              { value: 15, color: '#C13C37' },
-                                              { value: 20, color: '#6A2135' },
+                                              { value: 2, color: '#C9CBA3' },
+                                              { value: 4, color: '#FFE1A8' },
+                                              { value: 7, color: '#E26D5C' },
+                                              { value: 6, color: '#723D46' },
+                                              { value: 16, color: '#472D30' },
+                                              { value: 8, color: '#197278' },
+                                              { value: 11, color: '#772E25' }
                                             ]}
                                             />
                                         </Flexbox>
