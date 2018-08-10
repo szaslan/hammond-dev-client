@@ -1,9 +1,6 @@
 import React, { Component } from 'react';
-import { Well, Row, Panel } from 'react-bootstrap';
-
-import Flexbox from 'flexbox-react';
+import { Well, Row } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.css';
-import Accordion from '../Accordion/Accordion';
 import Loader from 'react-loader-spinner'
 
 import '../Assignments/Assignments.css'

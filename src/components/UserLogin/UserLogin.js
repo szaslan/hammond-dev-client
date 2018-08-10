@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 import './UserLogin.css';
-import { Link, Redirect } from "react-router-dom";
-import { Col, Row } from 'react-bootstrap';
-import { Label, Container, Form, FormGroup, Input } from 'reactstrap';
+import { Link } from "react-router-dom";
+import {Form, FormGroup, Input } from 'reactstrap';
 import Flexbox from 'flexbox-react';
 import history from '../../history'
 

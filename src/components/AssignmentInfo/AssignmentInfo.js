@@ -1,11 +1,7 @@
 import React, { Component } from 'react';
 import './AssignmentInfo.css';
 import Loader from 'react-loader-spinner'
-import { Well, Row, Col, Breadcrumb } from 'react-bootstrap';
-import AnalyzeButton from '../AnalyzeButton/AnalyzeButton';
-import { getCiphers } from 'crypto';
-import CalendarComp from '../CalendarComp/CalendarComp';
-import DueDate from '../DueDate/DueDate';
+import AnalyzeButton from '../AnalyzeButton/AnalyzeButton'
 
 function FilterRubricAssessments(props) {
     const currPeerReview = props.currPeerReview;
@@ -34,6 +30,7 @@ class AssignmentInfo extends Component {
             assignmentClicked: false,
             peerreviewJSON: [],
             rubricJSON: [],
+            error: false,
             ...props,
         }
     }
@@ -92,17 +89,18 @@ class AssignmentInfo extends Component {
         })
             .then(res => res.json())
             .then(res => this.setState({ assignment: res }))
+            .catch((() => this.setState({error: true})))
     }
 
     render() {
-
-        if (this.state.assignment === null)
+        if (this.state.error) return (null)
+        else if (this.state.assignment === null){
             return (
                 <div className="assignment-info">
                     <Loader type="TailSpin" color="black" height={80} width={80} />
                 </div>
             )
-        else {
+         } else {
             return (
 
                 <div>

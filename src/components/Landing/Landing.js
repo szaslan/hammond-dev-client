@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import './Landing.css';
-import { Link, Redirect } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 import PaperIcon from './PaperIcon';
 class Landing extends Component {

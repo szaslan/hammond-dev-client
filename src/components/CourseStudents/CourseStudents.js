@@ -3,7 +3,6 @@ import Loader from 'react-loader-spinner';
 import JumbotronComp from '../JumbotronComp/JumbotronComp';
 import {Breadcrumb} from 'react-bootstrap';
 import './CourseStudents.css'
-import StudentInfo from '../StudentInfo/StudentInfo';
 import { Link } from "react-router-dom";
 import history from '../../history'
 

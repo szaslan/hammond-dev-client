@@ -1,8 +1,30 @@
+
 .register-group{
     width:500px;
     padding-top:18vh;
     height:80vh;
     margin:auto;
+
+}
+
+@media (max-width: 555px) {
+    .entire-screen-login-group {
+      height: -webkit-fill-available;    }
+      
+      .register-group {
+        width: 80vw !important;
+      }
+  }
+
+.myGradient {
+    height: 100vh;
+    width: 100vw;
+    z-index: -1;
+        mask: url('./shape.svg');
+        mask-repeat: no-repeat;
+    background-size: 100px 100px
+    
+
 }
 
 .register-input{

@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import './Courses.css';
-import {Link, Redirect } from "react-router-dom";
+import {Link } from "react-router-dom";
 import history from '../../history'
 import Loader from 'react-loader-spinner';
-import { Container, Jumbotron } from 'reactstrap';
-import { Well, Row, Col, Breadcrumb } from 'react-bootstrap';
+import { Container } from 'reactstrap';
+import { Well } from 'react-bootstrap';
 import Flexbox from 'flexbox-react';
 import JumbotronComp from '../JumbotronComp/JumbotronComp';
 

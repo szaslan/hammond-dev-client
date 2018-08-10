@@ -1,10 +1,8 @@
 import React, { Component } from 'react';
-import { Well, Row, Panel } from 'react-bootstrap';
 import { UncontrolledTooltip } from 'reactstrap';
 import Flexbox from 'flexbox-react';
 import 'bootstrap/dist/css/bootstrap.css';
-import Accordion from '../Accordion/Accordion';
-import Loader from 'react-loader-spinner';
+
 import '../Assignments/Assignments.css';
 import FinalizeResults from '../FinalizeResults/FinalizeResults';
 import AnalyzeResults from '../AnalyzeResults/AnalyzeResults';
