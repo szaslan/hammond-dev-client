@@ -4,8 +4,9 @@ import { BrowserHistory, Redirect } from 'react-router-dom';
 import createBrowserHistory from 'history/createBrowserHistory';
 import { Form, FormGroup, Input } from 'reactstrap';
 import {Well} from 'react-bootstrap';
-
+import gradient from '../../gradients/57.\ Light\ Sky\ Blue.png'
 const history = createBrowserHistory();
+
 
 
 class UserRegistration extends Component {
@@ -109,6 +110,9 @@ class UserRegistration extends Component {
 
     return (
       <div className="entire-screen-login">
+      {/* <registerBackground /> */}
+      {/* <img className="myGradient" src={gradient}/>  */}
+
         <div className="register-group">
           <h1 className="welcome-message-login">Sign Up</h1>
           <Form className="register-form" onSubmit={this.handleSubmit}>

@@ -3,7 +3,6 @@ import './StudentInfo.css';
 import Loader from 'react-loader-spinner'
 import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 import history from '../../history'
-import ChartJS from 'react-chartjs-wrapper';
 import StudentInfoGraph from '../StudentInfoGraph/StudentInfoGraph'
 
 //filter for only peer reviewable assignments
@@ -227,11 +226,20 @@ class StudentInfo extends Component {
             },
             body: JSON.stringify(data)
         })
-            .then(res => res.json())
-            .then(res => {
-                this.setState({ peer_review_data: res })
-                this.determineGraphStyles()
-            })
+    
+            .then(res => { 
+                console.log(res)
+                if (res.status === 404) {
+                    console.log(res)
+                }
+                else {
+                    res.json().then(data => {
+                        console.log(data)
+                        this.setState({ peer_review_data: data })
+                        this.determineGraphStyles()
+                })
+            }
+        })
     }
 
     determineGraphStyles() {
@@ -413,6 +421,7 @@ class StudentInfo extends Component {
             value2: 'Select a Peer Review',
             peer_reviews: [],
             message: '',
+            peer_reviews: [],
             scoreGiven: '',
             finalScore: ''
         }, () => {

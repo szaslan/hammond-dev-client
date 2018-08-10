@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import './App.css';
-import Students from './components/students/students';
 import UserLogin from './components/UserLogin/UserLogin';
 import Courses from './components/Courses/Courses';
 import CourseInfo from './components/CourseInfo/CourseInfo';
@@ -13,7 +12,6 @@ import history from './history'
 import Landing from './components/Landing/Landing';
 import StudentInfo from './components/StudentInfo/StudentInfo';
 import NotFound from './components/NotFound/NotFound';
-import AuthenticatedComponent from './components/AuthenticatedComponent/AuthenticatedComponent';
 
 
 class App extends Component {

@@ -1,13 +1,12 @@
 import React, { Component } from 'react';
 import './CourseInfo.css';
 import { Link } from "react-router-dom";
-import { Well, Row, Col, Breadcrumb } from 'react-bootstrap';
+import { Breadcrumb } from 'react-bootstrap';
 import Flexbox from 'flexbox-react';
 import history from '../../history'
-import { Container, Jumbotron } from 'reactstrap';
+import { Container } from 'reactstrap';
 import JumbotronComp from '../JumbotronComp/JumbotronComp'
 import '../BreadcrumbComp/BreadcrumbComp.css';
-import { resolve } from 'path';
 import Loader from 'react-loader-spinner'
 
 
@@ -63,10 +62,10 @@ class CourseInfo extends Component {
                 res.json().then(data =>
                 {
                     this.setState({courseJSON: data, loaded: true})
-                })
+                }).catch(() => this.setState({error: true, loaded: true}))
             }
         })
-        .catch(err => console.log("no auth"))
+        .catch(err => console.log(err))
     }
 
 
@@ -77,9 +76,20 @@ class CourseInfo extends Component {
         //         <div>Not authenticated</div>
         //     )
         // }
-
-    
-        
+        if (this.state.error) {
+        return (
+            <div>
+                <JumbotronComp  mainTitle= {this.state.courseJSON.name}
+                    secondaryTitle="&nbsp;"/>
+                    
+                    <Breadcrumb className="breadcrumb1">
+                        <Breadcrumb.Item className="breadcrumb-item" href="/courses/">Home</Breadcrumb.Item>
+                        <Breadcrumb.Item className="breadcrumb-item breadcrumb-item1" active>{this.state.courseJSON.name}</Breadcrumb.Item>
+                    </Breadcrumb>
+                    <div>Oops! There was a problem on our end.</div>
+                </div>
+        )
+    }    
         return (
             <div>          
                 <JumbotronComp  mainTitle= {this.state.courseJSON.name}
@@ -112,7 +122,8 @@ class CourseInfo extends Component {
             </div>
 
         );
-    }
+
+}
 
 
 }

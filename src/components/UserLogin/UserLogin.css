@@ -61,6 +61,15 @@
     font-size:30px;
   }*/
 
+  @media (max-width: 555px) {
+    .entire-screen-login-group {
+      height: -webkit-fill-available;    }
+      
+      .login-group {
+        width: 80vw !important;
+      }
+  }
+
   .welcome-message-login{
       color: black;
       font-size:90px;
@@ -73,22 +82,24 @@
 }
 
   .entire-screen-login{
-      height:100vh;
+      height:800px;
       /*background-image: url('../deering-interior-square3.jpg');
       background-size: cover;
       background-repeat: no-repeat;
       background-attachment: fixed;
       background-position: 50% 30%;*/
-      background-color: #efd9ce;;
-      min-width: 500px;
+      background-color: #FFEFE1;;
+      overflow: hidden
   }
 
 
   .login-group{
-    width:500px;
+    width: 500px;
     padding-top:30vh;
     height:80vh;
     margin:auto;
+    display: flex;
+    flex-direction: column;
   }
 
   .new-button{

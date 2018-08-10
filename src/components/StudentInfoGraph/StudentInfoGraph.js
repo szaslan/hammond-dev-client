@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 import './StudentInfoGraph.css';
 import Loader from 'react-loader-spinner'
-import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
-import history from '../../history'
+
 import ChartJS from 'react-chartjs-wrapper';
 
 class StudentInfoGraph extends Component {

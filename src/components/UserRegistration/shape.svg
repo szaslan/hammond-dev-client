@@ -1,0 +1,27 @@
+<svg width="286px" height="314px" viewBox="0 0 286 314" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+
+    <defs>
+        <filter x="-2.1%" y="-1.2%" width="104.1%" height="103.4%" filterUnits="objectBoundingBox" id="filter-1">
+            <feOffset dx="0" dy="2" in="SourceAlpha" result="shadowOffsetOuter1"></feOffset>
+            <feGaussianBlur stdDeviation="2" in="shadowOffsetOuter1" result="shadowBlurOuter1"></feGaussianBlur>
+            <feColorMatrix values="0 0 0 0 0   0 0 0 0 0   0 0 0 0 0  0 0 0 0.5 0" type="matrix" in="shadowBlurOuter1" result="shadowMatrixOuter1"></feColorMatrix>
+            <feMerge>
+                <feMergeNode in="shadowMatrixOuter1"></feMergeNode>
+                <feMergeNode in="SourceGraphic"></feMergeNode>
+            </feMerge>
+        </filter>
+        <path d="M169,410 C215.268409,410 212.698255,288.145024 243.216923,251.605972 C274.262814,214.435693 338,262.093973 338,205 C338,175.27281 239.843237,127.498136 230.460366,102 C204.107823,30.3864497 237.829318,0 169,0 C75.6638773,0 0,91.7816263 0,205 C0,318.218374 75.6638773,410 169,410 Z" id="path-2"></path>
+    </defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="REgister">
+            <g id="Group" transform="translate(-56.000000, -102.000000)">
+                <g id="57.-Light-Sky-Blue" filter="url(#filter-1)">
+                    <mask id="mask-3" fill="white">
+                        <use xlink:href="#path-2"></use>
+                    </mask>
+                    <use id="Mask" fill="#D8D8D8" xlink:href="#path-2"></use>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

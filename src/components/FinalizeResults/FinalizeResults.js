@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
-import { Well, Row, Panel } from 'react-bootstrap';
+import { Well, Row } from 'react-bootstrap';
 import Flexbox from 'flexbox-react';
 import 'bootstrap/dist/css/bootstrap.css';
 import Accordion from '../Accordion/Accordion';
 import Loader from 'react-loader-spinner';
-import { Boxplot, computeBoxplotStats } from 'react-boxplot';
+import { Boxplot } from 'react-boxplot';
 import { Tooltip } from 'reactstrap';
 import ReactSvgPieChart from "react-svg-piechart";
 import Popup from 'reactjs-popup';

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import './Assignments.css';
 import { Link } from "react-router-dom";
 import Loader from 'react-loader-spinner'
-import { Well, Row, Col, Breadcrumb } from 'react-bootstrap';
+import { Breadcrumb } from 'react-bootstrap';
 import JumbotronComp from '../JumbotronComp/JumbotronComp';
 import AssignmentInfo from '../AssignmentInfo/AssignmentInfo';
 import '../BreadcrumbComp/BreadcrumbComp.css';
@@ -28,22 +28,6 @@ function FilterAssignments(props) {
     }
 }
 
-
-// function buttonsInstance(courses, url){
-//     <Col xs={6} className="col4">
-//         {courses.map(courses => 
-//          <div className="div-student">
-//          <Link className="assignment-link" to={{pathname: url + courses.id, state: {assignment_id: courses.id} }} key={courses.id}>
-//          <FilterAssignments currAssigment={courses}/>
-//          </Link>
-//          <br></br>
-//      </div>
-//     )}
-//     </Col>
-// }
-
-
-
 class Assignments extends Component{
     constructor(props, context){
         super(props, context);
@@ -53,6 +37,7 @@ class Assignments extends Component{
             assignments: [],
             loaded: false,
             url: '',
+            error: false,
             ...props,
         }
     }
@@ -86,7 +71,7 @@ class Assignments extends Component{
                 res.json().then(data => {
                     this.setState({assignments: data,
                                    mounted: true})
-                })
+                }).catch(() => this.setState({error: true}))
             }
         })
         .catch(err => console.log("Not Authorized.")) 
@@ -97,9 +82,24 @@ class Assignments extends Component{
    
 
     render() {
-            return (
-                // <div className="all-assignments">
 
+        if (this.state.error){
+            return (
+                <div>
+                    <JumbotronComp mainTitle="Assignments" secondaryTitle="&nbsp;" />
+
+                    <Breadcrumb className="breadcrumb1">
+                        <Breadcrumb.Item className="breadcrumb-item" href="/courses">Home</Breadcrumb.Item>
+                        <Breadcrumb.Item className="breadcrumb-item breadcrumb-item1" href={`/courses/${this.state.match.params.course_id}`}>
+                            {this.props.match.params.assignment_name}
+                        </Breadcrumb.Item>
+                        <Breadcrumb.Item className="breadcrumb-item" active>Assignments</Breadcrumb.Item>
+                    </Breadcrumb>
+                        <div>Oops! There was something wrong on our end.</div>
+                    </div>
+            )
+        }else {
+            return (
                 <div>
                     <JumbotronComp mainTitle="Assignments" secondaryTitle="&nbsp;" />
 
@@ -117,12 +117,7 @@ class Assignments extends Component{
                                             {this.state.assignments ?
                 
                     this.state.assignments.map(assignments =>
-                            <FilterAssignments link={this.state.url + assignments.id} assignment_id={assignments.id} name={this.state.match.params.assignment_name} course_id={this.state.match.params.course_id} currAssigment={assignments}  id={assignments.id} />
-                        
-                        // this.state.assignments.map(assignments =>
-                        //     <Link className="assignment-link" to={{ pathname: this.state.url + assignments.id, state: { assignment_id: assignments.id, name: this.state.match.params.assignment_name, course_id: this.state.match.params.course_id } }} key={assignments.id}>
-                        //         <FilterAssignments currAssigment={assignments}   />
-                        //     </Link>       
+                            <FilterAssignments link={this.state.url + assignments.id} assignment_id={assignments.id} name={this.state.match.params.assignment_name} course_id={this.state.match.params.course_id} currAssigment={assignments}  id={assignments.id} />   
                           )
                       :
                       <Loader type="TailSpin" color="black" height={80} width={80} />
@@ -133,6 +128,7 @@ class Assignments extends Component{
                     
                 </div>
             );
+        }
         }
     }
 
