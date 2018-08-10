@@ -45,10 +45,11 @@ class StudentInfoGraph extends Component {
             if (this.state.assignments[i].peer_reviews) {
                 let assignment_id = this.state.assignments[i].id;
                 let assignment_name = this.state.assignments[i].name
+                let column_name = "'" + assignment_id + "'";
 
-                if (this.state.peer_review_data[assignment_id + '_' + this.state.category] != undefined) {
+                if (this.state.peer_review_data[this.state.category + "_history"][column_name] != undefined) {
                     data_history.labels.push(assignment_name)
-                    data_history.datasets[0].data.push(this.state.peer_review_data[assignment_id + '_' + this.state.category])
+                    data_history.datasets[0].data.push(this.state.peer_review_data[this.state.category + "_history"][column_name])
                 }
             }
         }
