@@ -94,28 +94,24 @@ class CourseInfo extends Component {
             <div>          
                 <JumbotronComp  mainTitle= {this.state.courseJSON.name}
                 secondaryTitle="&nbsp;"/>
-                
                 <Breadcrumb className="breadcrumb1">
                     <Breadcrumb.Item className="breadcrumb-item" href="/courses/">Home</Breadcrumb.Item>
                     <Breadcrumb.Item className="breadcrumb-item breadcrumb-item1" active>{this.state.courseJSON.name}</Breadcrumb.Item>
                 </Breadcrumb>
                 {this.state.loaded ? 
-                <Container className="well1-container" fluid>
-                    <Flexbox className="big-buttons-flexbox" minWidth="700px" width="60vw" justifyContent="center"
-                        minHeight="50vh" flexDirection="column">
-                        <Flexbox
-                            justifyContent="space-around"
-                            flexWrap="nowrap">
+                    <div className='courseinfo-buttons'>
+                        <div>   
                              <Link to={{pathname: this.state.url + '/'+ this.state.courseJSON.name + "/assignments/", state: {name: this.state.courseJSON.name}, }}>
                                 <button className="pull-left big-button">Assignments</button>
                             </Link>
+                        </div>
+                        <div>
                             <Link to={{pathname: this.state.url + "/"+this.state.courseJSON.name + "/students", state: {name: this.state.courseJSON.name}}}>
                                 <button className="pull-right big-button">Students</button>
                             </Link>
-                           
-                        </Flexbox>
-                    </Flexbox>
-                </Container>
+                        </div>
+                    </div>
+                    
                  :
                  <Loader type="TailSpin" color="black" height={80} width={80} />
                  }
