@@ -4,7 +4,9 @@ import Flexbox from 'flexbox-react';
 import 'bootstrap/dist/css/bootstrap.css';
 import Accordion from '../Accordion/Accordion';
 import Loader from 'react-loader-spinner';
-import { Boxplot } from 'react-boxplot';
+import { Boxplot, computeBoxplotStats } from 'react-boxplot';
+import ReactSvgPieChart from "react-svg-piechart";
+import Popup from 'reactjs-popup';
 import { Progress, Tooltip } from 'reactstrap';
 
 import '../Assignments/Assignments.css'
@@ -22,9 +24,9 @@ class FinalizeResults extends Component {
             tooltipOpen: false,
             finalizeDisplayText: false,
             finishedLoading: false,
+            sectorValue1: "",
+            sectorValue2: "",
             benchmarks: this.props.benchmarks,
-            loaded1: false,
-            loaded2: false,
         };
 
         this.savePeerReviewsFromCanvasToDatabase = this.savePeerReviewsFromCanvasToDatabase.bind(this);
@@ -38,6 +40,8 @@ class FinalizeResults extends Component {
         this.pullBoxPlotFromCanvas = this.pullBoxPlotFromCanvas.bind(this);
         this.findCompletedAllReviews = this.findCompletedAllReviews.bind(this);
         this.toggle = this.toggle.bind(this);
+       
+
     }
 
     savePeerReviewsFromCanvasToDatabase() {
@@ -277,10 +281,11 @@ class FinalizeResults extends Component {
                             {
                                 localStorage.getItem("completed_all_reviews_" + this.props.assignment_id) ?
                                     <div>
+
                                         <strong>Completed Peer Reviews: </strong>{localStorage.getItem("finalizeDisplayTextNumCompleted_" + this.props.assignment_id)} / {localStorage.getItem("finalizeDisplayTextNumAssigned_" + this.props.assignment_id)}
-                                        <br></br>
-                                        <br></br>
-                                        <strong>Completed All Reviews: </strong>{localStorage.getItem("completed_all_reviews_" + this.props.assignment_id)} / {Number(localStorage.getItem("completed_all_reviews_out_of_" + this.props.assignment_id)) + Number(localStorage.getItem("completed_all_reviews_" + this.props.assignment_id))}
+
+                                        {/* <strong>Completed All Reviews: </strong>{localStorage.getItem("completed_all_reviews_" + this.props.assignment_id)} / {Number(localStorage.getItem("completed_all_reviews_out_of_" + this.props.assignment_id)) + Number(localStorage.getItem("completed_all_reviews_" + this.props.assignment_id))} */}
+
                                         <Boxplot
                                             width={400} height={25} orientation="horizontal"
                                             min={0} max={100}
@@ -293,6 +298,7 @@ class FinalizeResults extends Component {
                                                 outliers: [],
                                             }} />
                                         <br></br>
+                                        <br></br>
                                         <Row>
                                             <Well className="well2">
                                                 <Flexbox className="accordion-flexbox" flexDirection="column" minWidth="300px" maxWidth="500px" width="100%" flexWrap="wrap">
@@ -303,6 +309,57 @@ class FinalizeResults extends Component {
                                                     <Accordion name="Flagged Grades" content={JSON.parse(localStorage.getItem("flagged_students_" + this.props.assignment_id))} />
                                                 </Flexbox>
                                             </Well>
+                                        </Row>
+                                        <br></br>
+                                        <br></br>
+                                        <Row className = "chart-row">
+                                            <Flexbox className="chartbox" flexDirection="column" width="200px" flexWrap="wrap">
+                                                <h5 className="graphTitle">Completion</h5>
+                                                <ReactSvgPieChart className="piechart"
+                                                    expandSize={3}
+                                                    expandOnHover="false"
+                                                    data={[
+                                                        { value: 105, color: '#E38627' },
+                                                        { value: 10, color: '#C13C37' },
+                                                        { value: 20, color: '#6A2135' },
+                                                    ]}
+                                                    // onSectorHover={() => {
+                                                    //     console.log("You hovered over.");
+                                                    // }}
+                                                    onSectorHover={(d) => {
+                                                        if (d) {
+                                                            console.log("value: ", d.value);
+                                                            // this.sectorValue = d.value;
+                                                        }
+                                                    }
+                                                    }
+                                                />
+                                                <Well>This is the value of the sector over which you are hovering{this.state.sectorValue1}</Well>
+                                            </Flexbox>
+                                            <Flexbox className="chartbox" flexDirection="column" width="200px" flexWrap="wrap">
+                                                <h5 className="graphTitle">Grading Classification</h5>
+                                                <ReactSvgPieChart className="piechart"
+                                                    expandSize={3}
+                                                    expandOnHover="false"
+                                                    data={[
+                                                        { value: 2, color: '#C9CBA3' },
+                                                        { value: 4, color: '#FFE1A8' },
+                                                        { value: 7, color: '#E26D5C' },
+                                                        { value: 6, color: '#723D46' },
+                                                        { value: 16, color: '#472D30' },
+                                                        { value: 8, color: '#197278' },
+                                                        { value: 11, color: '#772E25' }
+                                                    ]}
+                                                    onSectorHover={(d) => {
+                                                        if (d) {
+                                                            console.log("value: ", d.value);
+                                                            // this.sectorValue = d.value;
+                                                        }
+                                                    }
+                                                    }
+                                                />
+                                                <Well>This is the value of the sector over which you are hovering{this.state.sectorValueState}</Well>
+                                            </Flexbox>
                                         </Row>
                                     </div>
                                     :
@@ -315,11 +372,8 @@ class FinalizeResults extends Component {
                                 localStorage.getItem("completed_all_reviews_" + this.props.assignment_id) ?
                                     // localStorage.getItem("harsh_students_" + this.props.assignment_id) && localStorage.getItem("max_" + this.props.assignment_id) ?
                                     <div>
-                                        <strong>Completed Peer Reviews:</strong> {localStorage.getItem("finalizeDisplayTextNumCompleted_" + this.props.assignment_id)} / {localStorage.getItem("finalizeDisplayTextNumAssigned_" + this.props.assignment_id)}
-                                        <br></br>
-                                        <br></br>
-                                        <strong>Completed All Reviews: </strong>{localStorage.getItem("completed_all_reviews_" + this.props.assignment_id)} / {Number(localStorage.getItem("completed_all_reviews_out_of_" + this.props.assignment_id)) + Number(localStorage.getItem("completed_all_reviews_" + this.props.assignment_id))}
-                                        <span id={"TooltipBoxplot"}>
+
+                                        <span className="boxplot" id={"TooltipBoxplot"}>
                                             <Boxplot
                                                 width={400} height={25} orientation="horizontal"
                                                 min={0} max={100}
@@ -332,6 +386,12 @@ class FinalizeResults extends Component {
                                                     outliers: [],
                                                 }} />
                                         </span>
+                                        <br></br>
+                                        <br></br>
+                                        <strong>Completed Peer Reviews:</strong> {localStorage.getItem("finalizeDisplayTextNumCompleted_" + this.props.assignment_id)} / {localStorage.getItem("finalizeDisplayTextNumAssigned_" + this.props.assignment_id)}
+                                        <br></br>
+                                        <br></br>
+                                        {/* <strong>Completed All Reviews: </strong>{localStorage.getItem("completed_all_reviews_" + this.props.assignment_id)} / {Number(localStorage.getItem("completed_all_reviews_out_of_" + this.props.assignment_id)) + Number(localStorage.getItem("completed_all_reviews_" + this.props.assignment_id))} */}
                                         <Tooltip placement="right" delay={{ show: "300" }} isOpen={this.state.tooltipOpen} target={"TooltipBoxplot"} toggle={this.toggle}>
                                             <strong>Min Score:</strong> {localStorage.getItem("min_" + this.props.assignment_id)}
                                             <br></br>
@@ -350,13 +410,72 @@ class FinalizeResults extends Component {
                                         <Row>
                                             <Well className="well2">
                                                 <Flexbox className="accordion-flexbox" flexDirection="column" minWidth="300px" maxWidth="500px" width="100%" flexWrap="wrap">
-                                                    <Accordion name="Definitely Harsh" content={JSON.parse(localStorage.getItem("harsh_students_" + this.props.assignment_id))} />
-                                                    <Accordion name="Definitely Lenient" content={JSON.parse(localStorage.getItem("lenient_students_" + this.props.assignment_id))} />
-                                                    <Accordion name="Missing Some Peer Reviews" content={JSON.parse(localStorage.getItem("some_incomplete_students_" + this.props.assignment_id))} />
-                                                    <Accordion name="Missing All Peer Reviews" content={JSON.parse(localStorage.getItem("all_incomplete_students_" + this.props.assignment_id))} />
-                                                    <Accordion name="Flagged Grades" content={JSON.parse(localStorage.getItem("flagged_students_" + this.props.assignment_id))} />
+                                                    {/* <Accordion name="Definitely Harsh" content={JSON.parse(localStorage.getItem("harsh_students_" + this.props.assignment_id))} /> */}
+                                                    {/* <Accordion name="Definitely Lenient" content={JSON.parse(localStorage.getItem("lenient_students_" + this.props.assignment_id))} /> */}
+                                                    {/* <Accordion name="Missing Some Peer Reviews" content={JSON.parse(localStorage.getItem("some_incomplete_students_" + this.props.assignment_id))} /> */}
+                                                    {/* <Accordion name="Missing All Peer Reviews" content={JSON.parse(localStorage.getItem("all_incomplete_students_" + this.props.assignment_id))} /> */}
+                                                    {/*<Accordion name="Flagged Grades" content={JSON.parse(localStorage.getItem("flagged_students_" + this.props.assignment_id))} /> */}
                                                 </Flexbox>
+                                                <Popup className="pop-up"
+                                                    trigger={<button className="button-student"> Flagged Grades </button>}
+                                                    modal
+                                                    closeOnDocumentClick
+                                                >
+                                                    <span><h5>Flagged Grades</h5></span>
+                                                    <hr />
+                                                    <span>{JSON.parse(localStorage.getItem("flagged_students_" + this.props.assignment_id))}</span>
+                                                </Popup>
                                             </Well>
+                                        </Row>
+                                        <br></br>
+                                        <Row className = "chart-row">
+                                            <Flexbox className="chartbox" flexDirection="column" width="200px" flexWrap="wrap">
+                                                <h5 className="graphTitle">Completion</h5>
+                                                <ReactSvgPieChart className="piechart"
+                                                    expandSize={3}
+                                                    expandOnHover="false"
+                                                    data={[
+                                                        { value: 105, color: '#E38627' },
+                                                        { value: 10, color: '#C13C37' },
+                                                        { value: 20, color: '#6A2135' },
+                                                    ]}
+                                                    // onSectorHover={() => {
+                                                    //     console.log("You hovered over.");
+                                                    // }}
+                                                    onSectorHover={(d) => {
+                                                        if (d) {
+                                                            console.log("value: ", d.value);
+                                                            this.state.sectorValue1 = d.value;
+                                                        }
+                                                    }
+                                                    }
+                                                />
+                                                <Well>This is the value of the sector over which you are hovering: {this.state.sectorValue1}</Well>
+                                            </Flexbox>
+                                            <Flexbox className="chartbox" flexDirection="column" width="200px" flexWrap="wrap">
+                                                <h5 className="graphTitle">Grading Classification</h5>
+                                                <ReactSvgPieChart className="piechart"
+                                                    expandSize={3}
+                                                    expandOnHover="false"
+                                                    data={[
+                                                        { value: 2, color: '#C9CBA3' },
+                                                        { value: 4, color: '#FFE1A8' },
+                                                        { value: 7, color: '#E26D5C' },
+                                                        { value: 6, color: '#723D46' },
+                                                        { value: 16, color: '#472D30' },
+                                                        { value: 8, color: '#197278' },
+                                                        { value: 11, color: '#772E25' }
+                                                    ]}
+                                                    onSectorHover={(d) => {
+                                                        if (d) {
+                                                            console.log("value: ", d.value);
+                                                            this.state.sectorValue2 = d.value;
+                                                        }
+                                                    }
+                                                    }
+                                                />
+                                                <Well>This is the value of the sector over which you are hovering: {this.state.sectorValue2}</Well>
+                                            </Flexbox>
                                         </Row>
                                     </div>
                                     :

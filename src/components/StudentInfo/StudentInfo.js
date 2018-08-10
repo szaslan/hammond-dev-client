@@ -217,7 +217,7 @@ class StudentInfo extends Component {
                         //     get.setState({errorMessage: "No peer reviews for this student!"})
                         //     console.log(get.state.errorMessage)
 
-                        // }   
+                        // }
                     })
                 } else {
 
@@ -440,6 +440,7 @@ class StudentInfo extends Component {
             value: event.target.innerText,
             selectedAssignment: Number(event.target.id),
             value2: 'Select a Peer Review',
+            peer_reviews: [],
             message: '',
             peer_reviews: [],
             scoreGiven: '',

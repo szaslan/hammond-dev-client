@@ -36,15 +36,17 @@
 
 
 .not-pr{
-  /*background-color:#a3a3a3;*/
+  background-color:#e0e1e5;
   border: 2px solid #e2c6c5;
+  opacity: 1;
 }
 
 .not-pr:hover{
   transform: none !important;
   box-shadow: none !important;
   border: 2px solid #e2c6c5 !important;
-  /*background-color:#a3a3a3 !important;*/
+  background-color:#e0e1e5 !important;
+  opacity:1;
 }
 
 .assignment-name:hover{
@@ -54,6 +56,45 @@
     /*background-color: var(--light-lavendar2);*/
     opacity: 1;
 }
+
+.boxplot{
+  margin-left: 2vh;
+}
+
+.well2{
+  margin-left: 3vh;
+}
+
+.button-student{
+  background-color: #f9f7f7;
+  border-radius: 3px;
+  margin-top: 4px;
+  box-shadow: 0px 10px 5px -8px rgba(0,0,0,0.1);
+  border: 2px solid #e2c6c5;
+  margin-bottom: 3px;
+}
+
+.pop-up{
+  border-radius: 3px;
+  text-align: center;
+}
+
+.graphTitle{
+  font-family: 'Open Sans';
+  font-size: 16px;
+  text-align: center;
+}
+
+.chartbox{
+  padding: 10px;
+}
+.chart-row{
+  min-width:500px;
+}
+
+/* .cardbody1{
+  margin-top: 4px;
+} */
 
   /* ------------Breadcrumbs settings------------ */
   /*.breadcrumb1{
