@@ -21,6 +21,8 @@ class FinalizeResults extends Component {
             tooltipOpen: false,
             finalizeDisplayText: false,
             finishedLoading: false,
+            sectorValue1: "",
+            sectorValue2: "",
         };
 
         this.pullBoxPlotFromCanvas = this.pullBoxPlotFromCanvas.bind(this);
@@ -32,6 +34,8 @@ class FinalizeResults extends Component {
         this.findFlaggedGrades = this.findFlaggedGrades.bind(this);
         this.findCompletedAllReviews = this.findCompletedAllReviews.bind(this);
         this.toggle = this.toggle.bind(this);
+       
+
     }
 
     pullBoxPlotFromCanvas() {
@@ -268,31 +272,54 @@ class FinalizeResults extends Component {
                                         </Row>
                                         <br></br>
                                         <br></br>
-                                        <Row>
-                                        <Flexbox className="chartbox" flexDirection="column" width="200px" flexWrap="wrap">
-                                        <h5 className="graphTitle">Completion</h5>
-                                        <ReactSvgPieChart className="piechart"
-                                            expandSize={3}
-                                            expandOnHover="false"
-                                            data={[
-                                              { value: 105, color: '#E38627' },
-                                              { value: 15, color: '#C13C37' },
-                                              { value: 20, color: '#6A2135' },
-                                            ]}
-                                            />
-                                        </Flexbox>
-                                        <Flexbox className="chartbox"  flexDirection="column" width="200px" flexWrap="wrap">
-                                        <h5 className="graphTitle">Grading Classification</h5>
-                                        <ReactSvgPieChart className="piechart"
-                                            expandSize={3}
-                                            expandOnHover="false"
-                                            data={[
-                                              { value: 105, color: '#E38627' },
-                                              { value: 15, color: '#C13C37' },
-                                              { value: 20, color: '#6A2135' },
-                                            ]}
-                                            />
-                                        </Flexbox>
+                                        <Row className = "chart-row">
+                                            <Flexbox className="chartbox" flexDirection="column" width="200px" flexWrap="wrap">
+                                                <h5 className="graphTitle">Completion</h5>
+                                                <ReactSvgPieChart className="piechart"
+                                                    expandSize={3}
+                                                    expandOnHover="false"
+                                                    data={[
+                                                        { value: 105, color: '#E38627' },
+                                                        { value: 10, color: '#C13C37' },
+                                                        { value: 20, color: '#6A2135' },
+                                                    ]}
+                                                    // onSectorHover={() => {
+                                                    //     console.log("You hovered over.");
+                                                    // }}
+                                                    onSectorHover={(d) => {
+                                                        if (d) {
+                                                            console.log("value: ", d.value);
+                                                            // this.sectorValue = d.value;
+                                                        }
+                                                    }
+                                                    }
+                                                />
+                                                <Well>This is the value of the sector over which you are hovering{this.state.sectorValue1}</Well>
+                                            </Flexbox>
+                                            <Flexbox className="chartbox" flexDirection="column" width="200px" flexWrap="wrap">
+                                                <h5 className="graphTitle">Grading Classification</h5>
+                                                <ReactSvgPieChart className="piechart"
+                                                    expandSize={3}
+                                                    expandOnHover="false"
+                                                    data={[
+                                                        { value: 2, color: '#C9CBA3' },
+                                                        { value: 4, color: '#FFE1A8' },
+                                                        { value: 7, color: '#E26D5C' },
+                                                        { value: 6, color: '#723D46' },
+                                                        { value: 16, color: '#472D30' },
+                                                        { value: 8, color: '#197278' },
+                                                        { value: 11, color: '#772E25' }
+                                                    ]}
+                                                    onSectorHover={(d) => {
+                                                        if (d) {
+                                                            console.log("value: ", d.value);
+                                                            // this.sectorValue = d.value;
+                                                        }
+                                                    }
+                                                    }
+                                                />
+                                                <Well>This is the value of the sector over which you are hovering{this.state.sectorValueState}</Well>
+                                            </Flexbox>
                                         </Row>
                                     </div>
                                     :
@@ -347,46 +374,65 @@ class FinalizeResults extends Component {
                                                     {/*<Accordion name="Flagged Grades" content={JSON.parse(localStorage.getItem("flagged_students_" + this.props.assignment_id))} /> */}
                                                 </Flexbox>
                                                 <Popup className="pop-up"
-                                                  trigger={<button className="button-student"> Flagged Grades </button>}
-                                                  modal
-                                                  closeOnDocumentClick
-                                                  >
-                                                  <span><h5>Flagged Grades</h5></span>
-                                                  <hr />
-                                                  <span>{JSON.parse(localStorage.getItem("flagged_students_" + this.props.assignment_id))}</span>
-                                                  </Popup>
+                                                    trigger={<button className="button-student"> Flagged Grades </button>}
+                                                    modal
+                                                    closeOnDocumentClick
+                                                >
+                                                    <span><h5>Flagged Grades</h5></span>
+                                                    <hr />
+                                                    <span>{JSON.parse(localStorage.getItem("flagged_students_" + this.props.assignment_id))}</span>
+                                                </Popup>
                                             </Well>
                                         </Row>
                                         <br></br>
-                                        <Row>
-                                        <Flexbox className="chartbox" flexDirection="column" width="200px" flexWrap="wrap">
-                                        <h5 className="graphTitle">Completion</h5>
-                                        <ReactSvgPieChart className="piechart"
-                                            expandSize={3}
-                                            expandOnHover="false"
-                                            data={[
-                                              { value: 105, color: '#E38627' },
-                                              { value: 10, color: '#C13C37' },
-                                              { value: 20, color: '#6A2135' },
-                                            ]}
-                                            />
-                                        </Flexbox>
-                                        <Flexbox className="chartbox"  flexDirection="column" width="200px" flexWrap="wrap">
-                                        <h5 className="graphTitle">Grading Classification</h5>
-                                        <ReactSvgPieChart className="piechart"
-                                            expandSize={3}
-                                            expandOnHover="false"
-                                            data={[
-                                              { value: 2, color: '#C9CBA3' },
-                                              { value: 4, color: '#FFE1A8' },
-                                              { value: 7, color: '#E26D5C' },
-                                              { value: 6, color: '#723D46' },
-                                              { value: 16, color: '#472D30' },
-                                              { value: 8, color: '#197278' },
-                                              { value: 11, color: '#772E25' }
-                                            ]}
-                                            />
-                                        </Flexbox>
+                                        <Row className = "chart-row">
+                                            <Flexbox className="chartbox" flexDirection="column" width="200px" flexWrap="wrap">
+                                                <h5 className="graphTitle">Completion</h5>
+                                                <ReactSvgPieChart className="piechart"
+                                                    expandSize={3}
+                                                    expandOnHover="false"
+                                                    data={[
+                                                        { value: 105, color: '#E38627' },
+                                                        { value: 10, color: '#C13C37' },
+                                                        { value: 20, color: '#6A2135' },
+                                                    ]}
+                                                    // onSectorHover={() => {
+                                                    //     console.log("You hovered over.");
+                                                    // }}
+                                                    onSectorHover={(d) => {
+                                                        if (d) {
+                                                            console.log("value: ", d.value);
+                                                            this.state.sectorValue1 = d.value;
+                                                        }
+                                                    }
+                                                    }
+                                                />
+                                                <Well>This is the value of the sector over which you are hovering: {this.state.sectorValue1}</Well>
+                                            </Flexbox>
+                                            <Flexbox className="chartbox" flexDirection="column" width="200px" flexWrap="wrap">
+                                                <h5 className="graphTitle">Grading Classification</h5>
+                                                <ReactSvgPieChart className="piechart"
+                                                    expandSize={3}
+                                                    expandOnHover="false"
+                                                    data={[
+                                                        { value: 2, color: '#C9CBA3' },
+                                                        { value: 4, color: '#FFE1A8' },
+                                                        { value: 7, color: '#E26D5C' },
+                                                        { value: 6, color: '#723D46' },
+                                                        { value: 16, color: '#472D30' },
+                                                        { value: 8, color: '#197278' },
+                                                        { value: 11, color: '#772E25' }
+                                                    ]}
+                                                    onSectorHover={(d) => {
+                                                        if (d) {
+                                                            console.log("value: ", d.value);
+                                                            this.state.sectorValue2 = d.value;
+                                                        }
+                                                    }
+                                                    }
+                                                />
+                                                <Well>This is the value of the sector over which you are hovering: {this.state.sectorValue2}</Well>
+                                            </Flexbox>
                                         </Row>
                                     </div>
                                     :

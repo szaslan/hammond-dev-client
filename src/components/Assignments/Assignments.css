@@ -88,6 +88,10 @@
 .chartbox{
   padding: 10px;
 }
+.chart-row{
+  min-width:500px;
+}
+
 /* .cardbody1{
   margin-top: 4px;
 } */
