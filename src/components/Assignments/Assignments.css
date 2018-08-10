@@ -88,6 +88,13 @@
 .chartbox{
   padding: 10px;
 }
+
+.graphKey{
+  font-size:12px;
+  text-align: center;
+}
+
+
 /* .cardbody1{
   margin-top: 4px;
 } */
