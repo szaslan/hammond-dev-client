@@ -1,16 +1,15 @@
 import React, { Component } from 'react';
-import { Well, Row, Panel } from 'react-bootstrap';
 import { UncontrolledTooltip } from 'reactstrap';
 import Flexbox from 'flexbox-react';
 import 'bootstrap/dist/css/bootstrap.css';
-import Accordion from '../Accordion/Accordion';
-import Loader from 'react-loader-spinner';
 import '../Assignments/Assignments.css';
 import FinalizeResults from '../FinalizeResults/FinalizeResults';
 import AnalyzeResults from '../AnalyzeResults/AnalyzeResults';
 import DueDate from '../DueDate/DueDate';
+import moment from 'moment';
 
 import '../Assignments/Assignments.css'
+import AlgorithmBenchmarks from '../AlgorithmBenchmarks/AlgorithmBenchmarks';
 
 //var message1 = "Click the button to set the first due date. This due date represents when all peer reviews are due by. Any peer review submitted to Canvas after this date will be considered late. At the time of the due date, all peer reviews are downloaded from Canvas. Any student who has not yet completed all their peer reviews for the assignment will get a Canvas message reminding them that they are now late and still need to complete x number of peer reviews.";
 var message1 = "Peer reviews submitted after this date will be considered late. Any student who has not submitted reviews by this date will receive a notification message from Canvas.";
@@ -33,6 +32,17 @@ class AnalyzeButton extends Component {
 			deleted_old_peer_reviews: false,
 			tooltipOpen1: false,
 			tooltipOpen2: false,
+
+			algorithm_benchmarks: {
+				WIDTH_OF_STD_DEV_RANGE: 0.10,
+				THRESHOLD: 2,
+				COULD_BE_LOWER_BOUND: 0.7,
+				COULD_BE_UPPER_BOUND: 2.0,
+				MIN_NUMBER_OF_REVIEWS_PER_STUDENT_FOR_CLASSIFICATION: 7,
+				MIN_NUMBER_OF_ASSIGNMENTS_IN_COURSE_FOR_CLASSIFICATION: 3,
+				MIN_NUMBER_OF_REVIEWS_FOR_SINGLE_SUBMISSION_FOR_GRADING: 5,
+				MIN_RATIO_OF_COMPLETED_TO_ASSIGNED_REVIEWS_FOR_SINGLE_SUBMISSION_FOR_GRADING: 1 / 2,
+			},
 		};
 
 		this.sendIncompleteMessages = this.sendIncompleteMessages.bind(this);
@@ -40,25 +50,31 @@ class AnalyzeButton extends Component {
 		this.deleteOldPeerReviews = this.deleteOldPeerReviews.bind(this);
 		this.handleAnalyzeClick = this.handleAnalyzeClick.bind(this);
 		this.handleFinalizeClick = this.handleFinalizeClick.bind(this);
+		this.deadline_1 = null;
+		this.deadline_2 = null;
+		this.deadline_3 = null;
 	}
 
 	sendIncompleteMessages() {
-		if (window.confirm('Do you want to Canvas message each student with missing peer reviews?')) {
-			var data = {
-				course_id: this.props.course_id,
-				assignment_id: this.props.assignment_id,
-				assignment_name: this.props.assignment_info.name,
-				points_possible: this.props.assignment_info.points_possible,
-			}
-			console.log("3: fetching peer review data from canvas")
-			fetch('/api/save_all_peer_reviews', {
-				method: "POST",
-				headers: {
-					'Content-Type': 'application/json'
-				},
-				body: JSON.stringify(data)
-			})
-				.then(() => {
+		console.log("3: fetching peer review data from canvas")
+
+		var data = {
+			course_id: this.props.course_id,
+			assignment_id: this.props.assignment_id,
+			assignment_name: this.props.assignment_info.name,
+			points_possible: this.props.assignment_info.points_possible,
+		}
+
+
+		fetch('/api/save_all_peer_reviews', {
+			method: "POST",
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify(data)
+		})
+			.then(() => {
+				if (window.confirm('Do you want to Canvas message each student with missing peer reviews?')) {
 					fetch('/api/send_incomplete_messages', {
 						method: 'POST',
 						headers: {
@@ -66,8 +82,8 @@ class AnalyzeButton extends Component {
 						},
 						body: JSON.stringify(data),
 					})
-				})
-		}
+				}
+			})
 	}
 
 	assignNewPeerReviews() {
@@ -93,7 +109,6 @@ class AnalyzeButton extends Component {
 			assignment_id: this.props.assignment_id,
 			points_possible: this.props.assignment_info.points_possible,
 		}
-
 		console.log("3: fetching peer review data from canvas")
 		fetch('/api/save_all_peer_reviews', {
 			method: "POST",
@@ -102,6 +117,15 @@ class AnalyzeButton extends Component {
 			},
 			body: JSON.stringify(data)
 		})
+			.then(() => {
+				fetch('/api/save_peer_review_numbers', {
+					method: "POST",
+					headers: {
+						'Content-Type': 'application/json'
+					},
+					body: JSON.stringify(data)
+				})
+			})
 			.then(() => {
 				this.setState({ deleted_old_peer_reviews: true })
 
@@ -136,14 +160,51 @@ class AnalyzeButton extends Component {
 			this.setState({
 				analyzeDisplayText: true
 			})
+
+			if (localStorage.getItem("analyzeDisplayTextMessage_" + this.props.assignment_id) && localStorage.getItem("analyzeDisplayTextMessage_" + this.props.assignment_id) == "All reviews accounted for"){
+				console.log("all peer reviews are in, so we can finalize this assignment")
+				// this.handleFinalizeClick()
+			}
 		}
 
-		if (localStorage.getItem("finalizePressed_" + this.props.assignment_id)) {
-			console.log("found saved finalize pressed history")
-			this.setState({
-				finalizeDisplayText: true,
-				finalizePressed: true
-			})
+		let data = {
+			assignment_id: this.props.assignment_id
+		}
+		fetch('/api/has_finalize_been_pressed', {
+			method: "POST",
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify(data)
+		})
+		.then(response => {
+			if (response.status == 200) {
+				this.setState({
+					finalizeDisplayText: true,
+					finalizePressed: true
+				})
+			}
+		})
+
+		if (localStorage.getItem("calendarDate_" + this.props.assignment_id + "_1")) {
+			let formatted_date = localStorage.getItem("calendarDate_" + this.props.assignment_id + "_1");
+			var new_date = new Date(formatted_date)
+
+			this.deadline_1 = moment(new_date).format('l') + ", " + moment(new_date).format('LTS')
+		}
+
+		if (localStorage.getItem("calendarDate_" + this.props.assignment_id + "_2")) {
+			let formatted_date = localStorage.getItem("calendarDate_" + this.props.assignment_id + "_2");
+			var new_date = new Date(formatted_date)
+
+			this.deadline_2 = moment(new_date).format('l') + ", " + moment(new_date).format('LTS')
+		}
+
+		if (localStorage.getItem("calendarDate_" + this.props.assignment_id + "_3")) {
+			let formatted_date = localStorage.getItem("calendarDate_" + this.props.assignment_id + "_3");
+			var new_date = new Date(formatted_date)
+
+			this.deadline_3 = moment(new_date).format('l') + ", " + moment(new_date).format('LTS')
 		}
 
 		setInterval(() => {
@@ -153,6 +214,29 @@ class AnalyzeButton extends Component {
 		},
 			1000
 		)
+	}
+
+	componentDidUpdate() {
+		if (localStorage.getItem("calendarDate_" + this.props.assignment_id + "_1")) {
+			let formatted_date = localStorage.getItem("calendarDate_" + this.props.assignment_id + "_1");
+			var new_date = new Date(formatted_date)
+
+			this.deadline_1 = moment(new_date).format('l') + ", " + moment(new_date).format('LTS')
+		}
+
+		if (localStorage.getItem("calendarDate_" + this.props.assignment_id + "_2")) {
+			let formatted_date = localStorage.getItem("calendarDate_" + this.props.assignment_id + "_2");
+			var new_date = new Date(formatted_date)
+
+			this.deadline_2 = moment(new_date).format('l') + ", " + moment(new_date).format('LTS')
+		}
+
+		if (localStorage.getItem("calendarDate_" + this.props.assignment_id + "_3")) {
+			let formatted_date = localStorage.getItem("calendarDate_" + this.props.assignment_id + "_3");
+			var new_date = new Date(formatted_date)
+
+			this.deadline_3 = moment(new_date).format('l') + ", " + moment(new_date).format('LTS')
+		}
 	}
 
 	render() {
@@ -171,18 +255,18 @@ class AnalyzeButton extends Component {
 								<DueDate
 									name="Due Date 2"
 									assignment_id={this.props.assignment_id}
-									number="2" 
-      								message={message2}/>
+									number="2"
+									message={message2} />
 								:
 								null
 							)}
-{(localStorage.getItem("calendarDate_" + this.props.assignment_id + "_1") &&
-							localStorage.getItem("calendarDate_" + this.props.assignment_id + "_2") ?
+							{(localStorage.getItem("calendarDate_" + this.props.assignment_id + "_1") &&
+								localStorage.getItem("calendarDate_" + this.props.assignment_id + "_2") ?
 								<DueDate
 									name="Due Date 3"
 									assignment_id={this.props.assignment_id}
 									number="3"
-  message={message3}/>
+									message={message3} />
 								:
 								null
 							)}
@@ -195,6 +279,15 @@ class AnalyzeButton extends Component {
 					!this.state.finalizePressed && !this.state.finalizeDisplayText ?
 						<div>
 							<Flexbox className="flex-dropdown" width="300px" flexWrap="wrap" justify-content="space-around"  >
+								<AlgorithmBenchmarks value={this.state.algorithm_benchmarks.WIDTH_OF_STD_DEV_RANGE} min={0} step={0.01} placeholder="WIDTH_OF_STD_DEV_RANGE" />
+								<AlgorithmBenchmarks value={this.state.algorithm_benchmarks.THRESHOLD} min={0} step={.0001} placeholder="THRESHOLD" />
+								<AlgorithmBenchmarks value={this.state.algorithm_benchmarks.COULD_BE_LOWER_BOUND} min={0} max={1} step={.01} placeholder="COULD_BE_LOWER_BOUND" />
+								<AlgorithmBenchmarks value={this.state.algorithm_benchmarks.COULD_BE_UPPER_BOUND} min={1} max={5} step={.01} placeholder="COULD_BE_UPPER_BOUND" />
+								<AlgorithmBenchmarks value={this.state.algorithm_benchmarks.MIN_NUMBER_OF_REVIEWS_PER_STUDENT_FOR_CLASSIFICATION} min={0} step={1} placeholder="MIN_NUMBER_OF_REVIEWS_PER_STUDENT_FOR_CLASSIFICATION" />
+								<AlgorithmBenchmarks value={this.state.algorithm_benchmarks.MIN_NUMBER_OF_ASSIGNMENTS_IN_COURSE_FOR_CLASSIFICATION} min={0} step={1} placeholder="MIN_NUMBER_OF_ASSIGNMENTS_IN_COURSE_FOR_CLASSIFICATION" />
+								<AlgorithmBenchmarks value={this.state.algorithm_benchmarks.MIN_NUMBER_OF_REVIEWS_FOR_SINGLE_SUBMISSION_FOR_GRADING} min={0} step={1} placeholder="MIN_NUMBER_OF_REVIEWS_FOR_SINGLE_SUBMISSION_FOR_GRADING" />
+								<AlgorithmBenchmarks value={this.state.algorithm_benchmarks.MIN_RATIO_OF_COMPLETED_TO_ASSIGNED_REVIEWS_FOR_SINGLE_SUBMISSION_FOR_GRADING} min={0} max={1} step={.001} placeholder="MIN_RATIO_OF_COMPLETED_TO_ASSIGNED_REVIEWS_FOR_SINGLE_SUBMISSION_FOR_GRADING" />
+								<br></br>
 								<span id="analyze-button-1">
 									<button onClick={this.handleAnalyzeClick} className="analyze" id="analyze">Analyze</button>
 								</span>
@@ -221,6 +314,7 @@ class AnalyzeButton extends Component {
 								course_id={this.props.course_id}
 								assignment_id={this.props.assignment_id}
 								pressed={true}
+								benchmarks={this.state.algorithm_benchmarks}
 							/>
 							{
 								this.setState({
@@ -240,6 +334,8 @@ class AnalyzeButton extends Component {
 								course_id={this.props.course_id}
 								assignment_id={this.props.assignment_id}
 								pressed={false}
+								benchmarks={this.state.algorithm_benchmarks}
+								progress={100}
 							/>
 						</div>
 						:
@@ -252,6 +348,7 @@ class AnalyzeButton extends Component {
 							course_id={this.props.course_id}
 							assignment_id={this.props.assignment_id}
 							pressed={false}
+							benchmarks={this.state.algorithm_benchmarks}
 						/>
 						:
 						null
@@ -264,6 +361,7 @@ class AnalyzeButton extends Component {
 								course_id={this.props.course_id}
 								assignment_id={this.props.assignment_id}
 								pressed={true}
+								benchmarks={this.state.algorithm_benchmarks}
 							/>
 							{
 								this.setState({
@@ -277,7 +375,7 @@ class AnalyzeButton extends Component {
 				}
 
 				{
-					localStorage.getItem("calendarDate_" + this.props.assignment_id + "_1") != null && localStorage.getItem("calendarDate_" + this.props.assignment_id + "_1") == this.state.curr_time ?
+					this.deadline_1 != null && this.deadline_1 == this.state.curr_time ?
 						<div>
 							{console.log("due date 1")}
 							{this.sendIncompleteMessages()}
@@ -286,7 +384,7 @@ class AnalyzeButton extends Component {
 						null
 				}
 				{
-					localStorage.getItem("calendarDate_" + this.props.assignment_id + "_2") != null && localStorage.getItem("calendarDate_" + this.props.assignment_id + "_2") == this.state.curr_time && !this.state.assigned_new_peer_reviews && !this.state.deleted_old_peer_reviews ?
+					this.deadline_2 != null && this.deadline_2 == this.state.curr_time && !this.state.assigned_new_peer_reviews && !this.state.deleted_old_peer_reviews ?
 						<div>
 							{console.log("due date 2")}
 							{this.deleteOldPeerReviews()}
@@ -295,7 +393,7 @@ class AnalyzeButton extends Component {
 						null
 				}
 				{
-					localStorage.getItem("calendarDate_" + this.props.assignment_id + "_3") != null && localStorage.getItem("calendarDate_" + this.props.assignment_id + "_3") == this.state.curr_time && !this.state.finalizePressed ?
+					this.deadline_3 != null && this.deadline_3 == this.state.curr_time && !this.state.finalizePressed ?
 						<div>
 							{console.log("due date 3")}
 							{this.handleFinalizeClick()}

@@ -33,6 +33,7 @@ class StudentInfo extends Component {
         this.selectPeerReview = this.selectPeerReview.bind(this);
         this.pullPeerReviewData = this.pullPeerReviewData.bind(this);
         this.determineGraphStyles = this.determineGraphStyles.bind(this);
+        this.checkIfStudentExists = this.checkIfStudentExists.bind(this);
 
         this.state = {
             assignments: [],
@@ -68,7 +69,7 @@ class StudentInfo extends Component {
                 datasets: [],
                 options: {},
             },
-
+            student_exists: false,
             graphs_loaded: false,
 
             ...props,
@@ -91,6 +92,7 @@ class StudentInfo extends Component {
         console.log("component mounted!");
         this.setState({ errorMessage: " " })
         this._fetchAssignmentData();
+        this.checkIfStudentExists();
     }
 
     //renders initially
@@ -109,12 +111,39 @@ class StudentInfo extends Component {
                 peer_reviews: [],
                 graphs_loaded: false,
             })
+            this.checkIfStudentExists();
 
-            this.pullPeerReviewData();
             // this._fetchAssignmentData();
         }
     }
 
+    checkIfStudentExists() {
+        let data = {
+            student_id: this.props.location.state.student_id,
+        }
+
+        fetch('/api/check_if_student_exists', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data),
+        })
+            .then(res => res.json())
+            .then(res => {
+                this.setState({
+                    student_exists: res.exists,
+                })
+                if (this.state.student_exists) {
+                    this.pullPeerReviewData();
+                }
+                else {
+                    this.setState({
+                        graphs_loaded: true,
+                    })
+                }
+            })
+    }
 
     //fetches assigment data
     _fetchAssignmentData() {
@@ -140,16 +169,13 @@ class StudentInfo extends Component {
                     history.push("/login")
                     throw new Error();
                 } else {
-                    res.json().then(data => {
-                        this.setState({ assignments: data })
-                    })
+                    res.json()
+                        .then(data => {
+                            this.setState({ assignments: data })
+                        })
                 }
             })
             .catch(err => console.log("Not auth"))
-            .then(() => {
-                this.pullPeerReviewData();
-            })
-
 
         /* NEED TO FETCH STUDENT INFO AND SET STATE TO FETCHED INFO WHEN PROPS ARE UPDATED
          fetch(/api/students)/
@@ -244,6 +270,7 @@ class StudentInfo extends Component {
                     data: [],
                     lineTension: 0,
                     pointBackgroundColor: "#black",
+                    pointRadius: 5,
                 }
             ],
             options: {
@@ -304,6 +331,7 @@ class StudentInfo extends Component {
                     data: [],
                     lineTension: 0,
                     pointBackgroundColor: "#black",
+                    pointRadius: 5,
                 }
             ],
             options: {
@@ -355,6 +383,7 @@ class StudentInfo extends Component {
                     data: [],
                     lineTension: 0,
                     pointBackgroundColor: "#black",
+                    pointRadius: 5,
                 }
             ],
             options: {
@@ -524,9 +553,17 @@ class StudentInfo extends Component {
                 {
                     this.state.graphs_loaded ?
                         <div>
-                            <StudentInfoGraph assignments={this.state.assignments} peer_review_data={this.state.peer_review_data} category="bucket" data={this.state.bucket_data} />
-                            <StudentInfoGraph assignments={this.state.assignments} peer_review_data={this.state.peer_review_data} category="weight" data={this.state.weight_data} />
-                            <StudentInfoGraph assignments={this.state.assignments} peer_review_data={this.state.peer_review_data} category="number_completed" data={this.state.number_of_reviews_completed_data} />
+                            {this.state.student_exists ?
+                                <div>
+                                    <StudentInfoGraph assignments={this.state.assignments} peer_review_data={this.state.peer_review_data} category="bucket" data={this.state.bucket_data} />
+                                    <StudentInfoGraph assignments={this.state.assignments} peer_review_data={this.state.peer_review_data} category="weight" data={this.state.weight_data} />
+                                    <StudentInfoGraph assignments={this.state.assignments} peer_review_data={this.state.peer_review_data} category="completion" data={this.state.number_of_reviews_completed_data} />
+                                </div>
+                                :
+                                <div>
+                                    This student does not have any data saved for them at this point. To save data, you must finalize an assignment
+                                </div>
+                            }
                         </div>
                         :
                         <Loader type="TailSpin" color="black" height={80} width={80} />
