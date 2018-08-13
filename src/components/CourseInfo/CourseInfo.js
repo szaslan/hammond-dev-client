@@ -83,12 +83,8 @@ class CourseInfo extends Component {
         return (
             <div>          
                 <JumbotronComp  mainTitle= {this.state.courseJSON.name}
-                secondaryTitle="&nbsp;"/>
+                tabs/>
                 
-                <Breadcrumb className="breadcrumb1">
-                    <Breadcrumb.Item className="breadcrumb-item" href="/courses/">Home</Breadcrumb.Item>
-                    <Breadcrumb.Item className="breadcrumb-item breadcrumb-item1" active>{this.state.courseJSON.name}</Breadcrumb.Item>
-                </Breadcrumb>
                 {this.state.loaded ? 
                 <Container className="well1-container" fluid>
                     <Flexbox className="big-buttons-flexbox" minWidth="700px" width="60vw" justifyContent="center"

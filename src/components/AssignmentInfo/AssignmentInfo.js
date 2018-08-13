@@ -4,7 +4,7 @@ import Loader from 'react-loader-spinner'
 import { Well, Row, Col, Breadcrumb } from 'react-bootstrap';
 import AnalyzeButton from '../AnalyzeButton/AnalyzeButton';
 import { getCiphers } from 'crypto';
-import CalendarComp from '../CalendarComp/CalendarComp';
+
 import DueDate from '../DueDate/DueDate';
 
 function FilterRubricAssessments(props) {
