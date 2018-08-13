@@ -8,7 +8,6 @@ import AnalyzeResults from '../AnalyzeResults/AnalyzeResults';
 import DueDate from '../DueDate/DueDate';
 import moment from 'moment';
 
-import '../Assignments/Assignments.css'
 import AlgorithmBenchmarks from '../AlgorithmBenchmarks/AlgorithmBenchmarks';
 
 //var message1 = "Click the button to set the first due date. This due date represents when all peer reviews are due by. Any peer review submitted to Canvas after this date will be considered late. At the time of the due date, all peer reviews are downloaded from Canvas. Any student who has not yet completed all their peer reviews for the assignment will get a Canvas message reminding them that they are now late and still need to complete x number of peer reviews.";
@@ -32,6 +31,10 @@ class AnalyzeButton extends Component {
 			deleted_old_peer_reviews: false,
 			tooltipOpen1: false,
 			tooltipOpen2: false,
+			sendIncompleteMessages: false,
+			custom_benchmarks: false,
+			penalizing_for_incompletes: false,
+			penalizing_for_reassigned: false,
 
 			algorithm_benchmarks: {
 				WIDTH_OF_STD_DEV_RANGE: 0.10,
@@ -50,6 +53,7 @@ class AnalyzeButton extends Component {
 		this.deleteOldPeerReviews = this.deleteOldPeerReviews.bind(this);
 		this.handleAnalyzeClick = this.handleAnalyzeClick.bind(this);
 		this.handleFinalizeClick = this.handleFinalizeClick.bind(this);
+		this.handleInputChange = this.handleInputChange.bind(this);
 		this.deadline_1 = null;
 		this.deadline_2 = null;
 		this.deadline_3 = null;
@@ -74,15 +78,13 @@ class AnalyzeButton extends Component {
 			body: JSON.stringify(data)
 		})
 			.then(() => {
-				if (window.confirm('Do you want to Canvas message each student with missing peer reviews?')) {
-					fetch('/api/send_incomplete_messages', {
-						method: 'POST',
-						headers: {
-							'Content-Type': 'application/json'
-						},
-						body: JSON.stringify(data),
-					})
-				}
+				fetch('/api/send_incomplete_messages', {
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/json'
+					},
+					body: JSON.stringify(data),
+				})
 			})
 	}
 
@@ -152,6 +154,23 @@ class AnalyzeButton extends Component {
 		this.setState({ finalizePressed: true })
 	}
 
+	handleInputChange(event) {
+		const target = event.target;
+		const value = target.type === 'checkbox' ? target.checked : target.value;
+		const name = target.name;
+
+		if (value) {
+			localStorage.setItem(name + "_" + this.props.assignment_id, value)
+		}
+		else {
+			localStorage.removeItem(name + "_" + this.props.assignment_id)
+		}
+
+		this.setState({
+			[name]: value
+		});
+	}
+
 	componentDidMount() {
 		console.log("mounted")
 
@@ -161,7 +180,7 @@ class AnalyzeButton extends Component {
 				analyzeDisplayText: true
 			})
 
-			if (localStorage.getItem("analyzeDisplayTextMessage_" + this.props.assignment_id) && localStorage.getItem("analyzeDisplayTextMessage_" + this.props.assignment_id) == "All reviews accounted for"){
+			if (localStorage.getItem("analyzeDisplayTextMessage_" + this.props.assignment_id) && localStorage.getItem("analyzeDisplayTextMessage_" + this.props.assignment_id) == "All reviews accounted for") {
 				console.log("all peer reviews are in, so we can finalize this assignment")
 				// this.handleFinalizeClick()
 			}
@@ -177,14 +196,14 @@ class AnalyzeButton extends Component {
 			},
 			body: JSON.stringify(data)
 		})
-		.then(response => {
-			if (response.status == 200) {
-				this.setState({
-					finalizeDisplayText: true,
-					finalizePressed: true
-				})
-			}
-		})
+			.then(response => {
+				if (response.status == 200) {
+					this.setState({
+						finalizeDisplayText: true,
+						finalizePressed: true
+					})
+				}
+			})
 
 		if (localStorage.getItem("calendarDate_" + this.props.assignment_id + "_1")) {
 			let formatted_date = localStorage.getItem("calendarDate_" + this.props.assignment_id + "_1");
@@ -206,6 +225,33 @@ class AnalyzeButton extends Component {
 
 			this.deadline_3 = moment(new_date).format('l') + ", " + moment(new_date).format('LTS')
 		}
+
+		if (localStorage.getItem("sendIncompleteMessages_" + this.props.assignment_id)) {
+			if (!this.state.sendIncompleteMessages) {
+				this.setState({ sendIncompleteMessages: true })
+			}
+		}
+		if (localStorage.getItem("custom_benchmarks_" + this.props.assignment_id)) {
+			if (!this.state.custom_benchmarks) {
+				this.setState({ custom_benchmarks: true })
+			}
+		}
+		if (localStorage.getItem("penalizing_for_incompletes_" + this.props.assignment_id)) {
+			if (!this.state.penalizing_for_incompletes) {
+				this.setState({
+					penalizing_for_incompletes: true
+				})
+			}
+		}
+		if (localStorage.getItem("penalizing_for_reassigned_" + this.props.assignment_id)) {
+			if (!this.state.penalizing_for_reassigned) {
+				this.setState({
+					penalizing_for_reassigned: true
+				})
+			}
+		}
+
+
 
 		setInterval(() => {
 			this.setState({
@@ -237,6 +283,30 @@ class AnalyzeButton extends Component {
 
 			this.deadline_3 = moment(new_date).format('l') + ", " + moment(new_date).format('LTS')
 		}
+		if (localStorage.getItem("sendIncompleteMessages_" + this.props.assignment_id)) {
+			if (!this.state.sendIncompleteMessages) {
+				this.setState({ sendIncompleteMessages: true })
+			}
+		}
+		if (localStorage.getItem("custom_benchmarks_" + this.props.assignment_id)) {
+			if (!this.state.custom_benchmarks) {
+				this.setState({ custom_benchmarks: true })
+			}
+		}
+		if (localStorage.getItem("penalizing_for_incompletes_" + this.props.assignment_id)) {
+			if (!this.state.penalizing_for_incompletes) {
+				this.setState({
+					penalizing_for_incompletes: true
+				})
+			}
+		}
+		if (localStorage.getItem("penalizing_for_reassigned_" + this.props.assignment_id)) {
+			if (!this.state.penalizing_for_reassigned) {
+				this.setState({
+					penalizing_for_reassigned: true
+				})
+			}
+		}
 	}
 
 	render() {
@@ -245,49 +315,67 @@ class AnalyzeButton extends Component {
 				{
 					!this.state.finalizePressed ?
 						<div className="assignment-info-content">
-							<DueDate
-								name="Due Date 1"
-								assignment_id={this.props.assignment_id}
-
-								number="1"
-								message={message1} />
-							{(localStorage.getItem("calendarDate_" + this.props.assignment_id + "_1") ?
-								<DueDate
-									name="Due Date 2"
-									assignment_id={this.props.assignment_id}
-									number="2"
-									message={message2} />
+							<DueDate name="Due Date 1" assignment_id={this.props.assignment_id} number="1" message={message1} />
+							{localStorage.getItem("calendarDate_" + this.props.assignment_id + "_1") ?
+								<DueDate name="Due Date 2" assignment_id={this.props.assignment_id} number="2" message={message2} />
 								:
 								null
-							)}
-							{(localStorage.getItem("calendarDate_" + this.props.assignment_id + "_1") &&
-								localStorage.getItem("calendarDate_" + this.props.assignment_id + "_2") ?
-								<DueDate
-									name="Due Date 3"
-									assignment_id={this.props.assignment_id}
-									number="3"
-									message={message3} />
+							}
+							{localStorage.getItem("calendarDate_" + this.props.assignment_id + "_1") && localStorage.getItem("calendarDate_" + this.props.assignment_id + "_2") ?
+								<DueDate name="Due Date 3" assignment_id={this.props.assignment_id} number="3" message={message3} />
 								:
 								null
-							)}
-
+							}
 						</div>
 						:
 						null
 				}
 				{
+					<form>
+						<label>
+							<input name="sendIncompleteMessages" type="checkbox" checked={this.state.sendIncompleteMessages} onChange={this.handleInputChange} />
+							Send Messages to All Students Who Have Incomplete Peer Reviews At Due Date 1?:
+						</label>
+						<br></br>
+						<label>
+							<input name="custom_benchmarks" type="checkbox" checked={this.state.custom_benchmarks} onChange={this.handleInputChange} />
+							Custom Benchmarks For Grading Algorithm?:
+						</label>
+						<label>
+							<input name="penalizing_for_incompletes" type="checkbox" checked={this.state.penalizing_for_incompletes} onChange={this.handleInputChange} />
+							Would You Like to Penalize Students' Weights For Incomplete Peer Reviews?:
+						</label>
+						{
+							this.state.penalizing_for_incompletes ?
+								<label>
+									<input name="penalizing_for_reassigned" type="checkbox" checked={this.state.penalizing_for_reassigned} onChange={this.handleInputChange} />
+									Would You Like to Penalize For Peer Reviews That Were Reassigned, But Not Completed?:
+								</label>
+								:
+								null
+						}
+
+					</form>
+				}
+				{
 					!this.state.finalizePressed && !this.state.finalizeDisplayText ?
 						<div>
 							<Flexbox className="flex-dropdown" width="300px" flexWrap="wrap" justify-content="space-around"  >
-								<AlgorithmBenchmarks value={this.state.algorithm_benchmarks.WIDTH_OF_STD_DEV_RANGE} min={0} step={0.01} placeholder="WIDTH_OF_STD_DEV_RANGE" />
-								<AlgorithmBenchmarks value={this.state.algorithm_benchmarks.THRESHOLD} min={0} step={.0001} placeholder="THRESHOLD" />
-								<AlgorithmBenchmarks value={this.state.algorithm_benchmarks.COULD_BE_LOWER_BOUND} min={0} max={1} step={.01} placeholder="COULD_BE_LOWER_BOUND" />
-								<AlgorithmBenchmarks value={this.state.algorithm_benchmarks.COULD_BE_UPPER_BOUND} min={1} max={5} step={.01} placeholder="COULD_BE_UPPER_BOUND" />
-								<AlgorithmBenchmarks value={this.state.algorithm_benchmarks.MIN_NUMBER_OF_REVIEWS_PER_STUDENT_FOR_CLASSIFICATION} min={0} step={1} placeholder="MIN_NUMBER_OF_REVIEWS_PER_STUDENT_FOR_CLASSIFICATION" />
-								<AlgorithmBenchmarks value={this.state.algorithm_benchmarks.MIN_NUMBER_OF_ASSIGNMENTS_IN_COURSE_FOR_CLASSIFICATION} min={0} step={1} placeholder="MIN_NUMBER_OF_ASSIGNMENTS_IN_COURSE_FOR_CLASSIFICATION" />
-								<AlgorithmBenchmarks value={this.state.algorithm_benchmarks.MIN_NUMBER_OF_REVIEWS_FOR_SINGLE_SUBMISSION_FOR_GRADING} min={0} step={1} placeholder="MIN_NUMBER_OF_REVIEWS_FOR_SINGLE_SUBMISSION_FOR_GRADING" />
-								<AlgorithmBenchmarks value={this.state.algorithm_benchmarks.MIN_RATIO_OF_COMPLETED_TO_ASSIGNED_REVIEWS_FOR_SINGLE_SUBMISSION_FOR_GRADING} min={0} max={1} step={.001} placeholder="MIN_RATIO_OF_COMPLETED_TO_ASSIGNED_REVIEWS_FOR_SINGLE_SUBMISSION_FOR_GRADING" />
-								<br></br>
+								{this.state.custom_benchmarks ?
+									<div>
+										<AlgorithmBenchmarks value={this.state.algorithm_benchmarks.WIDTH_OF_STD_DEV_RANGE} min={0} step={0.01} placeholder="WIDTH_OF_STD_DEV_RANGE" />
+										<AlgorithmBenchmarks value={this.state.algorithm_benchmarks.THRESHOLD} min={0} step={.0001} placeholder="THRESHOLD" />
+										<AlgorithmBenchmarks value={this.state.algorithm_benchmarks.COULD_BE_LOWER_BOUND} min={0} max={1} step={.01} placeholder="COULD_BE_LOWER_BOUND" />
+										<AlgorithmBenchmarks value={this.state.algorithm_benchmarks.COULD_BE_UPPER_BOUND} min={1} max={5} step={.01} placeholder="COULD_BE_UPPER_BOUND" />
+										<AlgorithmBenchmarks value={this.state.algorithm_benchmarks.MIN_NUMBER_OF_REVIEWS_PER_STUDENT_FOR_CLASSIFICATION} min={0} step={1} placeholder="MIN_NUMBER_OF_REVIEWS_PER_STUDENT_FOR_CLASSIFICATION" />
+										<AlgorithmBenchmarks value={this.state.algorithm_benchmarks.MIN_NUMBER_OF_ASSIGNMENTS_IN_COURSE_FOR_CLASSIFICATION} min={0} step={1} placeholder="MIN_NUMBER_OF_ASSIGNMENTS_IN_COURSE_FOR_CLASSIFICATION" />
+										<AlgorithmBenchmarks value={this.state.algorithm_benchmarks.MIN_NUMBER_OF_REVIEWS_FOR_SINGLE_SUBMISSION_FOR_GRADING} min={0} step={1} placeholder="MIN_NUMBER_OF_REVIEWS_FOR_SINGLE_SUBMISSION_FOR_GRADING" />
+										<AlgorithmBenchmarks value={this.state.algorithm_benchmarks.MIN_RATIO_OF_COMPLETED_TO_ASSIGNED_REVIEWS_FOR_SINGLE_SUBMISSION_FOR_GRADING} min={0} max={1} step={.001} placeholder="MIN_RATIO_OF_COMPLETED_TO_ASSIGNED_REVIEWS_FOR_SINGLE_SUBMISSION_FOR_GRADING" />
+										<br></br>
+									</div>
+									:
+									null
+								}
 								<span id="analyze-button-1">
 									<button onClick={this.handleAnalyzeClick} className="analyze" id="analyze">Analyze</button>
 								</span>
@@ -309,12 +397,7 @@ class AnalyzeButton extends Component {
 					this.state.finalizePressed && !this.state.finalizeDisplayText ?
 						<div>
 							{console.log("finalize pressed")}
-							<FinalizeResults
-								assignment_info={this.props.assignment_info}
-								course_id={this.props.course_id}
-								assignment_id={this.props.assignment_id}
-								pressed={true}
-								benchmarks={this.state.algorithm_benchmarks}
+							<FinalizeResults penalizing_for_incompletes={this.state.penalizing_for_incompletes} penalizing_for_reassigned={this.state.penalizing_for_reassigned} assignment_info={this.props.assignment_info} course_id={this.props.course_id} assignment_id={this.props.assignment_id} pressed={true} benchmarks={this.state.algorithm_benchmarks}
 							/>
 							{
 								this.setState({
@@ -329,13 +412,7 @@ class AnalyzeButton extends Component {
 				{
 					this.state.finalizePressed && this.state.finalizeDisplayText ?
 						<div>
-							<FinalizeResults
-								assignment_info={this.props.assignment_info}
-								course_id={this.props.course_id}
-								assignment_id={this.props.assignment_id}
-								pressed={false}
-								benchmarks={this.state.algorithm_benchmarks}
-								progress={100}
+							<FinalizeResults penalizing_for_incompletes={this.state.penalizing_for_incompletes} penalizing_for_reassigned={this.state.penalizing_for_reassigned} assignment_info={this.props.assignment_info} course_id={this.props.course_id} assignment_id={this.props.assignment_id} pressed={false} benchmarks={this.state.algorithm_benchmarks} progress={100}
 							/>
 						</div>
 						:
@@ -343,12 +420,7 @@ class AnalyzeButton extends Component {
 				}
 				{
 					!this.state.finalizePressed && this.state.analyzeDisplayText ?
-						<AnalyzeResults
-							assignment_info={this.props.assignment_info}
-							course_id={this.props.course_id}
-							assignment_id={this.props.assignment_id}
-							pressed={false}
-							benchmarks={this.state.algorithm_benchmarks}
+						<AnalyzeResults assignment_info={this.props.assignment_info} course_id={this.props.course_id} assignment_id={this.props.assignment_id} pressed={false} benchmarks={this.state.algorithm_benchmarks}
 						/>
 						:
 						null
@@ -356,12 +428,7 @@ class AnalyzeButton extends Component {
 				{
 					!this.state.finalizePressed && this.state.analyzePressed ?
 						<div>
-							<AnalyzeResults
-								assignment_info={this.props.assignment_info}
-								course_id={this.props.course_id}
-								assignment_id={this.props.assignment_id}
-								pressed={true}
-								benchmarks={this.state.algorithm_benchmarks}
+							<AnalyzeResults assignment_info={this.props.assignment_info} course_id={this.props.course_id} assignment_id={this.props.assignment_id} pressed={true} benchmarks={this.state.algorithm_benchmarks}
 							/>
 							{
 								this.setState({
@@ -375,7 +442,7 @@ class AnalyzeButton extends Component {
 				}
 
 				{
-					this.deadline_1 != null && this.deadline_1 == this.state.curr_time ?
+					this.deadline_1 != null && this.deadline_1 == this.state.curr_time && this.state.sendIncompleteMessages ?
 						<div>
 							{console.log("due date 1")}
 							{this.sendIncompleteMessages()}

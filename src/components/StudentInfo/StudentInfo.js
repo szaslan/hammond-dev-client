@@ -3,7 +3,6 @@ import './StudentInfo.css';
 import Loader from 'react-loader-spinner'
 import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 import history from '../../history'
-import ChartJS from 'react-chartjs-wrapper';
 import StudentInfoGraph from '../StudentInfoGraph/StudentInfoGraph'
 
 //filter for only peer reviewable assignments
@@ -213,11 +212,6 @@ class StudentInfo extends Component {
 
                         console.log(data);
                         get.setState({ peer_reviews: data })
-                        // if (get.state.peer_reviews == []){
-                        //     get.setState({errorMessage: "No peer reviews for this student!"})
-                        //     console.log(get.state.errorMessage)
-
-                        // }
                     })
                 } else {
 
@@ -261,7 +255,7 @@ class StudentInfo extends Component {
     }
 
     determineGraphStyles() {
-        let bucket_history = {
+        var bucket_history = {
             labels: [],
             datasets: [
                 {
@@ -371,7 +365,7 @@ class StudentInfo extends Component {
                             labelString: 'Assignments:'
                         },
                     }],
-                }
+                },
             }
         };
         let number_of_reviews_completed_history = {

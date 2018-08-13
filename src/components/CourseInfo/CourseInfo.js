@@ -24,21 +24,11 @@ class CourseInfo extends Component {
         }
 
         this.CreateTables = this.CreateTables.bind(this);
-        this.DeleteTables = this.DeleteTables.bind(this);
         this.ResetTables = this.ResetTables.bind(this);
 
     }
     CreateTables() {
         fetch('/api/create_tables', {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-        })
-    }
-
-    DeleteTables() {
-        fetch('/api/delete_tables', {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json'
@@ -139,9 +129,7 @@ class CourseInfo extends Component {
                     <Loader type="TailSpin" color="black" height={80} width={80} />
                 }
 
-                <button onClick={this.CreateTables}>Create Database Tables</button>
                 <button onClick={this.ResetTables}>Reset Database Tables</button>
-                <button onClick={this.DeleteTables}>Delete Database Tables</button>
             </div>
 
         );

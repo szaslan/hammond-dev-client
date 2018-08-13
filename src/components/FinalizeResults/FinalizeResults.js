@@ -27,6 +27,8 @@ class FinalizeResults extends Component {
             sectorValue1: "",
             sectorValue2: "",
             benchmarks: this.props.benchmarks,
+            penalizing_for_incompletes: false,
+            penalizing_for_reassigned: false,
         };
 
         this.savePeerReviewsFromCanvasToDatabase = this.savePeerReviewsFromCanvasToDatabase.bind(this);
@@ -40,7 +42,7 @@ class FinalizeResults extends Component {
         this.pullBoxPlotFromCanvas = this.pullBoxPlotFromCanvas.bind(this);
         this.findCompletedAllReviews = this.findCompletedAllReviews.bind(this);
         this.toggle = this.toggle.bind(this);
-       
+
 
     }
 
@@ -110,7 +112,10 @@ class FinalizeResults extends Component {
             assignment_id: this.props.assignment_id,
             points_possible: this.props.assignment_info.points_possible,
             benchmarks: this.state.benchmarks,
+            penalizing_for_incompletes: this.props.penalizing_for_incompletes,
+            penalizing_for_reassigned: this.props.penalizing_for_reassigned,
         }
+        console.log(data)
 
         fetch('/api/peer_reviews_finalizing', {
             method: 'POST',
@@ -316,7 +321,7 @@ class FinalizeResults extends Component {
                                         </Row>
                                         <br></br>
                                         <br></br>
-                                        <Row className = "chart-row">
+                                        <Row className="chart-row">
                                             <Flexbox className="chartbox" flexDirection="column" width="200px" flexWrap="wrap">
                                                 <h5 className="graphTitle">Completion</h5>
                                                 <ReactSvgPieChart className="piechart"
@@ -432,7 +437,7 @@ class FinalizeResults extends Component {
                                             </Well>
                                         </Row>
                                         <br></br>
-                                        <Row className = "chart-row">
+                                        <Row className="chart-row">
                                             <Flexbox className="chartbox" flexDirection="column" width="200px" flexWrap="wrap">
                                                 <h5 className="graphTitle">Completion</h5>
                                                 <ReactSvgPieChart className="piechart"
