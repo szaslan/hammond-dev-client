@@ -39,10 +39,11 @@
   /* ------------Middle Section Settings------------ */
   .well1-container{
       padding-top:15px;
-      width:100vw;
+      width:80vw;
       margin-left:0px;
       min-height:74vh;
   }
+
   .course-button{
     background-color: #ffffff;
     /*background-color:#f2f2f2;*/

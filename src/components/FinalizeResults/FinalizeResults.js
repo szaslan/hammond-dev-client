@@ -7,9 +7,11 @@ import Loader from 'react-loader-spinner';
 import { Boxplot, computeBoxplotStats } from 'react-boxplot';
 import ReactSvgPieChart from "react-svg-piechart";
 import Popup from 'reactjs-popup';
+import SideNav from 'react-simple-sidenav';
 import { Progress, Tooltip } from 'reactstrap';
-
 import '../Assignments/Assignments.css'
+import { Rectangle, Circle, Ellipse, Line, Polyline, CornerBox, Triangle } from 'react-shapes';
+
 
 var progress = 0;
 var progress_bar_message = "";
@@ -279,21 +281,22 @@ class FinalizeResults extends Component {
     }
 
     render() {
+        let currIndex = 0;
         return (
             <div>
-                {
-                    this.props.pressed ?
-                        <div>
-                            {
-                                this.savePeerReviewsFromCanvasToDatabase()
-                            }
-                            {
+                {this.props.pressed ?
+                    <div>
+                        {
+                            this.fetchPeerReviewData()
+                        }
+
+                        {/* {
                                 localStorage.getItem("completed_all_reviews_" + this.props.assignment_id) ?
                                     <div>
 
                                         <strong>Completed Peer Reviews: </strong>{localStorage.getItem("finalizeDisplayTextNumCompleted_" + this.props.assignment_id)} / {localStorage.getItem("finalizeDisplayTextNumAssigned_" + this.props.assignment_id)}
 
-                                        {/* <strong>Completed All Reviews: </strong>{localStorage.getItem("completed_all_reviews_" + this.props.assignment_id)} / {Number(localStorage.getItem("completed_all_reviews_out_of_" + this.props.assignment_id)) + Number(localStorage.getItem("completed_all_reviews_" + this.props.assignment_id))} */}
+                                       
 
                                         <Boxplot
                                             width={400} height={25} orientation="horizontal"
@@ -374,6 +377,7 @@ class FinalizeResults extends Component {
                                     :
                                     <Loader type="TailSpin" color="black" height={80} width={80} />
                             }
+                        </div> */}
                         </div>
                         :
                         <div>
@@ -381,7 +385,11 @@ class FinalizeResults extends Component {
                                 localStorage.getItem("completed_all_reviews_" + this.props.assignment_id) ?
                                     // localStorage.getItem("harsh_students_" + this.props.assignment_id) && localStorage.getItem("max_" + this.props.assignment_id) ?
                                     <div>
-
+                                        <SideNav
+                                            title="Simple Sidenav"
+                                            items={['Item 1', 'Item 2']}
+                                            showNav={this.state.showNav}
+                                        />
                                         <span className="boxplot" id={"TooltipBoxplot"}>
                                             <Boxplot
                                                 width={400} height={25} orientation="horizontal"
@@ -437,7 +445,7 @@ class FinalizeResults extends Component {
                                             </Well>
                                         </Row>
                                         <br></br>
-                                        <Row className="chart-row">
+                                        <Row>
                                             <Flexbox className="chartbox" flexDirection="column" width="200px" flexWrap="wrap">
                                                 <h5 className="graphTitle">Completion</h5>
                                                 <ReactSvgPieChart className="piechart"
@@ -448,18 +456,31 @@ class FinalizeResults extends Component {
                                                         { value: Number(localStorage.getItem("completed_no_reviews_" + this.props.assignment_id)), color: '#C13C37' },
                                                         { value: Number(localStorage.getItem("completed_some_reviews_" + this.props.assignment_id)), color: '#6A2135' },
                                                     ]}
-                                                    // onSectorHover={() => {
-                                                    //     console.log("You hovered over.");
-                                                    // }}
-                                                    onSectorHover={(d) => {
+                                                          onSectorHover={(d) => {
                                                         if (d) {
                                                             console.log("value: ", d.value);
                                                             this.state.sectorValue1 = d.value;
                                                         }
                                                     }
                                                     }
+                                                          <Well>This is the value of the sector over which you are hovering: {this.state.sectorValue1}</Well>
                                                 />
-                                                <Well>This is the value of the sector over which you are hovering: {this.state.sectorValue1}</Well>
+                                                <br />
+                                                <Row>
+                                                    <Ellipse rx={7} ry={4} fill={{ color: '#E38627' }} strokeWidth={5} />
+                                                    <p className="graphKey">Completed all reviews</p>
+                                                </Row>
+                                                <Row>
+                                                    <Ellipse rx={7} ry={4} fill={{ color: '#C13C37' }} strokeWidth={5} />
+                                                    <p className="graphKey">Completed some reviews</p>
+                                                </Row>
+                                                <Row>
+                                                    <Ellipse rx={7} ry={4} fill={{ color: '#6A2135' }} strokeWidth={5} />
+                                                    <p className="graphKey">Completed no reviews</p>
+                                                </Row>
+
+                                                    
+                                                />
                                             </Flexbox>
                                             <Flexbox className="chartbox" flexDirection="column" width="200px" flexWrap="wrap">
                                                 <h5 className="graphTitle">Grading Classification</h5>
@@ -484,6 +505,37 @@ class FinalizeResults extends Component {
                                                     }
                                                 />
                                                 <Well>This is the value of the sector over which you are hovering: {this.state.sectorValue2}</Well>
+                                                    ]}
+                                                />
+                                                <br />
+                                                <Row>
+                                                    <Ellipse rx={7} ry={4} fill={{ color: '#C9CBA3' }} strokeWidth={5} />
+                                                    <p className="graphKey">Definitely Harsh</p>
+                                                </Row>
+                                                <Row>
+                                                    <Ellipse rx={7} ry={4} fill={{ color: '#FFE1A8' }} strokeWidth={5} />
+                                                    <p className="graphKey">Might be Harsh</p>
+                                                </Row>
+                                                <Row>
+                                                    <Ellipse rx={7} ry={4} fill={{ color: '#E26D5C' }} strokeWidth={5} />
+                                                    <p className="graphKey">Definitely Lenient</p>
+                                                </Row>
+                                                <Row>
+                                                    <Ellipse rx={7} ry={4} fill={{ color: '#723D46' }} strokeWidth={5} />
+                                                    <p className="graphKey">Might be Lenient</p>
+                                                </Row>
+                                                <Row>
+                                                    <Ellipse rx={7} ry={4} fill={{ color: '#472D30' }} strokeWidth={5} />
+                                                    <p className="graphKey">Definitely Fair</p>
+                                                </Row>
+                                                <Row>
+                                                    <Ellipse rx={7} ry={4} fill={{ color: '#C197278' }} strokeWidth={5} />
+                                                    <p className="graphKey">Might be Fair</p>
+                                                </Row>
+                                                <Row>
+                                                    <Ellipse rx={7} ry={4} fill={{ color: '#772E25' }} strokeWidth={5} />
+                                                    <p className="graphKey">Spazzy</p>
+                                                </Row>
                                             </Flexbox>
                                         </Row>
                                     </div>
@@ -491,9 +543,9 @@ class FinalizeResults extends Component {
                                     <Progress value={progress}> {progress_bar_message} </Progress>
                             }
                         </div>
-                }
+                        }
             </div>
         )
-    }
-}
-export default FinalizeResults;
+                }
+            }
+            export default FinalizeResults;

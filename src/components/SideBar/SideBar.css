@@ -1,0 +1,68 @@
+root: {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    overflow: hidden;
+  }
+
+  sidebar: {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+  }
+
+  content: {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+  }
+
+  overlay: {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    opacity: 0;
+    visibility: hidden;
+  }
+
+  dragHandle: {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+  }
+
+.signoutbutton{
+  border:none;
+  border-radius: 3px;
+  /*box-shadow:2px 2px gray;*/
+  /* padding:5px;
+  padding-left:7px;
+  padding-right:7px; */
+  background-color: white;
+  font-size:12px;
+  color:black;
+  font-size: 14px;
+  width:75px;
+  height: 30px;
+  font-family: 'Open Sans';
+  position: absolute;
+  bottom: 10px;
+  left: 10px;
+}
+
+.logo{
+  margin: 20px;
+}
+
+.sidebarcontent{
+  font-family:'Open Sans';
+  font-weight: 100;
+  color: #8B8B8B;
+  padding: 20px;
+}

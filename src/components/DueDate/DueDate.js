@@ -4,7 +4,6 @@ import moment from 'moment';
 import React, { Component } from 'react';
 import InputMoment from 'input-moment';
 import './DueDate.css';
-import '../CalendarComp/CalendarComp.css';
 import { Tooltip } from 'reactstrap';
 import { Alert } from 'react-bootstrap';
 

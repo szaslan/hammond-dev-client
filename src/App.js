@@ -12,6 +12,7 @@ import UserRegistration from './components/UserRegistration/UserRegistration';
 import history from './history'
 import Landing from './components/Landing/Landing';
 import StudentInfo from './components/StudentInfo/StudentInfo';
+import CourseInfoComp from './components/CourseInfoComp/CourseInfoComp';
 import NotFound from './components/NotFound/NotFound';
 import AuthenticatedComponent from './components/AuthenticatedComponent/AuthenticatedComponent';
 
@@ -44,7 +45,8 @@ class App extends Component {
           <Route path="/courses/:course_id/:assignment_name/students"  component={CourseStudents}/>
 
           <Route path="/courses/:course_id/:assignment_name/students/:student_id" exact component={StudentInfo} />
-
+          
+          {/* <Route path="/courses/:course_id" exact component={CourseInfoComp} /> */}
           {/* <Route component={NotFound} exact/> */}
 
         </div>
