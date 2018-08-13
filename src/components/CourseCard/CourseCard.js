@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { Card, CardImg, CardText, CardBody,
   CardTitle, CardSubtitle, Button } from 'reactstrap';
 import './CourseCard.css'
@@ -20,23 +20,25 @@ function randomColor() {
 }
 
 
-const Example = (props) => {
-  return (
-    <div>
-      <Card className="card">
-        <CardImg className="classcolor" top height="250px;" width="300px;" style={{backgroundColor:randomColor()}} />
-        <CardBody>
-          <CardTitle className="cardtitle">
-          {this.content ?
-            this.content.map(name =>
-                <li>{name}</li>
-            )
-            :
-            "none"}</CardTitle>
-        </CardBody>
-      </Card>
-    </div>
-  );
+class Example extends Component {
+    constructor(props){
+      super(props);
+    }
+
+    render(){
+      return (
+        <div>
+          <Card className="card">
+            <CardImg className="classcolor" top height="250px;" width="300px;" style={{backgroundColor:randomColor()}} />
+            <CardBody>
+              <CardTitle className="cardtitle">
+              {this.props.name}
+                </CardTitle>
+            </CardBody>
+          </Card>
+        </div>
+      );
+    }
 };
 
 export default Example;

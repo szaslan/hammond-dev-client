@@ -10,12 +10,12 @@ class SidebarComp extends React.Component {
     this.state = {
       sidebarOpen: true
     };
-    /*this.onSetSidebarOpen = this.onSetSidebarOpen.bind(this);*/
+    this.onSetSidebarOpen = this.onSetSidebarOpen.bind(this);
   }
 
-  /*onSetSidebarOpen(open) {
+  onSetSidebarOpen(open) {
     this.setState({ sidebarOpen: open });
-  }*/
+  }
 
 
   signOut(){

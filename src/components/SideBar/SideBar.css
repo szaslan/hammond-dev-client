@@ -1,39 +1,38 @@
 root: {
-    position: "absolute";
+    position: absolute;
     top: 0;
     left: 0;
     right: 0;
     bottom: 0;
-    overflow: "hidden";
+    overflow: hidden;
   }
 
   sidebar: {
-    position: "absolute";
+    position: fixed;
     top: 0;
     bottom: 0;
   }
 
   content: {
-    position: "absolute";
+    position: absolute;
     top: 0;
     left: 0;
     right: 0;
     bottom: 0;
-    transition: "left .3s ease-out, right .3s ease-out";
   }
 
   overlay: {
-    position: "fixed";
+    position: fixed;
     top: 0;
     left: 0;
     right: 0;
     bottom: 0;
     opacity: 0;
-    visibility: "hidden";
+    visibility: hidden;
   }
 
   dragHandle: {
-    position: "fixed";
+    position: fixed;
     top: 0;
     bottom: 0;
   }

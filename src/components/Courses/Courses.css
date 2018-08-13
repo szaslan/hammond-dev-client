@@ -40,12 +40,8 @@
   .well1-container{
       padding-top:15px;
       width:80vw;
-      margin-left:50px;
+      margin-left:0px;
       min-height:74vh;
-  }
-
-  .sidebarcontain{
-    width: 200px;
   }
 
   .course-button{
@@ -72,7 +68,7 @@
 }
 
   .well1-flexbox{
-    margin-left:100px!important;
+    margin-left:25px!important;
     margin-top:15px;
   }
 
