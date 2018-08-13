@@ -7,6 +7,8 @@ import { Container, Jumbotron } from 'reactstrap';
 import { Well, Row, Col, Breadcrumb } from 'react-bootstrap';
 import Flexbox from 'flexbox-react';
 import JumbotronComp from '../JumbotronComp/JumbotronComp';
+import App from '../SideBar/SideBar';
+import Example from '../CourseCard/CourseCard';
 
 class Courses extends Component{
     constructor(props){
@@ -87,11 +89,15 @@ class Courses extends Component{
 
         return(
             <div>
-                <JumbotronComp mainTitle ={this.state.user} secondaryTitle="Welcome," />
+                <Container>
+                  <App/>
+                </Container>
+                <JumbotronComp mainTitle ={this.state.user} />
+                <hr/>
                 <Container className="well1-container" fluid>
                         <Flexbox className="well1-flexbox" minWidth="700px" width="90vw"
                             flexWrap="wrap" inline="true">
-                            <h1 className="pagetitle">Courses</h1>
+                            {/*<h1 className="pagetitle">Courses</h1>*/}
                             <Flexbox className="well1-flexbox" minWidth="700px" width="90vw"
                                 flexWrap="wrap" inline="true">
                             {this.state.courses.length > 0
@@ -99,7 +105,7 @@ class Courses extends Component{
                             this.state.courses ?
                                 this.state.courses.map(courses =>
                                     <Link to= {`/courses/${courses.id}`}>
-                                        <button className="course-button">{courses.name}</button>
+                                        <Example name={courses.name}/>
                                     </Link>)
                                     :
                                 null
@@ -112,12 +118,12 @@ class Courses extends Component{
                 </Container>
 
 
-                <Well className="bottom" fluid>
+                {/*<Well className="bottom" fluid>
                     <Container className="bottom-container" fluid>
                         <button className="about-button" >About Us</button>
                         <button className="about-button">About untitled</button>
                     </Container>
-                </Well>
+                </Well>*/}
             </div>
 
         );

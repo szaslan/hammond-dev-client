@@ -33,11 +33,11 @@ class JumbotronComp extends Component {
                                 <h1 className="name">{this.props.mainTitle}</h1>
                             </Row>
                         </Col>
-                        <Col xs={1} className="col2">
+                        {/*<Col xs={1} className="col2">
                             <Link to="/logout">
                                 <button className="pull-right signout-button" onClick={this.signOut}>Sign Out</button>
                             </Link>
-                        </Col>
+                        </Col>*/}
                     </Row>
                 </Container>
             </Jumbotron>
