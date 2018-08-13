@@ -22,9 +22,9 @@ class CourseInfo extends Component {
             loaded: false,
             ...props
         }
-    
+
     }
-    
+
 
     // componentWillMount(){
     //     if(this.state.location.state.auth){
@@ -33,10 +33,10 @@ class CourseInfo extends Component {
     // }
     componentDidMount() {
         const { match: { params } } = this.props;
-        
+
         this.setState({ url: `/courses/${params.course_id}` });
 
-        
+
         var data = {
             course_id: params.course_id,
         }
@@ -49,16 +49,16 @@ class CourseInfo extends Component {
             credentials: 'include',
             body: JSON.stringify(data)
         })
-        
+
         .then(res => {
             if (res.status === 401){
                 console.log("4040404")
                 history.push("/login")
                 throw new Error();
-                
+
                 // return <Redirect to="/" />
                 // window.location.href="/login"
-            }  
+            }
             {
                 res.json().then(data =>
                 {
@@ -78,14 +78,13 @@ class CourseInfo extends Component {
         //     )
         // }
 
-    
-        
+
+
         return (
-            <div>          
+            <div>
                 <JumbotronComp  mainTitle= {this.state.courseJSON.name}
                 tabs/>
-                
-                {this.state.loaded ? 
+                {this.state.loaded ?
                 <Container className="well1-container" fluid>
                     <Flexbox className="big-buttons-flexbox" minWidth="700px" width="60vw" justifyContent="center"
                         minHeight="50vh" flexDirection="column">
@@ -98,7 +97,7 @@ class CourseInfo extends Component {
                             <Link to={{pathname: this.state.url + "/"+this.state.courseJSON.name + "/students", state: {name: this.state.courseJSON.name}}}>
                                 <button className="pull-right big-button">Students</button>
                             </Link>
-                           
+
                         </Flexbox>
                     </Flexbox>
                 </Container>

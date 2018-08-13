@@ -10,7 +10,7 @@ class JumbotronComp extends Component {
     constructor(props) {
         super(props);
         // this.signOut = this.signOut.bind(this);
-        
+
     }
 
     // signOut() {
@@ -47,11 +47,13 @@ class JumbotronComp extends Component {
                 <Container className="jumbo-container" fluid>
                     <p className="main-title">{this.props.mainTitle}</p>
                 </Container>
+                <div className="tabcontain">
                 {this.props.tabs ?
                     <TabsComp/>
                     :
                     <hr className="hr-1"></hr>
                 }
+                </div>
             </Jumbotron>
 
 

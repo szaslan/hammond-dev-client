@@ -19,4 +19,7 @@
 .classcolor{
   border: none !important;
   border-radius: 10px 10px 0px 0px !important;
+  height: 250px;
+
+  width: 300px;
 }
