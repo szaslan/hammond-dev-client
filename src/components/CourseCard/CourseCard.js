@@ -19,8 +19,7 @@ function randomColor() {
   return colors[i];
 }
 
-
-class Example extends Component {
+class CardComp extends Component {
     constructor(props){
       super(props);
     }
@@ -41,4 +40,4 @@ class Example extends Component {
     }
 };
 
-export default Example;
+export default CardComp;
