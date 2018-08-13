@@ -15,16 +15,16 @@ function FilterAssignments(props) {
     const currAssignment = props.currAssigment;
 
 
-    if (currAssignment.peer_reviews){
+    if (currAssignment.peer_reviews) {
         return (
-            <Link className="assignment-link" to={{ pathname: props.link, state: { assignment_id: props.assignment_id, name: props.name, course_id: props.course_id} }} key={props.id}>
+            <Link className="assignment-link" to={{ pathname: props.link, state: { assignment_id: props.assignment_id, name: props.name, course_id: props.course_id } }} key={props.id}>
                 <li key={currAssignment.id} className="assignment-name">{currAssignment.name}</li>
             </Link>
         )
     }
     else {
-        return  <li key={currAssignment.id} className="assignment-name not-pr">{currAssignment.name}</li>
-        ;
+        return <li key={currAssignment.id} className="assignment-name not-pr">{currAssignment.name}</li>
+            ;
     }
 }
 
@@ -44,8 +44,8 @@ function FilterAssignments(props) {
 
 
 
-class Assignments extends Component{
-    constructor(props, context){
+class Assignments extends Component {
+    constructor(props, context) {
         super(props, context);
 
         //URL is the current url while taking in the parameters from the props of the previous url
@@ -63,13 +63,13 @@ class Assignments extends Component{
     //fetch assignments for course with course_id passed down
     componentDidMount() {
         const { match: { params } } = this.props;
-      this.setState({url: `/courses/${params.course_id}/${params.assignment_name}/assignments/`});
-        
+        this.setState({ url: `/courses/${params.course_id}/${params.assignment_name}/assignments/` });
+
         let data = {
             course_id: params.course_id,
         }
 
-        fetch('/api/assignments',{
+        fetch('/api/assignments', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -77,64 +77,67 @@ class Assignments extends Component{
             body: JSON.stringify(data),
             credentials: 'include'
         })
-        .then(res => {
-            if (res.status === 401){
-                console.log("4040404")
-                history.push("/login")
-                throw new Error();
-            } else {
-                res.json().then(data => {
-                    this.setState({assignments: data,
-                                   mounted: true})
-                })
-            }
-        })
-        .catch(err => console.log("Not Authorized.")) 
+            .then(res => {
+                if (res.status === 401) {
+                    console.log("4040404")
+                    history.push("/login")
+                    throw new Error();
+                } else {
+                    res.json()
+                        .then(data => {
+                            this.setState({
+                                assignments: data,
+                                mounted: true
+                            })
+                        })
+                }
+            })
+            .catch(err => console.log("Not Authorized."))
     }
 
-    
 
-   
+
+
 
     render() {
-            return (
-                // <div className="all-assignments">
+        return (
+            // <div className="all-assignments">
 
-                <div>
-                    <JumbotronComp mainTitle="Assignments" secondaryTitle="&nbsp;" />
+            <div>
+                <JumbotronComp mainTitle="Assignments" secondaryTitle="&nbsp;" />
 
-                    <Breadcrumb className="breadcrumb1">
-                        <Breadcrumb.Item className="breadcrumb-item" href="/courses">Home</Breadcrumb.Item>
-                        <Breadcrumb.Item className="breadcrumb-item breadcrumb-item1" href={`/courses/${this.state.match.params.course_id}`}>
-                            {this.props.match.params.assignment_name}
-                        </Breadcrumb.Item>
-                        <Breadcrumb.Item className="breadcrumb-item" active>Assignments</Breadcrumb.Item>
-                    </Breadcrumb>
-                    
-                    <div className="all-assignments">
+                <Breadcrumb className="breadcrumb1">
+                    <Breadcrumb.Item className="breadcrumb-item" href="/courses">Home</Breadcrumb.Item>
+                    <Breadcrumb.Item className="breadcrumb-item breadcrumb-item1" href={`/courses/${this.state.match.params.course_id}`}>
+                        {this.props.match.params.assignment_name}
+                    </Breadcrumb.Item>
+                    <Breadcrumb.Item className="breadcrumb-item" active>Assignments</Breadcrumb.Item>
+                </Breadcrumb>
 
-                        <ul className="assignment-list">
-                                            {this.state.assignments ?
-                
-                    this.state.assignments.map(assignments =>
-                            <FilterAssignments link={this.state.url + assignments.id} assignment_id={assignments.id} name={this.state.match.params.assignment_name} course_id={this.state.match.params.course_id} currAssigment={assignments}  id={assignments.id} />
-                        
-                        // this.state.assignments.map(assignments =>
-                        //     <Link className="assignment-link" to={{ pathname: this.state.url + assignments.id, state: { assignment_id: assignments.id, name: this.state.match.params.assignment_name, course_id: this.state.match.params.course_id } }} key={assignments.id}>
-                        //         <FilterAssignments currAssigment={assignments}   />
-                        //     </Link>       
-                          )
-                      :
-                      <Loader type="TailSpin" color="black" height={80} width={80} />
-                                  }
+                <div className="all-assignments">
 
-                        </ul>
-                    </div>
-                    
+                    <ul className="assignment-list">
+                        {this.state.assignments ?
+
+                            this.state.assignments.map(assignments =>
+                                <FilterAssignments link={this.state.url + assignments.id} assignment_id={assignments.id} name={this.state.match.params.assignment_name} course_id={this.state.match.params.course_id} currAssigment={assignments} id={assignments.id} />
+
+                                // this.state.assignments.map(assignments =>
+                                //     <Link className="assignment-link" to={{ pathname: this.state.url + assignments.id, state: { assignment_id: assignments.id, name: this.state.match.params.assignment_name, course_id: this.state.match.params.course_id } }} key={assignments.id}>
+                                //         <FilterAssignments currAssigment={assignments}   />
+                                //     </Link>       
+                            )
+                            :
+                            <Loader type="TailSpin" color="black" height={80} width={80} />
+                        }
+
+                    </ul>
                 </div>
-            );
-        }
+
+            </div>
+        );
     }
+}
 
 
 export default Assignments;

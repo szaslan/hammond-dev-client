@@ -88,7 +88,13 @@
 .chartbox{
   padding: 10px;
 }
+.chart-row{
+  min-width:500px;
+}
 
+input[type=checkbox] {
+  width: 17px !important;
+}
 
 /* .cardbody1{
   margin-top: 4px;

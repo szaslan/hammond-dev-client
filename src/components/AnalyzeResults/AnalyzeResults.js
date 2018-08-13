@@ -51,6 +51,7 @@ class AnalyzeResults extends Component {
             course_id: this.props.course_id,
             assignment_id: this.props.assignment_id,
             rubric_settings: this.props.assignment_info.rubric_settings.id,
+            benchmarks: this.props.benchmarks,
         }
 
         console.log("5: fetching rubric data from canvas");
@@ -62,6 +63,7 @@ class AnalyzeResults extends Component {
             body: JSON.stringify(data)
         })
             .then(() => {
+                console.log(this.props.benchmarks)
                 fetch('/api/peer_reviews_analyzing', {
                     method: 'POST',
                     headers: {
@@ -114,7 +116,7 @@ class AnalyzeResults extends Component {
         return (
             <div>
                 {
-                    this.props.pressed ?
+                    this.props.pressed?
                         <div>
                             {
                                 this.fetchPeerReviewData()

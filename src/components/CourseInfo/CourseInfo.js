@@ -22,10 +22,27 @@ class CourseInfo extends Component {
             loaded: false,
             ...props
         }
+        this.CreateTables = this.CreateTables.bind(this);
+        this.ResetTables = this.ResetTables.bind(this);
 
     }
+    CreateTables() {
+        fetch('/api/create_tables', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+        })
+    }
 
-
+    ResetTables() {
+        fetch('/api/reset_tables', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+        })
+    }
     // componentWillMount(){
     //     if(this.state.location.state.auth){
     //         this.setState({auth: true})
@@ -41,7 +58,7 @@ class CourseInfo extends Component {
             course_id: params.course_id,
         }
         console.log(data);
-        fetch('/api/courseinfo',{
+        fetch('/api/courseinfo', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -49,24 +66,24 @@ class CourseInfo extends Component {
             credentials: 'include',
             body: JSON.stringify(data)
         })
+            .then(res => {
+                if (res.status === 401) {
+                    console.log("4040404")
+                    history.push("/login")
+                    throw new Error();
 
-        .then(res => {
-            if (res.status === 401){
-                console.log("4040404")
-                history.push("/login")
-                throw new Error();
-
-                // return <Redirect to="/" />
-                // window.location.href="/login"
-            }
-            {
-                res.json().then(data =>
+                    // return <Redirect to="/" />
+                    // window.location.href="/login"
+                }
                 {
-                    this.setState({courseJSON: data, loaded: true})
-                })
-            }
-        })
-        .catch(err => console.log("no auth"))
+                    res.json().then(data => {
+                        this.setState({ courseJSON: data, loaded: true })
+                    })
+                }
+            })
+            .catch(err => console.log("no auth"))
+
+            this.CreateTables();
     }
 
 
@@ -97,13 +114,13 @@ class CourseInfo extends Component {
                             <Link to={{pathname: this.state.url + "/"+this.state.courseJSON.name + "/students", state: {name: this.state.courseJSON.name}}}>
                                 <button className="pull-right big-button">Students</button>
                             </Link>
-
                         </Flexbox>
-                    </Flexbox>
-                </Container>
-                 :
-                 <Loader type="TailSpin" color="black" height={80} width={80} />
-                 }
+                    </Container>
+                    :
+                    <Loader type="TailSpin" color="black" height={80} width={80} />
+                }
+
+                <button onClick={this.ResetTables}>Reset Database Tables</button>
             </div>
 
         );

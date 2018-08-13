@@ -27,6 +27,7 @@ class AssignmentInfo extends Component {
 
 
         this._fetchAssignmentData = this._fetchAssignmentData.bind(this);
+        this.clearLocalStorage = this.clearLocalStorage.bind(this);
         this.state = {
             assignment: [],
             url: '',
@@ -94,6 +95,10 @@ class AssignmentInfo extends Component {
             .then(res => this.setState({ assignment: res }))
     }
 
+    clearLocalStorage() {
+        localStorage.clear()
+    }
+
     render() {
 
         if (this.state.assignment === null)
@@ -110,9 +115,8 @@ class AssignmentInfo extends Component {
                         <div className="assignment-info-title">
                             <p><strong>Title:</strong> {this.state.assignment.name}</p>
                             <button className = "clear-local-button" onClick={this.clearLocalStorage}> Clear Local Storage</button>
-                        </div>
-
-                       
+                        </div> 
+                        <button onClick={this.clearLocalStorage}> Clear Local Storage</button>
                         <br></br>
 
                         <AnalyzeButton
