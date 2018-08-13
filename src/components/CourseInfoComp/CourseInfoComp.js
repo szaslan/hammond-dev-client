@@ -1,9 +1,9 @@
-import './CalendarComp.css';
+import './CourseInfoComp.css';
 import React, { Component } from 'react';
 import JumbotronComp from '../JumbotronComp/JumbotronComp';
 import { Container, Jumbotron, TabContent, TabPane, Nav, NavItem, NavLink, } from 'reactstrap';
 
-class CalendarComp extends Component {
+class CourseInfoComp extends Component {
     render() {
         return (
             <div>
@@ -16,4 +16,4 @@ class CalendarComp extends Component {
     }
 }
 
-export default CalendarComp;
+export default CourseInfoComp;

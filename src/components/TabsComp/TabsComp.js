@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Container, Jumbotron, TabContent, TabPane, Nav, NavItem, NavLink, } from 'reactstrap';
 import classnames from 'classnames';
 import { Row, Col } from 'react-bootstrap';
-
+import AssignmentInfo from '../AssignmentInfo/AssignmentInfo';
 class TabsComp extends Component {
     constructor(props) {
         super(props);
@@ -47,10 +47,10 @@ class TabsComp extends Component {
 
                 <TabContent activeTab={this.state.activeTab}>
                     <TabPane tabId="1">
-                        <h1>Tab 1</h1>
+                        blah 1
                     </TabPane>
                     <TabPane tabId="2">
-                        <h1>Tab 2</h1>
+                        blah 2
                     </TabPane>
                 </TabContent>
             </div>
