@@ -4,7 +4,7 @@ import {Link } from "react-router-dom";
 import './SideBar.css'
 import logo from '../logo.png'
 
-class App extends React.Component {
+class SidebarComp extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -45,10 +45,10 @@ class App extends React.Component {
         transitions={false}
         styles={{ sidebar: {background: "#FFEFE2"} } }
       >
-
+          {this.props.content}
       </Sidebar>
     );
   }
 }
 
-export default App;
+export default SidebarComp;

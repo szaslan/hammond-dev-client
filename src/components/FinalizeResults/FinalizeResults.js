@@ -10,7 +10,7 @@ import ReactSvgPieChart from "react-svg-piechart";
 import Popup from 'reactjs-popup';
 import SideNav from 'react-simple-sidenav';
 import '../Assignments/Assignments.css'
-import {Rectangle, Circle, Ellipse, Line, Polyline, CornerBox, Triangle} from 'react-shapes';
+import { Rectangle, Circle, Ellipse, Line, Polyline, CornerBox, Triangle } from 'react-shapes';
 
 
 var message = "";
@@ -226,23 +226,23 @@ class FinalizeResults extends Component {
     // }
 
     render() {
+        let currIndex = 0;
         return (
             <div>
-                {
-                    this.props.pressed ?
-                        <div>
-                            {
-                                this.fetchPeerReviewData()
-                            }
+                {this.props.pressed ?
+                    <div>
+                        {
+                            this.fetchPeerReviewData()
+                        }
 
-                            {
+                        {/* {
                                 localStorage.getItem("completed_all_reviews_" + this.props.assignment_id) ?
                                     // localStorage.getItem("finalizePressed_" + this.props.assignment_id) && localStorage.getItem("harsh_students_" + this.props.assignment_id) ?
                                     <div>
 
                                         <strong>Completed Peer Reviews: </strong>{localStorage.getItem("finalizeDisplayTextNumCompleted_" + this.props.assignment_id)} / {localStorage.getItem("finalizeDisplayTextNumAssigned_" + this.props.assignment_id)}
 
-                                        {/* <strong>Completed All Reviews: </strong>{localStorage.getItem("completed_all_reviews_" + this.props.assignment_id)} / {Number(localStorage.getItem("completed_all_reviews_out_of_" + this.props.assignment_id)) + Number(localStorage.getItem("completed_all_reviews_" + this.props.assignment_id))} */}
+                                       
 
                                         <Boxplot
                                             width={400} height={25} orientation="horizontal"
@@ -300,6 +300,7 @@ class FinalizeResults extends Component {
                                     :
                                     <Loader type="TailSpin" color="black" height={80} width={80} />
                             }
+                        </div> */}
                         </div>
                         :
                         <div>
@@ -307,10 +308,10 @@ class FinalizeResults extends Component {
                                 localStorage.getItem("completed_all_reviews_" + this.props.assignment_id) ?
                                     // localStorage.getItem("harsh_students_" + this.props.assignment_id) && localStorage.getItem("max_" + this.props.assignment_id) ?
                                     <div>
-                                    <SideNav
-                                      title="Simple Sidenav"
-                                      items={['Item 1', 'Item 2']}
-                                      showNav = {this.state.showNav}
+                                        <SideNav
+                                            title="Simple Sidenav"
+                                            items={['Item 1', 'Item 2']}
+                                            showNav={this.state.showNav}
                                         />
                                         <span className="boxplot" id={"TooltipBoxplot"}>
                                             <Boxplot
@@ -353,97 +354,97 @@ class FinalizeResults extends Component {
                                                     {/*<Accordion name="Flagged Grades" content={JSON.parse(localStorage.getItem("flagged_students_" + this.props.assignment_id))} /> */}
                                                 </Flexbox>
                                                 <Popup className="pop-up"
-                                                  trigger={<button className="button-student"> Flagged Grades </button>}
-                                                  modal
-                                                  closeOnDocumentClick
-                                                  >
-                                                  <span><h5>Flagged Grades</h5></span>
-                                                  <hr />
-                                                  <span>{JSON.parse(localStorage.getItem("flagged_students_" + this.props.assignment_id))}</span>
-                                                  </Popup>
+                                                    trigger={<button className="button-student"> Flagged Grades </button>}
+                                                    modal
+                                                    closeOnDocumentClick
+                                                >
+                                                    <span><h5>Flagged Grades</h5></span>
+                                                    <hr />
+                                                    <span>{JSON.parse(localStorage.getItem("flagged_students_" + this.props.assignment_id))}</span>
+                                                </Popup>
                                             </Well>
                                         </Row>
                                         <br></br>
                                         <Row>
-                                        <Flexbox className="chartbox" flexDirection="column" width="200px" flexWrap="wrap">
-                                        <h5 className="graphTitle">Completion</h5>
-                                        <ReactSvgPieChart className="piechart"
-                                            expandSize={3}
-                                            expandOnHover="false"
-                                            data={[
-                                              { value: 105, color: '#E38627' },
-                                              { value: 10, color: '#C13C37' },
-                                              { value: 20, color: '#6A2135' },
-                                            ]}
-                                            />
-                                            <br />
-                                            <Row>
-                                              <Ellipse rx={7} ry={4} fill={{color:'#E38627'}} strokeWidth={5} />
-                                              <p className="graphKey">Completed all reviews</p>
-                                            </Row>
-                                            <Row>
-                                              <Ellipse rx={7} ry={4} fill={{color:'#C13C37'}} strokeWidth={5} />
-                                              <p className="graphKey">Completed some reviews</p>
-                                            </Row>
-                                            <Row>
-                                              <Ellipse rx={7} ry={4} fill={{color:'#6A2135'}} strokeWidth={5} />
-                                              <p className="graphKey">Completed no reviews</p>
-                                            </Row>
+                                            <Flexbox className="chartbox" flexDirection="column" width="200px" flexWrap="wrap">
+                                                <h5 className="graphTitle">Completion</h5>
+                                                <ReactSvgPieChart className="piechart"
+                                                    expandSize={3}
+                                                    expandOnHover="false"
+                                                    data={[
+                                                        { value: 105, color: '#E38627' },
+                                                        { value: 10, color: '#C13C37' },
+                                                        { value: 20, color: '#6A2135' },
+                                                    ]}
+                                                />
+                                                <br />
+                                                <Row>
+                                                    <Ellipse rx={7} ry={4} fill={{ color: '#E38627' }} strokeWidth={5} />
+                                                    <p className="graphKey">Completed all reviews</p>
+                                                </Row>
+                                                <Row>
+                                                    <Ellipse rx={7} ry={4} fill={{ color: '#C13C37' }} strokeWidth={5} />
+                                                    <p className="graphKey">Completed some reviews</p>
+                                                </Row>
+                                                <Row>
+                                                    <Ellipse rx={7} ry={4} fill={{ color: '#6A2135' }} strokeWidth={5} />
+                                                    <p className="graphKey">Completed no reviews</p>
+                                                </Row>
                                             </Flexbox>
-                                        <Flexbox className="chartbox"  flexDirection="column" width="200px" flexWrap="wrap">
-                                        <h5 className="graphTitle">Grading Classification</h5>
-                                        <ReactSvgPieChart className="piechart"
-                                            expandSize={3}
-                                            expandOnHover="false"
-                                            data={[
-                                              { value: 2, color: '#C9CBA3' },
-                                              { value: 4, color: '#FFE1A8' },
-                                              { value: 7, color: '#E26D5C' },
-                                              { value: 6, color: '#723D46' },
-                                              { value: 16, color: '#472D30' },
-                                              { value: 8, color: '#197278' },
-                                              { value: 11, color: '#772E25' }
-                                            ]}
-                                            />
-                                            <br />
-                                            <Row>
-                                              <Ellipse rx={7} ry={4} fill={{color:'#C9CBA3'}} strokeWidth={5} />
-                                              <p className="graphKey">Definitely Harsh</p>
-                                            </Row>
-                                            <Row>
-                                              <Ellipse rx={7} ry={4} fill={{color:'#FFE1A8'}} strokeWidth={5} />
-                                              <p className="graphKey">Might be Harsh</p>
-                                            </Row>
-                                            <Row>
-                                              <Ellipse rx={7} ry={4} fill={{color:'#E26D5C'}} strokeWidth={5} />
-                                              <p className="graphKey">Definitely Lenient</p>
-                                            </Row>
-                                            <Row>
-                                              <Ellipse rx={7} ry={4} fill={{color:'#723D46'}} strokeWidth={5} />
-                                              <p className="graphKey">Might be Lenient</p>
-                                            </Row>
-                                            <Row>
-                                              <Ellipse rx={7} ry={4} fill={{color:'#472D30'}} strokeWidth={5} />
-                                              <p className="graphKey">Definitely Fair</p>
-                                            </Row>
-                                            <Row>
-                                              <Ellipse rx={7} ry={4} fill={{color:'#C197278'}} strokeWidth={5} />
-                                              <p className="graphKey">Might be Fair</p>
-                                            </Row>
-                                            <Row>
-                                              <Ellipse rx={7} ry={4} fill={{color:'#772E25'}} strokeWidth={5} />
-                                              <p className="graphKey">Spazzy</p>
-                                            </Row>
-                                        </Flexbox>
+                                            <Flexbox className="chartbox" flexDirection="column" width="200px" flexWrap="wrap">
+                                                <h5 className="graphTitle">Grading Classification</h5>
+                                                <ReactSvgPieChart className="piechart"
+                                                    expandSize={3}
+                                                    expandOnHover="false"
+                                                    data={[
+                                                        { value: 2, color: '#C9CBA3' },
+                                                        { value: 4, color: '#FFE1A8' },
+                                                        { value: 7, color: '#E26D5C' },
+                                                        { value: 6, color: '#723D46' },
+                                                        { value: 16, color: '#472D30' },
+                                                        { value: 8, color: '#197278' },
+                                                        { value: 11, color: '#772E25' }
+                                                    ]}
+                                                />
+                                                <br />
+                                                <Row>
+                                                    <Ellipse rx={7} ry={4} fill={{ color: '#C9CBA3' }} strokeWidth={5} />
+                                                    <p className="graphKey">Definitely Harsh</p>
+                                                </Row>
+                                                <Row>
+                                                    <Ellipse rx={7} ry={4} fill={{ color: '#FFE1A8' }} strokeWidth={5} />
+                                                    <p className="graphKey">Might be Harsh</p>
+                                                </Row>
+                                                <Row>
+                                                    <Ellipse rx={7} ry={4} fill={{ color: '#E26D5C' }} strokeWidth={5} />
+                                                    <p className="graphKey">Definitely Lenient</p>
+                                                </Row>
+                                                <Row>
+                                                    <Ellipse rx={7} ry={4} fill={{ color: '#723D46' }} strokeWidth={5} />
+                                                    <p className="graphKey">Might be Lenient</p>
+                                                </Row>
+                                                <Row>
+                                                    <Ellipse rx={7} ry={4} fill={{ color: '#472D30' }} strokeWidth={5} />
+                                                    <p className="graphKey">Definitely Fair</p>
+                                                </Row>
+                                                <Row>
+                                                    <Ellipse rx={7} ry={4} fill={{ color: '#C197278' }} strokeWidth={5} />
+                                                    <p className="graphKey">Might be Fair</p>
+                                                </Row>
+                                                <Row>
+                                                    <Ellipse rx={7} ry={4} fill={{ color: '#772E25' }} strokeWidth={5} />
+                                                    <p className="graphKey">Spazzy</p>
+                                                </Row>
+                                            </Flexbox>
                                         </Row>
                                     </div>
                                     :
                                     <Loader type="TailSpin" color="black" height={80} width={80} />
                             }
                         </div>
-                }
+                        }
             </div>
         )
-    }
-}
-export default FinalizeResults;
+                }
+            }
+            export default FinalizeResults;
