@@ -8,7 +8,7 @@ import { Well, Row, Col, Breadcrumb } from 'react-bootstrap';
 import Flexbox from 'flexbox-react';
 import JumbotronComp from '../JumbotronComp/JumbotronComp';
 import SidebarComp from '../SideBar/SideBar';
-import Example from '../CourseCard/CourseCard';
+import CardComp from '../CourseCard/CourseCard';
 
 class Courses extends Component {
     constructor(props) {
@@ -107,7 +107,7 @@ class Courses extends Component {
                                                     this.state.courses ?
                                                         this.state.courses.map(courses =>
                                                             <Link to={`/courses/${courses.id}`}>
-                                                                <Example name={courses.name} />
+                                                                <CardComp name={courses.name}  />
                                                             </Link>)
                                                         :
                                                         null

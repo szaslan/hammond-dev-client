@@ -3,7 +3,7 @@
     padding-bottom: 10px !important;
 
     background-color:var(--light-peach) !important;
-    
+
     margin:0px !important;
     padding-left:15px;
     min-width:750px!important;
@@ -50,12 +50,12 @@
      margin-right:0px !important;
      padding-right:0px !important;
      text-align:right;
-     width: 16vw!important; 
+     width: 16vw!important;
    }
    .signout-button{
      border:none;
      border-radius: 3px;
-     
+
      padding:5px;
      padding-left:7px;
      padding-right:7px;
@@ -80,11 +80,23 @@
   min-width:750px;
   margin:auto;
 }
+
+.main-title{
+  font-family: 'Open Sans';
+  color: #757373;
+}
+
 .jumbo-container{
   text-align:left;
   font-size:40px;
   color:#757373;
+  min-width: 50vh;
 }
+
+.tabcontain{
+  min-width: 800px !important;
+}
+
 .hr-1{
   border-top: 1px solid black;
 }
@@ -100,7 +112,7 @@
 .nav-link.active{
   border-color: black black #fff !important;
   color:black !important;
-  
+
 }
 .nav-tabs{
   border-bottom: 1px solid black !important;
@@ -109,7 +121,7 @@
   /* text-align:right!important; */
 }
 /* .tabs-div{
-  clear:both; 
+  clear:both;
 }*/
 
 .tabs{

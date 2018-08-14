@@ -33,6 +33,7 @@ class SidebarComp extends React.Component {
           <br />
           <a href="" className="sidebarcontent">Account</a>
           <br/>
+          <br/>
           <a href="" className="sidebarcontent">Courses</a>
           <br/>
           <Link to="/logout">

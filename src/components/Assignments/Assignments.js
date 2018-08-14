@@ -31,6 +31,19 @@ function FilterAssignments(props) {
     }
 }
 
+// function buttonsInstance(courses, url){
+//     <Col xs={6} className="col4">
+//         {courses.map(courses => 
+//          <div className="div-student">
+//          <Link className="assignment-link" to={{pathname: url + courses.id, state: {assignment_id: courses.id} }} key={courses.id}>
+//          <FilterAssignments currAssigment={courses}/>
+//          </Link>
+//          <br></br>
+//      </div>
+//     )}
+//     </Col>
+// }
+
 class Assignments extends Component {
     constructor(props, context) {
         super(props, context);

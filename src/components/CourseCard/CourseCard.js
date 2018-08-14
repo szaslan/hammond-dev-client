@@ -19,8 +19,7 @@ function randomColor() {
   return colors[i];
 }
 
-
-class Example extends Component {
+class CardComp extends Component {
     constructor(props){
       super(props);
     }
@@ -28,8 +27,8 @@ class Example extends Component {
     render(){
       return (
         <div>
-          <Card className="card">
-            <CardImg className="classcolor" top height="250px;" width="300px;" style={{backgroundColor:randomColor()}} />
+          <Card outline="false" className="card">
+            <CardImg tag="div" className="classcolor" style={{ backgroundColor:randomColor()}} />
             <CardBody>
               <CardTitle className="cardtitle">
               {this.props.name}
@@ -41,4 +40,4 @@ class Example extends Component {
     }
 };
 
-export default Example;
+export default CardComp;
