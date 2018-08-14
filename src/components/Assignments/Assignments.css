@@ -15,9 +15,9 @@
 .assignment-link, .assignment-link:hover {
     text-decoration: none;
     color: black;
+    
 }
 .assignment-name{
-
     width:55%;
     /*background-color: var(--light-lavendar2);*/
     border: 2px solid #c7e2c5;
@@ -34,19 +34,34 @@
     text-align: center;
 }
 
+.dropdown-ite{
+  
+}
+
+.dropdown-ite:hover{
+  
+}
+
+.dropdown-men{
+  height:auto;
+  max-height:30vh;
+  overflow-x:hidden;
+}
 
 .not-pr{
-  background-color:#e0e1e5;
+  /*background-color:#e0e1e5;
   border: 2px solid #e2c6c5;
-  opacity: 1;
+  opacity: 1;*/
+  background-color:lightgray!important;
 }
 
 .not-pr:hover{
-  transform: none !important;
+  /*transform: none !important;
   box-shadow: none !important;
   border: 2px solid #e2c6c5 !important;
   background-color:#e0e1e5 !important;
-  opacity:1;
+  opacity:1;*/
+  background-color:lightgray!important;
 }
 
 .assignment-name:hover{
@@ -88,7 +103,15 @@
 .chartbox{
   padding: 10px;
 }
-
+.title{
+  font-size:30px;
+  padding-top:15px;
+  margin-bottom:0px;
+}
+.hr-2{
+  border-top: 1px solid black;
+  margin-top:5px;
+}
 
 /* .cardbody1{
   margin-top: 4px;

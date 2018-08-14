@@ -6,10 +6,10 @@ import Flexbox from 'flexbox-react';
 import history from '../../history'
 import { Container, Jumbotron } from 'reactstrap';
 import JumbotronComp from '../JumbotronComp/JumbotronComp'
-import '../BreadcrumbComp/BreadcrumbComp.css';
+
 import { resolve } from 'path';
 import Loader from 'react-loader-spinner'
-
+import SidebarComp from '../SideBar/SideBar';
 
 class CourseInfo extends Component {
     constructor(props) {
@@ -22,9 +22,9 @@ class CourseInfo extends Component {
             loaded: false,
             ...props
         }
-    
+
     }
-    
+
 
     // componentWillMount(){
     //     if(this.state.location.state.auth){
@@ -33,15 +33,15 @@ class CourseInfo extends Component {
     // }
     componentDidMount() {
         const { match: { params } } = this.props;
-        
+
         this.setState({ url: `/courses/${params.course_id}` });
 
-        
+
         var data = {
             course_id: params.course_id,
         }
         console.log(data);
-        fetch('/api/courseinfo',{
+        fetch('/api/courseinfo', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -49,24 +49,23 @@ class CourseInfo extends Component {
             credentials: 'include',
             body: JSON.stringify(data)
         })
-        
-        .then(res => {
-            if (res.status === 401){
-                console.log("4040404")
-                history.push("/login")
-                throw new Error();
-                
-                // return <Redirect to="/" />
-                // window.location.href="/login"
-            }  
-            {
-                res.json().then(data =>
+
+            .then(res => {
+                if (res.status === 401) {
+                    console.log("4040404")
+                    history.push("/login")
+                    throw new Error();
+
+                    // return <Redirect to="/" />
+                    // window.location.href="/login"
+                }
                 {
-                    this.setState({courseJSON: data, loaded: true})
-                })
-            }
-        })
-        .catch(err => console.log("no auth"))
+                    res.json().then(data => {
+                        this.setState({ courseJSON: data, loaded: true })
+                    })
+                }
+            })
+            .catch(err => console.log("no auth"))
     }
 
 
@@ -78,33 +77,40 @@ class CourseInfo extends Component {
         //     )
         // }
 
-    
-        
+
+
         return (
-            <div>          
-                <JumbotronComp  mainTitle= {this.state.courseJSON.name}
-                tabs/>
-                
-                {this.state.loaded ? 
-                <Container className="well1-container" fluid>
-                    <Flexbox className="big-buttons-flexbox" minWidth="700px" width="60vw" justifyContent="center"
-                        minHeight="50vh" flexDirection="column">
-                        <Flexbox
-                            justifyContent="space-around"
-                            flexWrap="nowrap">
-                             <Link to={{pathname: this.state.url + '/'+ this.state.courseJSON.name + "/assignments/", state: {name: this.state.courseJSON.name}, }}>
-                                <button className="pull-left big-button">Assignments</button>
-                            </Link>
-                            <Link to={{pathname: this.state.url + "/"+this.state.courseJSON.name + "/students", state: {name: this.state.courseJSON.name}}}>
-                                <button className="pull-right big-button">Students</button>
-                            </Link>
-                           
-                        </Flexbox>
-                    </Flexbox>
-                </Container>
-                 :
-                 <Loader type="TailSpin" color="black" height={80} width={80} />
-                 }
+            <div>
+                {this.state.loaded ?
+                    <SidebarComp
+                        content={
+                            <div>
+                                <JumbotronComp 
+                                    mainTitle={this.state.courseJSON.name}
+                                    tabs
+                                    tab_1_link={{ pathname: this.state.url + '/' + this.state.courseJSON.name + "/assignments/", state: { name: this.state.courseJSON.name } }} 
+                                    tab_2_link={{pathname: this.state.url + "/" + this.state.courseJSON.name + "/students", state: { name: this.state.courseJSON.name }}}/>
+                                <Container className="well1-container" fluid>
+                                    <Flexbox className="big-buttons-flexbox" minWidth="700px" width="60vw" justifyContent="center"
+                                        minHeight="50vh" flexDirection="column">
+                                        <Flexbox
+                                            justifyContent="space-around"
+                                            flexWrap="nowrap">
+                                            <Link to={{ pathname: this.state.url + '/' + this.state.courseJSON.name + "/assignments/", state: { name: this.state.courseJSON.name }, }}>
+                                                <button className="pull-left big-button">Assignments</button>
+                                            </Link>
+                                            <Link to={{ pathname: this.state.url + "/" + this.state.courseJSON.name + "/students", state: { name: this.state.courseJSON.name } }}>
+                                                <button className="pull-right big-button">Students</button>
+                                            </Link>
+
+                                        </Flexbox>
+                                    </Flexbox>
+                                </Container>
+                            </div>}
+                    />
+                    :
+                    <Loader type="TailSpin" color="black" height={80} width={80} />
+                }
             </div>
 
         );

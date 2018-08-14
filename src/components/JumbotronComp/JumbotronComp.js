@@ -48,7 +48,9 @@ class JumbotronComp extends Component {
                     <p className="main-title">{this.props.mainTitle}</p>
                 </Container>
                 {this.props.tabs ?
-                    <TabsComp/>
+                    <TabsComp
+                    tab_1_link = {this.props.tab_1_link}
+                    tab_2_link = {this.props.tab_2_link}/>
                     :
                     <hr className="hr-1"></hr>
                 }
