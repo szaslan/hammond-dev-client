@@ -7,6 +7,7 @@ import 'bootstrap/dist/css/bootstrap.css';
 import '../Assignments/Assignments.css'
 
 var message = "";
+var names = null;
 
 class AnalyzeResults extends Component {
     constructor(props) {
@@ -40,6 +41,31 @@ class AnalyzeResults extends Component {
             },
             body: JSON.stringify(data),
         })
+        .then(() => {
+            let data = {
+                ids: names,
+            }
+            fetch('/api/get_name_from_id', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            })
+            .then(res => res.json())
+            .then(res => {
+                console.log(res)
+                localStorage.setItem("analyzeDisplayTextNames_" + this.assignment_id, JSON.stringify(res));
+                localStorage.setItem("analyzeDisplayTextNumCompleted_" + this.assignment_id, message.num_completed);
+                localStorage.setItem("analyzeDisplayTextNumAssigned_" + this.assignment_id, message.num_assigned);
+                localStorage.setItem("analyzeDisplayTextMessage_" + this.assignment_id, message.message);
+            })
+            .then(() => {
+                this.setState({
+                    analyzeDisplayText: true,
+                })
+            })
+        })
     }
 
     fetchPeerReviewData() {
@@ -72,8 +98,6 @@ class AnalyzeResults extends Component {
             benchmarks: this.benchmarks,
         }
 
-        var names;
-
         console.log("5: fetching rubric data from canvas");
         fetch('/api/save_all_rubrics', {
             method: "POST",
@@ -83,7 +107,6 @@ class AnalyzeResults extends Component {
             body: JSON.stringify(data)
         })
             .then(() => {
-                console.log(this.benchmarks)
                 fetch('/api/peer_reviews_analyzing', {
                     method: 'POST',
                     headers: {
@@ -95,20 +118,7 @@ class AnalyzeResults extends Component {
                     .then(res => {
                         message = res.message;
                         names = res.names;
-                    })
-                    // .then(() => {
-                    //     fetch('/api/')
-                    // })
-                    .then(() => {
-                        localStorage.setItem("analyzeDisplayTextNumCompleted_" + this.assignment_id, message.num_completed);
-                        localStorage.setItem("analyzeDisplayTextNumAssigned_" + this.assignment_id, message.num_assigned);
-                        localStorage.setItem("analyzeDisplayTextMessage_" + this.assignment_id, message.message);
-                        localStorage.setItem("analyzeDisplayTextNames_" + this.assignment_id, names);
-                    })
-                    .then(() => {
-                        this.setState({
-                            analyzeDisplayText: true,
-                        })
+                        console.log(names)
                     })
                     .then(() => this.attachNamesToDatabase())
             })
@@ -141,7 +151,7 @@ class AnalyzeResults extends Component {
                                 {localStorage.getItem("analyzeDisplayTextMessage_" + this.assignment_id)}
                                 <br></br>
                                 <br></br>
-                                {localStorage.getItem("analyzeDisplayTextNames_" + this.assignment_id)}
+                                {JSON.parse(localStorage.getItem("analyzeDisplayTextNames_" + this.assignment_id))}
                                 <br></br>
                                 <br></br>
                                 <Row>

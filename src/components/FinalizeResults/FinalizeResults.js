@@ -48,9 +48,9 @@ class FinalizeResults extends Component {
 
     savePeerReviewsFromCanvasToDatabase() {
         let data = {
-            course_id: this.props.course_id,
-            assignment_id: this.props.assignment_id,
-            points_possible: this.props.assignment_info.points_possible,
+            course_id: this.props.courseId,
+            assignment_id: this.props.assignmentId,
+            points_possible: this.props.assignmentInfo.points_possible,
         }
         console.log("3: fetching peer review data from canvas")
         fetch('/api/save_all_peer_reviews', {
@@ -69,9 +69,9 @@ class FinalizeResults extends Component {
 
     saveRubricScoresFromCanvasToDatabase() {
         let data = {
-            course_id: this.props.course_id,
-            assignment_id: this.props.assignment_id,
-            rubric_settings: this.props.assignment_info.rubric_settings.id
+            course_id: this.props.courseId,
+            assignment_id: this.props.assignmentId,
+            rubric_settings: this.props.assignmentInfo.rubric_settings.id
         }
 
         console.log("5: fetching rubric data from canvas");
@@ -91,7 +91,7 @@ class FinalizeResults extends Component {
 
     saveOriginallyAssignedNumbersToDatabase() {
         let data = {
-            assignment_id: this.props.assignment_id,
+            assignment_id: this.props.assignmentId,
         }
         fetch('/api/save_peer_review_numbers', {
             method: "POST",
@@ -109,11 +109,11 @@ class FinalizeResults extends Component {
 
     finalizePeerReviewGrades() {
         let data = {
-            assignment_id: this.props.assignment_id,
-            points_possible: this.props.assignment_info.points_possible,
+            assignment_id: this.props.assignmentId,
+            points_possible: this.props.assignmentInfo.points_possible,
             benchmarks: this.state.benchmarks,
-            penalizing_for_incompletes: this.props.penalizing_for_incompletes,
-            penalizing_for_reassigned: this.props.penalizing_for_reassigned,
+            penalizing_for_incompletes: this.props.penalizingForIncompletes,
+            penalizing_for_reassigned: this.props.penalizingForReassigned,
         }
         console.log(data)
 
@@ -129,10 +129,10 @@ class FinalizeResults extends Component {
             .then(() => {
                 progress = 40
                 progress_bar_message = "40%";
-                localStorage.setItem("finalizeDisplayTextNumCompleted_" + this.props.assignment_id, message.num_completed);
-                localStorage.setItem("finalizeDisplayTextNumAssigned_" + this.props.assignment_id, message.num_assigned);
-                localStorage.setItem("finalizeDisplayTextAverage_" + this.props.assignment_id, message.average);
-                localStorage.setItem("finalizeDisplayTextOutOf_" + this.props.assignment_id, message.out_of);
+                localStorage.setItem("finalizeDisplayTextNumCompleted_" + this.props.assignmentId, message.num_completed);
+                localStorage.setItem("finalizeDisplayTextNumAssigned_" + this.props.assignmentId, message.num_assigned);
+                localStorage.setItem("finalizeDisplayTextAverage_" + this.props.assignmentId, message.average);
+                localStorage.setItem("finalizeDisplayTextOutOf_" + this.props.assignmentId, message.out_of);
             })
             .then(() => this.sendGradesToCanvas())
             .then(() => this.attachNamesToDatabase())
@@ -141,8 +141,8 @@ class FinalizeResults extends Component {
     sendGradesToCanvas() {
         console.log("8: sending grades to canvas");
         let data = {
-            course_id: this.props.course_id,
-            assignment_id: this.props.assignment_id,
+            course_id: this.props.courseId,
+            assignment_id: this.props.assignmentId,
         }
 
         fetch('/api/send_grades_to_canvas', {
@@ -159,7 +159,7 @@ class FinalizeResults extends Component {
     attachNamesToDatabase() {
         console.log("10f: attaching names to database tables");
         let data = {
-            course_id: this.props.course_id,
+            course_id: this.props.courseId,
         }
 
         fetch('/api/attach_names_in_database', {
@@ -192,13 +192,13 @@ class FinalizeResults extends Component {
             .then(res => {
                 progress = 70
                 progress_bar_message = "70%";
-                localStorage.setItem("spazzy_" + this.props.assignment_id, JSON.stringify(res.spazzy))
-                localStorage.setItem("definitely_harsh_" + this.props.assignment_id, JSON.stringify(res.definitely_harsh))
-                localStorage.setItem("could_be_harsh_" + this.props.assignment_id, JSON.stringify(res.could_be_harsh))
-                localStorage.setItem("could_be_lenient_" + this.props.assignment_id, JSON.stringify(res.could_be_lenient))
-                localStorage.setItem("definitely_lenient_" + this.props.assignment_id, JSON.stringify(res.definitely_lenient))
-                localStorage.setItem("could_be_fair_" + this.props.assignment_id, JSON.stringify(res.could_be_fair))
-                localStorage.setItem("definitely_fair_" + this.props.assignment_id, JSON.stringify(res.definitely_fair))
+                localStorage.setItem("spazzy_" + this.props.assignmentId, JSON.stringify(res.spazzy))
+                localStorage.setItem("definitely_harsh_" + this.props.assignmentId, JSON.stringify(res.definitely_harsh))
+                localStorage.setItem("could_be_harsh_" + this.props.assignmentId, JSON.stringify(res.could_be_harsh))
+                localStorage.setItem("could_be_lenient_" + this.props.assignmentId, JSON.stringify(res.could_be_lenient))
+                localStorage.setItem("definitely_lenient_" + this.props.assignmentId, JSON.stringify(res.definitely_lenient))
+                localStorage.setItem("could_be_fair_" + this.props.assignmentId, JSON.stringify(res.could_be_fair))
+                localStorage.setItem("definitely_fair_" + this.props.assignmentId, JSON.stringify(res.definitely_fair))
             })
     }
 
@@ -215,14 +215,14 @@ class FinalizeResults extends Component {
             .then(res => {
                 progress = 80
                 progress_bar_message = "80%";
-                localStorage.setItem("flagged_students_" + this.props.assignment_id, JSON.stringify(res))
+                localStorage.setItem("flagged_students_" + this.props.assignmentId, JSON.stringify(res))
             })
     }
 
     pullBoxPlotFromCanvas() {
         let data = {
-            course_id: this.props.course_id,
-            assignment_id: this.props.assignment_id
+            course_id: this.props.courseId,
+            assignment_id: this.props.assignmentId
         }
 
         console.log("fetching box plot points from canvas")
@@ -239,11 +239,11 @@ class FinalizeResults extends Component {
                     .then(result => {
                         progress = 90
                         progress_bar_message = "90%";
-                        localStorage.setItem("min_" + this.props.assignment_id, result.min_score);
-                        localStorage.setItem("q1_" + this.props.assignment_id, result.first_quartile);
-                        localStorage.setItem("median_" + this.props.assignment_id, result.median);
-                        localStorage.setItem("q3_" + this.props.assignment_id, result.third_quartile);
-                        localStorage.setItem("max_" + this.props.assignment_id, result.max_score);
+                        localStorage.setItem("min_" + this.props.assignmentId, result.min_score);
+                        localStorage.setItem("q1_" + this.props.assignmentId, result.first_quartile);
+                        localStorage.setItem("median_" + this.props.assignmentId, result.median);
+                        localStorage.setItem("q3_" + this.props.assignmentId, result.third_quartile);
+                        localStorage.setItem("max_" + this.props.assignmentId, result.max_score);
                     })
                     .then(() => this.findCompletedAllReviews())
             })
@@ -260,9 +260,9 @@ class FinalizeResults extends Component {
             .then(res => {
                 progress = 100
                 progress_bar_message = "100%";
-                localStorage.setItem("completed_all_reviews_" + this.props.assignment_id, res.completed_all)
-                localStorage.setItem("completed_some_reviews_" + this.props.assignment_id, res.completed_some)
-                localStorage.setItem("completed_no_reviews_" + this.props.assignment_id, res.completed_none)
+                localStorage.setItem("completed_all_reviews_" + this.props.assignmentId, res.completed_all)
+                localStorage.setItem("completed_some_reviews_" + this.props.assignmentId, res.completed_some)
+                localStorage.setItem("completed_no_reviews_" + this.props.assignmentId, res.completed_none)
             })
             .then(() => this.setState({ finishedLoading: true }))
     }
@@ -289,10 +289,10 @@ class FinalizeResults extends Component {
                         }
 
                         {/* {
-                                localStorage.getItem("completed_all_reviews_" + this.props.assignment_id) ?
+                                localStorage.getItem("completed_all_reviews_" + this.props.assignmentId) ?
                                     <div>
 
-                                        <strong>Completed Peer Reviews: </strong>{localStorage.getItem("finalizeDisplayTextNumCompleted_" + this.props.assignment_id)} / {localStorage.getItem("finalizeDisplayTextNumAssigned_" + this.props.assignment_id)}
+                                        <strong>Completed Peer Reviews: </strong>{localStorage.getItem("finalizeDisplayTextNumCompleted_" + this.props.assignmentId)} / {localStorage.getItem("finalizeDisplayTextNumAssigned_" + this.props.assignmentId)}
 
                                        
 
@@ -300,11 +300,11 @@ class FinalizeResults extends Component {
                                             width={400} height={25} orientation="horizontal"
                                             min={0} max={100}
                                             stats={{
-                                                whiskerLow: localStorage.getItem("min_" + this.props.assignment_id),
-                                                quartile1: localStorage.getItem("q1_" + this.props.assignment_id),
-                                                quartile2: localStorage.getItem("median_" + this.props.assignment_id),
-                                                quartile3: localStorage.getItem("q3_" + this.props.assignment_id),
-                                                whiskerHigh: localStorage.getItem("max_" + this.props.assignment_id),
+                                                whiskerLow: localStorage.getItem("min_" + this.props.assignmentId),
+                                                quartile1: localStorage.getItem("q1_" + this.props.assignmentId),
+                                                quartile2: localStorage.getItem("median_" + this.props.assignmentId),
+                                                quartile3: localStorage.getItem("q3_" + this.props.assignmentId),
+                                                whiskerHigh: localStorage.getItem("max_" + this.props.assignmentId),
                                                 outliers: [],
                                             }} />
                                         <br></br>
@@ -312,11 +312,11 @@ class FinalizeResults extends Component {
                                         <Row>
                                             <Well className="well2">
                                                 <Flexbox className="accordion-flexbox" flexDirection="column" minWidth="300px" maxWidth="500px" width="100%" flexWrap="wrap">
-                                                    <Accordion name="Definitely Harsh" content={JSON.parse(localStorage.getItem("harsh_students_" + this.props.assignment_id))} />
-                                                    <Accordion name="Definitely Lenient" content={JSON.parse(localStorage.getItem("lenient_students_" + this.props.assignment_id))} />
-                                                    <Accordion name="Missing Some Peer Reviews" content={JSON.parse(localStorage.getItem("some_incomplete_students_" + this.props.assignment_id))} />
-                                                    <Accordion name="Missing All Peer Reviews" content={JSON.parse(localStorage.getItem("all_incomplete_students_" + this.props.assignment_id))} />
-                                                    <Accordion name="Flagged Grades" content={JSON.parse(localStorage.getItem("flagged_students_" + this.props.assignment_id))} />
+                                                    <Accordion name="Definitely Harsh" content={JSON.parse(localStorage.getItem("harsh_students_" + this.props.assignmentId))} />
+                                                    <Accordion name="Definitely Lenient" content={JSON.parse(localStorage.getItem("lenient_students_" + this.props.assignmentId))} />
+                                                    <Accordion name="Missing Some Peer Reviews" content={JSON.parse(localStorage.getItem("some_incomplete_students_" + this.props.assignmentId))} />
+                                                    <Accordion name="Missing All Peer Reviews" content={JSON.parse(localStorage.getItem("all_incomplete_students_" + this.props.assignmentId))} />
+                                                    <Accordion name="Flagged Grades" content={JSON.parse(localStorage.getItem("flagged_students_" + this.props.assignmentId))} />
                                                 </Flexbox>
                                             </Well>
                                         </Row>
@@ -329,9 +329,9 @@ class FinalizeResults extends Component {
                                                     expandSize={3}
                                                     expandOnHover="false"
                                                     data={[
-                                                        { value: Number(localStorage.getItem("completed_all_reviews_" + this.props.assignment_id)), color: '#E38627' },
-                                                        { value: Number(localStorage.getItem("completed_no_reviews_" + this.props.assignment_id)), color: '#C13C37' },
-                                                        { value: Number(localStorage.getItem("completed_some_reviews_" + this.props.assignment_id)), color: '#6A2135' },
+                                                        { value: Number(localStorage.getItem("completed_all_reviews_" + this.props.assignmentId)), color: '#E38627' },
+                                                        { value: Number(localStorage.getItem("completed_no_reviews_" + this.props.assignmentId)), color: '#C13C37' },
+                                                        { value: Number(localStorage.getItem("completed_some_reviews_" + this.props.assignmentId)), color: '#6A2135' },
                                                     ]}
                                                     // onSectorHover={() => {
                                                     //     console.log("You hovered over.");
@@ -352,13 +352,13 @@ class FinalizeResults extends Component {
                                                     expandSize={3}
                                                     expandOnHover="false"
                                                     data={[
-                                                        { value: Number(localStorage.getItem("spazzy_" + this.props.assignment_id)), color: '#C9CBA3' },
-                                                        { value: Number(localStorage.getItem("definitely_harsh_" + this.props.assignment_id)), color: '#FFE1A8' },
-                                                        { value: Number(localStorage.getItem("could_be_harsh_" + this.props.assignment_id)), color: '#E26D5C' },
-                                                        { value: Number(localStorage.getItem("could_be_lenient_" + this.props.assignment_id)), color: '#723D46' },
-                                                        { value: Number(localStorage.getItem("definitely_lenient_" + this.props.assignment_id)), color: '#472D30' },
-                                                        { value: Number(localStorage.getItem("could_be_fair_" + this.props.assignment_id)), color: '#197278' },
-                                                        { value: Number(localStorage.getItem("definitely_fair_" + this.props.assignment_id)), color: '#772E25' }
+                                                        { value: Number(localStorage.getItem("spazzy_" + this.props.assignmentId)), color: '#C9CBA3' },
+                                                        { value: Number(localStorage.getItem("definitely_harsh_" + this.props.assignmentId)), color: '#FFE1A8' },
+                                                        { value: Number(localStorage.getItem("could_be_harsh_" + this.props.assignmentId)), color: '#E26D5C' },
+                                                        { value: Number(localStorage.getItem("could_be_lenient_" + this.props.assignmentId)), color: '#723D46' },
+                                                        { value: Number(localStorage.getItem("definitely_lenient_" + this.props.assignmentId)), color: '#472D30' },
+                                                        { value: Number(localStorage.getItem("could_be_fair_" + this.props.assignmentId)), color: '#197278' },
+                                                        { value: Number(localStorage.getItem("definitely_fair_" + this.props.assignmentId)), color: '#772E25' }
                                                     ]}
                                                     onSectorHover={(d) => {
                                                         if (d) {
@@ -380,8 +380,8 @@ class FinalizeResults extends Component {
                     :
                     <div>
                         {
-                            localStorage.getItem("completed_all_reviews_" + this.props.assignment_id) ?
-                                // localStorage.getItem("harsh_students_" + this.props.assignment_id) && localStorage.getItem("max_" + this.props.assignment_id) ?
+                            localStorage.getItem("completed_all_reviews_" + this.props.assignmentId) ?
+                                // localStorage.getItem("harsh_students_" + this.props.assignmentId) && localStorage.getItem("max_" + this.props.assignmentId) ?
                                 <div>
                                     <SideNav
                                         title="Simple Sidenav"
@@ -393,30 +393,30 @@ class FinalizeResults extends Component {
                                             width={400} height={25} orientation="horizontal"
                                             min={0} max={100}
                                             stats={{
-                                                whiskerLow: localStorage.getItem("min_" + this.props.assignment_id),
-                                                quartile1: localStorage.getItem("q1_" + this.props.assignment_id),
-                                                quartile2: localStorage.getItem("median_" + this.props.assignment_id),
-                                                quartile3: localStorage.getItem("q3_" + this.props.assignment_id),
-                                                whiskerHigh: localStorage.getItem("max_" + this.props.assignment_id),
+                                                whiskerLow: localStorage.getItem("min_" + this.props.assignmentId),
+                                                quartile1: localStorage.getItem("q1_" + this.props.assignmentId),
+                                                quartile2: localStorage.getItem("median_" + this.props.assignmentId),
+                                                quartile3: localStorage.getItem("q3_" + this.props.assignmentId),
+                                                whiskerHigh: localStorage.getItem("max_" + this.props.assignmentId),
                                                 outliers: [],
                                             }} />
                                     </span>
                                     <br></br>
                                     <br></br>
-                                    <strong>Completed Peer Reviews:</strong> {localStorage.getItem("finalizeDisplayTextNumCompleted_" + this.props.assignment_id)} / {localStorage.getItem("finalizeDisplayTextNumAssigned_" + this.props.assignment_id)}
+                                    <strong>Completed Peer Reviews:</strong> {localStorage.getItem("finalizeDisplayTextNumCompleted_" + this.props.assignmentId)} / {localStorage.getItem("finalizeDisplayTextNumAssigned_" + this.props.assignmentId)}
                                     <br></br>
                                     <br></br>
-                                    {/* <strong>Completed All Reviews: </strong>{localStorage.getItem("completed_all_reviews_" + this.props.assignment_id)} / {Number(localStorage.getItem("completed_all_reviews_out_of_" + this.props.assignment_id)) + Number(localStorage.getItem("completed_all_reviews_" + this.props.assignment_id))} */}
+                                    {/* <strong>Completed All Reviews: </strong>{localStorage.getItem("completed_all_reviews_" + this.props.assignmentId)} / {Number(localStorage.getItem("completed_all_reviews_out_of_" + this.props.assignmentId)) + Number(localStorage.getItem("completed_all_reviews_" + this.props.assignmentId))} */}
                                     <Tooltip placement="right" delay={{ show: "300" }} isOpen={this.state.tooltipOpen} target={"TooltipBoxplot"} toggle={this.toggle}>
-                                        <strong>Min Score:</strong> {localStorage.getItem("min_" + this.props.assignment_id)}
+                                        <strong>Min Score:</strong> {localStorage.getItem("min_" + this.props.assignmentId)}
                                         <br></br>
-                                        <strong>First Quartile:</strong> {localStorage.getItem("q1_" + this.props.assignment_id)}
+                                        <strong>First Quartile:</strong> {localStorage.getItem("q1_" + this.props.assignmentId)}
                                         <br></br>
-                                        <strong>Median Score:</strong> {localStorage.getItem("median_" + this.props.assignment_id)}
+                                        <strong>Median Score:</strong> {localStorage.getItem("median_" + this.props.assignmentId)}
                                         <br></br>
-                                        <strong>Third Quartile:</strong> {localStorage.getItem("q3_" + this.props.assignment_id)}
+                                        <strong>Third Quartile:</strong> {localStorage.getItem("q3_" + this.props.assignmentId)}
                                         <br></br>
-                                        <strong>Max Score:</strong> {localStorage.getItem("max_" + this.props.assignment_id)}
+                                        <strong>Max Score:</strong> {localStorage.getItem("max_" + this.props.assignmentId)}
                                     </Tooltip>
 
                                     <br></br>
@@ -425,11 +425,11 @@ class FinalizeResults extends Component {
                                     <Row>
                                         <Well className="well2">
                                             <Flexbox className="accordion-flexbox" flexDirection="column" minWidth="300px" maxWidth="500px" width="100%" flexWrap="wrap">
-                                                {/* <Accordion name="Definitely Harsh" content={JSON.parse(localStorage.getItem("harsh_students_" + this.props.assignment_id))} /> */}
-                                                {/* <Accordion name="Definitely Lenient" content={JSON.parse(localStorage.getItem("lenient_students_" + this.props.assignment_id))} /> */}
-                                                {/* <Accordion name="Missing Some Peer Reviews" content={JSON.parse(localStorage.getItem("some_incomplete_students_" + this.props.assignment_id))} /> */}
-                                                {/* <Accordion name="Missing All Peer Reviews" content={JSON.parse(localStorage.getItem("all_incomplete_students_" + this.props.assignment_id))} /> */}
-                                                {/*<Accordion name="Flagged Grades" content={JSON.parse(localStorage.getItem("flagged_students_" + this.props.assignment_id))} /> */}
+                                                {/* <Accordion name="Definitely Harsh" content={JSON.parse(localStorage.getItem("harsh_students_" + this.props.assignmentId))} /> */}
+                                                {/* <Accordion name="Definitely Lenient" content={JSON.parse(localStorage.getItem("lenient_students_" + this.props.assignmentId))} /> */}
+                                                {/* <Accordion name="Missing Some Peer Reviews" content={JSON.parse(localStorage.getItem("some_incomplete_students_" + this.props.assignmentId))} /> */}
+                                                {/* <Accordion name="Missing All Peer Reviews" content={JSON.parse(localStorage.getItem("all_incomplete_students_" + this.props.assignmentId))} /> */}
+                                                {/*<Accordion name="Flagged Grades" content={JSON.parse(localStorage.getItem("flagged_students_" + this.props.assignmentId))} /> */}
                                             </Flexbox>
                                             <Popup className="pop-up"
                                                 trigger={<button className="button-student"> Flagged Grades </button>}
@@ -438,7 +438,7 @@ class FinalizeResults extends Component {
                                             >
                                                 <span><h5>Flagged Grades</h5></span>
                                                 <hr />
-                                                <span>{JSON.parse(localStorage.getItem("flagged_students_" + this.props.assignment_id))}</span>
+                                                <span>{JSON.parse(localStorage.getItem("flagged_students_" + this.props.assignmentId))}</span>
                                             </Popup>
                                         </Well>
                                     </Row>
@@ -450,9 +450,9 @@ class FinalizeResults extends Component {
                                                 expandSize={3}
                                                 expandOnHover="false"
                                                 data={[
-                                                    { value: Number(localStorage.getItem("completed_all_reviews_" + this.props.assignment_id)), color: '#E38627' },
-                                                    { value: Number(localStorage.getItem("completed_no_reviews_" + this.props.assignment_id)), color: '#C13C37' },
-                                                    { value: Number(localStorage.getItem("completed_some_reviews_" + this.props.assignment_id)), color: '#6A2135' },
+                                                    { value: Number(localStorage.getItem("completed_all_reviews_" + this.props.assignmentId)), color: '#E38627' },
+                                                    { value: Number(localStorage.getItem("completed_no_reviews_" + this.props.assignmentId)), color: '#C13C37' },
+                                                    { value: Number(localStorage.getItem("completed_some_reviews_" + this.props.assignmentId)), color: '#6A2135' },
                                                 ]}
                                                 onSectorHover={(d) => {
                                                     if (d) {
@@ -483,13 +483,13 @@ class FinalizeResults extends Component {
                                                 expandSize={3}
                                                 expandOnHover="false"
                                                 data={[
-                                                    { value: Number(localStorage.getItem("spazzy_" + this.props.assignment_id)), color: '#C9CBA3' },
-                                                    { value: Number(localStorage.getItem("definitely_harsh_" + this.props.assignment_id)), color: '#FFE1A8' },
-                                                    { value: Number(localStorage.getItem("could_be_harsh_" + this.props.assignment_id)), color: '#E26D5C' },
-                                                    { value: Number(localStorage.getItem("could_be_lenient_" + this.props.assignment_id)), color: '#723D46' },
-                                                    { value: Number(localStorage.getItem("definitely_lenient_" + this.props.assignment_id)), color: '#472D30' },
-                                                    { value: Number(localStorage.getItem("could_be_fair_" + this.props.assignment_id)), color: '#197278' },
-                                                    { value: Number(localStorage.getItem("definitely_fair_" + this.props.assignment_id)), color: '#772E25' }
+                                                    { value: Number(localStorage.getItem("spazzy_" + this.props.assignmentId)), color: '#C9CBA3' },
+                                                    { value: Number(localStorage.getItem("definitely_harsh_" + this.props.assignmentId)), color: '#FFE1A8' },
+                                                    { value: Number(localStorage.getItem("could_be_harsh_" + this.props.assignmentId)), color: '#E26D5C' },
+                                                    { value: Number(localStorage.getItem("could_be_lenient_" + this.props.assignmentId)), color: '#723D46' },
+                                                    { value: Number(localStorage.getItem("definitely_lenient_" + this.props.assignmentId)), color: '#472D30' },
+                                                    { value: Number(localStorage.getItem("could_be_fair_" + this.props.assignmentId)), color: '#197278' },
+                                                    { value: Number(localStorage.getItem("definitely_fair_" + this.props.assignmentId)), color: '#772E25' }
                                                 ]}
                                                 onSectorHover={(d) => {
                                                     if (d) {

@@ -13,7 +13,7 @@ class StudentInfoGraph extends Component {
 
         this.state = {
             assignments: this.props.assignments,
-            peer_review_data: this.props.peer_review_data,
+            peer_review_data: this.props.peerReviewData,
             category: this.props.category,
             data: {
                 labels: [],
@@ -46,6 +46,8 @@ class StudentInfoGraph extends Component {
                 let assignment_id = this.state.assignments[i].id;
                 let assignment_name = this.state.assignments[i].name
                 let column_name = "'" + assignment_id + "'";
+
+                console.log(this.state.peer_review_data)
 
                 if (this.state.peer_review_data[this.state.category + "_history"][column_name] != undefined) {
                     data_history.labels.push(assignment_name)

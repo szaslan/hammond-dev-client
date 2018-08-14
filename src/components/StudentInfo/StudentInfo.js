@@ -550,9 +550,9 @@ class StudentInfo extends Component {
                         <div>
                             {this.state.student_exists ?
                                 <div>
-                                    <StudentInfoGraph assignments={this.state.assignments} peer_review_data={this.state.peer_review_data} category="bucket" data={this.state.bucket_data} />
-                                    <StudentInfoGraph assignments={this.state.assignments} peer_review_data={this.state.peer_review_data} category="weight" data={this.state.weight_data} />
-                                    <StudentInfoGraph assignments={this.state.assignments} peer_review_data={this.state.peer_review_data} category="completion" data={this.state.number_of_reviews_completed_data} />
+                                    <StudentInfoGraph assignments={this.state.assignments} peerReviewData={this.state.peer_review_data} category="bucket" data={this.state.bucket_data} />
+                                    <StudentInfoGraph assignments={this.state.assignments} peerReviewData={this.state.peer_review_data} category="weight" data={this.state.weight_data} />
+                                    <StudentInfoGraph assignments={this.state.assignments} peerReviewData={this.state.peer_review_data} category="completion" data={this.state.number_of_reviews_completed_data} />
                                 </div>
                                 :
                                 <div>

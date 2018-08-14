@@ -36,7 +36,7 @@ class DueDate extends Component {
         this.isAcceptable = true;
         this.state.buttonPressed = true;
         this.isAfter = true;
-        // localStorage.removeItem("calendarDate_" + this.props.assignment_id + "_" + this.props.number);
+        // localStorage.removeItem("calendarDate_" + this.props.assignmentId + "_" + this.props.number);
     }
     toggle() {
         this.setState({
@@ -51,8 +51,8 @@ class DueDate extends Component {
         var formatted = moment(new_date).format('llll')
         console.log("formatted: " + formatted)*/
         //this.setState({ dueDateDisplay: m.format('llll') }, () => {
-            // localStorage.setItem(("calendarDate_" + this.props.assignment_id + "_" + this.props.number), this.state.dueDateActual);
-            //localStorage.setItem(("calendarDate_" + this.props.assignment_id + "_" + this.props.number), this.state.dueDateDisplay);
+            // localStorage.setItem(("calendarDate_" + this.props.assignmentId + "_" + this.props.number), this.state.dueDateActual);
+            //localStorage.setItem(("calendarDate_" + this.props.assignmentId + "_" + this.props.number), this.state.dueDateDisplay);
         //});
         this.setState({ dueDateDisplay: m.format('llll') });
         this.setState({ dueDateActual: m.format('l') + ", " + m.format('LTS') });
@@ -73,7 +73,7 @@ class DueDate extends Component {
         this.setState({ buttonPressed: false })
         // this.setState({dueDateDisplay: this.state.dueDate})
 
-        localStorage.setItem(("calendarDate_" + this.props.assignment_id + "_" + this.props.number), this.state.dueDateDisplay);
+        localStorage.setItem(("calendarDate_" + this.props.assignmentId + "_" + this.props.number), this.state.dueDateDisplay);
 
         console.log('saved', this.state.dueDate);
 
@@ -84,7 +84,7 @@ class DueDate extends Component {
         if ((actual_date.getTime() - d.getTime()) < 0) {
             this.isAcceptable = false;
             this.setState({ buttonPressed: true });
-            localStorage.removeItem("calendarDate_" + this.props.assignment_id + "_" + this.props.number);
+            localStorage.removeItem("calendarDate_" + this.props.assignmentId + "_" + this.props.number);
             this.setState({ dueDateDisplay: "" });
         }
         else {
@@ -93,10 +93,10 @@ class DueDate extends Component {
         }
 
         if (this.props.number == "2") {
-            var date_1 = new Date(localStorage.getItem("calendarDate_" + this.props.assignment_id + "_1"));
+            var date_1 = new Date(localStorage.getItem("calendarDate_" + this.props.assignmentId + "_1"));
             if (date_1.getTime() > actual_date.getTime()) {
                 this.isAfter = false;
-                localStorage.removeItem("calendarDate_" + this.props.assignment_id + "_" + this.props.number);
+                localStorage.removeItem("calendarDate_" + this.props.assignmentId + "_" + this.props.number);
                 this.setState({ dueDateDisplay: "" });
                 this.setState({ buttonPressed: true });
             }
@@ -106,10 +106,10 @@ class DueDate extends Component {
             }
         }
         else if (this.props.number == "3") {
-            var date_2 = new Date(localStorage.getItem("calendarDate_" + this.props.assignment_id + "_2"));
+            var date_2 = new Date(localStorage.getItem("calendarDate_" + this.props.assignmentId + "_2"));
             if (date_2.getTime() > actual_date.getTime()) {
                 this.isAfter = false;
-                localStorage.removeItem("calendarDate_" + this.props.assignment_id + "_" + this.props.number);
+                localStorage.removeItem("calendarDate_" + this.props.assignmentId + "_" + this.props.number);
                 this.setState({ dueDateDisplay: "" });
                 this.setState({ buttonPressed: true });
             }
@@ -130,8 +130,8 @@ class DueDate extends Component {
             message: this.props.message
         })
 
-        if (localStorage.getItem("calendarDate_" + this.props.assignment_id + "_" + this.props.number)) {
-            var actual_date = new Date(localStorage.getItem("calendarDate_" + this.props.assignment_id + "_" + this.props.number));
+        if (localStorage.getItem("calendarDate_" + this.props.assignmentId + "_" + this.props.number)) {
+            var actual_date = new Date(localStorage.getItem("calendarDate_" + this.props.assignmentId + "_" + this.props.number));
             var formatted_date = moment(actual_date).format('llll');
 
             this.setState({ dueDateDisplay: formatted_date })
