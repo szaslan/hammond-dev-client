@@ -111,13 +111,13 @@ class Assignments extends Component {
 
                 <div className="all-assignments">
                     <Container>
-                        <p className="title">Assignments</p>
-                        <hr className="hr-2"></hr>
+                        
                         {/* <ul className="assignment-list"> */}
                         <Dropdown direction="down" className="dropdown-1" isOpen={this.state.dropdownOpen} toggle={this.toggle}>
                             <DropdownToggle className="dropdown-tog" caret>
-                                Assignments
+                                ASSIGNMENT TITLE
                             </DropdownToggle>
+                            <hr className="hr-2"></hr>
                             <DropdownMenu className="dropdown-men">
                                 {this.state.assignments ?
                                     this.state.assignments.map(assignments =>

@@ -34,8 +34,10 @@
     text-align: center;
 }
 
-.dropdown-ite{
-  
+.dropdown-tog, .dropdown-tog:visited, .dropdown-tog:active, .dropdown-tog:hover{
+  background-color: white !important;
+  color: black !important;
+  border:none !important;
 }
 
 .dropdown-ite:hover{

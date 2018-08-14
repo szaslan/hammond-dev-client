@@ -1,10 +1,10 @@
 .assignment-info{
-    margin-left: 50%;
+    /* margin-left: 50%; */
     width: 50vw;
     height: 50vh;
     padding-top: 5vh;
-    display: flex;
-    flex-direction: column;
+    /* display: flex; */
+    /* flex-direction: column; */
     font-family: "Open Sans";
     text-align: left;
 }
