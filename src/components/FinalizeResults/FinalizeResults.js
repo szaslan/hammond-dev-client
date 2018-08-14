@@ -378,174 +378,174 @@ class FinalizeResults extends Component {
                                     <Loader type="TailSpin" color="black" height={80} width={80} />
                             }
                         </div> */}
-                        </div>
-                        :
-                        <div>
-                            {
-                                localStorage.getItem("completed_all_reviews_" + this.props.assignment_id) ?
-                                    // localStorage.getItem("harsh_students_" + this.props.assignment_id) && localStorage.getItem("max_" + this.props.assignment_id) ?
-                                    <div>
-                                        <SideNav
-                                            title="Simple Sidenav"
-                                            items={['Item 1', 'Item 2']}
-                                            showNav={this.state.showNav}
+                    </div>
+                    :
+                    <div>
+                        {
+                            localStorage.getItem("completed_all_reviews_" + this.props.assignment_id) ?
+                                // localStorage.getItem("harsh_students_" + this.props.assignment_id) && localStorage.getItem("max_" + this.props.assignment_id) ?
+                                <div>
+                                    <SideNav
+                                        title="Simple Sidenav"
+                                        items={['Item 1', 'Item 2']}
+                                        showNav={this.state.showNav}
+                                    />
+                                    <span className="boxplot" id={"TooltipBoxplot"}>
+                                        <Boxplot
+                                            width={400} height={25} orientation="horizontal"
+                                            min={0} max={100}
+                                            stats={{
+                                                whiskerLow: localStorage.getItem("min_" + this.props.assignment_id),
+                                                quartile1: localStorage.getItem("q1_" + this.props.assignment_id),
+                                                quartile2: localStorage.getItem("median_" + this.props.assignment_id),
+                                                quartile3: localStorage.getItem("q3_" + this.props.assignment_id),
+                                                whiskerHigh: localStorage.getItem("max_" + this.props.assignment_id),
+                                                outliers: [],
+                                            }} />
+                                    </span>
+                                    <br></br>
+                                    <br></br>
+                                    <strong>Completed Peer Reviews:</strong> {localStorage.getItem("finalizeDisplayTextNumCompleted_" + this.props.assignment_id)} / {localStorage.getItem("finalizeDisplayTextNumAssigned_" + this.props.assignment_id)}
+                                    <br></br>
+                                    <br></br>
+                                    {/* <strong>Completed All Reviews: </strong>{localStorage.getItem("completed_all_reviews_" + this.props.assignment_id)} / {Number(localStorage.getItem("completed_all_reviews_out_of_" + this.props.assignment_id)) + Number(localStorage.getItem("completed_all_reviews_" + this.props.assignment_id))} */}
+                                    <Tooltip placement="right" delay={{ show: "300" }} isOpen={this.state.tooltipOpen} target={"TooltipBoxplot"} toggle={this.toggle}>
+                                        <strong>Min Score:</strong> {localStorage.getItem("min_" + this.props.assignment_id)}
+                                        <br></br>
+                                        <strong>First Quartile:</strong> {localStorage.getItem("q1_" + this.props.assignment_id)}
+                                        <br></br>
+                                        <strong>Median Score:</strong> {localStorage.getItem("median_" + this.props.assignment_id)}
+                                        <br></br>
+                                        <strong>Third Quartile:</strong> {localStorage.getItem("q3_" + this.props.assignment_id)}
+                                        <br></br>
+                                        <strong>Max Score:</strong> {localStorage.getItem("max_" + this.props.assignment_id)}
+                                    </Tooltip>
+
+                                    <br></br>
+                                    <br></br>
+
+                                    <Row>
+                                        <Well className="well2">
+                                            <Flexbox className="accordion-flexbox" flexDirection="column" minWidth="300px" maxWidth="500px" width="100%" flexWrap="wrap">
+                                                {/* <Accordion name="Definitely Harsh" content={JSON.parse(localStorage.getItem("harsh_students_" + this.props.assignment_id))} /> */}
+                                                {/* <Accordion name="Definitely Lenient" content={JSON.parse(localStorage.getItem("lenient_students_" + this.props.assignment_id))} /> */}
+                                                {/* <Accordion name="Missing Some Peer Reviews" content={JSON.parse(localStorage.getItem("some_incomplete_students_" + this.props.assignment_id))} /> */}
+                                                {/* <Accordion name="Missing All Peer Reviews" content={JSON.parse(localStorage.getItem("all_incomplete_students_" + this.props.assignment_id))} /> */}
+                                                {/*<Accordion name="Flagged Grades" content={JSON.parse(localStorage.getItem("flagged_students_" + this.props.assignment_id))} /> */}
+                                            </Flexbox>
+                                            <Popup className="pop-up"
+                                                trigger={<button className="button-student"> Flagged Grades </button>}
+                                                modal
+                                                closeOnDocumentClick
+                                            >
+                                                <span><h5>Flagged Grades</h5></span>
+                                                <hr />
+                                                <span>{JSON.parse(localStorage.getItem("flagged_students_" + this.props.assignment_id))}</span>
+                                            </Popup>
+                                        </Well>
+                                    </Row>
+                                    <br></br>
+                                    <Row>
+                                        <Flexbox className="chartbox" flexDirection="column" width="200px" flexWrap="wrap">
+                                            <h5 className="graphTitle">Completion</h5>
+                                            <ReactSvgPieChart className="piechart"
+                                                expandSize={3}
+                                                expandOnHover="false"
+                                                data={[
+                                                    { value: Number(localStorage.getItem("completed_all_reviews_" + this.props.assignment_id)), color: '#E38627' },
+                                                    { value: Number(localStorage.getItem("completed_no_reviews_" + this.props.assignment_id)), color: '#C13C37' },
+                                                    { value: Number(localStorage.getItem("completed_some_reviews_" + this.props.assignment_id)), color: '#6A2135' },
+                                                ]}
+                                                onSectorHover={(d) => {
+                                                    if (d) {
+                                                        console.log("value: ", d.value);
+                                                        this.state.sectorValue1 = d.value;
+                                                    }
+                                                }
+                                                }
+                                            //   <Well>This is the value of the sector over which you are hovering: {this.state.sectorValue1}</Well>
+                                            />
+                                            <br />
+                                            <Row>
+                                                <Ellipse rx={7} ry={4} fill={{ color: '#E38627' }} strokeWidth={5} />
+                                                <p className="graphKey">Completed all reviews</p>
+                                            </Row>
+                                            <Row>
+                                                <Ellipse rx={7} ry={4} fill={{ color: '#C13C37' }} strokeWidth={5} />
+                                                <p className="graphKey">Completed some reviews</p>
+                                            </Row>
+                                            <Row>
+                                                <Ellipse rx={7} ry={4} fill={{ color: '#6A2135' }} strokeWidth={5} />
+                                                <p className="graphKey">Completed no reviews</p>
+                                            </Row>
+
+
+                                            />
+                                            </Flexbox>
+                                        <Flexbox className="chartbox" flexDirection="column" width="200px" flexWrap="wrap">
+                                            <h5 className="graphTitle">Grading Classification</h5>
+                                            <ReactSvgPieChart className="piechart"
+                                                expandSize={3}
+                                                expandOnHover="false"
+                                                data={[
+                                                    { value: Number(localStorage.getItem("spazzy_" + this.props.assignment_id)), color: '#C9CBA3' },
+                                                    { value: Number(localStorage.getItem("definitely_harsh_" + this.props.assignment_id)), color: '#FFE1A8' },
+                                                    { value: Number(localStorage.getItem("could_be_harsh_" + this.props.assignment_id)), color: '#E26D5C' },
+                                                    { value: Number(localStorage.getItem("could_be_lenient_" + this.props.assignment_id)), color: '#723D46' },
+                                                    { value: Number(localStorage.getItem("definitely_lenient_" + this.props.assignment_id)), color: '#472D30' },
+                                                    { value: Number(localStorage.getItem("could_be_fair_" + this.props.assignment_id)), color: '#197278' },
+                                                    { value: Number(localStorage.getItem("definitely_fair_" + this.props.assignment_id)), color: '#772E25' }
+                                                ]}
+                                                onSectorHover={(d) => {
+                                                    if (d) {
+                                                        console.log("value: ", d.value);
+                                                        this.state.sectorValue2 = d.value;
+                                                    }
+                                                }
+                                                }
+                                            />
+                                            <Well>This is the value of the sector over which you are hovering: {this.state.sectorValue2}</Well>
+                                            ]}
                                         />
-                                        <span className="boxplot" id={"TooltipBoxplot"}>
-                                            <Boxplot
-                                                width={400} height={25} orientation="horizontal"
-                                                min={0} max={100}
-                                                stats={{
-                                                    whiskerLow: localStorage.getItem("min_" + this.props.assignment_id),
-                                                    quartile1: localStorage.getItem("q1_" + this.props.assignment_id),
-                                                    quartile2: localStorage.getItem("median_" + this.props.assignment_id),
-                                                    quartile3: localStorage.getItem("q3_" + this.props.assignment_id),
-                                                    whiskerHigh: localStorage.getItem("max_" + this.props.assignment_id),
-                                                    outliers: [],
-                                                }} />
-                                        </span>
-                                        <br></br>
-                                        <br></br>
-                                        <strong>Completed Peer Reviews:</strong> {localStorage.getItem("finalizeDisplayTextNumCompleted_" + this.props.assignment_id)} / {localStorage.getItem("finalizeDisplayTextNumAssigned_" + this.props.assignment_id)}
-                                        <br></br>
-                                        <br></br>
-                                        {/* <strong>Completed All Reviews: </strong>{localStorage.getItem("completed_all_reviews_" + this.props.assignment_id)} / {Number(localStorage.getItem("completed_all_reviews_out_of_" + this.props.assignment_id)) + Number(localStorage.getItem("completed_all_reviews_" + this.props.assignment_id))} */}
-                                        <Tooltip placement="right" delay={{ show: "300" }} isOpen={this.state.tooltipOpen} target={"TooltipBoxplot"} toggle={this.toggle}>
-                                            <strong>Min Score:</strong> {localStorage.getItem("min_" + this.props.assignment_id)}
-                                            <br></br>
-                                            <strong>First Quartile:</strong> {localStorage.getItem("q1_" + this.props.assignment_id)}
-                                            <br></br>
-                                            <strong>Median Score:</strong> {localStorage.getItem("median_" + this.props.assignment_id)}
-                                            <br></br>
-                                            <strong>Third Quartile:</strong> {localStorage.getItem("q3_" + this.props.assignment_id)}
-                                            <br></br>
-                                            <strong>Max Score:</strong> {localStorage.getItem("max_" + this.props.assignment_id)}
-                                        </Tooltip>
-
-                                        <br></br>
-                                        <br></br>
-
-                                        <Row>
-                                            <Well className="well2">
-                                                <Flexbox className="accordion-flexbox" flexDirection="column" minWidth="300px" maxWidth="500px" width="100%" flexWrap="wrap">
-                                                    {/* <Accordion name="Definitely Harsh" content={JSON.parse(localStorage.getItem("harsh_students_" + this.props.assignment_id))} /> */}
-                                                    {/* <Accordion name="Definitely Lenient" content={JSON.parse(localStorage.getItem("lenient_students_" + this.props.assignment_id))} /> */}
-                                                    {/* <Accordion name="Missing Some Peer Reviews" content={JSON.parse(localStorage.getItem("some_incomplete_students_" + this.props.assignment_id))} /> */}
-                                                    {/* <Accordion name="Missing All Peer Reviews" content={JSON.parse(localStorage.getItem("all_incomplete_students_" + this.props.assignment_id))} /> */}
-                                                    {/*<Accordion name="Flagged Grades" content={JSON.parse(localStorage.getItem("flagged_students_" + this.props.assignment_id))} /> */}
-                                                </Flexbox>
-                                                <Popup className="pop-up"
-                                                    trigger={<button className="button-student"> Flagged Grades </button>}
-                                                    modal
-                                                    closeOnDocumentClick
-                                                >
-                                                    <span><h5>Flagged Grades</h5></span>
-                                                    <hr />
-                                                    <span>{JSON.parse(localStorage.getItem("flagged_students_" + this.props.assignment_id))}</span>
-                                                </Popup>
-                                            </Well>
-                                        </Row>
-                                        <br></br>
-                                        <Row>
-                                            <Flexbox className="chartbox" flexDirection="column" width="200px" flexWrap="wrap">
-                                                <h5 className="graphTitle">Completion</h5>
-                                                <ReactSvgPieChart className="piechart"
-                                                    expandSize={3}
-                                                    expandOnHover="false"
-                                                    data={[
-                                                        { value: Number(localStorage.getItem("completed_all_reviews_" + this.props.assignment_id)), color: '#E38627' },
-                                                        { value: Number(localStorage.getItem("completed_no_reviews_" + this.props.assignment_id)), color: '#C13C37' },
-                                                        { value: Number(localStorage.getItem("completed_some_reviews_" + this.props.assignment_id)), color: '#6A2135' },
-                                                    ]}
-                                                          onSectorHover={(d) => {
-                                                        if (d) {
-                                                            console.log("value: ", d.value);
-                                                            this.state.sectorValue1 = d.value;
-                                                        }
-                                                    }
-                                                    }
-                                                          <Well>This is the value of the sector over which you are hovering: {this.state.sectorValue1}</Well>
-                                                />
                                                 <br />
-                                                <Row>
-                                                    <Ellipse rx={7} ry={4} fill={{ color: '#E38627' }} strokeWidth={5} />
-                                                    <p className="graphKey">Completed all reviews</p>
-                                                </Row>
-                                                <Row>
-                                                    <Ellipse rx={7} ry={4} fill={{ color: '#C13C37' }} strokeWidth={5} />
-                                                    <p className="graphKey">Completed some reviews</p>
-                                                </Row>
-                                                <Row>
-                                                    <Ellipse rx={7} ry={4} fill={{ color: '#6A2135' }} strokeWidth={5} />
-                                                    <p className="graphKey">Completed no reviews</p>
-                                                </Row>
-
-                                                    
-                                                />
-                                            </Flexbox>
-                                            <Flexbox className="chartbox" flexDirection="column" width="200px" flexWrap="wrap">
-                                                <h5 className="graphTitle">Grading Classification</h5>
-                                                <ReactSvgPieChart className="piechart"
-                                                    expandSize={3}
-                                                    expandOnHover="false"
-                                                    data={[
-                                                        { value: Number(localStorage.getItem("spazzy_" + this.props.assignment_id)), color: '#C9CBA3' },
-                                                        { value: Number(localStorage.getItem("definitely_harsh_" + this.props.assignment_id)), color: '#FFE1A8' },
-                                                        { value: Number(localStorage.getItem("could_be_harsh_" + this.props.assignment_id)), color: '#E26D5C' },
-                                                        { value: Number(localStorage.getItem("could_be_lenient_" + this.props.assignment_id)), color: '#723D46' },
-                                                        { value: Number(localStorage.getItem("definitely_lenient_" + this.props.assignment_id)), color: '#472D30' },
-                                                        { value: Number(localStorage.getItem("could_be_fair_" + this.props.assignment_id)), color: '#197278' },
-                                                        { value: Number(localStorage.getItem("definitely_fair_" + this.props.assignment_id)), color: '#772E25' }
-                                                    ]}
-                                                    onSectorHover={(d) => {
-                                                        if (d) {
-                                                            console.log("value: ", d.value);
-                                                            this.state.sectorValue2 = d.value;
-                                                        }
-                                                    }
-                                                    }
-                                                />
-                                                <Well>This is the value of the sector over which you are hovering: {this.state.sectorValue2}</Well>
-                                                    ]}
-                                                />
-                                                <br />
-                                                <Row>
-                                                    <Ellipse rx={7} ry={4} fill={{ color: '#C9CBA3' }} strokeWidth={5} />
-                                                    <p className="graphKey">Definitely Harsh</p>
-                                                </Row>
-                                                <Row>
-                                                    <Ellipse rx={7} ry={4} fill={{ color: '#FFE1A8' }} strokeWidth={5} />
-                                                    <p className="graphKey">Might be Harsh</p>
-                                                </Row>
-                                                <Row>
-                                                    <Ellipse rx={7} ry={4} fill={{ color: '#E26D5C' }} strokeWidth={5} />
-                                                    <p className="graphKey">Definitely Lenient</p>
-                                                </Row>
-                                                <Row>
-                                                    <Ellipse rx={7} ry={4} fill={{ color: '#723D46' }} strokeWidth={5} />
-                                                    <p className="graphKey">Might be Lenient</p>
-                                                </Row>
-                                                <Row>
-                                                    <Ellipse rx={7} ry={4} fill={{ color: '#472D30' }} strokeWidth={5} />
-                                                    <p className="graphKey">Definitely Fair</p>
-                                                </Row>
-                                                <Row>
-                                                    <Ellipse rx={7} ry={4} fill={{ color: '#C197278' }} strokeWidth={5} />
-                                                    <p className="graphKey">Might be Fair</p>
-                                                </Row>
-                                                <Row>
-                                                    <Ellipse rx={7} ry={4} fill={{ color: '#772E25' }} strokeWidth={5} />
-                                                    <p className="graphKey">Spazzy</p>
-                                                </Row>
-                                            </Flexbox>
-                                        </Row>
-                                    </div>
-                                    :
-                                    <Progress value={progress}> {progress_bar_message} </Progress>
-                            }
-                        </div>
+                                            <Row>
+                                                <Ellipse rx={7} ry={4} fill={{ color: '#C9CBA3' }} strokeWidth={5} />
+                                                <p className="graphKey">Definitely Harsh</p>
+                                            </Row>
+                                            <Row>
+                                                <Ellipse rx={7} ry={4} fill={{ color: '#FFE1A8' }} strokeWidth={5} />
+                                                <p className="graphKey">Might be Harsh</p>
+                                            </Row>
+                                            <Row>
+                                                <Ellipse rx={7} ry={4} fill={{ color: '#E26D5C' }} strokeWidth={5} />
+                                                <p className="graphKey">Definitely Lenient</p>
+                                            </Row>
+                                            <Row>
+                                                <Ellipse rx={7} ry={4} fill={{ color: '#723D46' }} strokeWidth={5} />
+                                                <p className="graphKey">Might be Lenient</p>
+                                            </Row>
+                                            <Row>
+                                                <Ellipse rx={7} ry={4} fill={{ color: '#472D30' }} strokeWidth={5} />
+                                                <p className="graphKey">Definitely Fair</p>
+                                            </Row>
+                                            <Row>
+                                                <Ellipse rx={7} ry={4} fill={{ color: '#C197278' }} strokeWidth={5} />
+                                                <p className="graphKey">Might be Fair</p>
+                                            </Row>
+                                            <Row>
+                                                <Ellipse rx={7} ry={4} fill={{ color: '#772E25' }} strokeWidth={5} />
+                                                <p className="graphKey">Spazzy</p>
+                                            </Row>
+                                        </Flexbox>
+                                    </Row>
+                                </div>
+                                :
+                                <Progress value={progress}> {progress_bar_message} </Progress>
                         }
+                    </div>
+                }
             </div>
         )
-                }
-            }
-            export default FinalizeResults;
+    }
+}
+export default FinalizeResults;
