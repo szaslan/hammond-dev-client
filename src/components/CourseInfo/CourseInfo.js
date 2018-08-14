@@ -6,10 +6,10 @@ import Flexbox from 'flexbox-react';
 import history from '../../history'
 import { Container, Jumbotron } from 'reactstrap';
 import JumbotronComp from '../JumbotronComp/JumbotronComp'
-import '../BreadcrumbComp/BreadcrumbComp.css';
+
 import { resolve } from 'path';
 import Loader from 'react-loader-spinner'
-
+import SidebarComp from '../SideBar/SideBar';
 
 class CourseInfo extends Component {
     constructor(props) {
@@ -22,10 +22,11 @@ class CourseInfo extends Component {
             loaded: false,
             ...props
         }
+      
         this.CreateTables = this.CreateTables.bind(this);
         this.ResetTables = this.ResetTables.bind(this);
-
     }
+  
     CreateTables() {
         fetch('/api/create_tables', {
             method: 'GET',
@@ -82,7 +83,6 @@ class CourseInfo extends Component {
                 }
             })
             .catch(err => console.log("no auth"))
-
         this.CreateTables();
     }
 
