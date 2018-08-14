@@ -2,8 +2,8 @@
 
 /* ------------Assignments List Settings------------ */
 .all-assignments{
-  width:50vw;
-  float: left;
+  	width:50vw;
+  	float: left;
 }
 .assignment-list{
     list-style-type: none;
@@ -36,17 +36,17 @@
 
 
 .not-pr{
-  background-color:#e0e1e5;
-  border: 2px solid #e2c6c5;
-  opacity: 1;
+	background-color:#e0e1e5;
+	border: 2px solid #e2c6c5;
+	opacity: 1;
 }
 
 .not-pr:hover{
-  transform: none !important;
-  box-shadow: none !important;
-  border: 2px solid #e2c6c5 !important;
-  background-color:#e0e1e5 !important;
-  opacity:1;
+	transform: none !important;
+	box-shadow: none !important;
+	border: 2px solid #e2c6c5 !important;
+	background-color:#e0e1e5 !important;
+	opacity: 1;
 }
 
 .assignment-name:hover{
@@ -58,47 +58,66 @@
 }
 
 .boxplot{
-  margin-left: 2vh;
+  	margin-left: 2vh;
 }
 
 .well2{
-  margin-left: 3vh;
-}
-
-.button-student{
-  background-color: #f9f7f7;
-  border-radius: 3px;
-  margin-top: 4px;
-  box-shadow: 0px 10px 5px -8px rgba(0,0,0,0.1);
-  border: 2px solid #e2c6c5;
-  margin-bottom: 3px;
+  	margin-left: 3vh;
 }
 
 .pop-up{
-  border-radius: 3px;
-  text-align: center;
+	border-radius: 3px;
+	text-align: center;
 }
 
 .graphTitle{
-  font-family: 'Open Sans';
-  font-size: 16px;
-  text-align: center;
+	font-family: 'Open Sans';
+	font-size: 16px;
+	text-align: center;
 }
 
 .chartbox{
-  padding: 10px;
+  	padding: 10px;
 }
 .chart-row{
-  min-width:500px;
+  	min-width:500px;
 }
 
 input[type=checkbox] {
-  width: 17px !important;
+  	width: 17px !important;
 }
 
-/* .cardbody1{
-  margin-top: 4px;
+/* ------------Accordion settings------------ */
+/* .cardbody1 {
+  	margin-top: 4px;
 } */
+
+/* .card1 {
+    margin-bottom:10px !important;
+    border:none!important;
+} */
+
+/* .cardbody1{
+    background-color:white;
+    margin-top:0px !important;
+    padding:0px!important;
+    width:100% !important;
+} */
+
+/* Also used in FinalizeResults components */
+.button-student{
+	background-color: #f9f7f7;
+	border-radius: 3px;
+	margin-top: 4px;
+	box-shadow: 0px 10px 5px -8px rgba(0,0,0,0.1);
+	border: 2px solid #e2c6c5;
+	margin-bottom: 3px;
+}
+
+
+
+
+
 
   /* ------------Breadcrumbs settings------------ */
   /*.breadcrumb1{
@@ -109,8 +128,8 @@ input[type=checkbox] {
 /*
   .row {
       margin-left: 15px !important;
-  }
-  .well1{
+  }*/
+  /* .well1{
     border-radius:0px;
     background:white;
     border:0px solid;
@@ -118,14 +137,14 @@ input[type=checkbox] {
     font-size: 20px;
     height:60vh;
     margin:0px;
-  }
-  .bottom{
+  } */
+  /* .bottom{
     background-color:var(--navy-plum);
     height:20vh;
     border:0px solid;
     border-radius:0px;
-  }
-  .about-button{
+  } */
+  /* .about-button{
     border:none;
     padding:5px;
     padding-left:7px;
@@ -133,19 +152,19 @@ input[type=checkbox] {
     background-color:var(--navy-plum);
     font-size:12px;
     color:var(--light-peach);
-  }
-  .bottom-container{
+  } */
+  /* .bottom-container{
     padding:0px !important;
 
-  }
-  .jumbo-row{
+  } */
+  /* .jumbo-row{
     content: "";
     clear: both;
-  }
-  .col1{
+  } */
+  /* .col1{
     width: 80vw !important;
-  }
-  .signout-button{
+  } */
+  /* .signout-button{
     border:none;
     padding:5px;
     padding-left:7px;
@@ -160,19 +179,19 @@ input[type=checkbox] {
     left:100px !important;
     width:70px;
 
-  }
-  .col2{
+  } */
+  /* .col2{
     margin-right:0px !important;
     padding-right:0px !important;
     width: 17vw!important;
-  }
+  } */
 
-  .col3{
+  /* .col3{
     background-color:white;
     padding-left:10px;
     padding-right:10px;
-  }
-  .well1-row{
+  } */
+  /* .well1-row{
     width:70vw;
     max-width: 800px;
     margin: auto!important;
@@ -272,17 +291,8 @@ input[type=checkbox] {
     margin-top:10px;
     padding-top:0px;
     width:100%;
-  }
-  .card1{
-    margin-bottom:10px !important;
-    border:none!important;
-  }
-  .cardbody1{
-    background-color:white;
-    margin-top:0px !important;
-    padding:0px!important;
-    width:100% !important;
-  }
-  .accordion-flexbox{
-    padding-top:10px;
   }*/
+
+  /* .accordion-flexbox{
+    padding-top:10px;
+  } */
