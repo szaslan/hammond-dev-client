@@ -12,7 +12,6 @@ class Students extends Component {
 
 
         this.state = {
-            apiKey: '1876~ypSApnhVIL4RWGQCp5oW7aJqw4NoP0kxvdKRiTVqcpGXVgzeToigIKbVBskcqk8u',
             showComponent: false,
             students: [],
             dropdownOpen: false,

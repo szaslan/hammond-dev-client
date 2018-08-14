@@ -22,10 +22,28 @@ class CourseInfo extends Component {
             loaded: false,
             ...props
         }
-
+      
+        this.CreateTables = this.CreateTables.bind(this);
+        this.ResetTables = this.ResetTables.bind(this);
+    }
+  
+    CreateTables() {
+        fetch('/api/create_tables', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+        })
     }
 
-
+    ResetTables() {
+        fetch('/api/reset_tables', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+        })
+    }
     // componentWillMount(){
     //     if(this.state.location.state.auth){
     //         this.setState({auth: true})
@@ -49,7 +67,6 @@ class CourseInfo extends Component {
             credentials: 'include',
             body: JSON.stringify(data)
         })
-
             .then(res => {
                 if (res.status === 401) {
                     console.log("4040404")
@@ -66,6 +83,7 @@ class CourseInfo extends Component {
                 }
             })
             .catch(err => console.log("no auth"))
+        this.CreateTables();
     }
 
 
@@ -81,36 +99,29 @@ class CourseInfo extends Component {
 
         return (
             <div>
+                <JumbotronComp mainTitle={this.state.courseJSON.name}
+                    tabs />
                 {this.state.loaded ?
-                    <SidebarComp
-                        content={
-                            <div>
-                                <JumbotronComp 
-                                    mainTitle={this.state.courseJSON.name}
-                                    tabs
-                                    tab_1_link={{ pathname: this.state.url + '/' + this.state.courseJSON.name + "/assignments/", state: { name: this.state.courseJSON.name } }} 
-                                    tab_2_link={{pathname: this.state.url + "/" + this.state.courseJSON.name + "/students", state: { name: this.state.courseJSON.name }}}/>
-                                <Container className="well1-container" fluid>
-                                    <Flexbox className="big-buttons-flexbox" minWidth="700px" width="60vw" justifyContent="center"
-                                        minHeight="50vh" flexDirection="column">
-                                        <Flexbox
-                                            justifyContent="space-around"
-                                            flexWrap="nowrap">
-                                            <Link to={{ pathname: this.state.url + '/' + this.state.courseJSON.name + "/assignments/", state: { name: this.state.courseJSON.name }, }}>
-                                                <button className="pull-left big-button">Assignments</button>
-                                            </Link>
-                                            <Link to={{ pathname: this.state.url + "/" + this.state.courseJSON.name + "/students", state: { name: this.state.courseJSON.name } }}>
-                                                <button className="pull-right big-button">Students</button>
-                                            </Link>
-
-                                        </Flexbox>
-                                    </Flexbox>
-                                </Container>
-                            </div>}
-                    />
+                    <Container className="well1-container" fluid>
+                        <Flexbox className="big-buttons-flexbox" minWidth="700px" width="60vw" justifyContent="center"
+                            minHeight="50vh" flexDirection="column">
+                            <Flexbox
+                                justifyContent="space-around"
+                                flexWrap="nowrap">
+                                <Link to={{ pathname: this.state.url + '/' + this.state.courseJSON.name + "/assignments/", state: { name: this.state.courseJSON.name }, }}>
+                                    <button className="pull-left big-button">Assignments</button>
+                                </Link>
+                                <Link to={{ pathname: this.state.url + "/" + this.state.courseJSON.name + "/students", state: { name: this.state.courseJSON.name } }}>
+                                    <button className="pull-right big-button">Students</button>
+                                </Link>
+                            </Flexbox>
+                        </Flexbox>
+                    </Container>
                     :
                     <Loader type="TailSpin" color="black" height={80} width={80} />
                 }
+
+                <button onClick={this.ResetTables}>Reset Database Tables</button>
             </div>
 
         );

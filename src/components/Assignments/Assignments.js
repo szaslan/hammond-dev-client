@@ -1,20 +1,15 @@
 import React, { Component } from 'react';
-import './Assignments.css';
 import { Link } from "react-router-dom";
-import Loader from 'react-loader-spinner'
-import { Well, Row, Col, Breadcrumb } from 'react-bootstrap';
-import JumbotronComp from '../JumbotronComp/JumbotronComp';
-import AssignmentInfo from '../AssignmentInfo/AssignmentInfo';
-import '../BreadcrumbComp/BreadcrumbComp.css';
-import history from '../../history';
 import { Container, Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
+import Loader from 'react-loader-spinner'
+import history from '../../history';
 
-//FILTERS ASSIGNMENTS TO ONES WITH POINTS POSSIBLE > 10
-//USE THIS TO FILTER OUT ASSIGNMENTS THAT ARE NOT PEER REVIEWABLE
-//if (currAssignment.peer_reviews == true)
+import '../BreadcrumbComp/BreadcrumbComp.css';
+
+import './Assignments.css';
+
 function FilterAssignments(props) {
     const currAssignment = props.currAssigment;
-
 
     if (currAssignment.peer_reviews) {
         return (
@@ -27,7 +22,6 @@ function FilterAssignments(props) {
     else {
         // return <li key={currAssignment.id} className="assignment-name not-pr">{currAssignment.name}</li>
         return <DropdownItem disabled className="dropdown-ite not-pr" key={currAssignment.id} /*className="assignment-name not-pr"*/>{currAssignment.name}</DropdownItem>
-            ;
     }
 }
 
@@ -35,16 +29,17 @@ class Assignments extends Component {
     constructor(props, context) {
         super(props, context);
 
-        //URL is the current url while taking in the parameters from the props of the previous url
-        this.toggle = this.toggle.bind(this);
-
         this.state = {
-            assignments: [],
+            assignments: null,
             loaded: false,
             dropdownOpen: false,
             url: '',
+
             ...props,
         }
+
+        //URL is the current url while taking in the parameters from the props of the previous url
+        this.toggle = this.toggle.bind(this);
     }
 
     toggle() {
@@ -53,13 +48,12 @@ class Assignments extends Component {
         }));
     }
 
-    componentWillMount() {
-        this.setState({ assignments: null });
-    }
     //fetch assignments for course with course_id passed down
     componentDidMount() {
         const { match: { params } } = this.props;
-        this.setState({ url: `/courses/${params.course_id}/${params.assignment_name}/assignments/` });
+        this.setState({
+            url: `/courses/${params.course_id}/${params.assignment_name}/assignments/`
+        });
 
         let data = {
             course_id: params.course_id,
@@ -78,7 +72,8 @@ class Assignments extends Component {
                     console.log("4040404")
                     history.push("/login")
                     throw new Error();
-                } else {
+                }
+                else {
                     res.json().then(data => {
                         this.setState({
                             assignments: data,
@@ -89,10 +84,6 @@ class Assignments extends Component {
             })
             .catch(err => console.log("Not Authorized."))
     }
-
-
-
-
 
     render() {
         return (

@@ -10,7 +10,7 @@
   margin-left: 20px;
   margin-right: 20px;
   margin-top: 20px;
-  width: 200px;
+  width: 250px;
   box-shadow: 1px 1px 3px 1px rgba(0, 0, 0, 0.1);
   border-radius: 10px !important;
   border: none !important;
@@ -19,4 +19,7 @@
 .classcolor{
   border: none !important;
   border-radius: 10px 10px 0px 0px !important;
+  height: 250px;
+
+  width: 300px;
 }
