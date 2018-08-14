@@ -53,9 +53,9 @@ class AnalyzeButton extends Component {
 		this.handleInputChange = this.handleInputChange.bind(this);
 		this.sendIncompleteMessages = this.sendIncompleteMessages.bind(this);
 
-		this.assignment_id = this.props.assignment_id;
-		this.assignment_info = this.props.assignment_info;
-		this.course_id = this.props.course_id;
+		this.assignment_id = this.props.assignmentId;
+		this.assignment_info = this.props.assignmentInfo;
+		this.course_id = this.props.courseId;
 		this.deadline_1 = null;
 		this.deadline_2 = null;
 		this.deadline_3 = null;
@@ -190,6 +190,7 @@ class AnalyzeButton extends Component {
 				analyzeDisplayText: true,
 			})
 
+			//To automatically finalize if all peer reviews are in
 			if (localStorage.getItem("analyzeDisplayTextMessage_" + this.assignment_id) && localStorage.getItem("analyzeDisplayTextMessage_" + this.assignment_id) == "All reviews accounted for") {
 				console.log("all peer reviews are in, so we can finalize this assignment")
 				// this.handleFinalizeClick()
@@ -199,6 +200,7 @@ class AnalyzeButton extends Component {
 		let data = {
 			assignment_id: this.assignment_id
 		}
+
 		fetch('/api/has_finalize_been_pressed', {
 			method: "POST",
 			headers: {
@@ -206,8 +208,8 @@ class AnalyzeButton extends Component {
 			},
 			body: JSON.stringify(data)
 		})
-			.then(response => {
-				if (response.status == 200) {
+			.then(res => {
+				if (res.status == 200) {
 					this.setState({
 						finalizeDisplayText: true,
 						finalizePressed: true,
@@ -215,57 +217,76 @@ class AnalyzeButton extends Component {
 				}
 			})
 
-		if (localStorage.getItem("calendarDate_" + this.assignment_id + "_1")) {
-			let formatted_date = localStorage.getItem("calendarDate_" + this.assignment_id + "_1");
-			var new_date = new Date(formatted_date)
+		for (var i = 1; i <= 3; i++) {
+			if (localStorage.getItem("calendarDate_" + this.assignment_id + "_" + i)) {
+				let formatted_date = localStorage.getItem("calendarDate_" + this.assignment_id + "_" + i);
+				var new_date = new Date(formatted_date)
 
-			this.deadline_1 = moment(new_date).format('l') + ", " + moment(new_date).format('LTS')
-		}
-
-		if (localStorage.getItem("calendarDate_" + this.assignment_id + "_2")) {
-			let formatted_date = localStorage.getItem("calendarDate_" + this.assignment_id + "_2");
-			var new_date = new Date(formatted_date)
-
-			this.deadline_2 = moment(new_date).format('l') + ", " + moment(new_date).format('LTS')
-		}
-
-		if (localStorage.getItem("calendarDate_" + this.assignment_id + "_3")) {
-			let formatted_date = localStorage.getItem("calendarDate_" + this.assignment_id + "_3");
-			var new_date = new Date(formatted_date)
-
-			this.deadline_3 = moment(new_date).format('l') + ", " + moment(new_date).format('LTS')
-		}
-
-		if (localStorage.getItem("sendIncompleteMessages_" + this.assignment_id)) {
-			if (!this.state.sendIncompleteMessages) {
-				this.setState({
-					sendIncompleteMessages: true,
-				})
-			}
-		}
-		if (localStorage.getItem("custom_benchmarks_" + this.assignment_id)) {
-			if (!this.state.custom_benchmarks) {
-				this.setState({
-					custom_benchmarks: true,
-				})
-			}
-		}
-		if (localStorage.getItem("penalizing_for_incompletes_" + this.assignment_id)) {
-			if (!this.state.penalizing_for_incompletes) {
-				this.setState({
-					penalizing_for_incompletes: true,
-				})
-			}
-		}
-		if (localStorage.getItem("penalizing_for_reassigned_" + this.assignment_id)) {
-			if (!this.state.penalizing_for_reassigned) {
-				this.setState({
-					penalizing_for_reassigned: true,
-				})
+				this["deadline_" + i] = moment(new_date).format('l') + ", " + moment(new_date).format('LTS')
 			}
 		}
 
+		// if (localStorage.getItem("calendarDate_" + this.assignment_id + "_1")) {
+		// 	let formatted_date = localStorage.getItem("calendarDate_" + this.assignment_id + "_1");
+		// 	var new_date = new Date(formatted_date)
 
+		// 	this.deadline_1 = moment(new_date).format('l') + ", " + moment(new_date).format('LTS')
+		// }
+
+		// if (localStorage.getItem("calendarDate_" + this.assignment_id + "_2")) {
+		// 	let formatted_date = localStorage.getItem("calendarDate_" + this.assignment_id + "_2");
+		// 	var new_date = new Date(formatted_date)
+
+		// 	this.deadline_2 = moment(new_date).format('l') + ", " + moment(new_date).format('LTS')
+		// }
+
+		// if (localStorage.getItem("calendarDate_" + this.assignment_id + "_3")) {
+		// 	let formatted_date = localStorage.getItem("calendarDate_" + this.assignment_id + "_3");
+		// 	var new_date = new Date(formatted_date)
+
+		// 	this.deadline_3 = moment(new_date).format('l') + ", " + moment(new_date).format('LTS')
+		// }
+
+		let variables = ["sendIncompleteMessages_", "custom_benchmarks_", "penalizing_for_incompletes_", "penalizing_for_reassigned_"];
+
+		variables.forEach(variable => {
+			if (localStorage.getItem(variable + this.assignment_id)) {
+				if (!this.state[variable]) {
+					this.setState({
+						[variable]: true,
+					})
+				}
+			}
+		})
+
+		// if (localStorage.getItem("sendIncompleteMessages_" + this.assignment_id)) {
+		// 	if (!this.state.sendIncompleteMessages) {
+		// 		this.setState({
+		// 			sendIncompleteMessages: true,
+		// 		})
+		// 	}
+		// }
+		// if (localStorage.getItem("custom_benchmarks_" + this.assignment_id)) {
+		// 	if (!this.state.custom_benchmarks) {
+		// 		this.setState({
+		// 			custom_benchmarks: true,
+		// 		})
+		// 	}
+		// }
+		// if (localStorage.getItem("penalizing_for_incompletes_" + this.assignment_id)) {
+		// 	if (!this.state.penalizing_for_incompletes) {
+		// 		this.setState({
+		// 			penalizing_for_incompletes: true,
+		// 		})
+		// 	}
+		// }
+		// if (localStorage.getItem("penalizing_for_reassigned_" + this.assignment_id)) {
+		// 	if (!this.state.penalizing_for_reassigned) {
+		// 		this.setState({
+		// 			penalizing_for_reassigned: true,
+		// 		})
+		// 	}
+		// }
 
 		setInterval(() => {
 			this.setState({
@@ -277,73 +298,106 @@ class AnalyzeButton extends Component {
 	}
 
 	componentDidUpdate() {
-		
+		for (var i = 1; i <= 3; i++) {
+			if (localStorage.getItem("calendarDate_" + this.assignment_id + "_" + i)) {
+				let formatted_date = localStorage.getItem("calendarDate_" + this.assignment_id + "_" + i);
+				var new_date = new Date(formatted_date)
 
-		if (localStorage.getItem("calendarDate_" + this.assignment_id + "_1")) {
-			let formatted_date = localStorage.getItem("calendarDate_" + this.assignment_id + "_1");
-			var new_date = new Date(formatted_date)
-
-			this.deadline_1 = moment(new_date).format('l') + ", " + moment(new_date).format('LTS')
-		}
-
-		if (localStorage.getItem("calendarDate_" + this.assignment_id + "_2")) {
-			let formatted_date = localStorage.getItem("calendarDate_" + this.assignment_id + "_2");
-			var new_date = new Date(formatted_date)
-
-			this.deadline_2 = moment(new_date).format('l') + ", " + moment(new_date).format('LTS')
-		}
-
-		if (localStorage.getItem("calendarDate_" + this.assignment_id + "_3")) {
-			let formatted_date = localStorage.getItem("calendarDate_" + this.assignment_id + "_3");
-			var new_date = new Date(formatted_date)
-
-			this.deadline_3 = moment(new_date).format('l') + ", " + moment(new_date).format('LTS')
-		}
-		if (localStorage.getItem("sendIncompleteMessages_" + this.assignment_id)) {
-			if (!this.state.sendIncompleteMessages) {
-				this.setState({
-					sendIncompleteMessages: true,
-				})
+				this["deadline_" + i] = moment(new_date).format('l') + ", " + moment(new_date).format('LTS')
 			}
 		}
-		if (localStorage.getItem("custom_benchmarks_" + this.assignment_id)) {
-			if (!this.state.custom_benchmarks) {
-				this.setState({
-					custom_benchmarks: true,
-				})
+		// if (localStorage.getItem("calendarDate_" + this.assignment_id + "_1")) {
+		// 	let formatted_date = localStorage.getItem("calendarDate_" + this.assignment_id + "_1");
+		// 	var new_date = new Date(formatted_date)
+
+		// 	this.deadline_1 = moment(new_date).format('l') + ", " + moment(new_date).format('LTS')
+		// }
+
+		// if (localStorage.getItem("calendarDate_" + this.assignment_id + "_2")) {
+		// 	let formatted_date = localStorage.getItem("calendarDate_" + this.assignment_id + "_2");
+		// 	var new_date = new Date(formatted_date)
+
+		// 	this.deadline_2 = moment(new_date).format('l') + ", " + moment(new_date).format('LTS')
+		// }
+
+		// if (localStorage.getItem("calendarDate_" + this.assignment_id + "_3")) {
+		// 	let formatted_date = localStorage.getItem("calendarDate_" + this.assignment_id + "_3");
+		// 	var new_date = new Date(formatted_date)
+
+		// 	this.deadline_3 = moment(new_date).format('l') + ", " + moment(new_date).format('LTS')
+		// }
+
+		let variables = ["sendIncompleteMessages_", "custom_benchmarks_", "penalizing_for_incompletes_", "penalizing_for_reassigned_"];
+
+		variables.forEach(variable => {
+			if (localStorage.getItem(variable + this.assignment_id)) {
+				if (!this.state[variable]) {
+					this.setState({
+						[variable]: true,
+					})
+				}
 			}
-		}
-		if (localStorage.getItem("penalizing_for_incompletes_" + this.assignment_id)) {
-			if (!this.state.penalizing_for_incompletes) {
-				this.setState({
-					penalizing_for_incompletes: true,
-				})
-			}
-		}
-		if (localStorage.getItem("penalizing_for_reassigned_" + this.assignment_id)) {
-			if (!this.state.penalizing_for_reassigned) {
-				this.setState({
-					penalizing_for_reassigned: true,
-				})
-			}
-		}
+		})
+
+		// if (localStorage.getItem("sendIncompleteMessages_" + this.assignment_id)) {
+		// 	if (!this.state.sendIncompleteMessages) {
+		// 		this.setState({
+		// 			sendIncompleteMessages: true,
+		// 		})
+		// 	}
+		// }
+		// if (localStorage.getItem("custom_benchmarks_" + this.assignment_id)) {
+		// 	if (!this.state.custom_benchmarks) {
+		// 		this.setState({
+		// 			custom_benchmarks: true,
+		// 		})
+		// 	}
+		// }
+		// if (localStorage.getItem("penalizing_for_incompletes_" + this.assignment_id)) {
+		// 	if (!this.state.penalizing_for_incompletes) {
+		// 		this.setState({
+		// 			penalizing_for_incompletes: true,
+		// 		})
+		// 	}
+		// }
+		// if (localStorage.getItem("penalizing_for_reassigned_" + this.assignment_id)) {
+		// 	if (!this.state.penalizing_for_reassigned) {
+		// 		this.setState({
+		// 			penalizing_for_reassigned: true,
+		// 		})
+		// 	}
+		// }
 	}
 
 	render() {
-		
 		return (
 			<div>
 				{
 					!this.state.finalizePressed ?
 						<div className="assignment-info-content">
-							<DueDate name="Due Date 1" assignment_id={this.assignment_id} number="1" message={message1} />
+							<DueDate
+								name="Due Date 1"
+								assignmentId={this.assignment_id}
+								number="1"
+								message={message1}
+							/>
 							{localStorage.getItem("calendarDate_" + this.assignment_id + "_1") ?
-								<DueDate name="Due Date 2" assignment_id={this.assignment_id} number="2" message={message2} />
+								<DueDate
+									name="Due Date 2"
+									assignmentId={this.assignment_id}
+									number="2"
+									message={message2}
+								/>
 								:
 								null
 							}
 							{localStorage.getItem("calendarDate_" + this.assignment_id + "_1") && localStorage.getItem("calendarDate_" + this.assignment_id + "_2") ?
-								<DueDate name="Due Date 3" assignment_id={this.assignment_id} number="3" message={message3} />
+								<DueDate
+									name="Due Date 3"
+									assignmentId={this.assignment_id}
+									number="3"
+									message={message3}
+								/>
 								:
 								null
 							}
@@ -351,22 +405,22 @@ class AnalyzeButton extends Component {
 								<label>
 									<input name="sendIncompleteMessages" type="checkbox" checked={this.state.sendIncompleteMessages} onChange={this.handleInputChange} />
 									Send Messages to All Students Who Have Incomplete Peer Reviews At Due Date 1?:
-						</label>
+								</label>
 								<br></br>
 								<label>
 									<input name="custom_benchmarks" type="checkbox" checked={this.state.custom_benchmarks} onChange={this.handleInputChange} />
 									Custom Benchmarks For Grading Algorithm?:
-						</label>
+								</label>
 								<label>
 									<input name="penalizing_for_incompletes" type="checkbox" checked={this.state.penalizing_for_incompletes} onChange={this.handleInputChange} />
 									Would You Like to Penalize Students' Weights For Incomplete Peer Reviews?:
-						</label>
+								</label>
 								{
 									this.state.penalizing_for_incompletes ?
 										<label>
 											<input name="penalizing_for_reassigned" type="checkbox" checked={this.state.penalizing_for_reassigned} onChange={this.handleInputChange} />
 											Would You Like to Penalize For Peer Reviews That Were Reassigned, But Not Completed?:
-								</label>
+										</label>
 										:
 										null
 								}
@@ -379,17 +433,60 @@ class AnalyzeButton extends Component {
 				{
 					!this.state.finalizePressed && !this.state.finalizeDisplayText ?
 						<div>
-							<Flexbox className="flex-dropdown" width="300px" flexWrap="wrap" justify-content="space-around"  >
+							<Flexbox className="flex-dropdown" width="300px" flexWrap="wrap" justify-content="space-around">
 								{this.state.custom_benchmarks ?
 									<div>
-										<AlgorithmBenchmarks value={this.state.algorithm_benchmarks.WIDTH_OF_STD_DEV_RANGE} min={0} step={0.01} placeholder="WIDTH_OF_STD_DEV_RANGE" />
-										<AlgorithmBenchmarks value={this.state.algorithm_benchmarks.THRESHOLD} min={0} step={.0001} placeholder="THRESHOLD" />
-										<AlgorithmBenchmarks value={this.state.algorithm_benchmarks.COULD_BE_LOWER_BOUND} min={0} max={1} step={.01} placeholder="COULD_BE_LOWER_BOUND" />
-										<AlgorithmBenchmarks value={this.state.algorithm_benchmarks.COULD_BE_UPPER_BOUND} min={1} max={5} step={.01} placeholder="COULD_BE_UPPER_BOUND" />
-										<AlgorithmBenchmarks value={this.state.algorithm_benchmarks.MIN_NUMBER_OF_REVIEWS_PER_STUDENT_FOR_CLASSIFICATION} min={0} step={1} placeholder="MIN_NUMBER_OF_REVIEWS_PER_STUDENT_FOR_CLASSIFICATION" />
-										<AlgorithmBenchmarks value={this.state.algorithm_benchmarks.MIN_NUMBER_OF_ASSIGNMENTS_IN_COURSE_FOR_CLASSIFICATION} min={0} step={1} placeholder="MIN_NUMBER_OF_ASSIGNMENTS_IN_COURSE_FOR_CLASSIFICATION" />
-										<AlgorithmBenchmarks value={this.state.algorithm_benchmarks.MIN_NUMBER_OF_REVIEWS_FOR_SINGLE_SUBMISSION_FOR_GRADING} min={0} step={1} placeholder="MIN_NUMBER_OF_REVIEWS_FOR_SINGLE_SUBMISSION_FOR_GRADING" />
-										<AlgorithmBenchmarks value={this.state.algorithm_benchmarks.MIN_RATIO_OF_COMPLETED_TO_ASSIGNED_REVIEWS_FOR_SINGLE_SUBMISSION_FOR_GRADING} min={0} max={1} step={.001} placeholder="MIN_RATIO_OF_COMPLETED_TO_ASSIGNED_REVIEWS_FOR_SINGLE_SUBMISSION_FOR_GRADING" />
+										<AlgorithmBenchmarks
+											value={this.state.algorithm_benchmarks.WIDTH_OF_STD_DEV_RANGE}
+											min={0}
+											step={0.01}
+											placeholder="WIDTH_OF_STD_DEV_RANGE"
+										/>
+										<AlgorithmBenchmarks
+											value={this.state.algorithm_benchmarks.THRESHOLD}
+											min={0}
+											step={.0001}
+											placeholder="THRESHOLD"
+										/>
+										<AlgorithmBenchmarks
+											value={this.state.algorithm_benchmarks.COULD_BE_LOWER_BOUND}
+											min={0}
+											max={1}
+											step={.01}
+											placeholder="COULD_BE_LOWER_BOUND"
+										/>
+										<AlgorithmBenchmarks
+											value={this.state.algorithm_benchmarks.COULD_BE_UPPER_BOUND}
+											min={1}
+											max={5}
+											step={.01}
+											placeholder="COULD_BE_UPPER_BOUND"
+										/>
+										<AlgorithmBenchmarks
+											value={this.state.algorithm_benchmarks.MIN_NUMBER_OF_REVIEWS_PER_STUDENT_FOR_CLASSIFICATION}
+											min={0}
+											step={1}
+											placeholder="MIN_NUMBER_OF_REVIEWS_PER_STUDENT_FOR_CLASSIFICATION"
+										/>
+										<AlgorithmBenchmarks
+											value={this.state.algorithm_benchmarks.MIN_NUMBER_OF_ASSIGNMENTS_IN_COURSE_FOR_CLASSIFICATION}
+											min={0}
+											step={1}
+											placeholder="MIN_NUMBER_OF_ASSIGNMENTS_IN_COURSE_FOR_CLASSIFICATION"
+										/>
+										<AlgorithmBenchmarks
+											value={this.state.algorithm_benchmarks.MIN_NUMBER_OF_REVIEWS_FOR_SINGLE_SUBMISSION_FOR_GRADING}
+											min={0}
+											step={1}
+											placeholder="MIN_NUMBER_OF_REVIEWS_FOR_SINGLE_SUBMISSION_FOR_GRADING"
+										/>
+										<AlgorithmBenchmarks
+											value={this.state.algorithm_benchmarks.MIN_RATIO_OF_COMPLETED_TO_ASSIGNED_REVIEWS_FOR_SINGLE_SUBMISSION_FOR_GRADING}
+											min={0}
+											max={1}
+											step={.001}
+											placeholder="MIN_RATIO_OF_COMPLETED_TO_ASSIGNED_REVIEWS_FOR_SINGLE_SUBMISSION_FOR_GRADING"
+										/>
 										<br></br>
 									</div>
 									:
@@ -416,7 +513,14 @@ class AnalyzeButton extends Component {
 					this.state.finalizePressed && !this.state.finalizeDisplayText ?
 						<div>
 							{console.log("finalize pressed")}
-							<FinalizeResults penalizing_for_incompletes={this.state.penalizing_for_incompletes} penalizing_for_reassigned={this.state.penalizing_for_reassigned} assignment_info={this.assignment_info} course_id={this.course_id} assignment_id={this.assignment_id} pressed={true} benchmarks={this.state.algorithm_benchmarks}
+							<FinalizeResults
+								penalizingForIncompletes={this.state.penalizing_for_incompletes}
+								penalizingForReassigned={this.state.penalizing_for_reassigned}
+								assignmentInfo={this.assignment_info}
+								courseId={this.course_id}
+								assignmentId={this.assignment_id}
+								pressed={true}
+								benchmarks={this.state.algorithm_benchmarks}
 							/>
 							{
 								this.setState({
@@ -431,7 +535,15 @@ class AnalyzeButton extends Component {
 				{
 					this.state.finalizePressed && this.state.finalizeDisplayText ?
 						<div>
-							<FinalizeResults penalizing_for_incompletes={this.state.penalizing_for_incompletes} penalizing_for_reassigned={this.state.penalizing_for_reassigned} assignment_info={this.assignment_info} course_id={this.course_id} assignment_id={this.assignment_id} pressed={false} benchmarks={this.state.algorithm_benchmarks} progress={100}
+							<FinalizeResults
+								penalizingForIncompletes={this.state.penalizing_for_incompletes}
+								penalizingForReassigned={this.state.penalizing_for_reassigned}
+								assignmentInfo={this.assignment_info}
+								courseId={this.course_id}
+								assignmentId={this.assignment_id}
+								pressed={false}
+								benchmarks={this.state.algorithm_benchmarks}
+								progress={100}
 							/>
 						</div>
 						:
@@ -439,7 +551,12 @@ class AnalyzeButton extends Component {
 				}
 				{
 					!this.state.finalizePressed && this.state.analyzeDisplayText ?
-						<AnalyzeResults assignment_info={this.assignment_info} course_id={this.course_id} assignment_id={this.assignment_id} pressed={false} benchmarks={this.state.algorithm_benchmarks}
+						<AnalyzeResults
+							assignmentInfo={this.assignment_info}
+							courseId={this.course_id}
+							assignmentId={this.assignment_id}
+							pressed={false}
+							benchmarks={this.state.algorithm_benchmarks}
 						/>
 						:
 						null
@@ -447,7 +564,12 @@ class AnalyzeButton extends Component {
 				{
 					!this.state.finalizePressed && this.state.analyzePressed ?
 						<div>
-							<AnalyzeResults assignment_info={this.assignment_info} course_id={this.course_id} assignment_id={this.assignment_id} pressed={true} benchmarks={this.state.algorithm_benchmarks}
+							<AnalyzeResults
+								assignmentInfo={this.assignment_info}
+								courseId={this.course_id}
+								assignmentId={this.assignment_id}
+								pressed={true}
+								benchmarks={this.state.algorithm_benchmarks}
 							/>
 							{
 								this.setState({
