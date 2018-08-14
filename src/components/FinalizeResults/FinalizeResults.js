@@ -44,8 +44,6 @@ class FinalizeResults extends Component {
         this.pullBoxPlotFromCanvas = this.pullBoxPlotFromCanvas.bind(this);
         this.findCompletedAllReviews = this.findCompletedAllReviews.bind(this);
         this.toggle = this.toggle.bind(this);
-
-
     }
 
     savePeerReviewsFromCanvasToDatabase() {
@@ -287,7 +285,7 @@ class FinalizeResults extends Component {
                 {this.props.pressed ?
                     <div>
                         {
-                            this.fetchPeerReviewData()
+                            this.savePeerReviewsFromCanvasToDatabase()
                         }
 
                         {/* {
@@ -463,8 +461,8 @@ class FinalizeResults extends Component {
                                                     }
                                                 }
                                                 }
-                                            //   <Well>This is the value of the sector over which you are hovering: {this.state.sectorValue1}</Well>
                                             />
+                                            <Well>This is the value of the sector over which you are hovering: {this.state.sectorValue1}</Well>
                                             <br />
                                             <Row>
                                                 <Ellipse rx={7} ry={4} fill={{ color: '#E38627' }} strokeWidth={5} />
@@ -478,9 +476,6 @@ class FinalizeResults extends Component {
                                                 <Ellipse rx={7} ry={4} fill={{ color: '#6A2135' }} strokeWidth={5} />
                                                 <p className="graphKey">Completed no reviews</p>
                                             </Row>
-
-
-                                            />
                                             </Flexbox>
                                         <Flexbox className="chartbox" flexDirection="column" width="200px" flexWrap="wrap">
                                             <h5 className="graphTitle">Grading Classification</h5>
@@ -505,8 +500,6 @@ class FinalizeResults extends Component {
                                                 }
                                             />
                                             <Well>This is the value of the sector over which you are hovering: {this.state.sectorValue2}</Well>
-                                            ]}
-                                        />
                                                 <br />
                                             <Row>
                                                 <Ellipse rx={7} ry={4} fill={{ color: '#C9CBA3' }} strokeWidth={5} />

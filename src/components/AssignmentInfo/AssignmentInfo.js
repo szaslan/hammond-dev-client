@@ -116,7 +116,6 @@ class AssignmentInfo extends Component {
                             <p><strong>Title:</strong> {this.state.assignment.name}</p>
                             <button className = "clear-local-button" onClick={this.clearLocalStorage}> Clear Local Storage</button>
                         </div> 
-                        {/* <button onClick={this.clearLocalStorage}> Clear Local Storage</button> */}
                         <br></br>
 
                         <AnalyzeButton

@@ -326,36 +326,34 @@ class AnalyzeButton extends Component {
 								:
 								null
 							}
+							<form>
+								<label>
+									<input name="sendIncompleteMessages" type="checkbox" checked={this.state.sendIncompleteMessages} onChange={this.handleInputChange} />
+									Send Messages to All Students Who Have Incomplete Peer Reviews At Due Date 1?:
+						</label>
+								<br></br>
+								<label>
+									<input name="custom_benchmarks" type="checkbox" checked={this.state.custom_benchmarks} onChange={this.handleInputChange} />
+									Custom Benchmarks For Grading Algorithm?:
+						</label>
+								<label>
+									<input name="penalizing_for_incompletes" type="checkbox" checked={this.state.penalizing_for_incompletes} onChange={this.handleInputChange} />
+									Would You Like to Penalize Students' Weights For Incomplete Peer Reviews?:
+						</label>
+								{
+									this.state.penalizing_for_incompletes ?
+										<label>
+											<input name="penalizing_for_reassigned" type="checkbox" checked={this.state.penalizing_for_reassigned} onChange={this.handleInputChange} />
+											Would You Like to Penalize For Peer Reviews That Were Reassigned, But Not Completed?:
+								</label>
+										:
+										null
+								}
+
+							</form>
 						</div>
 						:
 						null
-				}
-				{
-					<form>
-						<label>
-							<input name="sendIncompleteMessages" type="checkbox" checked={this.state.sendIncompleteMessages} onChange={this.handleInputChange} />
-							Send Messages to All Students Who Have Incomplete Peer Reviews At Due Date 1?:
-						</label>
-						<br></br>
-						<label>
-							<input name="custom_benchmarks" type="checkbox" checked={this.state.custom_benchmarks} onChange={this.handleInputChange} />
-							Custom Benchmarks For Grading Algorithm?:
-						</label>
-						<label>
-							<input name="penalizing_for_incompletes" type="checkbox" checked={this.state.penalizing_for_incompletes} onChange={this.handleInputChange} />
-							Would You Like to Penalize Students' Weights For Incomplete Peer Reviews?:
-						</label>
-						{
-							this.state.penalizing_for_incompletes ?
-								<label>
-									<input name="penalizing_for_reassigned" type="checkbox" checked={this.state.penalizing_for_reassigned} onChange={this.handleInputChange} />
-									Would You Like to Penalize For Peer Reviews That Were Reassigned, But Not Completed?:
-								</label>
-								:
-								null
-						}
-
-					</form>
 				}
 				{
 					!this.state.finalizePressed && !this.state.finalizeDisplayText ?
