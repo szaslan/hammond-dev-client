@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import history from '../../history';
 import Loader from 'react-loader-spinner'
 
 import AnalyzeButton from '../AnalyzeButton/AnalyzeButton';
@@ -35,7 +36,6 @@ class AssignmentInfo extends Component {
             assignmentClicked: true
         });
 
-        console.log("1: fetching assignment data from canvas");
         this.setState({
             url: `/courses/${params.course_id}/assignments/`
         });
@@ -52,12 +52,27 @@ class AssignmentInfo extends Component {
             },
             body: JSON.stringify(data)
         })
-            .then(res => res.json())
             .then(res => {
-                this.setState({
-                    assignment: res
-                })
+                if (res.status == 200) {
+                    res.json()
+                        .then(res => {
+                            this.setState({
+                                assignment: res
+                            })
+                        })
+                }
+                else if (res.status == 400) {
+                    console.log("an error occcurred when pulling info for a specific assignment from canvas")
+                }
+                else if (res.status == 401) {
+                    history.push("/login")
+                    throw new Error();
+                }
+                else if (res.status == 404) {
+                    console.log("no assignments created on canvas")
+                }
             })
+            .catch(err => console.log("unauthorized request when pulling info for specific assignment"))
     }
 
     static getDerivedStateFromProps(nextProps, prevState) {
@@ -72,14 +87,12 @@ class AssignmentInfo extends Component {
 
     //everytime a new assignment is clicked on, component re-renders and new assignment is fetched
     componentDidMount() {
-        console.log("assignmentinfo mounted!");
         this.fetchAssignmentData();
     }
 
     //renders initially
     componentDidUpdate(prevProps) {
         if (this.props.match.params.assignment_id !== prevProps.match.params.assignment_id) {
-            console.log("component did update!");
             this.fetchAssignmentData();
         }
     }
@@ -88,7 +101,6 @@ class AssignmentInfo extends Component {
     // componentWillReceiveProps(nextProps) {
     //     if (nextProps.match.params.assignment_id !== this.props.match.params.assignment_id) {
     //         this.setState({id: nextProps.match.params.assignment_id});
-    //         console.log(nextProps);
     //     }
     // }
 
@@ -123,10 +135,7 @@ class AssignmentInfo extends Component {
                 </div>
             )
         }
-
     }
-
-
 }
 
 export default AssignmentInfo;

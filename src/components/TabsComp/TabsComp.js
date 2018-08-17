@@ -1,19 +1,18 @@
 import React, { Component } from 'react';
-import { Container, Jumbotron, TabContent, TabPane, Nav, NavItem, NavLink, } from 'reactstrap';
+import { Row } from 'react-bootstrap';
+import { TabContent, TabPane, Nav, NavItem, NavLink, } from 'reactstrap';
 import classnames from 'classnames';
-import { Row, Col } from 'react-bootstrap';
-import AssignmentInfo from '../AssignmentInfo/AssignmentInfo';
-import { Link } from "react-router-dom";
-import Assignments from '../Assignments/Assignments';
 
 class TabsComp extends Component {
     constructor(props) {
         super(props);
-        // this.signOut = this.signOut.bind(this);
-        this.toggle = this.toggle.bind(this);
+        
         this.state = {
             activeTab: '1'
         };
+
+        // this.signOut = this.signOut.bind(this);
+        this.toggle = this.toggle.bind(this);
     }
 
     toggle(tab) {
@@ -29,7 +28,7 @@ class TabsComp extends Component {
                 <Nav tabs className="tabs-nav">
                     {/* <div className = "tabs-div"> */}
                     <Row className="tabs">
-                        {/* <Link to={this.props.tab_1_link}> */}
+                        {/* <Link to={this.props.tab1link}> */}
                         <NavItem className="nav-item-1">
                             <NavLink
                                 className={"tab-link " + classnames({ active: this.state.activeTab === '1' })}
@@ -39,7 +38,7 @@ class TabsComp extends Component {
                             </NavLink>
                         </NavItem>
                         {/* </Link> */}
-                        {/* <Link to={this.props.tab_2_link}> */}
+                        {/* <Link to={this.props.tab2link}> */}
                         <NavItem className="nav-item-2">
                             <NavLink
                                 className={"tab-link " + classnames({ active: this.state.activeTab === '2' })}

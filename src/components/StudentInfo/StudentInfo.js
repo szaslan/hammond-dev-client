@@ -23,57 +23,53 @@ class StudentInfo extends Component {
     constructor(props) {
         super(props);
 
-
-        this.getPeerReviews = this.getPeerReviews.bind(this);
-        this.toggleReview = this.toggleReview.bind(this);
-        this.toggleAssignment = this.toggleAssignment.bind(this);
-        this._fetchAssignmentData = this._fetchAssignmentData.bind(this);
-        this.select = this.select.bind(this);
-        this.selectPeerReview = this.selectPeerReview.bind(this);
-        this.pullPeerReviewData = this.pullPeerReviewData.bind(this);
-        this.determineGraphStyles = this.determineGraphStyles.bind(this);
-        this.checkIfStudentExists = this.checkIfStudentExists.bind(this);
-
         this.state = {
             assignments: [],
-            peer_reviews: [],
-            url: '',
-            id: this.props.match.params.assignment_id,
-            dropdownOpen: false,
-            peerReviewOpen: false,
-            selectedAssignment: '',
-            selectedStudent: '',
-            value: 'Select an Assignment',
-            value2: 'Select a Peer Review',
-            noPeerReview: false,
-            scoreGiven: '',
-            finalScore: '',
-            errorMessage: 'No peer reviews for this student!',
-            message: '',
-
-            peer_review_data: null,
-
             bucket_data: {
                 labels: [],
                 datasets: [],
                 options: {},
             },
-            weight_data: {
-                labels: [],
-                datasets: [],
-                options: {},
-            },
+            dropdownOpen: false,
+            errorMessage: 'No peer reviews for this student!',
+            finalScore: '',
+            graphs_loaded: false,
+            id: this.props.match.params.assignment_id,
+            message: '',
+            noPeerReview: false,
             number_of_reviews_completed_data: {
                 labels: [],
                 datasets: [],
                 options: {},
             },
+            peerReviewOpen: false,
+            peer_reviews: [],
+            peer_review_data: null,
+            selectedAssignment: '',
+            selectedStudent: '',
+            scoreGiven: '',
             student_exists: false,
-            graphs_loaded: false,
+            url: '',
+            value: 'Select an Assignment',
+            value2: 'Select a Peer Review',
+            weight_data: {
+                labels: [],
+                datasets: [],
+                options: {},
+            },
 
             ...props,
-
         }
+
+        this.checkIfStudentExists = this.checkIfStudentExists.bind(this);
+        this.determineGraphStyles = this.determineGraphStyles.bind(this);
+        this.fetchAssignmentData = this.fetchAssignmentData.bind(this);
+        this.getPeerReviews = this.getPeerReviews.bind(this);
+        this.pullPeerReviewData = this.pullPeerReviewData.bind(this);
+        this.select = this.select.bind(this);
+        this.selectPeerReview = this.selectPeerReview.bind(this);
+        this.toggleAssignment = this.toggleAssignment.bind(this);
+        this.toggleReview = this.toggleReview.bind(this);
     }
     //if props are changed, this runs
     // static getDerivedStateFromProps(nextProps, prevState){
@@ -85,36 +81,6 @@ class StudentInfo extends Component {
     //     }
     //     return null;
     // }
-
-    //everytime a new assignment is clicked on, component re-renders and new assignment is fetched
-    componentDidMount() {
-        console.log("component mounted!");
-        this.setState({ errorMessage: " " })
-        this._fetchAssignmentData();
-        this.checkIfStudentExists();
-    }
-
-    //renders initially
-    componentDidUpdate(prevProps) {
-        if (this.props.location.state.student_name !== prevProps.location.state.student_name) {
-            console.log("component did update!");
-
-            this.setState({ errorMessage: "" })
-
-            this.setState({
-                value: "Select an Assignment",
-                value2: "Select a Peer Review",
-                finalScore: "",
-                message: '',
-                scoreGiven: "",
-                peer_reviews: [],
-                graphs_loaded: false,
-            })
-            this.checkIfStudentExists();
-
-            // this._fetchAssignmentData();
-        }
-    }
 
     checkIfStudentExists() {
         let data = {
@@ -128,129 +94,22 @@ class StudentInfo extends Component {
             },
             body: JSON.stringify(data),
         })
-            .then(res => res.json())
             .then(res => {
-                this.setState({
-                    student_exists: res.exists,
-                })
-                if (this.state.student_exists) {
+                if (res.status == 204) {
+                    this.setState({
+                        student_exists: true
+                    })
                     this.pullPeerReviewData();
                 }
-                else {
+                else if (res.status == 400) {
+                    console.log("there was an erorr when checking if the current student exists in the database")
+                }
+                else if (res.status == 404) {
                     this.setState({
                         graphs_loaded: true,
                     })
+                    console.log("the student does not exist in the database")
                 }
-            })
-    }
-
-    //fetches assigment data
-    _fetchAssignmentData() {
-        const { match: { params } } = this.props;
-        this.setState({ studentClicked: true });
-
-        let data = {
-            course_id: params.course_id,
-        }
-
-
-        fetch('/api/assignments', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(data),
-            credentials: 'include'
-        })
-            .then(res => {
-                if (res.status === 401) {
-                    console.log("4040404")
-                    history.push("/login")
-                    throw new Error();
-                } else {
-                    res.json()
-                        .then(data => {
-                            this.setState({ assignments: data })
-                        })
-                }
-            })
-            .catch(err => console.log("Not auth"))
-
-        /* NEED TO FETCH STUDENT INFO AND SET STATE TO FETCHED INFO WHEN PROPS ARE UPDATED
-         fetch(/api/students)/
-         */
-
-    }
-
-    getPeerReviews() {
-        let data = {
-            student_id: this.props.location.state.student_id,
-            assignment_id: this.state.selectedAssignment,
-        }
-        let finalizeId = {
-            assigment_id: this.state.selectedAssignment
-        }
-        console.log('getPeerReview()');
-
-        let get = this;
-
-        fetch('/api/get_peer_reviews', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(data)
-        })
-            .then(function (res) {
-                console.log(res)
-                if (res.status == 404) {
-                    get.setState({ errorMessage: "No peer reviews for this student!" })
-
-                }
-                else if (res.status == 200) {
-                    res.json().then(function (data) {
-
-                        console.log(data);
-                        get.setState({ peer_reviews: data })
-                    })
-                } else {
-
-                    fetch('/api/has_finalize_been_pressed', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: finalizeId
-                    })
-                        .then(function (response) {
-                            console.log(response)
-                            if (response.status == 400) {
-                                console.log("400 repsonse")
-                                get.setState({ peer_reviews: [] })
-                                get.setState({ errorMessage: "Assignment hasn't been finalized!" })
-                            }
-                        })
-                }
-            })
-    }
-
-    pullPeerReviewData() {
-        console.log("pulling peer review data")
-        let data = {
-            assessor_id: this.props.location.state.student_id,
-        }
-
-        fetch('/api/pull_peer_review_data', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(data)
-        })
-            .then(res => res.json())
-            .then(res => {
-                this.setState({ peer_review_data: res })
-                this.determineGraphStyles()
             })
     }
 
@@ -415,21 +274,138 @@ class StudentInfo extends Component {
         })
     }
 
-    toggleAssignment() {
-        this.setState(prevState => ({
-            dropdownOpen: !prevState.dropdownOpen,
-        }));
+    //fetches assigment data
+    fetchAssignmentData() {
+        const { match: { params } } = this.props;
+        this.setState({
+            studentClicked: true
+        });
+
+        let data = {
+            course_id: params.course_id,
+        }
+
+        fetch('/api/assignments', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data),
+            credentials: 'include'
+        })
+            .then(res => {
+                if (res.status == 200) {
+                    res.json().then(data => {
+                        this.setState({
+                            assignments: data,
+                        })
+                        this.checkIfStudentExists()
+                    })
+                }
+                else if (res.status == 400) {
+                    console.log("an error occcurred when pulling the list of assignments from canvas")
+                }
+                else if (res.status === 401) {
+                    history.push("/login")
+                    throw new Error();
+                }
+                else if (res.status == 404) {
+                    console.log("no assignments created on canvas")
+                }
+            })
+            .catch(err => console.log("unauthorized request when pulling info for specific assignment"))
+
+        /* NEED TO FETCH STUDENT INFO AND SET STATE TO FETCHED INFO WHEN PROPS ARE UPDATED
+         fetch(/api/students)/
+         */
     }
 
-    toggleReview() {
-        this.setState(prevState => ({
-            peerReviewOpen: !prevState.peerReviewOpen,
-        }))
+    getPeerReviews() {
+        let data = {
+            student_id: this.props.location.state.student_id,
+            assignment_id: this.state.selectedAssignment,
+        }
+
+        let finalizeId = {
+            assigment_id: this.state.selectedAssignment
+        }
+
+        fetch('/api/get_peer_reviews_for_student', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        })
+            .then(res => {
+                if (res.status == 200) {
+                    res.json().then(res => {
+                        this.setState({
+                            peer_reviews: res
+                        })
+                    })
+                }
+                else if (res.status == 400) {
+                    fetch('/api/has_finalize_been_pressed', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: finalizeId
+                    })
+                        .then(res => {
+                            if (res.status == 204) {
+                                //assignment has been finalized so issue with searching for peer reviews
+                                this.setState({
+                                    peer_reviews: [],
+                                })
+                                console.log("there was an error when searching for the peer reviews completed by this student")
+                            }
+                            else if (res.status == 404) {
+                                this.setState({
+                                    peer_reviews: [],
+                                    errorMessage: "Assignment hasn't been finalized!"
+                                })
+                            }
+                        })
+                }
+                else if (res.status == 404) {
+                    this.setState({
+                        errorMessage: "No peer reviews for this student!"
+                    })
+
+                }
+            })
+    }
+
+    pullPeerReviewData() {
+        let data = {
+            assessor_id: this.props.location.state.student_id,
+        }
+
+        fetch('/api/pull_peer_review_data', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        })
+            .then(res => {
+                if (res.status == 200) {
+                    res.json().then(res => {
+                        this.setState({
+                            peer_review_data: res
+                        })
+                        this.determineGraphStyles()
+                    })
+                }
+                else if (res.status == 400) {
+                    console.log("ran into an error when gathering all saved peer review evaluating history")
+                }
+            })
     }
 
     select(event) {
-        console.log(event.target)
-
         this.setState({
             value: event.target.innerText,
             selectedAssignment: Number(event.target.id),
@@ -441,18 +417,10 @@ class StudentInfo extends Component {
             finalScore: ''
         }, () => {
             this.getPeerReviews();
-            console.log('ran get peer reviews')
         })
-
-        let get = this;
-
-
-
-        console.log(this.state.selectedAssignment)
     }
 
     selectPeerReview(event) {
-        console.log(event.target)
         this.setState({
             value2: event.target.innerText,
             selectedStudent: Number(event.target.id)
@@ -464,10 +432,6 @@ class StudentInfo extends Component {
             user_id: Number(event.target.id)
         }
 
-        console.log(data);
-
-        let get = this;
-
         fetch('/api/peer_review_grade', {
             method: 'POST',
             headers: {
@@ -475,34 +439,72 @@ class StudentInfo extends Component {
             },
             body: JSON.stringify(data)
         })
-            .then(function (res) {
-                if (res.status == 404) {
-                    console.log("no score recieved yet")
-                }
-                else {
-                    res.json().then(function (data) {
-                        get.setState({
+            .then(res => {
+                if (res.status == 200) {
+                    res.json().then(data => {
+                        this.setState({
                             scoreGiven: data.score_given,
                             finalScore: data.final_score
                         })
                         if (data.score_given == null) {
-                            get.setState({ message: <div>{get.props.location.state.student_name} did not complete this peer review</div> })
-                        } else {
-                            get.setState({
+                            this.setState({
+                                message: <div>{this.props.location.state.student_name} did not complete this peer review</div>
+                            })
+                        }
+                        else {
+                            this.setState({
                                 message:
                                     <div>
-                                        <div>{get.props.location.state.student_name} gave {get.state.value2} a score of {get.state.scoreGiven}</div>
-                                        <div>{get.state.value2} received a final grade of {get.state.finalScore}</div>
+                                        <div>{this.props.location.state.student_name} gave {this.state.value2} a score of {this.state.scoreGiven}</div>
+                                        <div>{this.state.value2} received a final grade of {this.state.finalScore}</div>
                                     </div>
                             })
                         }
-
-
                     })
                 }
-
-
+                else if (res.status == 400) {
+                    console.log("there was an error when pulling the assigned and actual score for a specific peer review")
+                }
             })
+    }
+
+    toggleAssignment() {
+        this.setState(prevState => ({
+            dropdownOpen: !prevState.dropdownOpen,
+        }));
+    }
+
+    toggleReview() {
+        this.setState(prevState => ({
+            peerReviewOpen: !prevState.peerReviewOpen,
+        }))
+    }
+    //everytime a new assignment is clicked on, component re-renders and new assignment is fetched
+    componentDidMount() {
+        this.setState({
+            errorMessage: " "
+        })
+        this.fetchAssignmentData();
+    }
+
+    //renders initially
+    componentDidUpdate(prevProps) {
+        if (this.props.location.state.student_name !== prevProps.location.state.student_name) {
+
+            this.setState({
+                errorMessage: "",
+                value: "Select an Assignment",
+                value2: "Select a Peer Review",
+                finalScore: "",
+                message: '',
+                scoreGiven: "",
+                peer_reviews: [],
+                graphs_loaded: false,
+            }, () => {
+                this.checkIfStudentExists();
+            })
+            // this.fetchAssignmentData();
+        }
     }
 
     render() {
@@ -563,7 +565,6 @@ class StudentInfo extends Component {
                         :
                         <Loader type="TailSpin" color="black" height={80} width={80} />
                 }
-
             </div>
         )
     }

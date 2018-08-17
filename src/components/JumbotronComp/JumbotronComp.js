@@ -1,16 +1,14 @@
-import './JumbotronComp.css'
 import React, { Component } from 'react';
-import { Link } from "react-router-dom";
-import { Container, Jumbotron, TabContent, TabPane, Nav, NavItem, NavLink, } from 'reactstrap';
-import { Row, Col } from 'react-bootstrap';
-import classnames from 'classnames';
+import { Container, Jumbotron } from 'reactstrap';
 import TabsComp from '../TabsComp/TabsComp';
+
+import './JumbotronComp.css'
 
 class JumbotronComp extends Component {
     constructor(props) {
         super(props);
-        // this.signOut = this.signOut.bind(this);
 
+        // this.signOut = this.signOut.bind(this);
     }
 
     // signOut() {
@@ -19,7 +17,6 @@ class JumbotronComp extends Component {
     //     })
     //         .then(response => console.log(response))
     // }
-
 
     render() {
         return (
@@ -48,18 +45,16 @@ class JumbotronComp extends Component {
                     <p className="main-title">{this.props.mainTitle}</p>
                 </Container>
                 <div className="tabcontain">
-                {this.props.tabs ?
-                    <TabsComp
-                    tab_1_link = {this.props.tab_1_link}
-                    tab_2_link = {this.props.tab_2_link}/>
-                    :
-                    <hr className="hr-1"></hr>
-                }
+                    {
+                        this.props.tabs ?
+                            <TabsComp
+                                tab1link={this.props.tab_1_link}
+                                tab2link={this.props.tab_2_link} />
+                            :
+                            <hr className="hr-1"></hr>
+                    }
                 </div>
             </Jumbotron>
-
-
-
         )
     }
 }

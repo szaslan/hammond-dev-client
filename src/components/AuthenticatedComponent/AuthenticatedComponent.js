@@ -1,8 +1,5 @@
-import React, { Component } from 'react';
-
 const AuthenticatedComponent = {
-  isAuthenticated: false,
+	isAuthenticated: false,
 }
 
 export default AuthenticatedComponent;
-

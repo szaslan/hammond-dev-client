@@ -1,15 +1,15 @@
 import React, { Component } from 'react';
-import './students.css';
+import { Breadcrumb } from 'react-bootstrap';
 import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 import { Link } from "react-router-dom";
+
 import JumbotronComp from '../JumbotronComp/JumbotronComp';
-import { Breadcrumb } from 'react-bootstrap';
+
+import './students.css';
 
 class Students extends Component {
-
     constructor() {
         super();
-
 
         this.state = {
             showComponent: false,
@@ -42,9 +42,25 @@ class Students extends Component {
     }
 
     filterList() {
-        fetch("/api/filter").then(res => res.json())
-            .then(students => this.setState({ students }, () => console.log('fetched... ', students)));
-        this.setState({ showList: true });
+        fetch("/api/filter", {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+        })
+            .then(res => {
+                if (res.status == 200) {
+                    res.json().then(students => {
+                        this.setState({
+                            students: students,
+                            showList: true
+                        })
+                    })
+                }
+                else if (res.status == 400) {
+                    console.log("ran into an error when filtering out students who have not completed any peer reviews")
+                }
+            })
     }
 
     //search for courses using canvas ID
@@ -88,8 +104,9 @@ class Students extends Component {
                     this.state.showList
                         ?
                         <ul className="studentList">
-                            {this.state.students.map(students =>
-                                <li key={students.id}>{students.last_name}</li>)
+                            {
+                                this.state.students.map(students =>
+                                    <li key={students.id}>{students.last_name}</li>)
                             }
                         </ul>
                         :
@@ -102,8 +119,10 @@ class Students extends Component {
                     ?
 
                     <ul className="studentList">
-                        {this.state.courses.map(courses =>
-                            <li key={courses.id}>{courses.id}: {courses.name}</li>)}
+                        {
+                            this.state.courses.map(courses =>
+                                <li key={courses.id}>{courses.id}: {courses.name}</li>)
+                        }
                     </ul>
                     :
                     null
