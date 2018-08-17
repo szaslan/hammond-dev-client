@@ -13,7 +13,7 @@ function FilterAssignments(props) {
 
     if (currAssignment.peer_reviews) {
         return (
-            <Link className="assignment-link" to={{ pathname: props.link, state: { assignment_id: props.assignment_id, name: props.name, course_id: props.course_id } }} key={props.id}>
+            <Link className="assignment-link" to={{ pathname: props.link, state: { assignment_id: props.assignmentId, name: props.name, course_id: props.courseId } }} key={props.id}>
                 {/* <li key={currAssignment.id} className="assignment-name">{currAssignment.name}</li>  */}
                 <DropdownItem className="dropdown-ite" key={currAssignment.id} /*className="assignment-name"*/>{currAssignment.name}</DropdownItem>
             </Link>
@@ -68,12 +68,7 @@ class Assignments extends Component {
             credentials: 'include'
         })
             .then(res => {
-                if (res.status === 401) {
-                    console.log("4040404")
-                    history.push("/login")
-                    throw new Error();
-                }
-                else {
+                if (res.status == 200) {
                     res.json().then(data => {
                         this.setState({
                             assignments: data,
@@ -81,8 +76,18 @@ class Assignments extends Component {
                         })
                     })
                 }
+                else if (res.status == 400) {
+                    console.log("an error occcurred when pulling the list of assignment from canvas")
+                }
+                else if (res.status === 401) {
+                    history.push("/login")
+                    throw new Error();
+                }
+                else if (res.status == 404) {
+                    console.log("no assignments created on canvas")
+                }
             })
-            .catch(err => console.log("Not Authorized."))
+            .catch(err => console.log("unauthorized request when pulling info for specific assignment"))
     }
 
     render() {
@@ -100,7 +105,6 @@ class Assignments extends Component {
                                     this.state.assignments.map(assignments =>
                                         <FilterAssignments className="assign-name" link={this.state.url + assignments.id} assignment_id={assignments.id} name={this.state.match.params.assignment_name} course_id={this.state.match.params.course_id} currAssigment={assignments} id={assignments.id} />
 
-
                                         // this.state.assignments.map(assignments =>
                                         //     <Link className="assignment-link" to={{ pathname: this.state.url + assignments.id, state: { assignment_id: assignments.id, name: this.state.match.params.assignment_name, course_id: this.state.match.params.course_id } }} key={assignments.id}>
                                         //         <FilterAssignments currAssigment={assignments}   />
@@ -116,6 +120,5 @@ class Assignments extends Component {
         );
     }
 }
-
 
 export default Assignments;

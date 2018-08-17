@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
-import Loader from 'react-loader-spinner';
-import JumbotronComp from '../JumbotronComp/JumbotronComp';
-import {Breadcrumb} from 'react-bootstrap';
-import './CourseStudents.css'
-import StudentInfo from '../StudentInfo/StudentInfo';
+import { Breadcrumb } from 'react-bootstrap';
 import { Link } from "react-router-dom";
+import Loader from 'react-loader-spinner';
 import history from '../../history'
 import { Container, Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 
+import JumbotronComp from '../JumbotronComp/JumbotronComp';
+
+import './CourseStudents.css'
 
 class CourseStudents extends Component {
     constructor(props) {
@@ -15,6 +15,7 @@ class CourseStudents extends Component {
         this.toggle = this.toggle.bind(this);
         //URL is the current url while taking in the parameters from the props of the previous url
         this.state = {
+            loaded: false,
             students: [],
             url: '',
             loaded: false,
@@ -23,20 +24,18 @@ class CourseStudents extends Component {
         }
     }
 
-    componentWillMount() {
-        this.setState({ students: [] })
-    }
-
     //fetch assignments for course with course_id passed down
     componentDidMount() {
         const { match: { params } } = this.props;
-        this.setState({url: `/courses/${params.course_id}/${params.assignment_name}/students/`});
+        this.setState({
+            url: `/courses/${params.course_id}/${params.assignment_name}/students/`
+        });
 
         let data = {
             course_id: params.course_id
         }
 
-        fetch('/api/coursestudents',{
+        fetch('/api/coursestudents', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -44,20 +43,26 @@ class CourseStudents extends Component {
             body: JSON.stringify(data),
             credentials: 'include'
         })
-        .then(res => {
-            if (res.status === 401){
-                console.log("4040404")
-                history.push("/login")
-                throw new Error();
-            } else {
-                res.json().then(res => {
-                this.setState({students: res})
+            .then(res => {
+                if (res.status == 200) {
+                    res.json().then(data => {
+                        this.setState({
+                            students: data
+                        })
+                    })
+                }
+                else if (res.status == 400) {
+                    console.log("ran into an error when trying to pull the list of students in the course from canvas")
+                }
+                else if (res.status === 401) {
+                    history.push("/login")
+                    throw new Error();
+                }
+                else if (res.status == 404) {
+                    console.log("no students enrolled in the selected course on canvas")
+                }
             })
-        }
-    })
-        .catch(err => { console.log("not authorized") })
-
-
+      .catch(err => console.log("unauthorized request when pulling the list of students in the course from canvas"))
     }
 
     toggle() {
@@ -66,7 +71,12 @@ class CourseStudents extends Component {
         }));
     }
 
-
+    componentWillMount() {
+        this.setState({
+            students: []
+        })
+    }
+  
     render(){
             return (
                 <div className="studentdrop">
@@ -103,8 +113,7 @@ class CourseStudents extends Component {
 
             );
         }
-
-
     }
+}
 
 export default CourseStudents;

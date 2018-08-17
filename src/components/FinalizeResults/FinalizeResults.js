@@ -1,19 +1,20 @@
 import React, { Component } from 'react';
+import { Boxplot } from 'react-boxplot';
+import { Ellipse } from 'react-shapes';
+import { Progress, Tooltip } from 'reactstrap';
 import { Well, Row, Col } from 'react-bootstrap';
 import Flexbox from 'flexbox-react';
-import 'bootstrap/dist/css/bootstrap.css';
-import Accordion from '../Accordion/Accordion';
-import Loader from 'react-loader-spinner';
-import { Boxplot, computeBoxplotStats } from 'react-boxplot';
-import ReactSvgPieChart from "react-svg-piechart";
+import history from '../../history';
 import Popup from 'reactjs-popup';
+import ReactSvgPieChart from "react-svg-piechart";
 import SideNav from 'react-simple-sidenav';
-import { Progress, Tooltip } from 'reactstrap';
-import '../Assignments/Assignments.css'
-import { Rectangle, Circle, Ellipse, Line, Polyline, CornerBox, Triangle } from 'react-shapes';
 
+import 'bootstrap/dist/css/bootstrap.css';
+
+import '../Assignments/Assignments.css'
 
 var progress = 0;
+var progress_num_steps = 10;
 var progress_bar_message = "";
 
 var message = "";
@@ -31,62 +32,226 @@ class FinalizeResults extends Component {
             benchmarks: this.props.benchmarks,
             penalizing_for_incompletes: false,
             penalizing_for_reassigned: false,
+            error: false,
         };
 
-        this.savePeerReviewsFromCanvasToDatabase = this.savePeerReviewsFromCanvasToDatabase.bind(this);
-        this.saveRubricScoresFromCanvasToDatabase = this.saveRubricScoresFromCanvasToDatabase.bind(this);
-        this.saveOriginallyAssignedNumbersToDatabase = this.saveOriginallyAssignedNumbersToDatabase.bind(this);
-        this.finalizePeerReviewGrades = this.finalizePeerReviewGrades.bind(this);
-        this.sendGradesToCanvas = this.sendGradesToCanvas.bind(this);
         this.attachNamesToDatabase = this.attachNamesToDatabase.bind(this)
-        this.sortStudentsForAccordion = this.sortStudentsForAccordion.bind(this);
+        this.finalizePeerReviewGrades = this.finalizePeerReviewGrades.bind(this);
+        this.findCompletedAllReviews = this.findCompletedAllReviews.bind(this);
         this.findFlaggedGrades = this.findFlaggedGrades.bind(this);
         this.pullBoxPlotFromCanvas = this.pullBoxPlotFromCanvas.bind(this);
-        this.findCompletedAllReviews = this.findCompletedAllReviews.bind(this);
+        this.saveOriginallyAssignedNumbersToDatabase = this.saveOriginallyAssignedNumbersToDatabase.bind(this);
+        this.savePeerReviewsFromCanvasToDatabase = this.savePeerReviewsFromCanvasToDatabase.bind(this);
+        this.saveRubricScoresFromCanvasToDatabase = this.saveRubricScoresFromCanvasToDatabase.bind(this);
+        this.sendGradesToCanvas = this.sendGradesToCanvas.bind(this);
+        this.setProgress = this.setProgress.bind(this);
+        this.sortStudentsForAccordion = this.sortStudentsForAccordion.bind(this);
         this.toggle = this.toggle.bind(this);
+
+        this.error_message = "An error has occurred. Please consult the console to see what has gone wrong"
     }
 
-    savePeerReviewsFromCanvasToDatabase() {
+    attachNamesToDatabase() {
         let data = {
             course_id: this.props.courseId,
+        }
+
+        fetch('/api/attach_names_in_database', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data),
+        })
+            .then(res => {
+                if (res.status == 204) {
+                    this.setProgress(6)
+                    this.sortStudentsForAccordion()
+                    this.findFlaggedGrades()
+                    this.pullBoxPlotFromCanvas()
+                    // this.findCompletedAllReviews()
+                }
+                else if (res.status == 400) {
+                    if (!this.state.error) {
+                        this.setState({
+                            error: true
+                        })
+                    }
+                    console.log("ran into an error when trying to attach actual names to entries in SQL tables")
+                }
+                else if (res.status == 401) {
+                    history.push("/login")
+                    throw new Error();
+                }
+                else if (res.status == 404) {
+                    if (!this.state.error) {
+                        this.setState({
+                            error: true
+                        })
+                    }
+                    console.log("there are no students enrolled in this course")
+                }
+            })
+            .catch(err => console.log("unauthorized request when attaching actual names to entries in SQL tables"))
+    }
+
+    finalizePeerReviewGrades() {
+        let data = {
             assignment_id: this.props.assignmentId,
             points_possible: this.props.assignmentInfo.points_possible,
+            benchmarks: this.state.benchmarks,
+            penalizing_for_incompletes: this.props.penalizingForIncompletes,
+            penalizing_for_reassigned: this.props.penalizingForReassigned,
         }
-        console.log("3: fetching peer review data from canvas")
-        fetch('/api/save_all_peer_reviews', {
-            method: "POST",
+
+        fetch('/api/peer_reviews_finalizing', {
+            method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify(data)
+            body: JSON.stringify(data),
         })
-            .then(() => {
-                progress = 10;
-                progress_bar_message = "10%";
-                this.saveRubricScoresFromCanvasToDatabase()
+            .then(res => {
+                if (res.status == 200) {
+                    res.json().then(res => message = res)
+                        .then(() => {
+                            this.setProgress(4)
+                            localStorage.setItem("finalizeDisplayTextNumCompleted_" + this.props.assignmentId, message.num_completed);
+                            localStorage.setItem("finalizeDisplayTextNumAssigned_" + this.props.assignmentId, message.num_assigned);
+                            localStorage.setItem("finalizeDisplayTextAverage_" + this.props.assignmentId, message.average);
+                            localStorage.setItem("finalizeDisplayTextOutOf_" + this.props.assignmentId, message.out_of);
+                        })
+                        .then(() => this.sendGradesToCanvas())
+                        .then(() => this.attachNamesToDatabase())
+                }
+                else if (res.status == 400) {
+                    if (!this.state.error) {
+                        this.setState({
+                            error: true
+                        })
+                    }
+                    console.log("there was an error when running the finalize algorithm")
+                }
+                else if (res.status == 404) {
+                    if (!this.state.error) {
+                        this.setState({
+                            error: true
+                        })
+                    }
+                    console.log("no peer reviews have been completed for this assignment")
+                }
             })
     }
 
-    saveRubricScoresFromCanvasToDatabase() {
+    findCompletedAllReviews() {
+        fetch('/api/find_completed_all_reviews', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+            .then(res => {
+                if (res.status == 200) {
+                    res.json()
+                        .then(res => {
+                            this.setProgress(10)
+                            localStorage.setItem("completed_all_reviews_" + this.props.assignmentId, res.completed_all)
+                            localStorage.setItem("completed_some_reviews_" + this.props.assignmentId, res.completed_some)
+                            localStorage.setItem("completed_no_reviews_" + this.props.assignmentId, res.completed_none)
+                        })
+                        .then(() => this.setState({
+                            finishedLoading: true
+                        }))
+                }
+                else if (res.status == 400) {
+                    if (!this.state.error) {
+                        this.setState({
+                            error: true
+                        })
+                    }
+                    console.log("encountered an error when trying to determine stats for completion pie chart")
+                }
+            })
+    }
+
+    findFlaggedGrades() {
+        fetch('/api/find_flagged_grades', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+            .then(res => {
+                if (res.status == 200) {
+                    res.json()
+                        .then(res => {
+                            this.setProgress(8)
+                            localStorage.setItem("flagged_students_" + this.props.assignmentId, JSON.stringify(res))
+                        })
+                }
+                else if (res.status == 400) {
+                    if (!this.state.error) {
+                        this.setState({
+                            error: true
+                        })
+                    }
+                    console.log("encountered an error when trying to determine flagged grades")
+                }
+                else if (res.status == 404) {
+                    //no flagged grades
+                    this.setProgress(8)
+                    localStorage.setItem("flagged_students_" + this.props.assignmentId, JSON.stringify([]))
+                }
+            })
+    }
+
+    pullBoxPlotFromCanvas() {
         let data = {
             course_id: this.props.courseId,
-            assignment_id: this.props.assignmentId,
-            rubric_settings: this.props.assignmentInfo.rubric_settings.id
+            assignment_id: this.props.assignmentId
         }
 
-        console.log("5: fetching rubric data from canvas");
-        fetch('/api/save_all_rubrics', {
+        fetch('/api/pull_box_plot_from_canvas', {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify(data)
         })
-            .then(() => {
-                progress = 20
-                progress_bar_message = "20%";
-                this.saveOriginallyAssignedNumbersToDatabase();
+            .then(res => {
+                if (res.status == 200) {
+                    res.json().then(data => {
+                        this.setProgress(9)
+                        localStorage.setItem("min_" + this.props.assignmentId, data.min_score);
+                        localStorage.setItem("q1_" + this.props.assignmentId, data.first_quartile);
+                        localStorage.setItem("median_" + this.props.assignmentId, data.median);
+                        localStorage.setItem("q3_" + this.props.assignmentId, data.third_quartile);
+                        localStorage.setItem("max_" + this.props.assignmentId, data.max_score);
+                    })
+                        .then(() => this.findCompletedAllReviews())
+                }
+                else if (res.status == 400) {
+                    if (!this.state.error) {
+                        this.setState({
+                            error: true
+                        })
+                    }
+                    console.log("ran into an error when trying to pull boxplot from canvas")
+                }
+                else if (res.status === 401) {
+                    history.push("/login")
+                    throw new Error();
+                }
+                else if (res.status == 404) {
+                    if (!this.state.error) {
+                        this.setState({
+                            error: true
+                        })
+                    }
+                    console.log("no assignments created on canvas")
+                }
             })
+            .catch(err => console.log("unauthorized request when pulling boxplot from canvas"))
     }
 
     saveOriginallyAssignedNumbersToDatabase() {
@@ -100,46 +265,119 @@ class FinalizeResults extends Component {
             },
             body: JSON.stringify(data)
         })
-            .then(() => {
-                progress = 30
-                progress_bar_message = "30%";
-                this.finalizePeerReviewGrades();
+            .then(res => {
+                if (res.status == 204) {
+                    this.setProgress(3)
+                    this.finalizePeerReviewGrades();
+                }
+                else if (res.status == 400) {
+                    if (!this.state.error) {
+                        this.setState({
+                            error: true
+                        })
+                    }
+                    console.log("encountered an error when trying to save originally assigned peer review numbers")
+                }
+                else if (res.status == 404) {
+                    if (!this.state.error) {
+                        this.setState({
+                            error: true
+                        })
+                    }
+                    console.log("no peer reviews have been completed for this assignment")
+                }
             })
     }
 
-    finalizePeerReviewGrades() {
+    savePeerReviewsFromCanvasToDatabase() {
         let data = {
+            course_id: this.props.courseId,
             assignment_id: this.props.assignmentId,
             points_possible: this.props.assignmentInfo.points_possible,
-            benchmarks: this.state.benchmarks,
-            penalizing_for_incompletes: this.props.penalizingForIncompletes,
-            penalizing_for_reassigned: this.props.penalizingForReassigned,
         }
-        console.log(data)
 
-        fetch('/api/peer_reviews_finalizing', {
-            method: 'POST',
+        fetch('/api/save_all_peer_reviews', {
+            method: "POST",
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify(data),
+            body: JSON.stringify(data)
         })
-            .then(res => res.json())
-            .then(res => message = res.message)
-            .then(() => {
-                progress = 40
-                progress_bar_message = "40%";
-                localStorage.setItem("finalizeDisplayTextNumCompleted_" + this.props.assignmentId, message.num_completed);
-                localStorage.setItem("finalizeDisplayTextNumAssigned_" + this.props.assignmentId, message.num_assigned);
-                localStorage.setItem("finalizeDisplayTextAverage_" + this.props.assignmentId, message.average);
-                localStorage.setItem("finalizeDisplayTextOutOf_" + this.props.assignmentId, message.out_of);
+            .then(res => {
+                if (res.status == 204) {
+                    this.setProgress(1)
+                    this.saveRubricScoresFromCanvasToDatabase()
+                }
+                else if (res.status == 400) {
+                    if (!this.state.error) {
+                        this.setState({
+                            error: true
+                        })
+                    }
+                    console.log("ran into an error when trying to save all peer reviews from canvas")
+                }
+                else if (res.status === 401) {
+                    history.push("/login")
+                    throw new Error();
+                }
+                else if (res.status == 404) {
+                    if (!this.state.error) {
+                        this.setState({
+                            error: true
+                        })
+                    }
+                    console.log("no peer reviews assigned for this assignment")
+                }
             })
-            .then(() => this.sendGradesToCanvas())
-            .then(() => this.attachNamesToDatabase())
+            .catch(err => console.log("unauthorized request when saving all peer reviews from canvas"))
+
+    }
+
+    saveRubricScoresFromCanvasToDatabase() {
+        let data = {
+            course_id: this.props.courseId,
+            assignment_id: this.props.assignmentId,
+            rubric_settings: this.props.assignmentInfo.rubric_settings.id
+        }
+
+        fetch('/api/save_all_rubrics', {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        })
+            .then(res => {
+                if (res.status == 204) {
+                    this.setProgress(2)
+                    this.saveOriginallyAssignedNumbersToDatabase();
+                }
+                else if (res.status == 400) {
+                    if (!this.state.error) {
+                        this.setState({
+                            error: true
+                        })
+                    }
+                    console.log("ran into an error when trying to save all rubric assessments from canvas")
+                }
+                else if (res.status === 401) {
+                    history.push("/login")
+                    throw new Error();
+                }
+                else if (res.status == 404) {
+                    if (!this.state.error) {
+                        this.setState({
+                            error: true
+                        })
+                    }
+                    console.log("no rubric assessments found for current assignment")
+                }
+            })
+            .catch(err => console.log("unauthorized request when saving all rubric assessments from canvas"))
+
     }
 
     sendGradesToCanvas() {
-        console.log("8: sending grades to canvas");
         let data = {
             course_id: this.props.courseId,
             assignment_id: this.props.assignmentId,
@@ -152,119 +390,63 @@ class FinalizeResults extends Component {
             },
             body: JSON.stringify(data),
         })
-        progress = 50
-        progress_bar_message = "50%";
-    }
-
-    attachNamesToDatabase() {
-        console.log("10f: attaching names to database tables");
-        let data = {
-            course_id: this.props.courseId,
-        }
-
-        fetch('/api/attach_names_in_database', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(data),
-        })
-            .then(() => {
-                progress = 60
-                progress_bar_message = "60%";
-                this.sortStudentsForAccordion()
-                this.findFlaggedGrades()
-                this.pullBoxPlotFromCanvas()
-                // this.findCompletedAllReviews()
+            .then(res => {
+                if (res.status == 204) {
+                    this.setProgress(5)
+                }
+                else if (res.status == 400) {
+                    if (!this.state.error) {
+                        this.setState({
+                            error: true
+                        })
+                    }
+                    console.log("ran into an error in sending grades to canvas when reading the actual grade saved in the SQL gradebook")
+                }
+                else if (res.status == 404) {
+                    if (!this.state.error) {
+                        this.setState({
+                            error: true
+                        })
+                    }
+                    console.log("no students found in gradebook SQL table")
+                }
             })
     }
 
-    sortStudentsForAccordion() {
-        console.log("12: sorting students for accordion")
+    setProgress(step) {
+        progress = (step / progress_num_steps) * 100;
+        progress_bar_message = [progress.toFixed(0) + "%"]
+    }
 
+    sortStudentsForAccordion() {
         fetch('/api/sort_students_for_accordion', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
         })
-            .then(res => res.json())
             .then(res => {
-                progress = 70
-                progress_bar_message = "70%";
-                localStorage.setItem("spazzy_" + this.props.assignmentId, JSON.stringify(res.spazzy))
-                localStorage.setItem("definitely_harsh_" + this.props.assignmentId, JSON.stringify(res.definitely_harsh))
-                localStorage.setItem("could_be_harsh_" + this.props.assignmentId, JSON.stringify(res.could_be_harsh))
-                localStorage.setItem("could_be_lenient_" + this.props.assignmentId, JSON.stringify(res.could_be_lenient))
-                localStorage.setItem("definitely_lenient_" + this.props.assignmentId, JSON.stringify(res.definitely_lenient))
-                localStorage.setItem("could_be_fair_" + this.props.assignmentId, JSON.stringify(res.could_be_fair))
-                localStorage.setItem("definitely_fair_" + this.props.assignmentId, JSON.stringify(res.definitely_fair))
-            })
-    }
-
-    findFlaggedGrades() {
-        console.log("14: finding flagged grades")
-
-        fetch('/api/find_flagged_grades', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        })
-            .then(res => res.json())
-            .then(res => {
-                progress = 80
-                progress_bar_message = "80%";
-                localStorage.setItem("flagged_students_" + this.props.assignmentId, JSON.stringify(res))
-            })
-    }
-
-    pullBoxPlotFromCanvas() {
-        let data = {
-            course_id: this.props.courseId,
-            assignment_id: this.props.assignmentId
-        }
-
-        console.log("fetching box plot points from canvas")
-
-        fetch('/api/pull_box_plot_from_canvas', {
-            method: "POST",
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(data)
-        })
-            .then(res => {
-                res.json()
-                    .then(result => {
-                        progress = 90
-                        progress_bar_message = "90%";
-                        localStorage.setItem("min_" + this.props.assignmentId, result.min_score);
-                        localStorage.setItem("q1_" + this.props.assignmentId, result.first_quartile);
-                        localStorage.setItem("median_" + this.props.assignmentId, result.median);
-                        localStorage.setItem("q3_" + this.props.assignmentId, result.third_quartile);
-                        localStorage.setItem("max_" + this.props.assignmentId, result.max_score);
+                if (res.status == 200) {
+                    res.json().then(res => {
+                        this.setProgress(7)
+                        localStorage.setItem("spazzy_" + this.props.assignmentId, JSON.stringify(res.spazzy))
+                        localStorage.setItem("definitely_harsh_" + this.props.assignmentId, JSON.stringify(res.definitely_harsh))
+                        localStorage.setItem("could_be_harsh_" + this.props.assignmentId, JSON.stringify(res.could_be_harsh))
+                        localStorage.setItem("could_be_lenient_" + this.props.assignmentId, JSON.stringify(res.could_be_lenient))
+                        localStorage.setItem("definitely_lenient_" + this.props.assignmentId, JSON.stringify(res.definitely_lenient))
+                        localStorage.setItem("could_be_fair_" + this.props.assignmentId, JSON.stringify(res.could_be_fair))
+                        localStorage.setItem("definitely_fair_" + this.props.assignmentId, JSON.stringify(res.definitely_fair))
                     })
-                    .then(() => this.findCompletedAllReviews())
+                }
+                else if (res.status == 400) {
+                    if (!this.state.error) {
+                        this.setState({
+                            error: true
+                        })
+                    }
+                    console.log("encountered an error when trying to sort students into the seven buckets")
+                }
             })
-    }
-
-    findCompletedAllReviews() {
-        fetch('/api/find_completed_all_reviews', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        })
-            .then(res => res.json())
-            .then(res => {
-                progress = 100
-                progress_bar_message = "100%";
-                localStorage.setItem("completed_all_reviews_" + this.props.assignmentId, res.completed_all)
-                localStorage.setItem("completed_some_reviews_" + this.props.assignmentId, res.completed_some)
-                localStorage.setItem("completed_no_reviews_" + this.props.assignmentId, res.completed_none)
-            })
-            .then(() => this.setState({ finishedLoading: true }))
     }
 
     toggle() {
@@ -274,110 +456,29 @@ class FinalizeResults extends Component {
     }
 
     componentDidMount() {
-        progress = 0;
-        progress_bar_message = "";
+        this.setProgress(0)
     }
 
     render() {
-        let currIndex = 0;
-        return (
-            <div>
-                {this.props.pressed ?
+        if (this.props.pressed) {
+            return (
+                <div>
+                    {
+                        this.savePeerReviewsFromCanvasToDatabase()
+                    }
+                </div>
+            )
+        }
+        else {
+            if (this.state.error) {
+                return (
                     <div>
-                        {
-                            this.savePeerReviewsFromCanvasToDatabase()
-                        }
-
-                        {/* {
-                                localStorage.getItem("completed_all_reviews_" + this.props.assignmentId) ?
-                                    <div>
-
-                                        <strong>Completed Peer Reviews: </strong>{localStorage.getItem("finalizeDisplayTextNumCompleted_" + this.props.assignmentId)} / {localStorage.getItem("finalizeDisplayTextNumAssigned_" + this.props.assignmentId)}
-
-
-
-                                        <Boxplot
-                                            width={400} height={25} orientation="horizontal"
-                                            min={0} max={100}
-                                            stats={{
-                                                whiskerLow: localStorage.getItem("min_" + this.props.assignmentId),
-                                                quartile1: localStorage.getItem("q1_" + this.props.assignmentId),
-                                                quartile2: localStorage.getItem("median_" + this.props.assignmentId),
-                                                quartile3: localStorage.getItem("q3_" + this.props.assignmentId),
-                                                whiskerHigh: localStorage.getItem("max_" + this.props.assignmentId),
-                                                outliers: [],
-                                            }} />
-                                        <br></br>
-                                        <br></br>
-                                        <Row>
-                                            <Well className="well2">
-                                                <Flexbox className="accordion-flexbox" flexDirection="column" minWidth="300px" maxWidth="500px" width="100%" flexWrap="wrap">
-                                                    <Accordion name="Definitely Harsh" content={JSON.parse(localStorage.getItem("harsh_students_" + this.props.assignmentId))} />
-                                                    <Accordion name="Definitely Lenient" content={JSON.parse(localStorage.getItem("lenient_students_" + this.props.assignmentId))} />
-                                                    <Accordion name="Missing Some Peer Reviews" content={JSON.parse(localStorage.getItem("some_incomplete_students_" + this.props.assignmentId))} />
-                                                    <Accordion name="Missing All Peer Reviews" content={JSON.parse(localStorage.getItem("all_incomplete_students_" + this.props.assignmentId))} />
-                                                    <Accordion name="Flagged Grades" content={JSON.parse(localStorage.getItem("flagged_students_" + this.props.assignmentId))} />
-                                                </Flexbox>
-                                            </Well>
-                                        </Row>
-                                        <br></br>
-                                        <br></br>
-                                        <Row className="chart-row">
-                                            <Flexbox className="chartbox" flexDirection="column" width="200px" flexWrap="wrap">
-                                                <h5 className="graphTitle">Completion</h5>
-                                                <ReactSvgPieChart className="piechart"
-                                                    expandSize={3}
-                                                    expandOnHover="false"
-                                                    data={[
-                                                        { value: Number(localStorage.getItem("completed_all_reviews_" + this.props.assignmentId)), color: '#E38627' },
-                                                        { value: Number(localStorage.getItem("completed_no_reviews_" + this.props.assignmentId)), color: '#C13C37' },
-                                                        { value: Number(localStorage.getItem("completed_some_reviews_" + this.props.assignmentId)), color: '#6A2135' },
-                                                    ]}
-                                                    // onSectorHover={() => {
-                                                    //     console.log("You hovered over.");
-                                                    // }}
-                                                    onSectorHover={(d) => {
-                                                        if (d) {
-                                                            console.log("value: ", d.value);
-                                                            // this.sectorValue = d.value;
-                                                        }
-                                                    }
-                                                    }
-                                                />
-                                                <Well>This is the value of the sector over which you are hovering{this.state.sectorValue1}</Well>
-                                            </Flexbox>
-                                            <Flexbox className="chartbox" flexDirection="column" width="200px" flexWrap="wrap">
-                                                <h5 className="graphTitle">Grading Classification</h5>
-                                                <ReactSvgPieChart className="piechart"
-                                                    expandSize={3}
-                                                    expandOnHover="false"
-                                                    data={[
-                                                        { value: Number(localStorage.getItem("spazzy_" + this.props.assignmentId)), color: '#C9CBA3' },
-                                                        { value: Number(localStorage.getItem("definitely_harsh_" + this.props.assignmentId)), color: '#FFE1A8' },
-                                                        { value: Number(localStorage.getItem("could_be_harsh_" + this.props.assignmentId)), color: '#E26D5C' },
-                                                        { value: Number(localStorage.getItem("could_be_lenient_" + this.props.assignmentId)), color: '#723D46' },
-                                                        { value: Number(localStorage.getItem("definitely_lenient_" + this.props.assignmentId)), color: '#472D30' },
-                                                        { value: Number(localStorage.getItem("could_be_fair_" + this.props.assignmentId)), color: '#197278' },
-                                                        { value: Number(localStorage.getItem("definitely_fair_" + this.props.assignmentId)), color: '#772E25' }
-                                                    ]}
-                                                    onSectorHover={(d) => {
-                                                        if (d) {
-                                                            console.log("value: ", d.value);
-                                                            // this.sectorValue = d.value;
-                                                        }
-                                                    }
-                                                    }
-                                                />
-                                                <Well>This is the value of the sector over which you are hovering{this.state.sectorValueState}</Well>
-                                            </Flexbox>
-                                        </Row>
-                                    </div>
-                                    :
-                                    <Loader type="TailSpin" color="black" height={80} width={80} />
-                            }
-                        </div> */}
+                        {this.error_message}
                     </div>
-                    :
+                )
+            }
+            else {
+                return (
                     <div>
                         {
                             localStorage.getItem("completed_all_reviews_" + this.props.assignmentId) ?
@@ -457,7 +558,7 @@ class FinalizeResults extends Component {
                                                 ]}
                                                 onSectorHover={(d) => {
                                                     if (d) {
-                                                        console.log("value: ", d.value);
+                                                        // console.log("value: ", d.value);
                                                         this.state.sectorValue1 = d.value;
                                                         this.state.sectorTitle1 = d.title;
                                                         this.state.check = true;
@@ -484,7 +585,7 @@ class FinalizeResults extends Component {
                                                 <Ellipse rx={7} ry={4} fill={{ color: '#6A2135' }} strokeWidth={5} />
                                                 <p className="compkey">Completed no reviews</p>
                                             </Row>
-                                            </Flexbox>
+                                        </Flexbox>
                                         <Flexbox className="chartbox" flexDirection="column" width="200px" flexWrap="wrap">
                                             <h5 className="graphTitle">Grading Classification</h5>
                                             <ReactSvgPieChart className="piechart"
@@ -501,7 +602,7 @@ class FinalizeResults extends Component {
                                                 ]}
                                                 onSectorHover={(d) => {
                                                     if (d) {
-                                                        console.log("value: ", d.value);
+                                                        // console.log("value: ", d.value);
                                                         this.state.sectorValue2 = d.value;
                                                         this.state.sectorTitle2 = d.title;
                                                         this.state.check2 = true;
@@ -571,9 +672,10 @@ class FinalizeResults extends Component {
                                 <Progress value={progress}> {progress_bar_message} </Progress>
                         }
                     </div>
-                }
-            </div>
-        )
+                )
+            }
+        }
     }
 }
+
 export default FinalizeResults;
