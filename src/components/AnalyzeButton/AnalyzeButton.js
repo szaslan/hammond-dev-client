@@ -130,10 +130,13 @@ class AnalyzeButton extends Component {
 
 	handleFinalizeClick() {
 		console.log("handle finalize click")
+		localStorage.setItem("finalized_" + this.assignment_id, this.state.curr_time)
 		this.setState({
 			finalizePressed: true,
 		})
 	}
+
+
 
 	handleInputChange(event) {
 		const target = event.target;
@@ -413,7 +416,7 @@ class AnalyzeButton extends Component {
 								</label>
 								<label>
 									<input name="penalizing_for_incompletes" type="checkbox" checked={this.state.penalizing_for_incompletes} onChange={this.handleInputChange} />
-									Would You Like to Penalize Students' Weights For Incomplete Peer Reviews?:
+									Would You Like to Penalize Students Weights For Incomplete Peer Reviews?:
 								</label>
 								{
 									this.state.penalizing_for_incompletes ?

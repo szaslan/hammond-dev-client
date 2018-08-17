@@ -5,6 +5,7 @@ import { Row, Col } from 'react-bootstrap';
 import AssignmentInfo from '../AssignmentInfo/AssignmentInfo';
 import { Link } from "react-router-dom";
 import Assignments from '../Assignments/Assignments';
+import Iframe from 'react-iframe';
 
 class TabsComp extends Component {
     constructor(props) {
@@ -53,11 +54,11 @@ class TabsComp extends Component {
                 </Nav>
 
                 <TabContent activeTab={this.state.activeTab}>
-                
+
                     <TabPane tabId="1">
-                        blah 1  
+                        blah 1
                     </TabPane>
-                
+
                     <TabPane tabId="2">
                         blah 2
                     </TabPane>

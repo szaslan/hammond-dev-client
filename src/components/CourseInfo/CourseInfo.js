@@ -6,10 +6,10 @@ import Flexbox from 'flexbox-react';
 import history from '../../history'
 import { Container, Jumbotron } from 'reactstrap';
 import JumbotronComp from '../JumbotronComp/JumbotronComp'
-
 import { resolve } from 'path';
 import Loader from 'react-loader-spinner'
 import SidebarComp from '../SideBar/SideBar';
+import Iframe from 'react-iframe';
 
 class CourseInfo extends Component {
     constructor(props) {
@@ -22,11 +22,11 @@ class CourseInfo extends Component {
             loaded: false,
             ...props
         }
-      
+
         this.CreateTables = this.CreateTables.bind(this);
         this.ResetTables = this.ResetTables.bind(this);
     }
-  
+
     CreateTables() {
         fetch('/api/create_tables', {
             method: 'GET',
@@ -99,7 +99,10 @@ class CourseInfo extends Component {
 
         return (
             <div>
-                <JumbotronComp mainTitle={this.state.courseJSON.name}
+              <SidebarComp
+                content={
+                  <div>
+                  <JumbotronComp mainTitle={this.state.courseJSON.name}
                     tabs />
                 {this.state.loaded ?
                     <Container className="well1-container" fluid>
@@ -122,6 +125,8 @@ class CourseInfo extends Component {
                 }
 
                 <button onClick={this.ResetTables}>Reset Database Tables</button>
+                </div>
+              }/>
             </div>
 
         );

@@ -6,17 +6,19 @@ import './CourseStudents.css'
 import StudentInfo from '../StudentInfo/StudentInfo';
 import { Link } from "react-router-dom";
 import history from '../../history'
+import { Container, Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 
 
 class CourseStudents extends Component {
     constructor(props) {
         super(props);
-
+        this.toggle = this.toggle.bind(this);
         //URL is the current url while taking in the parameters from the props of the previous url
         this.state = {
             students: [],
             url: '',
             loaded: false,
+            dropdownOpen: false,
             ...props
         }
     }
@@ -54,53 +56,50 @@ class CourseStudents extends Component {
         }
     })
         .catch(err => { console.log("not authorized") })
-        
-                
+
+
+    }
+
+    toggle() {
+        this.setState(prevState => ({
+            dropdownOpen: !prevState.dropdownOpen
+        }));
     }
 
 
     render(){
             return (
-                <div>
-                    <JumbotronComp mainTitle="Students" secondaryTitle="&nbsp;" />
-
-                      <Breadcrumb className="breadcrumb1">
-                        <Breadcrumb.Item className="breadcrumb-item" href="/courses">Home</Breadcrumb.Item>
-                        <Breadcrumb.Item className="breadcrumb-item breadcrumb-item1" href={`/courses/${this.state.match.params.course_id}`}>
-                            {this.props.match.params.assignment_name}
-                        </Breadcrumb.Item>
-                        <Breadcrumb.Item className="breadcrumb-item" active>Students</Breadcrumb.Item>
-                    </Breadcrumb>
-
-                    {/* <Breadcrumb className="breadcrumb1">
-                        <Breadcrumb.Item className="breadcrumb-item" href="/courses/">Home</Breadcrumb.Item>
-                        <Breadcrumb.Item className="breadcrumb-item breadcrumb-item1" active>{this.state.courseJSON.name}</Breadcrumb.Item>
-                    </Breadcrumb> */}
-
+                <div className="studentdrop">
                     {console.log(this.state.students)}
-                    
-                    <div className="all-courses">
-                    {this.state.students ?
+                    <Dropdown direction="down" isOpen={this.state.dropdownOpen} toggle={this.toggle}>
+                        <DropdownToggle className="studenttog" caret>
+                            {this.props.location.state.student_name ?
+                              this.props.location.state.student_name
+                            :
+                            "Students"}
+                        </DropdownToggle>
 
-                        <ul className="courses-list">
-                            {
+                          <DropdownMenu className="studentmenu">
+                            {this.state.students ?
                                 this.state.students.map(students =>
-                                    <Link className="course-link" to={{ pathname: this.state.url + students.id, state: 
-                                                            { student_id: students.id, 
-                                                            student_name: students.name, 
-                                                            course_id: this.state.match.params.course_id 
-                                                            } }} 
+                                    <Link className="student-link" to={{ pathname: this.state.url + students.id, state:
+                                                            { student_id: students.id,
+                                                            student_name: students.name,
+                                                            course_id: this.state.match.params.course_id
+                                                            } }}
                                             key={students.id}>
-                                        <li className = "course-name" key={students.id}>{students.name}</li>
+                                        <li className = "student-name" key={students.id}>{students.name}</li>
                                     </Link>
                                     )
+                              :
+                              <Loader type="TailSpin" color="black" height={80} width={80} />
                             }
-                        </ul>
-                    :
-                    <Loader type="TailSpin" color="black" height={80} width={80} />
-                    }
-                </div>
-                </div>
+                        </DropdownMenu>
+                    </Dropdown>
+                  <hr className="hr-3"></hr>
+              </div>
+
+
 
             );
         }
