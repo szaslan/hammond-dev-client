@@ -5,6 +5,8 @@ import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap
 import history from '../../history'
 import StudentInfoGraph from '../StudentInfoGraph/StudentInfoGraph'
 
+import { Well, Row, Col, Breadcrumb } from 'react-bootstrap';
+
 //filter for only peer reviewable assignments
 function FilterAssignments(props) {
     const currAssignment = props.currAssigment;
@@ -510,10 +512,14 @@ class StudentInfo extends Component {
     render() {
         return (
             <div className="student-info">
+              <h2 className="headertext">Peer Grading Details</h2>
+              <hr className="hr-2"></hr>
                 {/*THIS BELOW SHOULD BE THIS.STATE.STUDENT*/}
-                <div className="student-name">{this.props.location.state.student_name}</div>
+                {/*<div className="studentinfo-name">{this.props.location.state.student_name}</div>*/}
+            <Row>
+              <Col className="dropsouter">
                 <Dropdown className="dropdowns" isOpen={this.state.dropdownOpen} toggle={this.toggleAssignment} >
-                    <DropdownToggle caret>
+                    <DropdownToggle className="dropbutton" caret>
                         {this.state.value}
                     </DropdownToggle>
                     <DropdownMenu >
@@ -531,7 +537,7 @@ class StudentInfo extends Component {
                     this.state.peer_reviews.length > 0 ?
 
                         <Dropdown className="dropdowns" isOpen={this.state.peerReviewOpen} toggle={this.toggleReview} >
-                            <DropdownToggle caret>
+                            <DropdownToggle className="dropbutton" caret>
                                 {this.state.value2}
                             </DropdownToggle>
                             <DropdownMenu >
@@ -543,22 +549,28 @@ class StudentInfo extends Component {
                             </DropdownMenu>
                         </Dropdown>
                         :
-                        <div>{this.state.errorMessage}</div>
+                        <div className="errmessage">{this.state.errorMessage}</div>
                 }
-
-                {this.state.message}
+                </Col>
+                <Col className="message">
+                    {this.state.message}
+                </Col>
+              </Row>
+              <hr className="hr-4"></hr>
+              <h2 className="headertext">Grading History</h2>
+              <hr className="hr-2"></hr>
                 {
                     this.state.graphs_loaded ?
                         <div>
                             {this.state.student_exists ?
                                 <div>
-                                    <StudentInfoGraph assignments={this.state.assignments} peerReviewData={this.state.peer_review_data} category="bucket" data={this.state.bucket_data} />
-                                    <StudentInfoGraph assignments={this.state.assignments} peerReviewData={this.state.peer_review_data} category="weight" data={this.state.weight_data} />
-                                    <StudentInfoGraph assignments={this.state.assignments} peerReviewData={this.state.peer_review_data} category="completion" data={this.state.number_of_reviews_completed_data} />
+                                    <StudentInfoGraph className="graph" assignments={this.state.assignments} peerReviewData={this.state.peer_review_data} category="bucket" data={this.state.bucket_data} />
+                                    <StudentInfoGraph className="graph" assignments={this.state.assignments} peerReviewData={this.state.peer_review_data} category="weight" data={this.state.weight_data} />
+                                    <StudentInfoGraph className="graph" assignments={this.state.assignments} peerReviewData={this.state.peer_review_data} category="completion" data={this.state.number_of_reviews_completed_data} />
                                 </div>
                                 :
-                                <div>
-                                    This student does not have any data saved for them at this point. To save data, you must finalize an assignment
+                                <div className="message">
+                                    This student does not have any data saved at this point. To save data, you must finalize an assignment.
                                 </div>
                             }
                         </div>

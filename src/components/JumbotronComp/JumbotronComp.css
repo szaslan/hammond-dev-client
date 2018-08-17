@@ -98,8 +98,9 @@
 }
 
 .hr-1{
-  border-top: 1px solid black;
+  border-top: 1px solid black !important;
 }
+
 .nav-link:hover{
   border-color:#757373 #757373 black!important;
   color:#757373 !important;

@@ -1,11 +1,14 @@
 import React, { Component } from 'react';
 import { Container } from 'reactstrap';
 import { Link } from "react-router-dom";
+import { resolve } from 'path';
 import Flexbox from 'flexbox-react';
 import history from '../../history'
+import Iframe from 'react-iframe';
 import Loader from 'react-loader-spinner'
 
 import JumbotronComp from '../JumbotronComp/JumbotronComp'
+import SidebarComp from '../SideBar/SideBar';
 
 import './CourseInfo.css';
 
@@ -115,7 +118,10 @@ class CourseInfo extends Component {
 
         return (
             <div>
-                <JumbotronComp mainTitle={this.state.courseJSON.name}
+              <SidebarComp
+                content={
+                  <div>
+                  <JumbotronComp mainTitle={this.state.courseJSON.name}
                     tabs />
                 {
                     this.state.loaded ?
@@ -139,6 +145,8 @@ class CourseInfo extends Component {
                 }
 
                 <button onClick={this.ResetTables}>Reset Database Tables</button>
+                </div>
+              }/>
             </div>
 
         );

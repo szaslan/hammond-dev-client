@@ -120,11 +120,12 @@ class AssignmentInfo extends Component {
         else {
             return (
                 <div className="assignment-info">
-                    <div className="assignment-info-title">
-                        <p><strong>Title: </strong>{this.state.assignment.name}</p>
-                        <button className="clear-local-button" onClick={this.clearLocalStorage}> Clear Local Storage</button>
-                    </div>
-                    <br></br>
+                      <h2 className="headertext">Score Details
+                      {/*<button className="clear-local-button" onClick={this.clearLocalStorage}> Clear Local Storage</button>*/}
+                      </h2>
+                      <hr className="hr-2"></hr>
+                        {/*<p><strong>Title: </strong>{this.state.assignment.name}</p>*/}
+                        <br></br>
 
                     <AnalyzeButton
                         assignmentInfo={this.state.assignment}

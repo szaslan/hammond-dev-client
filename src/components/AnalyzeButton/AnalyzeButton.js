@@ -189,6 +189,8 @@ class AnalyzeButton extends Component {
 		})
 	}
 
+
+
 	handleInputChange(event) {
 		const target = event.target;
 		const value = target.type === 'checkbox' ? target.checked : target.value;
@@ -517,9 +519,9 @@ class AnalyzeButton extends Component {
 										<input name="custom_benchmarks" type="checkbox" checked={this.state.custom_benchmarks} onChange={this.handleInputChange} />
 										Custom Benchmarks For Grading Algorithm?:
 								</label>
-									<label>
-										<input name="penalizing_for_incompletes" type="checkbox" checked={this.state.penalizing_for_incompletes} onChange={this.handleInputChange} />
-										Would You Like to Penalize Students' Weights For Incomplete Peer Reviews?:
+								<label>
+									<input name="penalizing_for_incompletes" type="checkbox" checked={this.state.penalizing_for_incompletes} onChange={this.handleInputChange} />
+									Would You Like to Penalize Students Weights For Incomplete Peer Reviews?:
 								</label>
 									{
 										this.state.penalizing_for_incompletes ?
