@@ -154,11 +154,11 @@ class AnalyzeResults extends Component {
                                 {JSON.parse(localStorage.getItem("analyzeDisplayTextNames_" + this.assignment_id))}
                                 <br></br>
                                 <br></br>
-                                <Row>
-                                    <Well className="well2">
-                                        <strong>Completed Peer Reviews:</strong> {localStorage.getItem("analyzeDisplayTextNumCompleted_" + this.assignment_id)} / {localStorage.getItem("analyzeDisplayTextNumAssigned_" + this.assignment_id)}
-                                    </Well>
-                                </Row>
+
+
+                                <strong>Completed Peer Reviews:</strong> {localStorage.getItem("analyzeDisplayTextNumCompleted_" + this.assignment_id)} / {localStorage.getItem("analyzeDisplayTextNumAssigned_" + this.assignment_id)}
+
+
                             </div>
                             :
                             <Loader type="TailSpin" color="black" height={80} width={80} />

@@ -1,12 +1,14 @@
 .assignment-info{
     /* margin-left: 50%; */
-    width: 50vw;
-    height: 50vh;
-    padding-top: 5vh;
-    /* display: flex; */
-    /* flex-direction: column; */
+    width: 100vw;
+    background-color:#FFEFE2;
+    display: flex;
+    flex-direction: column;
     font-family: "Open Sans";
     text-align: left;
+    margin:0px;
+    padding:15px;
+    padding-top:0px;
 }
 
 .assigment-labels, .buttons{

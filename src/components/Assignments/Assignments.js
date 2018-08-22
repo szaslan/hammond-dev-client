@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from "react-router-dom";
 import { Container, Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
+import {Well} from 'react-bootstrap';
 import Loader from 'react-loader-spinner'
 import history from '../../history';
 
@@ -101,7 +102,7 @@ class Assignments extends Component {
                     </Breadcrumb> */}
 
                 <div className="all-assignments">
-                    <Container>
+                    <Well className = "body-well">
                         
                         {/* <ul className="assignment-list"> */}
                         <Dropdown direction="down" className="dropdown-1" isOpen={this.state.dropdownOpen} toggle={this.toggle}>
@@ -127,7 +128,7 @@ class Assignments extends Component {
                         </Dropdown>
 
                         {/* </ul> */}
-                    </Container>
+                    </Well>
                 </div>
 
             </div>

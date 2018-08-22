@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import Loader from 'react-loader-spinner'
+import {Well} from 'react-bootstrap';
 
 import AnalyzeButton from '../AnalyzeButton/AnalyzeButton';
 
@@ -107,7 +108,7 @@ class AssignmentInfo extends Component {
             )
         else {
             return (
-                <div className="assignment-info">
+                <Well className="assignment-info">
                     <div className="assignment-info-title">
                         <p><strong>Title: </strong>{this.state.assignment.name}</p>
                         <button className="clear-local-button" onClick={this.clearLocalStorage}> Clear Local Storage</button>
@@ -120,7 +121,7 @@ class AssignmentInfo extends Component {
                         assignmentId={this.props.match.params.assignment_id}
                     />
 
-                </div>
+                </Well>
             )
         }
 

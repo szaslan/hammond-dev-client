@@ -2,12 +2,12 @@ import React, { Component } from 'react';
 import { UncontrolledTooltip } from 'reactstrap';
 import Flexbox from 'flexbox-react';
 import moment from 'moment';
-
+import { Row } from 'react-bootstrap';
 import AlgorithmBenchmarks from '../AlgorithmBenchmarks/AlgorithmBenchmarks';
 import AnalyzeResults from '../AnalyzeResults/AnalyzeResults';
 import DueDate from '../DueDate/DueDate';
 import FinalizeResults from '../FinalizeResults/FinalizeResults';
-
+import NewDueDate from '../DueDate/NewDueDate';
 import 'bootstrap/dist/css/bootstrap.css';
 
 import '../Assignments/Assignments.css';
@@ -59,6 +59,7 @@ class AnalyzeButton extends Component {
 		this.deadline_1 = null;
 		this.deadline_2 = null;
 		this.deadline_3 = null;
+
 	}
 
 	assignNewPeerReviews() {
@@ -375,6 +376,21 @@ class AnalyzeButton extends Component {
 				{
 					!this.state.finalizePressed ?
 						<div className="assignment-info-content">
+							{/* <Row> */}
+
+							<div className="calendar-case">
+								
+									<Flexbox flexWrap="wrap">
+										<NewDueDate number="1" assignmentId={this.assignment_id} />
+										<NewDueDate number="2" assignmentId={this.assignment_id} />
+										<NewDueDate number="3" assignmentId={this.assignment_id} />
+									</Flexbox>
+								
+
+							</div>
+
+
+							{/* <p>Set Due Date 1:</p>
 							<DueDate
 								name="Due Date 1"
 								assignmentId={this.assignment_id}
@@ -382,25 +398,32 @@ class AnalyzeButton extends Component {
 								message={message1}
 							/>
 							{localStorage.getItem("calendarDate_" + this.assignment_id + "_1") ?
-								<DueDate
-									name="Due Date 2"
-									assignmentId={this.assignment_id}
-									number="2"
-									message={message2}
-								/>
+								<div>
+									<p>Set Due Date 2:</p>
+									<DueDate
+										name="Due Date 2"
+										assignmentId={this.assignment_id}
+										number="2"
+										message={message2}
+									/>
+								</div>
 								:
 								null
 							}
+
 							{localStorage.getItem("calendarDate_" + this.assignment_id + "_1") && localStorage.getItem("calendarDate_" + this.assignment_id + "_2") ?
-								<DueDate
-									name="Due Date 3"
-									assignmentId={this.assignment_id}
-									number="3"
-									message={message3}
-								/>
+								<div>
+									<p>Set Due Date 3:</p>
+									<DueDate
+										name="Due Date 3"
+										assignmentId={this.assignment_id}
+										number="3"
+										message={message3}
+									/>
+								</div>
 								:
 								null
-							}
+							} */}
 							<form>
 								<label>
 									<input name="sendIncompleteMessages" type="checkbox" checked={this.state.sendIncompleteMessages} onChange={this.handleInputChange} />
@@ -426,6 +449,7 @@ class AnalyzeButton extends Component {
 								}
 
 							</form>
+							{/* </Row> */}
 						</div>
 						:
 						null

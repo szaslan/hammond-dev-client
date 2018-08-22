@@ -6,6 +6,8 @@ import InputMoment from 'input-moment';
 import './DueDate.css';
 import { Tooltip } from 'reactstrap';
 import { Alert } from 'react-bootstrap';
+import { Container } from 'reactstrap';
+import Datetime from 'react-datetime';
 
 var infoIcon = require('../InfoIcon.svg')
 
@@ -51,8 +53,8 @@ class DueDate extends Component {
         var formatted = moment(new_date).format('llll')
         console.log("formatted: " + formatted)*/
         //this.setState({ dueDateDisplay: m.format('llll') }, () => {
-            // localStorage.setItem(("calendarDate_" + this.props.assignmentId + "_" + this.props.number), this.state.dueDateActual);
-            //localStorage.setItem(("calendarDate_" + this.props.assignmentId + "_" + this.props.number), this.state.dueDateDisplay);
+        // localStorage.setItem(("calendarDate_" + this.props.assignmentId + "_" + this.props.number), this.state.dueDateActual);
+        //localStorage.setItem(("calendarDate_" + this.props.assignmentId + "_" + this.props.number), this.state.dueDateDisplay);
         //});
         this.setState({ dueDateDisplay: m.format('llll') });
         this.setState({ dueDateActual: m.format('l') + ", " + m.format('LTS') });
@@ -100,8 +102,8 @@ class DueDate extends Component {
                 this.setState({ dueDateDisplay: "" });
                 this.setState({ buttonPressed: true });
             }
-            else { 
-                this.isAfter = true; 
+            else {
+                this.isAfter = true;
                 this.setState({ buttonPressed: false });
             }
         }
@@ -113,12 +115,12 @@ class DueDate extends Component {
                 this.setState({ dueDateDisplay: "" });
                 this.setState({ buttonPressed: true });
             }
-            else { 
-                this.isAfter = true; 
+            else {
+                this.isAfter = true;
                 this.setState({ buttonPressed: false });
             }
         }
-        else { 
+        else {
             this.isAfter = true;
             //this.setState({ buttonPressed: false });
         }
@@ -144,9 +146,9 @@ class DueDate extends Component {
             <div className="app">
 
                 <p>
-                    <button onClick={this.handleClick1} >{this.props.name}</button>
+                    {/* <button onClick={this.handleClick1} >{this.props.name}</button> */}
                     <span style={{ textDecoration: "underline", color: "blue" }} href="#" id={"TooltipExample" + this.props.number}>
-                        <img src={infoIcon} width="20"/>
+                        <img src={infoIcon} width="20" />
                     </span>
                     <Tooltip placement="right" isOpen={this.state.tooltipOpen} target={"TooltipExample" + this.props.number} toggle={this.toggle}>
                         {this.state.message}
@@ -155,23 +157,23 @@ class DueDate extends Component {
                     {this.state.dueDateDisplay}
                 </p>
 
+                <Container className="input-moment-container">
+                    {/* {this.state.buttonPressed ? */}
 
-                {this.state.buttonPressed ?
 
-
-                    (this.isAcceptable ?
+                    {this.isAcceptable ?
                         (this.isAfter ?
-                            <form>
-                                <InputMoment
-                                    moment={this.state.m}
-                                    onChange={this.handleChange}
-                                    onSave={this.handleSave}
-                                    minStep={1} // default
-                                    hourStep={1} // default
-                                    prevMonthIcon="ion-ios-arrow-left" // default
-                                    nextMonthIcon="ion-ios-arrow-right" // default
-                                />
-                            </form>
+
+                            <InputMoment
+                                moment={this.state.m}
+                                onChange={this.handleChange}
+                                onSave={this.handleSave}
+                                minStep={1} // default
+                                hourStep={1} // default
+                                prevMonthIcon="ion-ios-arrow-left" // default
+                                nextMonthIcon="ion-ios-arrow-right" // default
+                            />
+
                             :
                             <Alert bsStyle="danger" onDismiss={this.handleDismiss}>
                                 <h2>Oops.</h2>
@@ -189,10 +191,10 @@ class DueDate extends Component {
 
                             {/* <button onClick = {this.handleDismiss}>Ok fineee</button> */}
                         </Alert>
-                    )
-                    :
-                    null
-                }
+                    }
+                    {/* ? */}
+                    {/* } */}
+                </Container>
 
 
 
