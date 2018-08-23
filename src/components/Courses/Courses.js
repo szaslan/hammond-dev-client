@@ -1,128 +1,135 @@
 import React, { Component } from 'react';
-import './Courses.css';
-import { Link, Redirect } from "react-router-dom";
-import history from '../../history'
-import Loader from 'react-loader-spinner';
-import { Container, Jumbotron } from 'reactstrap';
-import { Well, Row, Col, Breadcrumb } from 'react-bootstrap';
+import { Container } from 'reactstrap';
+import { Link } from "react-router-dom";
 import Flexbox from 'flexbox-react';
+import Loader from 'react-loader-spinner';
+
+import CardComp from '../CourseCard/CourseCard';
 import JumbotronComp from '../JumbotronComp/JumbotronComp';
 import SidebarComp from '../SideBar/SideBar';
-import CardComp from '../CourseCard/CourseCard';
+import UnauthorizedError from '../UnauthorizedError/UnauthorizedError';
+
+import './Courses.css';
 
 class Courses extends Component {
     constructor(props) {
         super(props);
-        this.signOut = this.signOut.bind(this);
+
         this.state = {
             courses: [],
+            error: false,
+            error_message: null,
             loaded: false,
             showCourse: false,
-            auth: false,
             user: [],
         }
+
+        this.fetchCourses = this.fetchCourses.bind(this);
+        this.signOut = this.signOut.bind(this);
     }
 
-    componentWillMount() {
-        this.setState({ courses: null });
-    }
-
-    componentDidMount() {
-        let get = this;
-
-        this.setState({ loaded: true });
-
+    fetchCourses() {
         fetch('/api/courses', {
+            method: 'POST',
             credentials: 'include',
             headers: {
                 'Content-Type': 'application/json'
-
             },
             redirect: 'follow'
         })
-            .then(function (res) {
-                console.log(res)
-
-                if (res.status === 401) {
-                    console.log("4040404")
-                    history.push("/login")
-                    throw new Error();
-
-                    // return <Redirect to="/" />
-                    // window.location.href="/login"
+            .then(res => {
+                switch (res.status) {
+                    case 200:
+                        res.json().then(data => {
+                            this.setState({
+                                courses: data.courses,
+                                loaded: true,
+                                user: data.first_name,
+                            })
+                        })
+                        break;
+                    case 400:
+                        console.log("ran into an error when trying to pull the list of courses from canvas")
+                        break;
+                    case 401:
+                        res.json().then(res => {
+                            this.setState({
+                                error: true,
+                                error_message: res.message,
+                            })
+                        })
+                        break;
+                    case 404:
+                        console.log("no courses found on canvas where you are listed as teacher")
+                        break;
                 }
-                // if (res.status == 200)
-                {
-                    // get.setState({auth: true})
-                    // console.log(res)
-                    res.json().then(function (data) {
-                        console.log(data)
-                        get.setState({ user: data.first_name, courses: data.courses })
-                    })
-                }
-
             })
-            .catch(err => console.log(err));
     }
 
     onClick() {
-        this.setState({ showCourse: true });
+        this.setState({
+            showCourse: true
+        });
     }
 
     signOut() {
         fetch('/logout', {
             credentials: 'include'
         })
-            .then(response => console.log(response))
     }
 
+    componentWillMount() {
+        this.setState({
+            courses: null
+        });
+    }
+
+    componentDidMount() {
+        this.fetchCourses();
+    }
 
     render() {
+        if (this.state.error) {
+            return (
+                <UnauthorizedError message={this.state.error_message} />
+            )
+        }
 
-        if (this.state.courses === null) {
+        if (!this.state.loaded) {
             return (
                 <Loader className="loader" type="TailSpin" color="black" height={80} width={80} />
-
             );
         }
-        else {
-
-            return (
-                <div>
-
-                    <Container>
-                        <SidebarComp
-                            content={
-                                <div>
-                                    <JumbotronComp mainTitle={this.state.user} />
-
-                                    <Container className="well1-container" fluid>
+        return (
+            <div>
+                <Container>
+                    <SidebarComp
+                        content={
+                            <div>
+                                <JumbotronComp mainTitle={this.state.user} />
+                                <Container className="well1-container" fluid>
+                                    <Flexbox className="well1-flexbox" minWidth="700px" width="90vw"
+                                        flexWrap="wrap" inline="true">
+                                        {/*<h1 className="pagetitle">Courses</h1>*/}
                                         <Flexbox className="well1-flexbox" minWidth="700px" width="90vw"
                                             flexWrap="wrap" inline="true">
-                                            {/*<h1 className="pagetitle">Courses</h1>*/}
-                                            <Flexbox className="well1-flexbox" minWidth="700px" width="90vw"
-                                                flexWrap="wrap" inline="true">
-                                                {this.state.courses.length > 0
-                                                    ?
-                                                    this.state.courses ?
-                                                        this.state.courses.map(courses =>
-                                                            <Link to={`/courses/${courses.id}`}>
-                                                                <CardComp name={courses.name}  />
-                                                            </Link>)
-                                                        :
-                                                        null
-
+                                            {
+                                                this.state.courses.length > 0 ?
+                                                    this.state.courses.map(course =>
+                                                        <Link to={`/courses/${course.id}`}>
+                                                            <CardComp name={course.name} />
+                                                        </Link>)
                                                     :
                                                     <h1>No classes as a teacher</h1>
-                                                }
-                                            </Flexbox>
+                                            }
                                         </Flexbox>
-                                    </Container>
-                                </div>
-                            } />
-                    </Container>
+                                    </Flexbox>
+                                </Container>
+                            </div>
+                        } />
+                </Container>
 
-                    {/* <JumbotronComp mainTitle={this.state.user} />
+                {/* <JumbotronComp mainTitle={this.state.user} />
 
                         <Container className="well1-container" fluid>
                             <Flexbox className="well1-flexbox" minWidth="700px" width="90vw"
@@ -149,29 +156,16 @@ class Courses extends Component {
 
 
 
-                    {/*<Well className="bottom" fluid>
+                {/*<Well className="bottom" fluid>
                     <Container className="bottom-container" fluid>
                         <button className="about-button" >About Us</button>
                         <button className="about-button">About untitled</button>
                     </Container>
                 </Well>*/}
-                </div>
+            </div>
 
-            );
-        }
-        // else{
-        //     return (
-        //         <div>
-        //             <div>Not Authenticated</div>
-        //             <Link to="/login">
-        //                 <button>Sign in</button>
-        //             </Link>
-        //         </div>
-        //     )
-        // }
+        );
     }
-
-
 }
 
 export default Courses;

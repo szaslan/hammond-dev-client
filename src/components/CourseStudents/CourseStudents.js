@@ -1,40 +1,39 @@
 import React, { Component } from 'react';
-import Loader from 'react-loader-spinner';
-import JumbotronComp from '../JumbotronComp/JumbotronComp';
-import {Breadcrumb} from 'react-bootstrap';
-import './CourseStudents.css'
-import StudentInfo from '../StudentInfo/StudentInfo';
+import { Dropdown, DropdownToggle, DropdownMenu } from 'reactstrap';
 import { Link } from "react-router-dom";
-import history from '../../history'
+import Loader from 'react-loader-spinner';
 
+import UnauthorizedError from '../UnauthorizedError/UnauthorizedError';
+
+import './CourseStudents.css'
 
 class CourseStudents extends Component {
     constructor(props) {
         super(props);
 
-        //URL is the current url while taking in the parameters from the props of the previous url
         this.state = {
+            dropdownOpen: false,
+            error: false,
+            error_message: null,
+            loaded: false,
             students: [],
             url: '',
-            loaded: false,
+
             ...props
         }
+
+        this.fetchStudentsFromCanvas = this.fetchStudentsFromCanvas.bind(this);
+        this.toggle = this.toggle.bind(this);
     }
 
-    componentWillMount() {
-        this.setState({ students: [] })
-    }
-
-    //fetch assignments for course with course_id passed down
-    componentDidMount() {
+    fetchStudentsFromCanvas() {
         const { match: { params } } = this.props;
-        this.setState({url: `/courses/${params.course_id}/${params.assignment_name}/students/`});
 
         let data = {
             course_id: params.course_id
         }
 
-        fetch('/api/coursestudents',{
+        fetch('/api/coursestudents', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -42,70 +41,97 @@ class CourseStudents extends Component {
             body: JSON.stringify(data),
             credentials: 'include'
         })
-        .then(res => {
-            if (res.status === 401){
-                console.log("4040404")
-                history.push("/login")
-                throw new Error();
-            } else {
-                res.json().then(res => {
-                this.setState({students: res})
+            .then(res => {
+                switch (res.status) {
+                    case 200:
+                        res.json().then(data => {
+                            this.setState({
+                                loaded: true,
+                                students: data,
+                            })
+                        })
+                        break;
+                    case 400:
+                        console.log("ran into an error when trying to pull the list of students in the course from canvas")
+                        break;
+                    case 401:
+                        res.json().then(res => {
+                            this.setState({
+                                error: true,
+                                error_message: res.message,
+                            })
+                        })
+                        break;
+                    case 404:
+                        console.log("no students enrolled in the selected course on canvas")
+                        break;
+                }
             })
-        }
-    })
-        .catch(err => { console.log("not authorized") })
-        
-                
     }
 
+    toggle() {
+        this.setState(prevState => ({
+            dropdownOpen: !prevState.dropdownOpen
+        }));
+    }
 
-    render(){
+    componentDidMount() {
+        const { match: { params } } = this.props;
+
+        this.setState({
+            url: `/courses/${params.course_id}/${params.assignment_name}/students/`
+        });
+
+        this.fetchStudentsFromCanvas()
+    }
+
+    componentWillMount() {
+        this.setState({
+            students: []
+        })
+    }
+
+    render() {
+        if (this.state.error) {
             return (
-                <div>
-                    <JumbotronComp mainTitle="Students" secondaryTitle="&nbsp;" />
+                <UnauthorizedError message={this.state.error_message} />
+            )
+        }
 
-                      <Breadcrumb className="breadcrumb1">
-                        <Breadcrumb.Item className="breadcrumb-item" href="/courses">Home</Breadcrumb.Item>
-                        <Breadcrumb.Item className="breadcrumb-item breadcrumb-item1" href={`/courses/${this.state.match.params.course_id}`}>
-                            {this.props.match.params.assignment_name}
-                        </Breadcrumb.Item>
-                        <Breadcrumb.Item className="breadcrumb-item" active>Students</Breadcrumb.Item>
-                    </Breadcrumb>
-
-                    {/* <Breadcrumb className="breadcrumb1">
-                        <Breadcrumb.Item className="breadcrumb-item" href="/courses/">Home</Breadcrumb.Item>
-                        <Breadcrumb.Item className="breadcrumb-item breadcrumb-item1" active>{this.state.courseJSON.name}</Breadcrumb.Item>
-                    </Breadcrumb> */}
-
-                    {console.log(this.state.students)}
-                    
-                    <div className="all-courses">
-                    {this.state.students ?
-
-                        <ul className="courses-list">
+        if (this.state.loaded) {
+            return (
+                <div className="studentdrop">
+                    <Dropdown direction="down" isOpen={this.state.dropdownOpen} toggle={this.toggle}>
+                        <DropdownToggle className="studenttog" caret>
                             {
-                                this.state.students.map(students =>
-                                    <Link className="course-link" to={{ pathname: this.state.url + students.id, state: 
-                                                            { student_id: students.id, 
-                                                            student_name: students.name, 
-                                                            course_id: this.state.match.params.course_id 
-                                                            } }} 
-                                            key={students.id}>
-                                        <li className = "course-name" key={students.id}>{students.name}</li>
-                                    </Link>
-                                    )
+                                this.props.location.state.student_name ?
+                                    this.props.location.state.student_name
+                                    :
+                                    "Students"
                             }
-                        </ul>
-                    :
-                    <Loader type="TailSpin" color="black" height={80} width={80} />
-                    }
-                </div>
-                </div>
+                        </DropdownToggle>
 
+                        <DropdownMenu className="studentmenu">
+                            {
+                                this.state.students.map(student =>
+                                    <Link className="student-link" to={{ pathname: this.state.url + student.id, state: { student_id: student.id, student_name: student.name, course_id: this.state.match.params.course_id } }} key={student.id}>
+                                        <li className="student-name" key={student.id}>
+                                            {student.name}
+                                        </li>
+                                    </Link>
+                                )
+                            }
+                        </DropdownMenu>
+                    </Dropdown>
+                    <hr className="hr-3"></hr>
+                </div>
             );
         }
 
-
+        return (
+            <Loader type="TailSpin" color="black" height={80} width={80} />
+        )
     }
+}
 
 export default CourseStudents;

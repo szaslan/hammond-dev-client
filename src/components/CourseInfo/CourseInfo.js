@@ -1,64 +1,60 @@
 import React, { Component } from 'react';
-import './CourseInfo.css';
+import { Container } from 'reactstrap';
 import { Link } from "react-router-dom";
-import { Well, Row, Col, Breadcrumb } from 'react-bootstrap';
 import Flexbox from 'flexbox-react';
-import history from '../../history'
-import { Container, Jumbotron } from 'reactstrap';
-import JumbotronComp from '../JumbotronComp/JumbotronComp'
+import Iframe from 'react-iframe';
 
-import { resolve } from 'path';
-import Loader from 'react-loader-spinner'
+import JumbotronComp from '../JumbotronComp/JumbotronComp'
 import SidebarComp from '../SideBar/SideBar';
+import UnauthorizedError from '../UnauthorizedError/UnauthorizedError';
+
+import './CourseInfo.css';
 
 class CourseInfo extends Component {
     constructor(props) {
         super(props);
+
         this.state = {
             courseJSON: [],
-            courseID: '',
-            url: '',
-            auth: false,
+            error: false,
+            error_message: null,
             loaded: false,
+            url: '',
+
             ...props
         }
-      
-        this.CreateTables = this.CreateTables.bind(this);
-        this.ResetTables = this.ResetTables.bind(this);
+
+        this.createTables = this.createTables.bind(this);
+        this.fetchCourseInfo = this.fetchCourseInfo.bind(this);
+        this.resetTables = this.resetTables.bind(this);
     }
-  
-    CreateTables() {
+
+    createTables() {
         fetch('/api/create_tables', {
-            method: 'GET',
+            method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
         })
+            .then(res => {
+                switch (res.status) {
+                    case 201:
+                        //no issues
+                        break;
+                    case 400:
+                        console.log("ran into an error when creating nonexistent SQL tables")
+                        break;
+                }
+            })
     }
 
-    ResetTables() {
-        fetch('/api/reset_tables', {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-        })
-    }
-    // componentWillMount(){
-    //     if(this.state.location.state.auth){
-    //         this.setState({auth: true})
-    //     }
-    // }
-    componentDidMount() {
+    fetchCourseInfo() {
         const { match: { params } } = this.props;
-
-        this.setState({ url: `/courses/${params.course_id}` });
-
 
         var data = {
             course_id: params.course_id,
         }
-        console.log(data);
+
         fetch('/api/courseinfo', {
             method: 'POST',
             headers: {
@@ -68,66 +64,106 @@ class CourseInfo extends Component {
             body: JSON.stringify(data)
         })
             .then(res => {
-                if (res.status === 401) {
-                    console.log("4040404")
-                    history.push("/login")
-                    throw new Error();
-
-                    // return <Redirect to="/" />
-                    // window.location.href="/login"
-                }
-                {
-                    res.json().then(data => {
-                        this.setState({ courseJSON: data, loaded: true })
-                    })
+                switch (res.status) {
+                    case 200:
+                        res.json().then(data => {
+                            this.setState({
+                                courseJSON: data,
+                                loaded: true
+                            })
+                        })
+                        break;
+                    case 400:
+                        console.log("ran into an error when trying to pull course info from canvas")
+                        break;
+                    case 401:
+                        res.json().then(res => {
+                            this.setState({
+                                error: true,
+                                error_message: res.message,
+                            })
+                        })
+                        break;
+                    case 404:
+                        console.log("there are no courses where you are listed as a teacher on canvas")
+                        break;
                 }
             })
-            .catch(err => console.log("no auth"))
-        this.CreateTables();
     }
 
+    resetTables() {
+        fetch('/api/reset_tables', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+        })
+            .then(res => {
+                switch (res.status) {
+                    case 204:
+                        //no issues
+                        break;
+                    case 400:
+                        console.log("ran into an error when creating nonexistent SQL tables")
+                        break;
+                }
+            })
+    }
+
+    componentDidMount() {
+        const { match: { params } } = this.props;
+
+        this.setState({
+            url: `/courses/${params.course_id}`
+        });
+
+        this.fetchCourseInfo();
+        this.createTables();
+    }
 
     render() {
+        if (this.state.error) {
+            return (
+                <UnauthorizedError message={this.state.error_message} />
+            )
+        }
 
-        // if (!this.state.auth){
-        //     return(
-        //         <div>Not authenticated</div>
-        //     )
-        // }
+        if (this.state.loaded) {
+            return (
+                <div>
+                    <SidebarComp
+                        content={
+                            <div>
+                                <JumbotronComp mainTitle={this.state.courseJSON.name} tabs />
+                                {
+                                    <Container className="well1-container" fluid>
+                                        <Flexbox className="big-buttons-flexbox" minWidth="700px" width="60vw" justifyContent="center"
+                                            minHeight="50vh" flexDirection="column">
+                                            <Flexbox justifyContent="space-around" flexWrap="nowrap">
+                                                <Link to={{ pathname: this.state.url + '/' + this.state.courseJSON.name + "/assignments/", state: { name: this.state.courseJSON.name }, }}>
+                                                    <button className="pull-left big-button">Assignments</button>
+                                                </Link>
+                                                <Link to={{ pathname: this.state.url + "/" + this.state.courseJSON.name + "/students", state: { name: this.state.courseJSON.name } }}>
+                                                    <button className="pull-right big-button">Students</button>
+                                                </Link>
+                                            </Flexbox>
+                                        </Flexbox>
+                                    </Container>
+                                }
 
+                                <button onClick={this.resetTables}>Reset Database Tables</button>
+                            </div>
+                        }
+                    />
+                </div>
 
-
+            );
+        }
+        
         return (
-            <div>
-                <JumbotronComp mainTitle={this.state.courseJSON.name}
-                    tabs />
-                {this.state.loaded ?
-                    <Container className="well1-container" fluid>
-                        <Flexbox className="big-buttons-flexbox" minWidth="700px" width="60vw" justifyContent="center"
-                            minHeight="50vh" flexDirection="column">
-                            <Flexbox
-                                justifyContent="space-around"
-                                flexWrap="nowrap">
-                                <Link to={{ pathname: this.state.url + '/' + this.state.courseJSON.name + "/assignments/", state: { name: this.state.courseJSON.name }, }}>
-                                    <button className="pull-left big-button">Assignments</button>
-                                </Link>
-                                <Link to={{ pathname: this.state.url + "/" + this.state.courseJSON.name + "/students", state: { name: this.state.courseJSON.name } }}>
-                                    <button className="pull-right big-button">Students</button>
-                                </Link>
-                            </Flexbox>
-                        </Flexbox>
-                    </Container>
-                    :
-                    <Loader type="TailSpin" color="black" height={80} width={80} />
-                }
-
-                <button onClick={this.ResetTables}>Reset Database Tables</button>
-            </div>
-
-        );
+            <div></div>
+        )
     }
-
-
 }
 
 export default CourseInfo;

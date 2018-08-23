@@ -39,3 +39,52 @@
     text-decoration: none;
     color: black;
 }
+
+.studentdrop{
+  float: left;
+  position: block;
+  margin-top: 10vh;
+  background-color:#FFEFE2;
+  margin-left: 200px;
+}
+
+.student-name{
+  font-family: 'Open Sans';
+  font-size: 36px !important;
+  color: #626262;
+  font-weight: 100;
+}
+
+.student-link{
+  text-align: center;
+}
+
+.student-link:hover{
+  background: #4B4A4A;
+}
+
+.studentmenu{
+  /* opacity: .9;
+  border-radius: 10px; */
+  height:auto;
+  max-height:40vh;
+  overflow-x:hidden;
+}
+
+.studenttog{
+  font-family: 'Open Sans' !important;
+  font-size: 36px !important;
+  /* background-color: #ffffff !important; */
+  color: #626262 !important;
+  font-weight: 100 !important;
+  border-radius: 10px !important;
+  margin-left: -40vw;
+  background-color:#FFEFE2 !important;
+  border: none !important;
+}
+
+.hr-3{
+  border-top: 2px solid #a0a0a0 !important;
+  width: 135vh !important;
+  /* margin-left: 100px !important; */
+}
