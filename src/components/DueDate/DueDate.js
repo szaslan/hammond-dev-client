@@ -5,8 +5,6 @@ import InputMoment from 'input-moment';
 import moment from 'moment';
 
 import './DueDate.css';
-import { Tooltip } from 'reactstrap';
-import { Alert } from 'react-bootstrap';
 import { Container } from 'reactstrap';
 import Datetime from 'react-datetime';
 
@@ -223,6 +221,7 @@ else if (this.number == "3") {
                                 <h4>That date has already happened. Please select a date that has not happened.</h4>
                                 {/* <button onClick = {this.handleDismiss}>Ok fineee</button> */}
                             </Alert>
+                        )
                         :
 
                         <Alert bsStyle="danger" onDismiss={this.handleDismiss}>

@@ -393,7 +393,7 @@ class AnalyzeButton extends Component {
 					!this.state.finalizePressed ?
 						<div className="assignment-info-content">
 							{/* <Row> */}
-/*
+{/*
 							<div className="calendar-case">					
 									<Flexbox flexWrap="wrap">
 										<NewDueDate number="1" assignmentId={this.assignment_id} />
@@ -416,7 +416,7 @@ class AnalyzeButton extends Component {
 									<input name="penalizing_for_incompletes" type="checkbox" checked={this.state.penalizing_for_incompletes} onChange={this.handleInputChange} />
 									Would You Like to Penalize Students' Weights For Incomplete Peer Reviews?:
 								</label>
-                */
+*/}
 							<DueDates assignmentId={this.assignment_id} messages={{ message1: message1, message2: message2, message3: message3 }} />
 							<CustomizableParameters assignmentId={this.assignment_id} />
 
