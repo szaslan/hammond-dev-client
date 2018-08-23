@@ -9,7 +9,6 @@ import './DueDate.css';
 var infoIcon = require('../InfoIcon.svg')
 
 class DueDate extends Component {
-
     constructor(props) {
         super(props);
 
@@ -23,6 +22,7 @@ class DueDate extends Component {
             tooltipOpen: false,
         };
 
+        this.convertDateStringToCorrectFormat = this.convertDateStringToCorrectFormat.bind(this);
         this.compareDates = this.compareDates.bind(this);
         this.handleChange = this.handleChange.bind(this);
         this.handleClick1 = this.handleClick1.bind(this);
@@ -30,14 +30,22 @@ class DueDate extends Component {
         this.handleSave = this.handleSave.bind(this);
         this.toggle = this.toggle.bind(this);
 
+        this.assignment_id = this.props.assignmentId;
         this.isAcceptable = true;
         this.isAfter = true;
+        this.number = this.props.number;
+    }
+
+    convertDateStringToCorrectFormat(format, datestring) {
+        var date = new Date(datestring);
+        var formatted_date = moment(date).format(format);
+        return formatted_date
     }
 
     compareDates(old_date, current_date) {
         if (old_date > current_date) {
             this.isAfter = false;
-            localStorage.removeItem("calendarDate_" + this.props.assignmentId + "_" + this.props.number);
+            localStorage.removeItem("calendarDate_" + this.assignment_id + "_" + this.number);
             this.setState({
                 dueDateDisplay: "",
                 buttonPressed: true,
@@ -77,7 +85,7 @@ class DueDate extends Component {
             buttonPressed: false
         })
 
-        localStorage.setItem(("calendarDate_" + this.props.assignmentId + "_" + this.props.number), this.state.dueDateDisplay);
+        localStorage.setItem(("calendarDate_" + this.assignment_id + "_" + this.number), this.state.dueDateDisplay);
 
         var actual_date = new Date(this.state.m.format('llll'));
         let actual_date_time = actual_date.getTime();
@@ -85,7 +93,7 @@ class DueDate extends Component {
 
         if ((actual_date_time - d.getTime()) < 0) {
             this.isAcceptable = false;
-            localStorage.removeItem("calendarDate_" + this.props.assignmentId + "_" + this.props.number);
+            localStorage.removeItem("calendarDate_" + this.assignment_id + "_" + this.number);
 
             this.setState({
                 buttonPressed: true,
@@ -99,13 +107,13 @@ class DueDate extends Component {
             //  });
         }
 
-        if (this.props.number == "2") {
-            var date_1 = new Date(localStorage.getItem("calendarDate_" + this.props.assignmentId + "_1"));
+        if (this.number == "2") {
+            var date_1 = new Date(localStorage.getItem("calendarDate_" + this.assignment_id + "_1"));
 
             this.compareDates(date_1.getTime(), actual_date_time)
         }
-        else if (this.props.number == "3") {
-            var date_2 = new Date(localStorage.getItem("calendarDate_" + this.props.assignmentId + "_2"));
+        else if (this.number == "3") {
+            var date_2 = new Date(localStorage.getItem("calendarDate_" + this.assignment_id + "_2"));
 
             this.compareDates(date_2.getTime(), actual_date_time)
         }
@@ -126,8 +134,8 @@ class DueDate extends Component {
             message: this.props.message
         })
 
-        if (localStorage.getItem("calendarDate_" + this.props.assignmentId + "_" + this.props.number)) {
-            var actual_date = new Date(localStorage.getItem("calendarDate_" + this.props.assignmentId + "_" + this.props.number));
+        if (localStorage.getItem("calendarDate_" + this.assignment_id + "_" + this.number)) {
+            var actual_date = new Date(localStorage.getItem("calendarDate_" + this.assignment_id + "_" + this.number));
             var formatted_date = moment(actual_date).format('llll');
 
             this.setState({
@@ -141,10 +149,10 @@ class DueDate extends Component {
             <div className="app">
                 <p>
                     <button onClick={this.handleClick1} >{this.props.name}</button>
-                    <span style={{ textDecoration: "underline", color: "blue" }} href="#" id={"TooltipExample" + this.props.number}>
+                    <span style={{ textDecoration: "underline", color: "blue" }} href="#" id={"TooltipExample" + this.number}>
                         <img src={infoIcon} width="20" />
                     </span>
-                    <Tooltip placement="right" isOpen={this.state.tooltipOpen} target={"TooltipExample" + this.props.number} toggle={this.toggle}>
+                    <Tooltip placement="right" isOpen={this.state.tooltipOpen} target={"TooltipExample" + this.number} toggle={this.toggle}>
                         {this.state.message}
                     </Tooltip>
                     {this.state.dueDateDisplay}
@@ -185,4 +193,5 @@ class DueDate extends Component {
         );
     }
 }
+
 export default DueDate;

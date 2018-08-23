@@ -60,11 +60,10 @@ class StudentInfoGraph extends Component {
                 </div>
             )
         }
-        else {
-            return (
-                <Loader type="TailSpin" color="black" height={80} width={80} />
-            )
-        }
+
+        return (
+            <Loader type="TailSpin" color="black" height={80} width={80} />
+        )
     }
 }
 

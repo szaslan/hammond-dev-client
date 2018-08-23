@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { Link } from "react-router-dom";
-import { Container, Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
-import Loader from 'react-loader-spinner'
-import history from '../../history';
+import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
+
+import UnauthorizedError from '../UnauthorizedError/UnauthorizedError';
 
 import '../BreadcrumbComp/BreadcrumbComp.css';
 
@@ -13,7 +13,7 @@ function FilterAssignments(props) {
 
     if (currAssignment.peer_reviews) {
         return (
-            <Link className="assignment-link" to={{ pathname: props.link, state: { assignment_id: props.assignmentId, name: props.name, course_id: props.courseId } }} key={props.id}>
+            <Link className="assignment-link" to={{ pathname: props.link, state: { assignment_id: props.assignmentId, assignment_name: currAssignment.name, course_id: props.courseId } }} key={props.id}>
                 {/* <li key={currAssignment.id} className="assignment-name">{currAssignment.name}</li>  */}
                 <DropdownItem className="dropdown-ite" key={currAssignment.id} /*className="assignment-name"*/>{currAssignment.name}</DropdownItem>
             </Link>
@@ -31,33 +31,27 @@ class Assignments extends Component {
 
         this.state = {
             assignments: null,
-            loaded: false,
             dropdownOpen: false,
+            error: false,
+            error_message: null,
+            mounted: false,
             url: '',
 
             ...props,
         }
 
-        //URL is the current url while taking in the parameters from the props of the previous url
+        this.pullAssignments = this.pullAssignments.bind(this);
         this.toggle = this.toggle.bind(this);
     }
 
-    toggle() {
-        this.setState(prevState => ({
-            dropdownOpen: !prevState.dropdownOpen
-        }));
-    }
-
-    //fetch assignments for course with course_id passed down
-    componentDidMount() {
+    pullAssignments() {
         const { match: { params } } = this.props;
-        this.setState({
-            url: `/courses/${params.course_id}/${params.assignment_name}/assignments/`
-        });
 
         let data = {
             course_id: params.course_id,
         }
+
+        console.log(data)
 
         fetch('/api/assignments', {
             method: 'POST',
@@ -68,56 +62,87 @@ class Assignments extends Component {
             credentials: 'include'
         })
             .then(res => {
-                if (res.status == 200) {
-                    res.json().then(data => {
-                        this.setState({
-                            assignments: data,
-                            mounted: true
+                switch (res.status) {
+                    case 200:
+                        res.json().then(data => {
+                            this.setState({
+                                assignments: data,
+                                mounted: true
+                            })
                         })
-                    })
-                }
-                else if (res.status == 400) {
-                    console.log("an error occcurred when pulling the list of assignment from canvas")
-                }
-                else if (res.status === 401) {
-                    history.push("/login")
-                    throw new Error();
-                }
-                else if (res.status == 404) {
-                    console.log("no assignments created on canvas")
+                        break;
+                    case 400:
+                        console.log("an error occcurred when pulling the list of assignments from canvas")
+                        break;
+                    case 401:
+                        res.json().then(res => {
+                            this.setState({
+                                error: true,
+                                error_message: res.message,
+                            })
+                        })
+                        break;
+                    case 404:
+                        console.log("no assignments created on canvas")
+                        break;
                 }
             })
-            .catch(err => console.log("unauthorized request when pulling info for specific assignment"))
+    }
+
+    toggle() {
+        this.setState(prevState => ({
+            dropdownOpen: !prevState.dropdownOpen
+        }));
+    }
+
+    componentDidMount() {
+        const { match: { params } } = this.props;
+        this.setState({
+            url: `/courses/${params.course_id}/${params.assignment_name}/assignments/`
+        });
+
+        this.pullAssignments()
     }
 
     render() {
-        return (
-                <div className="assigndrop">
-                        <Dropdown direction="down" isOpen={this.state.dropdownOpen} toggle={this.toggle}>
-                            <DropdownToggle className="assigntog" caret>
-                                {this.props.location.state.assignment_name ?
-                                  this.props.location.state.assignment_name
-                                :
-                                "Assignment Title"}
-                            </DropdownToggle>
-                            <DropdownMenu className="dropdown-men">
-                                {this.state.assignments ?
-                                    this.state.assignments.map(assignments =>
-                                        <FilterAssignments className="assign-name" link={this.state.url + assignments.id} assignment_id={assignments.id} name={this.state.match.params.assignment_name} course_id={this.state.match.params.course_id} currAssigment={assignments} id={assignments.id} />
+        if (this.state.error) {
+            return (
+                <UnauthorizedError message={this.state.error_message} />
+            )
+        }
 
-                                        // this.state.assignments.map(assignments =>
-                                        //     <Link className="assignment-link" to={{ pathname: this.state.url + assignments.id, state: { assignment_id: assignments.id, name: this.state.match.params.assignment_name, course_id: this.state.match.params.course_id } }} key={assignments.id}>
-                                        //         <FilterAssignments currAssigment={assignments}   />
-                                        //     </Link>
-                                    )
+        if (this.state.mounted) {
+            return (
+                <div className="assigndrop">
+                    <Dropdown direction="down" isOpen={this.state.dropdownOpen} toggle={this.toggle}>
+                        <DropdownToggle className="assigntog" caret>
+                            {
+                                this.props.location.state.assignment_name ?
+                                    this.props.location.state.assignment_name
                                     :
-                                    <Loader type="TailSpin" color="black" height={80} width={80} />
-                                }
-                            </DropdownMenu>
-                        </Dropdown>
+                                    "Assignment Title"
+                            }
+                        </DropdownToggle>
+                        <DropdownMenu className="dropdown-men">
+                            {
+                                this.state.assignments.map(assignments =>
+                                    <FilterAssignments className="assign-name" link={this.state.url + assignments.id} assignmentId={assignments.id} name={this.state.match.params.assignment_name} courseId={this.state.match.params.course_id} currAssigment={assignments} id={assignments.id} />
+                                    //     <Link className="assignment-link" to={{ pathname: this.state.url + assignments.id, state: { assignment_id: assignments.id, name: this.state.match.params.assignment_name, course_id: this.state.match.params.course_id } }} key={assignments.id}>
+                                    //         <FilterAssignments currAssigment={assignments}   />
+                                    //     </Link>
+                                )
+                            }
+                        </DropdownMenu>
+                    </Dropdown>
                     <hr className="hr-3"></hr>
                 </div>
-        );
+            );
+        }
+        
+        return (
+            <div></div>
+            // <Loader type="TailSpin" color="black" height={80} width={80} />
+        )
     }
 }
 

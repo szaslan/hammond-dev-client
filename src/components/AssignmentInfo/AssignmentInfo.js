@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-import history from '../../history';
 import Loader from 'react-loader-spinner'
 
 import AnalyzeButton from '../AnalyzeButton/AnalyzeButton';
+import UnauthorizedError from '../UnauthorizedError/UnauthorizedError';
 
 import './AssignmentInfo.css';
 
@@ -12,20 +12,16 @@ class AssignmentInfo extends Component {
 
         this.state = {
             assignment: null,
+            assignmentClicked: false,
+            error: false,
+            error_message: null,
             url: '',
             id: this.props.match.params.assignment_id,
-            assignmentClicked: false,
-            peerreviewJSON: [],
-            rubricJSON: [],
+
             ...props,
         }
 
-        this.clearLocalStorage = this.clearLocalStorage.bind(this);
         this.fetchAssignmentData = this.fetchAssignmentData.bind(this);
-    }
-
-    clearLocalStorage() {
-        localStorage.clear()
     }
 
     //fetches assigment data
@@ -33,10 +29,7 @@ class AssignmentInfo extends Component {
         const { match: { params } } = this.props;
 
         this.setState({
-            assignmentClicked: true
-        });
-
-        this.setState({
+            assignmentClicked: true,
             url: `/courses/${params.course_id}/assignments/`
         });
 
@@ -53,26 +46,40 @@ class AssignmentInfo extends Component {
             body: JSON.stringify(data)
         })
             .then(res => {
-                if (res.status == 200) {
-                    res.json()
-                        .then(res => {
+                switch (res.status) {
+                    case 200:
+                        res.json().then(res => {
                             this.setState({
                                 assignment: res
                             })
                         })
-                }
-                else if (res.status == 400) {
-                    console.log("an error occcurred when pulling info for a specific assignment from canvas")
-                }
-                else if (res.status == 401) {
-                    history.push("/login")
-                    throw new Error();
-                }
-                else if (res.status == 404) {
-                    console.log("no assignments created on canvas")
+                        break;
+                    case 400:
+                        console.log("an error occcurred when pulling info for a specific assignment from canvas")
+                        break;
+                    case 401:
+                        res.json().then(res => {
+                            this.setState({
+                                error: true,
+                                error_message: res.message,
+                            })
+                        })
+                        break;
+                    case 404:
+                        console.log("no assignments created on canvas")
+                        break;
                 }
             })
-            .catch(err => console.log("unauthorized request when pulling info for specific assignment"))
+    }
+
+    componentDidMount() {
+        this.fetchAssignmentData();
+    }
+
+    componentDidUpdate(prevProps) {
+        if (this.props.match.params.assignment_id !== prevProps.match.params.assignment_id) {
+            this.fetchAssignmentData();
+        }
     }
 
     static getDerivedStateFromProps(nextProps, prevState) {
@@ -85,57 +92,38 @@ class AssignmentInfo extends Component {
         return null;
     }
 
-    //everytime a new assignment is clicked on, component re-renders and new assignment is fetched
-    componentDidMount() {
-        this.fetchAssignmentData();
-    }
-
-    //renders initially
-    componentDidUpdate(prevProps) {
-        if (this.props.match.params.assignment_id !== prevProps.match.params.assignment_id) {
-            this.fetchAssignmentData();
-        }
-    }
-
-    //
-    // componentWillReceiveProps(nextProps) {
-    //     if (nextProps.match.params.assignment_id !== this.props.match.params.assignment_id) {
-    //         this.setState({id: nextProps.match.params.assignment_id});
-    //     }
-    // }
-
     render() {
-
-        if (this.state.assignment === null)
+        if (this.state.error) {
             return (
-                <div className="assignment-info">
-                    <Loader
-                        type="TailSpin"
-                        color="black"
-                        height={80}
-                        width={80}
-                    />
-                </div>
-            )
-        else {
-            return (
-                <div className="assignment-info">
-                      <h2 className="headertext">Score Details
-                      {/*<button className="clear-local-button" onClick={this.clearLocalStorage}> Clear Local Storage</button>*/}
-                      </h2>
-                      <hr className="hr-2"></hr>
-                        {/*<p><strong>Title: </strong>{this.state.assignment.name}</p>*/}
-                        <br></br>
-
-                    <AnalyzeButton
-                        assignmentInfo={this.state.assignment}
-                        courseId={this.props.match.params.course_id}
-                        assignmentId={this.props.match.params.assignment_id}
-                    />
-
-                </div>
+                <UnauthorizedError message={this.state.error_message} />
             )
         }
+
+        if (this.state.assignment == null)
+            return (
+                <div className="assignment-info">
+                    <Loader type="TailSpin" color="black" height={80} width={80}
+                    />
+                </div>
+            )
+            
+        return (
+            <div className="assignment-info">
+                <h2 className="headertext">
+                    Score Details
+                    </h2>
+                <hr className="hr-2"></hr>
+                {/*<p><strong>Title: </strong>{this.state.assignment.name}</p>*/}
+                <br></br>
+
+                <AnalyzeButton
+                    assignmentInfo={this.state.assignment}
+                    courseId={this.props.match.params.course_id}
+                    assignmentId={this.props.match.params.assignment_id}
+                />
+
+            </div>
+        )
     }
 }
 

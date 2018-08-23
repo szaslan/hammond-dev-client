@@ -31,11 +31,12 @@ export default class Accordion extends Component {
 					<Card className="card1">
 						<CardBody className="cardbody1">
 							{this.content ?
-								this.content.map(names =>
+								this.content.map(names => {
 									<li>{names}</li>
-								)
+								})
 								:
-								"none"}
+								"none"
+							}
 						</CardBody>
 					</Card>
 				</Collapse>
