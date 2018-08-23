@@ -2,12 +2,13 @@ import React, { Component } from 'react';
 import { UncontrolledTooltip } from 'reactstrap';
 import Flexbox from 'flexbox-react';
 import moment from 'moment';
-
+import { Row } from 'react-bootstrap';
 import AlgorithmBenchmarks from '../AlgorithmBenchmarks/AlgorithmBenchmarks';
 import AnalyzeResults from '../AnalyzeResults/AnalyzeResults';
 import CustomizableParameters from '../CustomizableParameters/CustomizableParameters';
 import DueDates from '../DueDates/DueDates';
 import FinalizeResults from '../FinalizeResults/FinalizeResults';
+import NewDueDate from '../DueDate/NewDueDate';
 import UnauthorizedError from '../UnauthorizedError/UnauthorizedError';
 
 import 'bootstrap/dist/css/bootstrap.css';
@@ -80,6 +81,7 @@ class AnalyzeButton extends Component {
 		this.deadline_1 = null;
 		this.deadline_2 = null;
 		this.deadline_3 = null;
+
 	}
 
 	assignNewPeerReviews() {
@@ -390,6 +392,31 @@ class AnalyzeButton extends Component {
 				{
 					!this.state.finalizePressed ?
 						<div className="assignment-info-content">
+							{/* <Row> */}
+/*
+							<div className="calendar-case">					
+									<Flexbox flexWrap="wrap">
+										<NewDueDate number="1" assignmentId={this.assignment_id} />
+										<NewDueDate number="2" assignmentId={this.assignment_id} />
+										<NewDueDate number="3" assignmentId={this.assignment_id} />
+									</Flexbox>
+							</div>
+
+							<form>
+								<label>
+									<input name="sendIncompleteMessages" type="checkbox" checked={this.state.sendIncompleteMessages} onChange={this.handleInputChange} />
+									Send Messages to All Students Who Have Incomplete Peer Reviews At Due Date 1?:
+								</label>
+								<br></br>
+								<label>
+									<input name="custom_benchmarks" type="checkbox" checked={this.state.custom_benchmarks} onChange={this.handleInputChange} />
+									Custom Benchmarks For Grading Algorithm?:
+								</label>
+								<label>
+									<input name="penalizing_for_incompletes" type="checkbox" checked={this.state.penalizing_for_incompletes} onChange={this.handleInputChange} />
+									Would You Like to Penalize Students' Weights For Incomplete Peer Reviews?:
+								</label>
+                */
 							<DueDates assignmentId={this.assignment_id} messages={{ message1: message1, message2: message2, message3: message3 }} />
 							<CustomizableParameters assignmentId={this.assignment_id} />
 
@@ -403,7 +430,6 @@ class AnalyzeButton extends Component {
 										:
 										null
 								}
-
 								<span id="analyze-button-1">
 									<button onClick={this.handleAnalyzeClick} className="analyze" id="analyze">Analyze</button>
 								</span>

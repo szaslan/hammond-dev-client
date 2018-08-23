@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
+import { Container, Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 import { Link } from "react-router-dom";
-import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
+import {Well} from 'react-bootstrap';
+import Loader from 'react-loader-spinner'
+import history from '../../history';
 
 import UnauthorizedError from '../UnauthorizedError/UnauthorizedError';
 
@@ -113,9 +116,10 @@ class Assignments extends Component {
 
         if (this.state.mounted) {
             return (
-                <div className="assigndrop">
+              <div className="all-assignments">
+                    <Well className = "body-well">
                     <Dropdown direction="down" isOpen={this.state.dropdownOpen} toggle={this.toggle}>
-                        <DropdownToggle className="assigntog" caret>
+                        <DropdownToggle className="dropdown-tog" caret>
                             {
                                 this.props.location.state.assignment_name ?
                                     this.props.location.state.assignment_name
@@ -123,6 +127,7 @@ class Assignments extends Component {
                                     "Assignment Title"
                             }
                         </DropdownToggle>
+                                          <hr className="hr-2"></hr>
                         <DropdownMenu className="dropdown-men">
                             {
                                 this.state.assignments.map(assignments =>
@@ -134,7 +139,9 @@ class Assignments extends Component {
                             }
                         </DropdownMenu>
                     </Dropdown>
+                          </Well>
                     <hr className="hr-3"></hr>
+
                 </div>
             );
         }

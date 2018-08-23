@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import Loader from 'react-loader-spinner'
+import {Well} from 'react-bootstrap';
 
 import AnalyzeButton from '../AnalyzeButton/AnalyzeButton';
 import UnauthorizedError from '../UnauthorizedError/UnauthorizedError';
@@ -101,10 +102,9 @@ class AssignmentInfo extends Component {
 
         if (this.state.assignment == null)
             return (
-                <div className="assignment-info">
-                    <Loader type="TailSpin" color="black" height={80} width={80}
-                    />
-                </div>
+                <Well className="assignment-info">
+                    <Loader type="TailSpin" color="black" height={80} width={80} />
+                </Well>
             )
             
         return (

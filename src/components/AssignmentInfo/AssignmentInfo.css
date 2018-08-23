@@ -1,27 +1,14 @@
 .assignment-info{
-  padding-top: 20vh;
-  padding-left: 20vw;
-  width: 100%;
-  /* display: flex; */
-  flex-direction: column;
-  align-items: left;
-  background-color:#FFEFE2;
-}
-
-.assignmentname{
-  font-family: 'Open Sans';
-  font-size: 36px;
-  /* background-color: #ffffff !important; */
-  color: #626262;
-  font-weight: 100;
-  border-radius: 10px;
-  background-color:#FFEFE2;
-  border: none;
-  margin-top: -10vh;
-  margin-left: -67vw;
-  float: left;
-  z-index: 10;
-  position: relative;
+    /* margin-left: 50%; */
+    width: 100vw;
+    background-color:#FFEFE2;
+    display: flex;
+    flex-direction: column;
+    font-family: "Open Sans";
+    text-align: left;
+    margin:0px;
+    padding:15px;
+    padding-top:0px;
 }
 
 .assigment-labels, .buttons{
