@@ -2,96 +2,93 @@ import React, { Component } from 'react';
 import { Container } from 'reactstrap';
 import { Link } from "react-router-dom";
 import Flexbox from 'flexbox-react';
-import history from '../../history'
+import history from '../../history';
 import Loader from 'react-loader-spinner';
 
+import CardComp from '../CourseCard/CourseCard';
 import JumbotronComp from '../JumbotronComp/JumbotronComp';
 import SidebarComp from '../SideBar/SideBar';
-import CardComp from '../CourseCard/CourseCard';
 
 import './Courses.css';
 
 class Courses extends Component {
     constructor(props) {
         super(props);
+
         this.state = {
-            auth: false,
             courses: [],
             loaded: false,
-            showCourse: false,
+            url: '/courses',
             user: [],
         }
 
+        this.fetchCourses = this.fetchCourses.bind(this);
         this.signOut = this.signOut.bind(this);
     }
-    onClick() {
-        this.setState({
-            showCourse: true
-        });
+
+    fetchCourses() {
+        fetch('/api/courses', {
+            method: 'POST',
+            credentials: 'include',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            redirect: 'follow'
+        })
+            .then(res => {
+                switch (res.status) {
+                    case 200:
+                        res.json().then(res => {
+                            this.setState({
+                                courses: res.courses,
+                                loaded: true,
+                                user: res.firstName,
+                            })
+                        })
+                        break;
+                    case 400:
+                    res.json().then(res => {
+                        history.push({
+                            pathname: '/error',
+                            state: {
+                                context: '',
+                                error: res.error,
+                                location: "Courses.js: fetchCourses() (error came from Canvas)",
+                                message: res.message,
+                            }
+                        })
+                    })
+                        break;
+                    case 401:
+                        res.json().then(res => {
+                            history.push({
+                                pathname: '/unauthorized',
+                                state: {
+                                    location: res.location,
+                                    message: res.message,
+                                }
+                            })
+                        })
+                        break;
+                    case 404:
+                        console.log("no courses found on canvas where you are listed as teacher")
+                        break;
+                }
+            })
     }
 
     signOut() {
         fetch('/logout', {
             credentials: 'include'
         })
-            .then(response => console.log(response))
-    }
-
-
-    componentWillMount() {
-        this.setState({
-            courses: null
-        });
     }
 
     componentDidMount() {
-        let get = this;
-
-        this.setState({
-            loaded: true
-        });
-
-        fetch('/api/courses', {
-            method: 'POST',
-            credentials: 'include',
-            headers: {
-                'Content-Type': 'application/json'
-
-            },
-            redirect: 'follow'
-        })
-            .then(res => {
-                if (res.status == 200) {
-                    res.json().then(data => {
-                        this.setState({
-                            user: data.first_name,
-                            courses: data.courses,
-                        })
-                    })
-                }
-                else if (res.status == 400) {
-                    console.log("ran into an error when trying to pull the list of courses from canvas")
-                }
-                else if (res.status === 401) {
-                    history.push("/login")
-                    throw new Error();
-                }
-                else if (res.status == 404) {
-                    console.log("no courses found on canvas where you are listed as teacher")
-                }
-            })
-            .catch(err => console.log("unauthorized request when trying to pull the list of courses from canvas"))
+        this.fetchCourses();
     }
 
     render() {
-
-        if (this.state.courses === null) {
-            return (
-                <Loader className="loader" type="TailSpin" color="black" height={80} width={80} />
-
-            );
-        }
-        else {
+        if (this.state.loaded) {
             return (
                 <div>
                     <Container>
@@ -107,13 +104,10 @@ class Courses extends Component {
                                                 flexWrap="wrap" inline="true">
                                                 {
                                                     this.state.courses.length > 0 ?
-                                                        this.state.courses ?
-                                                            this.state.courses.map(courses =>
-                                                                <Link to={`/courses/${courses.id}`}>
-                                                                    <CardComp name={courses.name} />
-                                                                </Link>)
-                                                            :
-                                                            null
+                                                        this.state.courses.map(course =>
+                                                            <Link to={`/courses/${course.id}`}>
+                                                                <CardComp name={course.name} />
+                                                            </Link>)
                                                         :
                                                         <h1>No classes as a teacher</h1>
                                                 }
@@ -161,16 +155,9 @@ class Courses extends Component {
 
             );
         }
-        // else{
-        //     return (
-        //         <div>
-        //             <div>Not Authenticated</div>
-        //             <Link to="/login">
-        //                 <button>Sign in</button>
-        //             </Link>
-        //         </div>
-        //     )
-        // }
+        return (
+            <Loader className="loader" type="TailSpin" color="black" height={80} width={80} />
+        );
     }
 }
 

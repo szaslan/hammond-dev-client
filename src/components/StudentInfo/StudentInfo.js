@@ -1,24 +1,26 @@
 import React, { Component } from 'react';
-import './StudentInfo.css';
-import Loader from 'react-loader-spinner'
 import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
-import history from '../../history'
+import { Row, Col } from 'react-bootstrap';
+import history from '../../history';
+import Loader from 'react-loader-spinner'
+
 import StudentInfoGraph from '../StudentInfoGraph/StudentInfoGraph'
 
-import { Well, Row, Col, Breadcrumb } from 'react-bootstrap';
+import './StudentInfo.css';
 
 //filter for only peer reviewable assignments
 function FilterAssignments(props) {
     const currAssignment = props.currAssigment;
+    console.log(props)
 
+    //only show assignments that are peer reviewable
     if (currAssignment.peer_reviews) {
         return (
             <DropdownItem onClick={props.click} id={props.id}>{currAssignment.name}</DropdownItem>
         )
     }
-    else {
-        return null;
-    }
+
+    return null;
 }
 
 class StudentInfo extends Component {
@@ -26,70 +28,95 @@ class StudentInfo extends Component {
         super(props);
 
         this.state = {
+            actualGrade: '',
             assignments: [],
-            bucket_data: {
-                labels: [],
-                datasets: [],
-                options: {},
-            },
+            courseId: this.props.match.params.course_id,
             dropdownOpen: false,
-            errorMessage: 'No peer reviews for this student!',
-            finalScore: '',
-            graphs_loaded: false,
-            id: this.props.match.params.assignment_id,
+            errorMessage: '',
+            gradeGiven: '',
+            graphsLoaded: false,
             message: '',
             noPeerReview: false,
-            number_of_reviews_completed_data: {
-                labels: [],
-                datasets: [],
-                options: {},
-            },
             peerReviewOpen: false,
-            peer_reviews: [],
-            peer_review_data: null,
+            peerReviewsCompletedByCurrentStudent: [],
+            studentEvaluatingData: null,
             selectedAssignment: '',
-            selectedStudent: '',
-            scoreGiven: '',
-            student_exists: false,
+            selectedStudentId: this.props.match.params.student_id,
+            studentHasSavedHistory: false,
             url: '',
             value: 'Select an Assignment',
             value2: 'Select a Peer Review',
-            weight_data: {
-                labels: [],
-                datasets: [],
-                options: {},
-            },
 
             ...props,
         }
 
-        this.checkIfStudentExists = this.checkIfStudentExists.bind(this);
+        this.checkIfFinalizeHasBeenPressed = this.checkIfFinalizeHasBeenPressed.bind(this);
+        this.checkIfStudentHasSavedHistory = this.checkIfStudentHasSavedHistory.bind(this);
         this.determineGraphStyles = this.determineGraphStyles.bind(this);
         this.fetchAssignmentData = this.fetchAssignmentData.bind(this);
         this.getPeerReviews = this.getPeerReviews.bind(this);
-        this.pullPeerReviewData = this.pullPeerReviewData.bind(this);
+        this.pullStudentEvaluatingData = this.pullStudentEvaluatingData.bind(this);
         this.select = this.select.bind(this);
         this.selectPeerReview = this.selectPeerReview.bind(this);
+        this.setMessage = this.setMessage.bind(this);
         this.toggleAssignment = this.toggleAssignment.bind(this);
         this.toggleReview = this.toggleReview.bind(this);
-    }
-    //if props are changed, this runs
-    // static getDerivedStateFromProps(nextProps, prevState){
-    //     if (nextProps.match.params.assignment_id !== prevState.id){
-    //         return {
-    //         id: nextProps.match.params.assignment_id,
-    //         assignment: null
-    //         }
-    //     }
-    //     return null;
-    // }
 
-    checkIfStudentExists() {
-        let data = {
-            student_id: this.props.location.state.student_id,
+        this.bucketData = {
+            labels: [],
+            datasets: [],
+            options: {},
+        };
+        this.peerReviewCompletionData = {
+            labels: [],
+            datasets: [],
+            options: {},
+        }
+        this.weightData = {
+            labels: [],
+            datasets: [],
+            options: {},
+        }
+    }
+
+    checkIfFinalizeHasBeenPressed() {
+        let finalizeId = {
+            assignmentId: this.state.selectedAssignment
         }
 
-        fetch('/api/check_if_student_exists', {
+        //if error, check if assignment has been finalized (error inevitable if assignment hasn't been finalized)
+        fetch('/api/hasFinalizeBeenPressed', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(finalizeId)
+        })
+            .then(res => {
+                res.json().then(res => {
+                    if (res.result == "not found") {
+                        this.setState({
+                            peerReviewsCompletedByCurrentStudent: [],
+                            errorMessage: "Assignment hasn't been finalized!"
+                        })
+                    }
+                    else if (res.result == "found") {
+                        //assignment has been finalized so issue with searching for peer reviews
+                        this.setState({
+                            peerReviewsCompletedByCurrentStudent: [],
+                        })
+                        console.log("there was an error when searching for the peer reviews completed by this student")
+                    }
+                })
+            })
+    }
+
+    checkIfStudentHasSavedHistory() {
+        let data = {
+            studentId: this.state.selectedStudentId,
+        }
+
+        fetch('/api/checkIfStudentHasSavedHistory', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -97,26 +124,37 @@ class StudentInfo extends Component {
             body: JSON.stringify(data),
         })
             .then(res => {
-                if (res.status == 204) {
-                    this.setState({
-                        student_exists: true
+                switch (res.status) {
+                    case 204:
+                        this.setState({
+                            studentHasSavedHistory: true
+                        })
+                        this.pullStudentEvaluatingData();
+                        break;
+                    case 400:
+                    res.json().then(res => {
+                        history.push({
+                            pathname: '/error',
+                            state: {
+                                context: '',
+                                error: res.error,
+                                location: "StudentInfo.js checkIfStudentHasSavedHistory()",
+                            }
+                        })
                     })
-                    this.pullPeerReviewData();
-                }
-                else if (res.status == 400) {
-                    console.log("there was an erorr when checking if the current student exists in the database")
-                }
-                else if (res.status == 404) {
-                    this.setState({
-                        graphs_loaded: true,
-                    })
-                    console.log("the student does not exist in the database")
+                        break;
+                    case 404:
+                        this.setState({
+                            graphsLoaded: true,
+                        })
+                        console.log("the student does not exist in the database")
+                        break;
                 }
             })
     }
 
     determineGraphStyles() {
-        var bucket_history = {
+        var bucketHistory = {
             labels: [],
             datasets: [
                 {
@@ -177,7 +215,7 @@ class StudentInfo extends Component {
                 }
             }
         };
-        let weight_history = {
+        let weightHistory = {
             labels: [],
             datasets: [
                 {
@@ -229,7 +267,7 @@ class StudentInfo extends Component {
                 },
             }
         };
-        let number_of_reviews_completed_history = {
+        let peerReviewCompletionHistory = {
             labels: [],
             datasets: [
                 {
@@ -268,23 +306,19 @@ class StudentInfo extends Component {
                 }
             }
         };
+
+        this.bucketData = bucketHistory;
+        this.peerReviewCompletionData = peerReviewCompletionHistory;
+        this.weightData = weightHistory;
         this.setState({
-            bucket_data: bucket_history,
-            weight_data: weight_history,
-            number_of_reviews_completed_data: number_of_reviews_completed_history,
-            graphs_loaded: true,
+            graphsLoaded: true,
         })
     }
 
-    //fetches assigment data
+    //fetches assignment data
     fetchAssignmentData() {
-        const { match: { params } } = this.props;
-        this.setState({
-            studentClicked: true
-        });
-
         let data = {
-            course_id: params.course_id,
+            courseId: this.state.courseId
         }
 
         fetch('/api/assignments', {
@@ -296,43 +330,52 @@ class StudentInfo extends Component {
             credentials: 'include'
         })
             .then(res => {
-                if (res.status == 200) {
-                    res.json().then(data => {
-                        this.setState({
-                            assignments: data,
+                switch (res.status) {
+                    case 200:
+                        res.json().then(data => {
+                            this.setState({
+                                assignments: data,
+                            })
+                            this.checkIfStudentHasSavedHistory()
                         })
-                        this.checkIfStudentExists()
+                        break;
+                    case 400:
+                    res.json().then(res => {
+                        history.push({
+                            pathname: '/error',
+                            state: {
+                                context: '',
+                                location: "StudentInfo.js fetchAssignmentData() (error came from Canvas)",
+                                message: res.message,
+                            }
+                        })
                     })
-                }
-                else if (res.status == 400) {
-                    console.log("an error occcurred when pulling the list of assignments from canvas")
-                }
-                else if (res.status === 401) {
-                    history.push("/login")
-                    throw new Error();
-                }
-                else if (res.status == 404) {
-                    console.log("no assignments created on canvas")
+                        break;
+                    case 401:
+                        res.json().then(res => {
+                            history.push({
+                                pathname: '/unauthorized',
+                                state: {
+                                    location: res.location,
+                                    message: res.message,
+                                }
+                            })
+                        })
+                        break;
+                    case 404:
+                        console.log("no assignments created on canvas")
+                        break;
                 }
             })
-            .catch(err => console.log("unauthorized request when pulling info for specific assignment"))
-
-        /* NEED TO FETCH STUDENT INFO AND SET STATE TO FETCHED INFO WHEN PROPS ARE UPDATED
-         fetch(/api/students)/
-         */
     }
 
     getPeerReviews() {
         let data = {
-            student_id: this.props.location.state.student_id,
-            assignment_id: this.state.selectedAssignment,
+            studentId: this.state.selectedStudentId,
+            assignmentId: this.state.selectedAssignment,
         }
 
-        let finalizeId = {
-            assignment_id: this.state.selectedAssignment
-        }
-
-        fetch('/api/get_peer_reviews_for_student', {
+        fetch('/api/getPeerReviewsForStudent', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -340,52 +383,33 @@ class StudentInfo extends Component {
             body: JSON.stringify(data)
         })
             .then(res => {
-                if (res.status == 200) {
-                    res.json().then(res => {
+                switch (res.status) {
+                    case 200:
+                        res.json().then(res => {
+                            this.setState({
+                                peerReviewsCompletedByCurrentStudent: res
+                            })
+                        })
+                        break;
+                    case 400:
+                        //if 400 error, check if there should be any peer reviews
+                        this.checkIfFinalizeHasBeenPressed()
+                        break;
+                    case 404:
                         this.setState({
-                            peer_reviews: res
+                            errorMessage: "No peer reviews for this student!"
                         })
-                    })
-                }
-                else if (res.status == 400) {
-                    fetch('/api/has_finalize_been_pressed', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify(finalizeId)
-                    })
-                        .then(res => {
-                            if (res.status == 204) {
-                                //assignment has been finalized so issue with searching for peer reviews
-                                this.setState({
-                                    peer_reviews: [],
-                                })
-                                console.log("there was an error when searching for the peer reviews completed by this student")
-                            }
-                            else if (res.status == 404) {
-                                this.setState({
-                                    peer_reviews: [],
-                                    errorMessage: "Assignment hasn't been finalized!"
-                                })
-                            }
-                        })
-                }
-                else if (res.status == 404) {
-                    this.setState({
-                        errorMessage: "No peer reviews for this student!"
-                    })
-
+                        break;
                 }
             })
     }
 
-    pullPeerReviewData() {
+    pullStudentEvaluatingData() {
         let data = {
-            assessor_id: this.props.location.state.student_id,
+            studentId: this.state.selectedStudentId,
         }
 
-        fetch('/api/pull_peer_review_data', {
+        fetch('/api/pullStudentEvaluatingData', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -393,16 +417,27 @@ class StudentInfo extends Component {
             body: JSON.stringify(data)
         })
             .then(res => {
-                if (res.status == 200) {
-                    res.json().then(res => {
-                        this.setState({
-                            peer_review_data: res
+                switch (res.status) {
+                    case 200:
+                        res.json().then(res => {
+                            this.setState({
+                                studentEvaluatingData: res
+                            })
+                            this.determineGraphStyles()
                         })
-                        this.determineGraphStyles()
+                        break;
+                    case 400:
+                    res.json().then(res => {
+                        history.push({
+                            pathname: '/error',
+                            state: {
+                                context: '',
+                                error: res.error,
+                                location: "StudentInfo.js pullStudentEvaluatingData()",
+                            }
+                        })
                     })
-                }
-                else if (res.status == 400) {
-                    console.log("ran into an error when gathering all saved peer review evaluating history")
+                        break;
                 }
             })
     }
@@ -412,11 +447,10 @@ class StudentInfo extends Component {
             value: event.target.innerText,
             selectedAssignment: Number(event.target.id),
             value2: 'Select a Peer Review',
-            peer_reviews: [],
+            peerReviewsCompletedByCurrentStudent: [],
             message: '',
-            peer_reviews: [],
-            scoreGiven: '',
-            finalScore: ''
+            gradeGiven: '',
+            actualGrade: ''
         }, () => {
             this.getPeerReviews();
         })
@@ -425,16 +459,15 @@ class StudentInfo extends Component {
     selectPeerReview(event) {
         this.setState({
             value2: event.target.innerText,
-            selectedStudent: Number(event.target.id)
         })
 
         let data = {
-            assignment_id: this.state.selectedAssignment,
-            assessor_id: this.props.location.state.student_id,
-            user_id: Number(event.target.id)
+            assignmentId: this.state.selectedAssignment,
+            assessorId: this.state.selectedStudentId,
+            userId: Number(event.target.id)
         }
 
-        fetch('/api/peer_review_grade', {
+        fetch('/api/peerReviewGrade', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -442,32 +475,47 @@ class StudentInfo extends Component {
             body: JSON.stringify(data)
         })
             .then(res => {
-                if (res.status == 200) {
-                    res.json().then(data => {
-                        this.setState({
-                            scoreGiven: data.score_given,
-                            finalScore: data.final_score
+                switch (res.status) {
+                    case 200:
+                        res.json().then(data => {
+                            this.setState({
+                                gradeGiven: data.gradeGiven,
+                                actualGrade: data.actualGrade
+                            })
+                            this.setMessage();
                         })
-                        if (data.score_given == null) {
-                            this.setState({
-                                message: <div>{this.props.location.state.student_name} did not complete this peer review</div>
-                            })
-                        }
-                        else {
-                            this.setState({
-                                message:
-                                    <div>
-                                        <div>{this.props.location.state.student_name} gave {this.state.value2} a score of {this.state.scoreGiven}</div>
-                                        <div>{this.state.value2} received a final grade of {this.state.finalScore}</div>
-                                    </div>
-                            })
-                        }
+                        break;
+                    case 400:
+                    res.json().then(res => {
+                        history.push({
+                            pathname: '/error',
+                            state: {
+                                context: '',
+                                error: res.error,
+                                location: "StudentInfo.js selectPeerReview()",
+                            }
+                        })
                     })
-                }
-                else if (res.status == 400) {
-                    console.log("there was an error when pulling the assigned and actual score for a specific peer review")
+                        break;
                 }
             })
+    }
+
+    setMessage() {
+        if (this.state.gradeGiven == null) {
+            this.setState({
+                message: <div>{this.props.location.state.student.name} did not complete this peer review</div>
+            })
+        }
+        else {
+            this.setState({
+                message:
+                    <div>
+                        <div>{this.props.location.state.student.name} gave {this.state.value2} a score of {this.state.gradeGiven}</div>
+                        <div>{this.state.value2} received a final grade of {this.state.actualGrade}</div>
+                    </div>
+            })
+        }
     }
 
     toggleAssignment() {
@@ -484,26 +532,26 @@ class StudentInfo extends Component {
     //everytime a new assignment is clicked on, component re-renders and new assignment is fetched
     componentDidMount() {
         this.setState({
-            errorMessage: " "
+            errorMessage: ""
         })
         this.fetchAssignmentData();
     }
 
     //renders initially
     componentDidUpdate(prevProps) {
-        if (this.props.location.state.student_name !== prevProps.location.state.student_name) {
-
+        if (this.props.location.state.student.id !== prevProps.location.state.student.id) {
             this.setState({
+                actualGrade: "",
                 errorMessage: "",
+                gradeGiven: "",
+                graphsLoaded: false,
+                message: '',
+                peerReviewsCompletedByCurrentStudent: [],
+                selectedStudentId: this.props.match.params.student_id,
                 value: "Select an Assignment",
                 value2: "Select a Peer Review",
-                finalScore: "",
-                message: '',
-                scoreGiven: "",
-                peer_reviews: [],
-                graphs_loaded: false,
             }, () => {
-                this.checkIfStudentExists();
+                this.checkIfStudentHasSavedHistory();
             })
             // this.fetchAssignmentData();
         }
@@ -512,65 +560,68 @@ class StudentInfo extends Component {
     render() {
         return (
             <div className="student-info">
-              <h2 className="headertext">Peer Grading Details</h2>
-              <hr className="hr-2"></hr>
+                <h2 className="headertext">Peer Grading Details</h2>
+                <hr className="hr-2"></hr>
                 {/*THIS BELOW SHOULD BE THIS.STATE.STUDENT*/}
-                {/*<div className="studentinfo-name">{this.props.location.state.student_name}</div>*/}
-            <Row>
-              <Col className="dropsouter">
-                <Dropdown className="dropdowns" isOpen={this.state.dropdownOpen} toggle={this.toggleAssignment} >
-                    <DropdownToggle className="dropbutton" caret>
-                        {this.state.value}
-                    </DropdownToggle>
-                    <DropdownMenu >
-
-                        {
-                            this.state.assignments.map(assignment =>
-                                <FilterAssignments id={assignment.id} click={this.select} currAssigment={assignment} />
-                            )
-                        }
-
-                    </DropdownMenu>
-                </Dropdown>
-
-                {
-                    this.state.peer_reviews.length > 0 ?
-
-                        <Dropdown className="dropdowns" isOpen={this.state.peerReviewOpen} toggle={this.toggleReview} >
+                {/*<div className="studentinfo-name">{this.props.location.state.student.name}</div>*/}
+                <Row>
+                    <Col className="dropsouter">
+                        <Dropdown className="dropdowns" isOpen={this.state.dropdownOpen} toggle={this.toggleAssignment} >
                             <DropdownToggle className="dropbutton" caret>
-                                {this.state.value2}
+                                {this.state.value}
                             </DropdownToggle>
                             <DropdownMenu >
+
                                 {
-                                    this.state.peer_reviews.map(currPeerReivew =>
-                                        <DropdownItem id={currPeerReivew.id} onClick={this.selectPeerReview}>{currPeerReivew.name}</DropdownItem>
+                                    this.state.assignments.map(assignment =>
+                                        <FilterAssignments id={assignment.id} click={this.select} currAssigment={assignment} />
                                     )
                                 }
+
                             </DropdownMenu>
                         </Dropdown>
-                        :
-                        <div className="errmessage">{this.state.errorMessage}</div>
-                }
-                </Col>
-                <Col className="message">
-                    {this.state.message}
-                </Col>
-              </Row>
-              <hr className="hr-4"></hr>
-              <h2 className="headertext">Grading History</h2>
-              <hr className="hr-2"></hr>
-                {
-                    this.state.graphs_loaded ?
-                        <div>
-                            {this.state.student_exists ?
-                                <div>
-                                    <StudentInfoGraph className="graph" assignments={this.state.assignments} peerReviewData={this.state.peer_review_data} category="bucket" data={this.state.bucket_data} />
-                                    <StudentInfoGraph className="graph" assignments={this.state.assignments} peerReviewData={this.state.peer_review_data} category="weight" data={this.state.weight_data} />
-                                    <StudentInfoGraph className="graph" assignments={this.state.assignments} peerReviewData={this.state.peer_review_data} category="completion" data={this.state.number_of_reviews_completed_data} />
-                                </div>
+
+                        {
+                            this.state.peerReviewsCompletedByCurrentStudent.length > 0 ?
+
+                                <Dropdown className="dropdowns" isOpen={this.state.peerReviewOpen} toggle={this.toggleReview} >
+                                    <DropdownToggle className="dropbutton" caret>
+                                        {this.state.value2}
+                                    </DropdownToggle>
+                                    <DropdownMenu >
+                                        {
+                                            this.state.peerReviewsCompletedByCurrentStudent.map(currPeerReivew =>
+                                                <DropdownItem id={currPeerReivew.id} onClick={this.selectPeerReview}>
+                                                    {currPeerReivew.name}
+                                                </DropdownItem>
+                                            )
+                                        }
+                                    </DropdownMenu>
+                                </Dropdown>
                                 :
-                                <div className="errmessage2">
-                                    This student does not have any data saved at this point. To save data, you must finalize an assignment.
+                                <div className="errmessage">{this.state.errorMessage}</div>
+                        }
+                    </Col>
+                    <Col className="message">
+                        {this.state.message}
+                    </Col>
+                </Row>
+                <hr className="hr-4"></hr>
+                <h2 className="headertext">Grading History</h2>
+                <hr className="hr-2"></hr>
+                {
+                    this.state.graphsLoaded ?
+                        <div>
+                            {
+                                this.state.studentHasSavedHistory ?
+                                    <div>
+                                        <StudentInfoGraph className="graph" assignments={this.state.assignments} peerReviewData={this.state.studentEvaluatingData} category="bucket" data={this.bucketData} />
+                                        <StudentInfoGraph className="graph" assignments={this.state.assignments} peerReviewData={this.state.studentEvaluatingData} category="weight" data={this.weightData} />
+                                        <StudentInfoGraph className="graph" assignments={this.state.assignments} peerReviewData={this.state.studentEvaluatingData} category="completion" data={this.peerReviewCompletionData} />
+                                    </div>
+                                    :
+                                    <div className="message">
+                                        This student does not have any data saved at this point. To save data, you must finalize an assignment.
                                 </div>
                             }
                         </div>
@@ -582,6 +633,5 @@ class StudentInfo extends Component {
     }
 
 }
-
 
 export default StudentInfo;

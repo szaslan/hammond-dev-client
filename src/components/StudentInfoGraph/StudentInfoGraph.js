@@ -14,16 +14,16 @@ class StudentInfoGraph extends Component {
                 datasets: [],
                 options: {},
             },
-            graph_loaded: false,
+            graphLoaded: false,
 
             ...props,
         }
 
-        this.pullPeerReviewData = this.pullPeerReviewData.bind(this);
+        this.pullStudentEvaluatingData = this.pullStudentEvaluatingData.bind(this);
     }
 
-    pullPeerReviewData() {
-        let data_history = {
+    pullStudentEvaluatingData() {
+        let dataHistory = {
             labels: [],
             datasets: this.props.data.datasets,
             options: this.props.data.options,
@@ -31,40 +31,39 @@ class StudentInfoGraph extends Component {
 
         this.props.assignments.forEach(assignment => {
             if (assignment.peer_reviews) {
-                let assignment_id = assignment.id;
-                let assignment_name = assignment.name
-                let column_name = "'" + assignment_id + "'";
+                let assignmentId = assignment.id;
+                let assignmentName = assignment.name
+                let columnName = "'" + assignmentId + "'";
 
-                if (this.props.peerReviewData[this.props.category + "_history"][column_name] != undefined) {
-                    data_history.labels.push(assignment_name)
-                    data_history.datasets[0].data.push(this.props.peerReviewData[this.props.category + "_history"][column_name])
+                if (this.props.peerReviewData[this.props.category + "History"][columnName] != undefined) {
+                    dataHistory.labels.push(assignmentName)
+                    dataHistory.datasets[0].data.push(this.props.peerReviewData[this.props.category + "History"][columnName])
                 }
             }
         })
 
         this.setState({
-            data: data_history,
-            graph_loaded: true,
+            data: dataHistory,
+            graphLoaded: true,
         })
     }
 
     componentDidMount() {
-        this.pullPeerReviewData();
+        this.pullStudentEvaluatingData();
     }
 
     render() {
-        if (this.state.graph_loaded) {
+        if (this.state.graphLoaded) {
             return (
                 <div className="graph">
                     <ChartJS type='line' data={this.state.data} options={this.state.data.options} width="600" height="300" />
                 </div>
             )
         }
-        else {
-            return (
-                <Loader type="TailSpin" color="black" height={80} width={80} />
-            )
-        }
+
+        return (
+            <Loader type="TailSpin" color="black" height={80} width={80} />
+        )
     }
 }
 

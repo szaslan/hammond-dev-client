@@ -1,4 +1,5 @@
 .error-message {
+    /* text-align: center; */
     margin-left: 1vw;
 }
 
@@ -14,4 +15,13 @@
 
 .error-message-body {
 
+}
+
+.redirect-message {
+
+}
+
+.immediate-redirection {
+    padding-left: 3px;
+    padding-right: 3px;
 }

@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Well } from 'react-bootstrap';
 import history from '../../history';
 import Loader from 'react-loader-spinner'
 
@@ -11,41 +12,30 @@ class AssignmentInfo extends Component {
         super(props);
 
         this.state = {
-            assignment: null,
-            url: '',
-            id: this.props.match.params.assignment_id,
-            assignmentClicked: false,
-            peerreviewJSON: [],
-            rubricJSON: [],
+            assignmentId: this.props.match.params.assignment_id, //assignment_id prop passed through route in app.js\
+            assignmentJSON: null,
+            courseId: this.props.match.params.course_id,
+            loaded: false,
+            url: `/courses/${this.props.match.params.course_id}/assignments/`,
+
             ...props,
         }
 
-        this.clearLocalStorage = this.clearLocalStorage.bind(this);
         this.fetchAssignmentData = this.fetchAssignmentData.bind(this);
-    }
-
-    clearLocalStorage() {
-        localStorage.clear()
     }
 
     //fetches assigment data
     fetchAssignmentData() {
-        const { match: { params } } = this.props;
-
         this.setState({
-            assignmentClicked: true
-        });
-
-        this.setState({
-            url: `/courses/${params.course_id}/assignments/`
-        });
+            loaded: false,
+        })
 
         let data = {
-            course_id: params.course_id,
-            assignment_id: params.assignment_id
+            assignmentId: this.state.assignmentId,
+            courseId: this.state.courseId,
         }
 
-        fetch('/api/assignmentinfo', {
+        fetch('/api/assignmentInfo', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -53,71 +43,67 @@ class AssignmentInfo extends Component {
             body: JSON.stringify(data)
         })
             .then(res => {
-                if (res.status == 200) {
-                    res.json()
-                        .then(res => {
+                switch (res.status) {
+                    case 200:
+                        res.json().then(res => {
                             this.setState({
-                                assignment: res
+                                assignmentJSON: res,
+                                loaded: true,
                             })
                         })
-                }
-                else if (res.status == 400) {
-                    console.log("an error occcurred when pulling info for a specific assignment from canvas")
-                }
-                else if (res.status == 401) {
-                    history.push("/login")
-                    throw new Error();
-                }
-                else if (res.status == 404) {
-                    console.log("no assignments created on canvas")
+                        break;
+                    case 400:
+                        res.json().then(res => {
+                            history.push({
+                                pathname: '/error',
+                                state: {
+                                    context: '',
+                                    location: "AssignmentInfo.js: fetchAssignmentData() (error came from Canvas)",
+                                    message: res.message,
+                                }
+                            })
+                        })
+                        break;
+                    case 401:
+                        res.json().then(res => {
+                            history.push({
+                                pathname: '/unauthorized',
+                                state: {
+                                    location: res.location,
+                                    message: res.message,
+                                }
+                            })
+                        })
+                        break;
+                    case 404:
+                        console.log("no assignments created on canvas")
+                        break;
                 }
             })
-            .catch(err => console.log("unauthorized request when pulling info for specific assignment"))
+    }
+
+    componentDidMount() {
+        this.fetchAssignmentData();
+    }
+
+    componentDidUpdate(prevProps) {
+        if (this.state.assignmentId !== prevProps.match.params.assignment_id) {
+            this.fetchAssignmentData();
+        }
     }
 
     static getDerivedStateFromProps(nextProps, prevState) {
-        if (nextProps.match.params.assignment_id !== prevState.id) {
+        if (nextProps.match.params.assignment_id !== prevState.assignmentId) {
             return {
-                id: nextProps.match.params.assignment_id,
-                assignment: null
+                assignmentId: nextProps.match.params.assignment_id,
+                assignmentJSON: null,
             }
         }
         return null;
     }
 
-    //everytime a new assignment is clicked on, component re-renders and new assignment is fetched
-    componentDidMount() {
-        this.fetchAssignmentData();
-    }
-
-    //renders initially
-    componentDidUpdate(prevProps) {
-        if (this.props.match.params.assignment_id !== prevProps.match.params.assignment_id) {
-            this.fetchAssignmentData();
-        }
-    }
-
-    //
-    // componentWillReceiveProps(nextProps) {
-    //     if (nextProps.match.params.assignment_id !== this.props.match.params.assignment_id) {
-    //         this.setState({id: nextProps.match.params.assignment_id});
-    //     }
-    // }
-
     render() {
-
-        if (this.state.assignment === null)
-            return (
-                <div className="assignment-info">
-                    <Loader
-                        type="TailSpin"
-                        color="black"
-                        height={80}
-                        width={80}
-                    />
-                </div>
-            )
-        else {
+        if (this.state.loaded) {
             return (
                 <div className="assignment-info">
                       {/*<h2 className="headertext">Score Details
@@ -127,15 +113,17 @@ class AssignmentInfo extends Component {
                         <p><strong>Title: </strong>{this.state.assignment.name}</p>
                         <br></br>*/}
 
-                    <AnalyzeButton
-                        assignmentInfo={this.state.assignment}
-                        courseId={this.props.match.params.course_id}
-                        assignmentId={this.props.match.params.assignment_id}
-                    />
+                    <AnalyzeButton assignmentId={this.state.assignmentId} assignmentInfo={this.state.assignmentJSON} courseId={this.state.courseId} />
 
                 </div>
             )
         }
+
+        return (
+            <Well className="assignment-info">
+                <Loader type="TailSpin" color="black" height={80} width={80} />
+            </Well>
+        )
     }
 }
 

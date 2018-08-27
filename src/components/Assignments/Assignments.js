@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
+import { Dropdown, DropdownItem, DropdownMenu, DropdownToggle } from 'reactstrap';
 import { Link } from "react-router-dom";
-import { Container, Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
-import Loader from 'react-loader-spinner'
+import { Well } from 'react-bootstrap';
 import history from '../../history';
 
 import '../BreadcrumbComp/BreadcrumbComp.css';
@@ -50,13 +50,15 @@ class Assignments extends Component {
 
         this.state = {
             assignments: [],
-            loaded: false,
+            courseId: this.props.match.params.course_id,
             dropdownOpen: false,
-            url: '',
+            loaded: false,
+            url: `/courses/${this.props.match.params.course_id}/assignments/`,
+
             ...props,
         }
 
-        //URL is the current url while taking in the parameters from the props of the previous url
+        this.pullAssignments = this.pullAssignments.bind(this);
         this.toggle = this.toggle.bind(this);
         this.reDirect = this.reDirect.bind(this);
     }
@@ -68,21 +70,9 @@ class Assignments extends Component {
       history.push(`/courses/${params.course_id}/${params.assignment_name}/assignments/${event.value}`)
     }
 
-    toggle() {
-        this.setState(prevState => ({
-            dropdownOpen: !prevState.dropdownOpen
-        }));
-    }
-
-    //fetch assignments for course with course_id passed down
-    componentDidMount() {
-        const { match: { params } } = this.props;
-        this.setState({
-            url: `/courses/${params.course_id}/${params.assignment_name}/assignments/`
-        });
-
+    pullAssignments() {
         let data = {
-            course_id: params.course_id,
+            courseId: this.state.courseId,
         }
 
         fetch('/api/assignments', {
@@ -94,33 +84,59 @@ class Assignments extends Component {
             credentials: 'include'
         })
             .then(res => {
-                if (res.status == 200) {
-                    res.json().then(data => {
-                        this.setState({
-                            assignments: data,
-                            mounted: true
+                switch (res.status) {
+                    case 200:
+                        res.json().then(data => {
+                            this.setState({
+                                assignments: data,
+                                loaded: true
+                            })
+                        })
+                        break;
+                    case 400:
+                    res.json().then(res => {
+                        history.push({
+                            pathname: '/error',
+                            state: {
+                                context: '',
+                                location: "Assignments.js: pullAssignments() (error came from Canvas)",
+                                message: res.message,
+                            }
                         })
                     })
-                }
-                else if (res.status == 400) {
-                    console.log("an error occcurred when pulling the list of assignment from canvas")
-                }
-                else if (res.status === 401) {
-                    history.push("/login")
-                    throw new Error();
-                }
-                else if (res.status == 404) {
-                    console.log("no assignments created on canvas")
+                        break;
+                    case 401:
+                        res.json().then(res => {
+                            history.push({
+                                pathname: '/unauthorized',
+                                state: {
+                                    location: res.location,
+                                    message: res.message,
+                                }
+                            })
+                        })
+                        break;
+                    case 404:
+                        console.log("no assignments created on canvas")
+                        break;
                 }
             })
-            .catch(err => console.log("unauthorized request when pulling info for specific assignment"))
+    }
+
+    toggle() {
+        this.setState(prevState => ({
+            dropdownOpen: !prevState.dropdownOpen
+        }));
+    }
+
+    componentDidMount() {
+        this.pullAssignments()
     }
 
 
 
     render() {
       if (this.state.assignments && array.length != this.state.assignments.length) {
-        console.log("hello")
           this.state.assignments.map(assignments => {
             console.log(assignments);
             FilterAssignments(assignments);
@@ -137,13 +153,12 @@ class Assignments extends Component {
                                 :
                                 "Assignment Title"}
                             </DropdownToggle>
+                            <hr className="hr-2"></hr>
                             <DropdownMenu className="dropdown-men">
-                                {this.state.assignments ?
-                                    this.state.assignments.map(assignments =>
-                                        <FilterAssignments className="assign-name" link={this.state.url + assignments.id} assignment_id={assignments.id} name={this.state.match.params.assignment_name} course_id={this.state.match.params.course_id} currAssigment={assignments} id={assignments.id} />
+                                {
+                                    this.state.assignments.map(assignment =>
+                                        <FilterAssignments className="assign-name" link={this.state.url} courseId={this.state.courseId} currAssigment={assignment} />
                                     )
-                                    :
-                                    <Loader type="TailSpin" color="black" height={80} width={80} />
                                 }
                             </DropdownMenu>
                         </Dropdown>*/}
@@ -174,7 +189,12 @@ class Assignments extends Component {
                       null
                     }
                 </div>
-        );
+            );
+        }
+
+        return (
+            <div></div>
+        )
     }
 }
 

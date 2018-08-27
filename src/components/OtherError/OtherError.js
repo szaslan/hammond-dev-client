@@ -2,24 +2,29 @@ import React, { Component } from 'react';
 import { Row } from 'react-bootstrap';
 import Loader from 'react-loader-spinner';
 
-import './NotFound.css';
+import './OtherError.css';
 
-class NotFound extends Component {
+class OtherError extends Component {
     constructor(props) {
         super(props);
 
         this.state = {
+            context: null,
+            error: null,
             loaded: false,
             location: null,
             message: null,
         }
 
 
-        this.errorMessageTitle = "Oops, it looks like something went wrong"
+        this.errorMessageTitle = "400 - Bad Request: An Error Occurred"
     }
 
     componentDidMount() {
+        //this.props.location.state.error will only exist if the error came from an SQL querry
         this.setState({
+            context: this.props.location.state.context,
+            error: this.props.location.state.error,
             loaded: true,
             location: this.props.location.state.location,
             message: this.props.location.state.message,
@@ -34,7 +39,10 @@ class NotFound extends Component {
                         {this.errorMessageTitle}
                     </Row>
                     <Row className="error-message-body">
-                        Message received from {this.state.location}: {this.state.message}
+                        Message received from {this.state.location}: {this.state.error ? this.state.error.sql : this.state.message}
+                    </Row>
+                    <Row>
+                        Context: {this.state.context}
                     </Row>
                 </div>
             );
@@ -47,4 +55,4 @@ class NotFound extends Component {
     }
 }
 
-export default NotFound;
+export default OtherError;

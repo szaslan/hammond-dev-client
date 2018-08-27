@@ -11,15 +11,14 @@ class UserRegistration extends Component {
 
 		this.state = {
 			email: '',
-			emailExists: false,
 			errors: [],
 			firstName: '',
 			lastName: '',
+			loaded: false,
 			msg: '',
 			password: '',
 			password2: '',
 			reDirect: false,
-			success: false,
 		}
 
 		this.handleChange = this.handleChange.bind(this);
@@ -35,7 +34,10 @@ class UserRegistration extends Component {
 	handleSubmit(event) {
 		event.preventDefault();
 
-		const errors = this.state.errors;
+		this.setState({
+			errors: [],
+			loaded: false,
+		})
 
 		var data = {
 			firstName: this.state.firstName,
@@ -53,47 +55,28 @@ class UserRegistration extends Component {
 			},
 			body: JSON.stringify(data)
 		})
-			// .then(res => {
-			//     if (res.status > 400){
-			//     throw new Error("Bad response from server")
-			//   }
-			//   else if (res == "success"){
-			//     this.setState({msg: res});
-			//     console.log(this.state.msg)
-			//   }
-			// })
-
-
-			// .then(res => this.CheckStatus(res))
-
-			/*THIS IS THE PROBLEM,
-			ITS TRYING TO PARSE AN EMPTY ARRAY */
-
 			.then(res => {
-				if (res.status == 200) {
-					this.setState({
-						errors: [], reDirect: true,
-						success: true
-					})
-
-					throw new Error("breaking promise chain early");
-				}
-
-				res.json().then(data => {
-					if (data.length > 0)
+				switch (res.status) {
+					case 204:
 						this.setState({
-							errors: data
+							errors: [],
+							loaded: true,
+							reDirect: true,
 						})
-				})
+						break;
+					case 400:
+						res.json().then(errors => {
+							this.setState({
+								errors: errors,
+								loaded: true,
+							})
+						})
+						break;
+				}
 			})
-			// .then(res => this.setState({errors: res}))
-			.catch(err => console.log(err))
-		// this.MapErrors(this.state.errors);
 	}
 
 	render() {
-		const errors = this.state.errors;
-
 		return (
 			<div className="entire-screen-login">
 				<div className="register-group">
@@ -111,24 +94,17 @@ class UserRegistration extends Component {
 						<button className="new-button">Submit</button>
 						<Well>
 							{
-								this.state.emailExists ?
-									errors.push("Sorry that email already exists")
-									:
-									null
-							}
-							{
-								errors.length > 0 ?
+								this.state.errors.length > 0?
 									<ul className="errors">
 										{
-											(errors.map(errors =>
-												<li>{errors.msg}</li>))
+											this.state.errors.map(error => 
+												<li>{error.msg}</li>
+											)
 										}
 									</ul>
 									:
 									null
 							}
-							{/* {this.state.emailExists ? <div>Sorry that email already exists</div> : null} */}
-
 							{
 								this.state.reDirect ?
 									<Redirect to='/courses' />

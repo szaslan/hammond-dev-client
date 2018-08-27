@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
-import { Breadcrumb } from 'react-bootstrap';
+import { Dropdown, DropdownToggle, DropdownMenu } from 'reactstrap';
 import { Link } from "react-router-dom";
+import history from '../../history';
 import Loader from 'react-loader-spinner';
 import history from '../../history'
 import { Container, Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
@@ -9,7 +10,6 @@ import JumbotronComp from '../JumbotronComp/JumbotronComp';
 import SelectSearch from 'react-select-search'
 // import linkState from 'react-link-state';
 // import { Redirect } from 'react-router-dom'
-
 
 import './CourseStudents.css'
 
@@ -23,14 +23,18 @@ class CourseStudents extends Component {
         // this.handleChange = this.handleChange.bind(this)
         //URL is the current url while taking in the parameters from the props of the previous url
         this.state = {
+            courseId: this.props.match.params.course_id,
+            dropdownOpen: false,
             loaded: false,
             check: false,
             students: [],
-            url: '',
             loaded: false,
             dropdownOpen: false,
             ...props,
+            url: `/courses/${this.props.match.params.course_id}/students/`,
+
         }
+      this.fetchStudentsFromCanvas = this.fetchStudentsFromCanvas.bind(this);
     }
 
     reDirect(event) {
@@ -47,11 +51,12 @@ class CourseStudents extends Component {
             url: `/courses/${params.course_id}/${params.assignment_name}/students/`
         });
 
+    fetchStudentsFromCanvas() {
         let data = {
-            course_id: params.course_id
+            courseId: this.state.courseId
         }
 
-        fetch('/api/coursestudents', {
+        fetch('/api/courseStudents', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -60,31 +65,53 @@ class CourseStudents extends Component {
             credentials: 'include'
         })
             .then(res => {
-                if (res.status == 200) {
-                    res.json().then(data => {
-                        this.setState({
-                            students: data
+                switch (res.status) {
+                    case 200:
+                        res.json().then(data => {
+                            this.setState({
+                                loaded: true,
+                                students: data,
+                            })
+                        })
+                        break;
+                    case 400:
+                    res.json().then(res => {
+                        history.push({
+                            pathname: '/error',
+                            state: {
+                                context: '',
+                                location: "CourseStudents.js: fetchStudentsFromCanvas() (error came from Canvas)",
+                                message: res.message,
+                            }
                         })
                     })
-                }
-                else if (res.status == 400) {
-                    console.log("ran into an error when trying to pull the list of students in the course from canvas")
-                }
-                else if (res.status === 401) {
-                    history.push("/login")
-                    throw new Error();
-                }
-                else if (res.status == 404) {
-                    console.log("no students enrolled in the selected course on canvas")
+                        break;
+                    case 401:
+                        res.json().then(res => {
+                            history.push({
+                                pathname: '/unauthorized',
+                                state: {
+                                    location: res.location,
+                                    message: res.message,
+                                }
+                            })
+                        })
+                        break;
+                    case 404:
+                        console.log("no students enrolled in the selected course on canvas")
+                        break;
                 }
             })
-      .catch(err => console.log("unauthorized request when pulling the list of students in the course from canvas"))
     }
 
     toggle() {
         this.setState(prevState => ({
             dropdownOpen: !prevState.dropdownOpen
         }));
+    }
+
+    componentDidMount() {
+        this.fetchStudentsFromCanvas()
     }
 
     componentWillMount() {
@@ -115,26 +142,23 @@ class CourseStudents extends Component {
                     {/*console.log(this.state.students)*/}
                     {/*<Dropdown direction="down" isOpen={this.state.dropdownOpen} toggle={this.toggle}>
                         <DropdownToggle className="studenttog" caret>
-                            {this.props.location.state.student_name ?
-                              this.props.location.state.student_name
-                            :
-                            "Students"}
+                            {
+                                this.props.location.state.student ?
+                                    this.props.location.state.student.name
+                                    :
+                                    "Students"
+                            }
                         </DropdownToggle>
 
-                          <DropdownMenu className="studentmenu">
-                            {this.state.students ?
-                                this.state.students.map(students =>
-                                    <Link className="student-link" to={{ pathname: this.state.url + students.id, state:
-                                                            { student_id: students.id,
-                                                            student_name: students.name,
-                                                            course_id: this.state.match.params.course_id
-                                                            } }}
-                                            key={students.id}>
-                                        <li className = "student-name" key={students.id}>{students.name}</li>
+                        <DropdownMenu className="studentmenu">
+                            {
+                                this.state.students.map(student =>
+                                    <Link className="student-link" to={{ pathname: this.state.url + student.id, state: { student: student, course_id: this.state.courseId } }} key={student.id}>
+                                        <li className="student-name" key={student.id}>
+                                            {student.name}
+                                        </li>
                                     </Link>
-                                    )
-                              :
-                              <Loader type="TailSpin" color="black" height={80} width={80} />
+                                )
                             }
                         </DropdownMenu>
                     </Dropdown>*/}
@@ -174,6 +198,10 @@ class CourseStudents extends Component {
               </div>
             );
         }
+
+        return (
+            <Loader type="TailSpin" color="black" height={80} width={80} />
+        )
     }
 
 export default CourseStudents;
