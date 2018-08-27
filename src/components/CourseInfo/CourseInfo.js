@@ -42,16 +42,16 @@ class CourseInfo extends Component {
                         //no issues
                         break;
                     case 400:
-                    res.json().then(res => {
-                        history.push({
-                            pathname: '/error',
-                            state: {
-                                context: '',
-                                error: res.error,
-                                location: "CourseInfo.js: createTables()",
-                            }
+                        res.json().then(res => {
+                            history.push({
+                                pathname: '/error',
+                                state: {
+                                    context: '',
+                                    error: res.error,
+                                    location: "CourseInfo.js: createTables()",
+                                }
+                            })
                         })
-                    })
                         break;
                 }
             })
@@ -81,16 +81,16 @@ class CourseInfo extends Component {
                         })
                         break;
                     case 400:
-                    res.json().then(res => {
-                        history.push({
-                            pathname: '/error',
-                            state: {
-                                context: '',
-                                location: "CourseInfo.js: fetchCourseInfo() (error came from Canvas)",
-                                message: res.message,
-                            }
+                        res.json().then(res => {
+                            history.push({
+                                pathname: '/error',
+                                state: {
+                                    context: '',
+                                    location: "CourseInfo.js: fetchCourseInfo() (error came from Canvas)",
+                                    message: res.message,
+                                }
+                            })
                         })
-                    })
                         break;
                     case 401:
                         res.json().then(res => {
@@ -123,16 +123,16 @@ class CourseInfo extends Component {
                         //no issues
                         break;
                     case 400:
-                    res.json().then(res => {
-                        history.push({
-                            pathname: '/error',
-                            state: {
-                                context: '',
-                                error: res.error,
-                                location: "CourseInfo.js: resetTables()",
-                            }
+                        res.json().then(res => {
+                            history.push({
+                                pathname: '/error',
+                                state: {
+                                    context: '',
+                                    error: res.error,
+                                    location: "CourseInfo.js: resetTables()",
+                                }
+                            })
                         })
-                    })
                         break;
                 }
             })
@@ -150,15 +150,15 @@ class CourseInfo extends Component {
         //         <div>Not authenticated</div>
         //     )
         // }
-
-        return (
-            <div>
-              <SidebarComp
-                content={
-                  <div>
-                  <JumbotronComp mainTitle={this.state.courseJSON.name}
-                    tabs />
-                {/*{
+        if (this.state.loaded) {
+            return (
+                <div>
+                    <SidebarComp
+                        content={
+                            <div>
+                                <JumbotronComp mainTitle={this.state.courseJSON.name}
+                                    tabs />
+                                {/*{
                     this.state.loaded ?
                         <Container className="well1-container" fluid>
                             <Flexbox className="big-buttons-flexbox" minWidth="700px" width="60vw" justifyContent="center"
@@ -179,15 +179,15 @@ class CourseInfo extends Component {
                         <Loader type="TailSpin" color="black" height={80} width={80} />
                 */}
 
-                <button onClick={this.ResetTables}>Reset Database Tables</button>}
+                                <button onClick={this.ResetTables}>Reset Database Tables</button>}
                 </div>
-              }
-              />
-            </div>
+                        }
+                    />
+                </div>
 
             );
         }
-        
+
         return (
             <Loader type="TailSpin" color="black" height={80} width={80} />
         )

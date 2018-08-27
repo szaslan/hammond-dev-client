@@ -19,25 +19,25 @@ const FilterAssignments = currAssignment => {
     console.log("filtering assignments")
 
     if (currAssignment.peer_reviews) {
-      array.push({
-        name: currAssignment.name,
-        value: currAssignment.id,
-      })
-      // statusToClassName = "select-search-box"
-          // if (array.length == props.length) {
-          //   return (
-          //     array
-          //   )}
-          // else{
+        array.push({
+            name: currAssignment.name,
+            value: currAssignment.id,
+        })
+        // statusToClassName = "select-search-box"
+        // if (array.length == props.length) {
+        //   return (
+        //     array
+        //   )}
+        // else{
 
-          // }
+        // }
 
     }
     else {      // return <li key={currAssignment.id} className="assignment-name not-pr">{currAssignment.name}</li>
         // return <DropdownItem disabled className="assign-name not-pr" key={currAssignment.id} /*className="assignment-name not-pr"*/>{currAssignment.name}</DropdownItem>
         array.push({
-          name: currAssignment.name,
-          value: null,
+            name: currAssignment.name,
+            value: null,
         })
 
         // statusToClassName = "select-search-box-dis"
@@ -64,10 +64,10 @@ class Assignments extends Component {
     }
 
     reDirect(event) {
-      const { match: { params } } = this.props;
-      console.log("redirecting")
+        const { match: { params } } = this.props;
+        console.log("redirecting")
 
-      history.push(`/courses/${params.course_id}/${params.assignment_name}/assignments/${event.value}`)
+        history.push(`/courses/${params.course_id}/${params.assignment_name}/assignments/${event.value}`)
     }
 
     pullAssignments() {
@@ -94,16 +94,16 @@ class Assignments extends Component {
                         })
                         break;
                     case 400:
-                    res.json().then(res => {
-                        history.push({
-                            pathname: '/error',
-                            state: {
-                                context: '',
-                                location: "Assignments.js: pullAssignments() (error came from Canvas)",
-                                message: res.message,
-                            }
+                        res.json().then(res => {
+                            history.push({
+                                pathname: '/error',
+                                state: {
+                                    context: '',
+                                    location: "Assignments.js: pullAssignments() (error came from Canvas)",
+                                    message: res.message,
+                                }
+                            })
                         })
-                    })
                         break;
                     case 401:
                         res.json().then(res => {
@@ -136,17 +136,17 @@ class Assignments extends Component {
 
 
     render() {
-      if (this.state.assignments && array.length != this.state.assignments.length) {
-          this.state.assignments.map(assignments => {
-            console.log(assignments);
-            FilterAssignments(assignments);
-          }
-              )
-            }
+        if (this.state.assignments && array.length != this.state.assignments.length) {
+            this.state.assignments.map(assignments => {
+                console.log(assignments);
+                FilterAssignments(assignments);
+            })
+        }
 
-        return (
+        if (this.state.loaded) {
+            return (
                 <div className="assigndrop">
-                        {/*<Dropdown direction="down" isOpen={this.state.dropdownOpen} toggle={this.toggle}>
+                    {/*<Dropdown direction="down" isOpen={this.state.dropdownOpen} toggle={this.toggle}>
                             <DropdownToggle className="assigntog" caret>
                                 {this.props.location.state.assignment_name ?
                                   this.props.location.state.assignment_name
@@ -162,7 +162,7 @@ class Assignments extends Component {
                                 }
                             </DropdownMenu>
                         </Dropdown>*/}
-                        {/*this.state.assignments ?
+                    {/*this.state.assignments ?
                             this.state.assignments.map(assignments =>
                               <FilterAssignments className="assign-name" link={this.state.url + assignments.id} length={this.state.assignments.length} assignment_id={assignments.id} name={this.state.match.params.assignment_name} course_id={this.state.match.params.course_id} currAssigment={assignments} id={assignments.id} />
 
@@ -170,30 +170,30 @@ class Assignments extends Component {
                           :
                           <Loader type="TailSpin" color="black" height={80} width={80} />*/}
 
-                          {console.log(array)}
-                          {console.log(this.state.assignments.length)}
-                          {console.log(this.state.value)}
-                      {array.length == this.state.assignments.length ?
-                            <div>
-                          <SelectSearch
-                            // className={statusToClassName}
-                            className="select-search-box"
-                            options={array}
-                            search = "true"
-                            placeholder = "Select an Assignment"
-                            value={this.state.value}
-                            onChange={this.reDirect}
-                          />
-                          </div>
-                      :
-                      null
+                    {console.log(array)}
+                    {console.log(this.state.assignments.length)}
+                    {console.log(this.state.value)}
+                    {array.length == this.state.assignments.length ?
+                        <div>
+                            <SelectSearch
+                                // className={statusToClassName}
+                                className="select-search-box"
+                                options={array}
+                                search="true"
+                                placeholder="Select an Assignment"
+                                value={this.state.value}
+                                onChange={this.reDirect}
+                            />
+                        </div>
+                        :
+                        null
                     }
                 </div>
             );
         }
 
         return (
-            <div></div>
+            <div></div >
         )
     }
 }

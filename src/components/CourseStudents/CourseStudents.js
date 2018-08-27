@@ -3,8 +3,6 @@ import { Dropdown, DropdownToggle, DropdownMenu } from 'reactstrap';
 import { Link } from "react-router-dom";
 import history from '../../history';
 import Loader from 'react-loader-spinner';
-import history from '../../history'
-import { Container, Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 import JumbotronComp from '../JumbotronComp/JumbotronComp';
 // import Select from 'react-select';
 import SelectSearch from 'react-select-search'
@@ -28,28 +26,28 @@ class CourseStudents extends Component {
             loaded: false,
             check: false,
             students: [],
-            loaded: false,
             dropdownOpen: false,
             ...props,
             url: `/courses/${this.props.match.params.course_id}/students/`,
 
         }
-      this.fetchStudentsFromCanvas = this.fetchStudentsFromCanvas.bind(this);
+        this.fetchStudentsFromCanvas = this.fetchStudentsFromCanvas.bind(this);
     }
 
     reDirect(event) {
-      const { match: { params } } = this.props;
-      console.log("redirecting")
+        const { match: { params } } = this.props;
+        console.log("redirecting")
 
-      history.push(`/courses/${params.course_id}/${params.assignment_name}/students/${event.value}`)
+        history.push(`/courses/${params.course_id}/${params.assignment_name}/students/${event.value}`)
     }
 
     //fetch assignments for course with course_id passed down
-    componentDidMount() {8
+    componentDidMount() {
         const { match: { params } } = this.props;
         this.setState({
             url: `/courses/${params.course_id}/${params.assignment_name}/students/`
         });
+    }
 
     fetchStudentsFromCanvas() {
         let data = {
@@ -75,16 +73,16 @@ class CourseStudents extends Component {
                         })
                         break;
                     case 400:
-                    res.json().then(res => {
-                        history.push({
-                            pathname: '/error',
-                            state: {
-                                context: '',
-                                location: "CourseStudents.js: fetchStudentsFromCanvas() (error came from Canvas)",
-                                message: res.message,
-                            }
+                        res.json().then(res => {
+                            history.push({
+                                pathname: '/error',
+                                state: {
+                                    context: '',
+                                    location: "CourseStudents.js: fetchStudentsFromCanvas() (error came from Canvas)",
+                                    message: res.message,
+                                }
+                            })
                         })
-                    })
                         break;
                     case 401:
                         res.json().then(res => {
@@ -136,8 +134,9 @@ class CourseStudents extends Component {
     //   }
     // }
 
-    render(){
-            return(
+    render() {
+        if (this.state.loaded) {
+            return (
                 <div className="studentdrop">
                     {/*console.log(this.state.students)*/}
                     {/*<Dropdown direction="down" isOpen={this.state.dropdownOpen} toggle={this.toggle}>
@@ -166,36 +165,36 @@ class CourseStudents extends Component {
                     {this.state.students ?
                         this.state.students.map(students => {
                             array.push({
-                              name: students.name,
-                              value: students.id,
+                                name: students.name,
+                                value: students.id,
                             });
-                          }
+                        }
 
-                            )
-                      :
-                      <Loader type="TailSpin" color="black" height={80} width={80} />}
+                        )
+                        :
+                        <Loader type="TailSpin" color="black" height={80} width={80} />}
 
-                  {array.length == this.state.students.length ?
-                    <div>
-                  <SelectSearch
-                    className="select-search-box"
-                    options={array}
-                    search = "true"
-                    placeholder = "Select a Student"
-                    value={this.state.value}
-                    onChange={this.reDirect}
-                    // onChange={this.handleChange}
-                    // onChange={() => {if (this.value) window.location.href=this.value}}
-                    // onChange={() => {if (this.value) window.location.href=this.options[this.selectedIndex].value}}
-                    // onChange={() => {if (this.value) this.options[this.selectedIndex].value && (window.location.href = this.options[this.selectedIndex].value)}}
-                    // onChange={this.setRedirect}
-                  />
-                  </div>
-                  :
-                  null
-                }
-                  <hr className="hr-3"></hr>
-              </div>
+                    {array.length == this.state.students.length ?
+                        <div>
+                            <SelectSearch
+                                className="select-search-box"
+                                options={array}
+                                search="true"
+                                placeholder="Select a Student"
+                                value={this.state.value}
+                                onChange={this.reDirect}
+                            // onChange={this.handleChange}
+                            // onChange={() => {if (this.value) window.location.href=this.value}}
+                            // onChange={() => {if (this.value) window.location.href=this.options[this.selectedIndex].value}}
+                            // onChange={() => {if (this.value) this.options[this.selectedIndex].value && (window.location.href = this.options[this.selectedIndex].value)}}
+                            // onChange={this.setRedirect}
+                            />
+                        </div>
+                        :
+                        null
+                    }
+                    <hr className="hr-3"></hr>
+                </div>
             );
         }
 
@@ -203,5 +202,6 @@ class CourseStudents extends Component {
             <Loader type="TailSpin" color="black" height={80} width={80} />
         )
     }
+}
 
 export default CourseStudents;

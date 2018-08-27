@@ -642,7 +642,7 @@ class FinalizeResults extends Component {
                                         title="Simple Sidenav"
                                         items={['Item 1', 'Item 2']}
                                         showNav={this.state.showNav}
-                                    />*/}
+                                    />}*/
 //                                     <hr className="hr-6"></hr>
 //                                           <h2 className="headertext">Score Details
 //                                           {/*<button className="clear-local-button" onClick={this.clearLocalStorage}> Clear Local Storage</button>*/}
