@@ -489,6 +489,13 @@ class FinalizeResults extends Component {
                                         items={['Item 1', 'Item 2']}
                                         showNav={this.state.showNav}
                                     />*/}
+                                    <hr className="hr-6"></hr>
+                                          <h2 className="headertext">Score Details
+                                          {/*<button className="clear-local-button" onClick={this.clearLocalStorage}> Clear Local Storage</button>*/}
+                                          </h2>
+                                          <hr className="hr-2"></hr>
+                                            {/*<p><strong>Title: </strong>{this.state.assignment.name}</p>*/}
+                                            <br></br>
                                     <p className="totalscore"> -/{localStorage.getItem("finalizeDisplayTextOutOf_" + this.props.assignmentId)}pts</p>
                                     <Row className="scoredets">
                                       <p className="stats"> Mean: {localStorage.getItem("finalizeDisplayTextAverage_" + this.props.assignmentId)}</p>
@@ -496,7 +503,7 @@ class FinalizeResults extends Component {
                                       <p className="stats"> Low: {localStorage.getItem("min_" + this.props.assignmentId)}</p>
                                       <span className="boxplot" id={"TooltipBoxplot"}>
                                         <Boxplot
-                                            width={400} height={25} orientation="horizontal"
+                                            width={350} height={25} orientation="horizontal"
                                             min={0} max={100}
                                             stats={{
                                                 whiskerLow: localStorage.getItem("min_" + this.props.assignmentId),
@@ -510,13 +517,24 @@ class FinalizeResults extends Component {
                                     </Row>
                                     <br></br>
                                     <br></br>
-                                    <hr className="hr-4"></hr>
+                                    <hr className="hr-5"></hr>
                                     <Row>
                                       <p className="pagetext">Completed Peer Reviews: {localStorage.getItem("finalizeDisplayTextNumCompleted_" + this.props.assignmentId)} / {localStorage.getItem("finalizeDisplayTextNumAssigned_" + this.props.assignmentId)}</p>
                                       <p className="date">Date Finalized: {localStorage.getItem("finalized_" + this.props.assignmentId)}</p>
+                                      <Popup className="pop-up"
+                                          trigger={<button className="flaggedbutton"> View Flagged Grades </button>}
+                                          modal
+                                          closeOnDocumentClick
+                                      >
+                                          <span><h5 className="modaltext">Flagged Grades</h5></span>
+                                          <hr />
+                                          <span className="studentlist">
+                                            {JSON.parse(localStorage.getItem("flagged_students_" + this.props.assignmentId)).join(", ")}
+                                          </span>
+                                      </Popup>
                                     </Row>
                                     <br></br>
-                                    <hr className="hr-4"></hr>
+                                    <hr className="hr-5"></hr>
                                     {/* <strong>Completed All Reviews: </strong>{localStorage.getItem("completed_all_reviews_" + this.props.assignmentId)} / {Number(localStorage.getItem("completed_all_reviews_out_of_" + this.props.assignmentId)) + Number(localStorage.getItem("completed_all_reviews_" + this.props.assignmentId))} */}
                                     <Tooltip placement="right" delay={{ show: "300" }} isOpen={this.state.tooltipOpen} target={"TooltipBoxplot"} toggle={this.toggle}>
                                         <strong>Min Score:</strong> {localStorage.getItem("min_" + this.props.assignmentId)}
@@ -546,8 +564,10 @@ class FinalizeResults extends Component {
                                     </Row>
                                     <br></br>
                                     <Row>
-                                        <Flexbox className="chartbox" flexDirection="column" width="200px" flexWrap="wrap">
+                                      <Col className="graph1">
                                             <h5 className="graphTitle">Completion</h5>
+                                            <p className="graphsub">Total: {Number(localStorage.getItem("completed_all_reviews_" + this.props.assignmentId)) + Number(localStorage.getItem("completed_some_reviews_" + this.props.assignmentId)) + Number(localStorage.getItem("completed_no_reviews_" + this.props.assignmentId))}</p>
+                                            <Flexbox className="chartbox" flexDirection="column" flexWrap="wrap">
                                             <ReactSvgPieChart className="piechart"
                                                 expandSize={3}
                                                 expandOnHover="false"
@@ -566,6 +586,8 @@ class FinalizeResults extends Component {
                                                 }
                                                 }
                                             />
+
+                                        </Flexbox>
                                             <Well className="pieinfo">
                                                 {this.state.check ?
                                                     this.state.sectorTitle1 + ": " + this.state.sectorValue1 + " student(s)"
@@ -573,6 +595,8 @@ class FinalizeResults extends Component {
                                                 "Hover over a sector to display completion data. There may be a slight delay."}
                                                 </Well>
                                             <br />
+
+                                        <div className="legend">
                                             <Row>
                                                 <Ellipse className="keycolor" rx={7} ry={4} fill={{ color: '#E38627' }} strokeWidth={5} />
                                                 <p className="compkey">Completed all reviews</p>
@@ -585,9 +609,18 @@ class FinalizeResults extends Component {
                                                 <Ellipse rx={7} ry={4} fill={{ color: '#6A2135' }} strokeWidth={5} />
                                                 <p className="compkey">Completed no reviews</p>
                                             </Row>
-                                        </Flexbox>
-                                        <Flexbox className="chartbox" flexDirection="column" width="200px" flexWrap="wrap">
+                                            </div>
+                                          </Col>
+                                          <Col className="graph2">
                                             <h5 className="graphTitle">Grading Classification</h5>
+                                            <p className="graphsub">Total: {Number(localStorage.getItem("definitely_harsh_" + this.props.assignmentId)) +
+                                            Number(localStorage.getItem("could_be_harsh_" + this.props.assignmentId)) +
+                                            Number(localStorage.getItem("definitely_lenient_" + this.props.assignmentId)) +
+                                            Number(localStorage.getItem("could_be_lenient_" + this.props.assignmentId)) +
+                                            Number(localStorage.getItem("definitely_fair_" + this.props.assignmentId)) +
+                                            Number(localStorage.getItem("could_be_fair_" + this.props.assignmentId)) +
+                                            Number(localStorage.getItem("spazzy_" + this.props.assignmentId))}</p>
+                                            <Flexbox className="chartbox" flexDirection="column" flexWrap="wrap">
                                             <ReactSvgPieChart className="piechart"
                                                 expandSize={3}
                                                 expandOnHover="false"
@@ -610,6 +643,8 @@ class FinalizeResults extends Component {
                                                 }
                                                 }
                                             />
+
+                                          </Flexbox>
                                             <Well className="pieinfo">
                                             {this.state.check2 ?
                                                 this.state.sectorTitle2 + ": " + this.state.sectorValue2 + " student(s)"
@@ -653,23 +688,12 @@ class FinalizeResults extends Component {
                                               </Col>
                                             </Row>
                                           </div>
-                                        </Flexbox>
+                                        </Col>
                                     </Row>
-                                  <hr className="hr-4"></hr>
-                                    <Popup className="pop-up"
-                                        trigger={<button className="flaggedbutton"> View Flagged Grades </button>}
-                                        modal
-                                        closeOnDocumentClick
-                                    >
-                                        <span><h5 className="modaltext">Flagged Grades</h5></span>
-                                        <hr />
-                                        <span className="studentlist">
-                                          {JSON.parse(localStorage.getItem("flagged_students_" + this.props.assignmentId))}
-                                        </span>
-                                    </Popup>
+
                                 </div>
                                 :
-                                <Progress value={progress}> {progress_bar_message} </Progress>
+                                <Progress className="progressbar" value={progress}> {progress_bar_message} </Progress>
                         }
                     </div>
                 )

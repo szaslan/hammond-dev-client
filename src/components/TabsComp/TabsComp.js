@@ -7,11 +7,12 @@ import Iframe from 'react-iframe';
 
 import AssignmentInfo from '../AssignmentInfo/AssignmentInfo';
 import Assignments from '../Assignments/Assignments';
+import '../TabsComp/TabsComp.css'
 
 class TabsComp extends Component {
     constructor(props) {
         super(props);
-        
+
         this.state = {
             activeTab: '1'
         };
@@ -59,11 +60,20 @@ class TabsComp extends Component {
                 <TabContent activeTab={this.state.activeTab}>
 
                     <TabPane tabId="1">
-                        blah 1
+                      <div>
+                      <Iframe className="iframe" url="http://localhost:3000/courses/83831/sza4405%20Prep%20Site%20A/assignments"
+                        width="85%"
+                        height="70%"
+                        />
+                      </div>
                     </TabPane>
 
                     <TabPane tabId="2">
-                        blah 2
+                      <div>
+                      <Iframe url="http://localhost:3000/courses/83831/sza4405%20Prep%20Site%20A/students"
+                        width="85%"
+                        />
+                      </div>
                     </TabPane>
                 </TabContent>
             </div>

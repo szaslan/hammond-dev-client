@@ -123,7 +123,7 @@ class CourseInfo extends Component {
                   <div>
                   <JumbotronComp mainTitle={this.state.courseJSON.name}
                     tabs />
-                {
+                {/*{
                     this.state.loaded ?
                         <Container className="well1-container" fluid>
                             <Flexbox className="big-buttons-flexbox" minWidth="700px" width="60vw" justifyContent="center"
@@ -144,9 +144,10 @@ class CourseInfo extends Component {
                         <Loader type="TailSpin" color="black" height={80} width={80} />
                 }
 
-                <button onClick={this.ResetTables}>Reset Database Tables</button>
+                <button onClick={this.ResetTables}>Reset Database Tables</button>*/}
                 </div>
-              }/>
+              }
+              />
             </div>
 
         );

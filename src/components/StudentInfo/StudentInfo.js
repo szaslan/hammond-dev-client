@@ -329,7 +329,7 @@ class StudentInfo extends Component {
         }
 
         let finalizeId = {
-            assigment_id: this.state.selectedAssignment
+            assignment_id: this.state.selectedAssignment
         }
 
         fetch('/api/get_peer_reviews_for_student', {
@@ -353,7 +353,7 @@ class StudentInfo extends Component {
                         headers: {
                             'Content-Type': 'application/json'
                         },
-                        body: finalizeId
+                        body: JSON.stringify(finalizeId)
                     })
                         .then(res => {
                             if (res.status == 204) {
@@ -569,7 +569,7 @@ class StudentInfo extends Component {
                                     <StudentInfoGraph className="graph" assignments={this.state.assignments} peerReviewData={this.state.peer_review_data} category="completion" data={this.state.number_of_reviews_completed_data} />
                                 </div>
                                 :
-                                <div className="message">
+                                <div className="errmessage2">
                                     This student does not have any data saved at this point. To save data, you must finalize an assignment.
                                 </div>
                             }
