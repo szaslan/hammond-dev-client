@@ -623,244 +623,13 @@ class FinalizeResults extends Component {
                 </div>
             )
         }
-        /*else {
-            if (this.state.error) {
-                return (
-                    <div>
-                        {this.error_message}
-                    </div>
-                )
-            }
-            else {
-                return (
-                    <div>
-                        {
-                            localStorage.getItem("completed_all_reviews_" + this.props.assignmentId) ?
-                                // localStorage.getItem("harsh_students_" + this.props.assignmentId) && localStorage.getItem("max_" + this.props.assignmentId) ?
-                                <div>
-                                    {<SideNav
-                                        title="Simple Sidenav"
-                                        items={['Item 1', 'Item 2']}
-                                        showNav={this.state.showNav}
-                                    />*/}
-//                                     <hr className="hr-6"></hr>
-//                                           <h2 className="headertext">Score Details
-//                                           {/*<button className="clear-local-button" onClick={this.clearLocalStorage}> Clear Local Storage</button>*/}
-//                                           </h2>
-//                                           <hr className="hr-2"></hr>
-//                                             {/*<p><strong>Title: </strong>{this.state.assignment.name}</p>*/}
-//                                             <br></br>
-//                                     <p className="totalscore"> -/{localStorage.getItem("finalizeDisplayTextOutOf_" + this.props.assignmentId)}pts</p>
-//                                     <Row className="scoredets">
-//                                       <p className="stats"> Mean: {localStorage.getItem("finalizeDisplayTextAverage_" + this.props.assignmentId)}</p>
-//                                       <p className="stats"> High: {localStorage.getItem("max_" + this.props.assignmentId)}</p>
-//                                       <p className="stats"> Low: {localStorage.getItem("min_" + this.props.assignmentId)}</p>
-//                                       <span className="boxplot" id={"TooltipBoxplot"}>
-//                                         <Boxplot
-//                                             width={350} height={25} orientation="horizontal"
-//                                             min={0} max={100}
-//                                             stats={{
-//                                                 whiskerLow: localStorage.getItem("min_" + this.props.assignmentId),
-//                                                 quartile1: localStorage.getItem("q1_" + this.props.assignmentId),
-//                                                 quartile2: localStorage.getItem("median_" + this.props.assignmentId),
-//                                                 quartile3: localStorage.getItem("q3_" + this.props.assignmentId),
-//                                                 whiskerHigh: localStorage.getItem("max_" + this.props.assignmentId),
-//                                                 outliers: [],
-//                                             }} />
-//                                       </span>
-//                                     </Row>
-//                                     <br></br>
-//                                     <br></br>
-//                                     <hr className="hr-5"></hr>
-//                                     <Row>
-//                                       <p className="pagetext">Completed Peer Reviews: {localStorage.getItem("finalizeDisplayTextNumCompleted_" + this.props.assignmentId)} / {localStorage.getItem("finalizeDisplayTextNumAssigned_" + this.props.assignmentId)}</p>
-//                                       <p className="date">Date Finalized: {localStorage.getItem("finalized_" + this.props.assignmentId)}</p>
-//                                       <Popup className="pop-up"
-//                                           trigger={<button className="flaggedbutton"> View Flagged Grades </button>}
-//                                           modal
-//                                           closeOnDocumentClick
-//                                       >
-//                                           <span><h5 className="modaltext">Flagged Grades</h5></span>
-//                                           <hr />
-//                                           <span className="studentlist">
-//                                             {JSON.parse(localStorage.getItem("flagged_students_" + this.props.assignmentId)).join(", ")}
-//                                           </span>
-//                                       </Popup>
-//                                     </Row>
-//                                     <br></br>
-//                                     <hr className="hr-5"></hr>
-//                                     {/* <strong>Completed All Reviews: </strong>{localStorage.getItem("completed_all_reviews_" + this.props.assignmentId)} / {Number(localStorage.getItem("completed_all_reviews_out_of_" + this.props.assignmentId)) + Number(localStorage.getItem("completed_all_reviews_" + this.props.assignmentId))} */}
-//                                     <Tooltip placement="right" delay={{ show: "300" }} isOpen={this.state.tooltipOpen} target={"TooltipBoxplot"} toggle={this.toggle}>
-//                                         <strong>Min Score:</strong> {localStorage.getItem("min_" + this.props.assignmentId)}
-//                                         <br></br>
-//                                         <strong>First Quartile:</strong> {localStorage.getItem("q1_" + this.props.assignmentId)}
-//                                         <br></br>
-//                                         <strong>Median Score:</strong> {localStorage.getItem("median_" + this.props.assignmentId)}
-//                                         <br></br>
-//                                         <strong>Third Quartile:</strong> {localStorage.getItem("q3_" + this.props.assignmentId)}
-//                                         <br></br>
-//                                         <strong>Max Score:</strong> {localStorage.getItem("max_" + this.props.assignmentId)}
-//                                     </Tooltip>
-
-//                                     <br></br>
-//                                     <br></br>
-
-//                                     <Row>
-//                                         <Well className="well2">
-//                                             <Flexbox className="accordion-flexbox" flexDirection="column" minWidth="300px" maxWidth="500px" width="100%" flexWrap="wrap">
-//                                                 {/* <Accordion name="Definitely Harsh" content={JSON.parse(localStorage.getItem("harsh_students_" + this.props.assignmentId))} /> */}
-//                                                 {/* <Accordion name="Definitely Lenient" content={JSON.parse(localStorage.getItem("lenient_students_" + this.props.assignmentId))} /> */}
-//                                                 {/* <Accordion name="Missing Some Peer Reviews" content={JSON.parse(localStorage.getItem("some_incomplete_students_" + this.props.assignmentId))} /> */}
-//                                                 {/* <Accordion name="Missing All Peer Reviews" content={JSON.parse(localStorage.getItem("all_incomplete_students_" + this.props.assignmentId))} /> */}
-//                                                 {/*<Accordion name="Flagged Grades" content={JSON.parse(localStorage.getItem("flagged_students_" + this.props.assignmentId))} /> */}
-//                                             </Flexbox>
-//                                         </Well>
-//                                     </Row>
-//                                     <br></br>
-//                                     <Row>
-//                                       <Col className="graph1">
-//                                             <h5 className="graphTitle">Completion</h5>
-//                                             <p className="graphsub">Total: {Number(localStorage.getItem("completed_all_reviews_" + this.props.assignmentId)) + Number(localStorage.getItem("completed_some_reviews_" + this.props.assignmentId)) + Number(localStorage.getItem("completed_no_reviews_" + this.props.assignmentId))}</p>
-//                                             <Flexbox className="chartbox" flexDirection="column" flexWrap="wrap">
-//                                             <ReactSvgPieChart className="piechart"
-//                                                 expandSize={3}
-//                                                 expandOnHover="false"
-//                                                 data={[
-//                                                     {title: "Completed all reviews", value: Number(localStorage.getItem("completed_all_reviews_" + this.props.assignmentId)), color: '#E38627' },
-//                                                     {title: "Completed some reviews", value: Number(localStorage.getItem("completed_no_reviews_" + this.props.assignmentId)), color: '#C13C37' },
-//                                                     {title: "Completed no reviews", value: Number(localStorage.getItem("completed_some_reviews_" + this.props.assignmentId)), color: '#6A2135' },
-//                                                 ]}
-//                                                 onSectorHover={(d) => {
-//                                                     if (d) {
-//                                                         // console.log("value: ", d.value);
-//                                                         this.state.sectorValue1 = d.value;
-//                                                         this.state.sectorTitle1 = d.title;
-//                                                         this.state.check = true;
-//                                                     }
-//                                                 }
-//                                                 }
-//                                             />
-
-//                                         </Flexbox>
-//                                             <Well className="pieinfo">
-//                                                 {this.state.check ?
-//                                                     this.state.sectorTitle1 + ": " + this.state.sectorValue1 + " student(s)"
-//                                                 :
-//                                                 "Hover over a sector to display completion data. There may be a slight delay."}
-//                                                 </Well>
-//                                             <br />
-
-//                                         <div className="legend">
-//                                             <Row>
-//                                                 <Ellipse className="keycolor" rx={7} ry={4} fill={{ color: '#E38627' }} strokeWidth={5} />
-//                                                 <p className="compkey">Completed all reviews</p>
-//                                             </Row>
-//                                             <Row>
-//                                                 <Ellipse rx={7} ry={4} fill={{ color: '#C13C37' }} strokeWidth={5} />
-//                                                 <p className="compkey">Completed some reviews</p>
-//                                             </Row>
-//                                             <Row>
-//                                                 <Ellipse rx={7} ry={4} fill={{ color: '#6A2135' }} strokeWidth={5} />
-//                                                 <p className="compkey">Completed no reviews</p>
-//                                             </Row>
-//                                             </div>
-//                                           </Col>
-//                                           <Col className="graph2">
-//                                             <h5 className="graphTitle">Grading Classification</h5>
-//                                             <p className="graphsub">Total: {Number(localStorage.getItem("definitely_harsh_" + this.props.assignmentId)) +
-//                                             Number(localStorage.getItem("could_be_harsh_" + this.props.assignmentId)) +
-//                                             Number(localStorage.getItem("definitely_lenient_" + this.props.assignmentId)) +
-//                                             Number(localStorage.getItem("could_be_lenient_" + this.props.assignmentId)) +
-//                                             Number(localStorage.getItem("definitely_fair_" + this.props.assignmentId)) +
-//                                             Number(localStorage.getItem("could_be_fair_" + this.props.assignmentId)) +
-//                                             Number(localStorage.getItem("spazzy_" + this.props.assignmentId))}</p>
-//                                             <Flexbox className="chartbox" flexDirection="column" flexWrap="wrap">
-//                                             <ReactSvgPieChart className="piechart"
-//                                                 expandSize={3}
-//                                                 expandOnHover="false"
-//                                                 data={[
-//                                                     {title: "Definitely harsh", value: Number(localStorage.getItem("definitely_harsh_" + this.props.assignmentId)), color: '#ad1f1f' },
-//                                                     {title: "Could be harsh", value: Number(localStorage.getItem("could_be_harsh_" + this.props.assignmentId)), color: '#d6a0a0' },
-//                                                     {title: "Definitely lenient", value: Number(localStorage.getItem("definitely_lenient_" + this.props.assignmentId)), color: '#001887' },
-//                                                     {title: "Could be lenient", value: Number(localStorage.getItem("could_be_lenient_" + this.props.assignmentId)), color: '#b3bbdd' },
-//                                                     {title: "Definitely fair", value: Number(localStorage.getItem("definitely_fair_" + this.props.assignmentId)), color: '#063d11' },
-//                                                     {title: "Could be fair", value: Number(localStorage.getItem("could_be_fair_" + this.props.assignmentId)), color: '#94b29a' },
-//                                                     {title:"Spazzy", value: Number(localStorage.getItem("spazzy_" + this.props.assignmentId)), color: '#c68100' }
-//                                                 ]}
-//                                                 onSectorHover={(d) => {
-//                                                     if (d) {
-//                                                         // console.log("value: ", d.value);
-//                                                         this.state.sectorValue2 = d.value;
-//                                                         this.state.sectorTitle2 = d.title;
-//                                                         this.state.check2 = true;
-//                                                     }
-//                                                 }
-//                                                 }
-//                                             />
-
-//                                           </Flexbox>
-//                                             <Well className="pieinfo">
-//                                             {this.state.check2 ?
-//                                                 this.state.sectorTitle2 + ": " + this.state.sectorValue2 + " student(s)"
-//                                             :
-//                                             "Hover over a sector to display grading classification data. There may be a slight delay."}
-//                                             </Well>
-//                                                 <br />
-//                                             <div className="legend">
-//                                             <Row>
-//                                               <Col>
-//                                                 <Row>
-//                                                   <Ellipse rx={7} ry={4} fill={{ color: '#ad1f1f' }} strokeWidth={5} />
-//                                                   <p className="graphKey">Definitely Harsh</p>
-//                                                 </Row>
-//                                                 <Row>
-//                                                   <Ellipse rx={7} ry={4} fill={{ color: '#d6a0a0' }} strokeWidth={5} />
-//                                                   <p className="graphKey">Could be Harsh</p>
-//                                                 </Row>
-//                                                 <Row>
-//                                                   <Ellipse rx={7} ry={4} fill={{ color: '#001887' }} strokeWidth={5} />
-//                                                   <p className="graphKey">Definitely Lenient</p>
-//                                                 </Row>
-//                                                 <Row>
-//                                                   <Ellipse rx={7} ry={4} fill={{ color: '#b3bbdd' }} strokeWidth={5} />
-//                                                   <p className="graphKey">Could be Lenient</p>
-//                                                 </Row>
-//                                               </Col>
-//                                               <Col>
-//                                                 <Row>
-//                                                   <Ellipse rx={7} ry={4} fill={{ color: '#063d11' }} strokeWidth={5} />
-//                                                   <p className="graphKey">Definitely Fair</p>
-//                                                 </Row>
-//                                                 <Row>
-//                                                   <Ellipse rx={7} ry={4} fill={{ color: '#94b29a' }} strokeWidth={5} />
-//                                                   <p className="graphKey">Could be Fair</p>
-//                                                 </Row>
-//                                                 <Row>
-//                                                   <Ellipse rx={7} ry={4} fill={{ color: '#c68100' }} strokeWidth={5} />
-//                                                   <p className="graphKey">Spazzy</p>
-//                                                 </Row>
-//                                               </Col>
-//                                             </Row>
-//                                           </div>
-//                                         </Col>
-//                                     </Row>
-
-//                                 </div>
-//                                 :
-//                                 <Progress className="progressbar" value={progress}> {progress_bar_message} </Progress>
-//                         }
-//                     </div>
-//                 )
-//             }
-
-        if (this.props.pressed) {
+        else if (this.props.pressed) {
             this.savePeerReviewsFromCanvasToDatabase()
             return (
                 <div></div>
             )
         }
-
-        if (localStorage.getItem("completedAllReviews_" + this.assignmentId)) {
+        else if (localStorage.getItem("completedAllReviews_" + this.assignmentId)) {
             return (
                 <div>
                     {/* <SideNav
@@ -1043,10 +812,13 @@ class FinalizeResults extends Component {
             )
         }
 
-        return (
+       else {
+           return (
             <Progress value={progress}> {progressBarMessage} </Progress>
         )
     }
+
+}
 }
 
 export default FinalizeResults;

@@ -151,7 +151,8 @@ class CourseInfo extends Component {
         //     )
         // }
 
-        return (
+            if (this.state.loaded){
+            return(
             <div>
               <SidebarComp
                 content={
@@ -179,19 +180,17 @@ class CourseInfo extends Component {
                         <Loader type="TailSpin" color="black" height={80} width={80} />
                 */}
 
-                <button onClick={this.ResetTables}>Reset Database Tables</button>}
+                <button onClick={this.resetTables}>Reset Database Tables</button>
                 </div>
               }
               />
             </div>
-
-            );
+            )
         }
-        
-        return (
-            <Loader type="TailSpin" color="black" height={80} width={80} />
-        )
-    }
+
+        else return (<Loader type="TailSpin" color="black" height={80} width={80} />)
+        }
+
 }
 
 export default CourseInfo;

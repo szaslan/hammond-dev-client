@@ -17,30 +17,17 @@ const FilterAssignments = currAssignment => {
     // console.log(assignArr)
 
     console.log("filtering assignments")
-
-    if (currAssignment.peer_reviews) {
+        if (currAssignment.peer_reviews ) {
       array.push({
         name: currAssignment.name,
         value: currAssignment.id,
       })
-      // statusToClassName = "select-search-box"
-          // if (array.length == props.length) {
-          //   return (
-          //     array
-          //   )}
-          // else{
-
-          // }
-
     }
-    else {      // return <li key={currAssignment.id} className="assignment-name not-pr">{currAssignment.name}</li>
-        // return <DropdownItem disabled className="assign-name not-pr" key={currAssignment.id} /*className="assignment-name not-pr"*/>{currAssignment.name}</DropdownItem>
+    else {     
         array.push({
           name: currAssignment.name,
           value: null,
         })
-
-        // statusToClassName = "select-search-box-dis"
     }
 }
 
@@ -54,7 +41,7 @@ class Assignments extends Component {
             dropdownOpen: false,
             loaded: false,
             url: `/courses/${this.props.match.params.course_id}/assignments/`,
-
+            value: '',
             ...props,
         }
 
@@ -67,7 +54,7 @@ class Assignments extends Component {
       const { match: { params } } = this.props;
       console.log("redirecting")
 
-      history.push(`/courses/${params.course_id}/${params.assignment_name}/assignments/${event.value}`)
+      history.push(`/courses/${params.course_id}/assignments/${event.value}`)
     }
 
     pullAssignments() {
@@ -137,11 +124,10 @@ class Assignments extends Component {
 
     render() {
       if (this.state.assignments && array.length != this.state.assignments.length) {
-          this.state.assignments.map(assignments => {
-            console.log(assignments);
-            FilterAssignments(assignments);
-          }
-              )
+            this.state.assignments.map(assignments => {
+                console.log(assignments);
+                FilterAssignments(assignments);
+              })
             }
 
         return (
@@ -173,7 +159,6 @@ class Assignments extends Component {
                           {console.log(array)}
                           {console.log(this.state.assignments.length)}
                           {console.log(this.state.value)}
-                      {array.length == this.state.assignments.length ?
                             <div>
                           <SelectSearch
                             // className={statusToClassName}
@@ -185,17 +170,14 @@ class Assignments extends Component {
                             onChange={this.reDirect}
                           />
                           </div>
-                      :
-                      null
-                    }
                 </div>
             );
         }
 
-        return (
-            <div></div>
-        )
-    }
+    //     return (
+    //         <div></div>
+    //     )
+    // }
 }
 
 export default Assignments;

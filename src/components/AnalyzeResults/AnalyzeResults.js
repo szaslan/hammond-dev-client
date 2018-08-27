@@ -304,9 +304,7 @@ class AnalyzeResults extends Component {
                     </Row>
 
                     <hr className="hr-4"></hr>
-                    {console.log(this.assignmentId)}
-                    {console.log(localStorage.getItem("analyzeDisplayTextNames_" + this.assignmentId))}
-                    {console.log(JSON.parse(localStorage.getItem("analyzeDisplayTextNames_" + this.assignmentId)))}
+    
                     <Popup className="pop-up" trigger={<button className="flaggedbutton"> View Flagged Grades ({JSON.parse(localStorage.getItem("analyzeDisplayTextNames_" + this.assignmentId)).length})</button>} modal closeOnDocumentClick >
                         <span><h5 className="modaltext">Flagged Grades</h5></span>
                         <hr />

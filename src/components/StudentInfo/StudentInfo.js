@@ -124,6 +124,7 @@ class StudentInfo extends Component {
             body: JSON.stringify(data),
         })
             .then(res => {
+                console.log(res)
                 switch (res.status) {
                     case 204:
                         this.setState({
@@ -386,6 +387,7 @@ class StudentInfo extends Component {
                 switch (res.status) {
                     case 200:
                         res.json().then(res => {
+                            console.log(res)
                             this.setState({
                                 peerReviewsCompletedByCurrentStudent: res
                             })
@@ -408,6 +410,7 @@ class StudentInfo extends Component {
         let data = {
             studentId: this.state.selectedStudentId,
         }
+        console.log(data)
 
         fetch('/api/pullStudentEvaluatingData', {
             method: 'POST',
@@ -504,14 +507,14 @@ class StudentInfo extends Component {
     setMessage() {
         if (this.state.gradeGiven == null) {
             this.setState({
-                message: <div>{this.props.location.state.student.name} did not complete this peer review</div>
+                message: <div>{this.props.location.state.student_name} did not complete this peer review</div>
             })
         }
         else {
             this.setState({
                 message:
                     <div>
-                        <div>{this.props.location.state.student.name} gave {this.state.value2} a score of {this.state.gradeGiven}</div>
+                        <div>{this.props.location.state.student_name} gave {this.state.value2} a score of {this.state.gradeGiven}</div>
                         <div>{this.state.value2} received a final grade of {this.state.actualGrade}</div>
                     </div>
             })
@@ -531,6 +534,7 @@ class StudentInfo extends Component {
     }
     //everytime a new assignment is clicked on, component re-renders and new assignment is fetched
     componentDidMount() {
+        console.log(this.props)
         this.setState({
             errorMessage: ""
         })
@@ -539,7 +543,8 @@ class StudentInfo extends Component {
 
     //renders initially
     componentDidUpdate(prevProps) {
-        if (this.props.location.state.student.id !== prevProps.location.state.student.id) {
+        if (this.props.location.state.student_id !== prevProps.location.state.student_id) {
+        // if (this.props.location.state.student.id !== prevProps.location.state.student.id) {
             this.setState({
                 actualGrade: "",
                 errorMessage: "",
@@ -547,7 +552,7 @@ class StudentInfo extends Component {
                 graphsLoaded: false,
                 message: '',
                 peerReviewsCompletedByCurrentStudent: [],
-                selectedStudentId: this.props.match.params.student_id,
+                selectedStudentId: this.props.location.state.student_id,
                 value: "Select an Assignment",
                 value2: "Select a Peer Review",
             }, () => {

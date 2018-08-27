@@ -1,15 +1,13 @@
 import React, { Component } from 'react';
-import { Dropdown, DropdownToggle, DropdownMenu } from 'reactstrap';
 import { Link } from "react-router-dom";
 import history from '../../history';
 import Loader from 'react-loader-spinner';
-import history from '../../history'
 import { Container, Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 import JumbotronComp from '../JumbotronComp/JumbotronComp';
 // import Select from 'react-select';
 import SelectSearch from 'react-select-search'
 // import linkState from 'react-link-state';
-// import { Redirect } from 'react-router-dom'
+import { Redirect } from 'react-router-dom'
 
 import './CourseStudents.css'
 
@@ -39,17 +37,28 @@ class CourseStudents extends Component {
 
     reDirect(event) {
       const { match: { params } } = this.props;
-      console.log("redirecting")
+      let id = event.value.toString();
+      console.log(this.state.url+id)
+      console.log(event);
+      console.log("redirecting");
+      <Redirect push to={{
+          pathname: this.state.url + id,
+          state: {student_id: event.value, student_name: event.name}}} />
+    // <Link className="student-link" to={{ pathname: this.state.url + student.id, state: { student: student, course_id: this.state.courseId } }} key={student.id}>
 
-      history.push(`/courses/${params.course_id}/${params.assignment_name}/students/${event.value}`)
+      history.push({pathname:`/courses/${params.course_id}/students/${event.value}`,
+                    state: {student_id: event.value,
+                            student_name: event.name
+                        }})
     }
 
     //fetch assignments for course with course_id passed down
-    componentDidMount() {8
+    componentDidMount() {
         const { match: { params } } = this.props;
         this.setState({
-            url: `/courses/${params.course_id}/${params.assignment_name}/students/`
-        });
+            url: `/courses/${params.course_id}/students/`
+        })
+    };
 
     fetchStudentsFromCanvas() {
         let data = {
@@ -175,7 +184,6 @@ class CourseStudents extends Component {
                       :
                       <Loader type="TailSpin" color="black" height={80} width={80} />}
 
-                  {array.length == this.state.students.length ?
                     <div>
                   <SelectSearch
                     className="select-search-box"
@@ -191,17 +199,14 @@ class CourseStudents extends Component {
                     // onChange={this.setRedirect}
                   />
                   </div>
-                  :
-                  null
-                }
                   <hr className="hr-3"></hr>
               </div>
             );
         }
 
-        return (
-            <Loader type="TailSpin" color="black" height={80} width={80} />
-        )
+        // return (
+        //     <Loader type="TailSpin" color="black" height={80} width={80} />
+        // )
     }
 
 export default CourseStudents;
