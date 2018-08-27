@@ -14,6 +14,7 @@ class UserRegistration extends Component {
 			errors: [],
 			firstName: '',
 			lastName: '',
+			loaded: false,
 			msg: '',
 			password: '',
 			password2: '',
@@ -35,6 +36,7 @@ class UserRegistration extends Component {
 
 		this.setState({
 			errors: [],
+			loaded: false,
 		})
 
 		var data = {
@@ -58,12 +60,15 @@ class UserRegistration extends Component {
 					case 204:
 						this.setState({
 							errors: [],
+							loaded: true,
 							reDirect: true,
 						})
+						break;
 					case 400:
 						res.json().then(errors => {
 							this.setState({
-								errors: errors
+								errors: errors,
+								loaded: true,
 							})
 						})
 						break;
@@ -89,12 +94,12 @@ class UserRegistration extends Component {
 						<button className="new-button">Submit</button>
 						<Well>
 							{
-								this.state.errors.length > 0 ?
+								this.state.errors.length > 0?
 									<ul className="errors">
 										{
-											this.state.errors.map(error => {
+											this.state.errors.map(error => 
 												<li>{error.msg}</li>
-											})
+											)
 										}
 									</ul>
 									:

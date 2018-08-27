@@ -43,6 +43,10 @@ class AlgorithmBenchmarks extends Component {
         this.handleClear = this.handleClear.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
         this.toggle = this.toggle.bind(this);
+
+        this.assignmentId = this.props.assignmentId
+        this.benchmarks = this.props.benchmarks
+        this.originalBenchmarks = this.props.originalBenchmarks
     }
 
     handleChange(event) {
@@ -54,18 +58,20 @@ class AlgorithmBenchmarks extends Component {
 
     handleClear(event) {
         event.preventDefault();
+        
+        //reset back to the original benchmark
         this.setState({
-            [event.target.name]: this.props.originalBenchmarks[event.target.name]
+            [event.target.name]: this.originalBenchmarks[event.target.name]
         })
     }
 
     handleSubmit(event) {
         event.preventDefault();
-        Object.keys(this.props.benchmarks).forEach(benchmark => {
+        Object.keys(this.benchmarks).forEach(benchmark => {
             var value = this.state[benchmark];
-            localStorage.setItem(benchmark + "_" + this.props.assignmentId, value)
+            localStorage.setItem(benchmark + "_" + this.assignmentId, value)
         });
-        localStorage.setItem("custom_benchmarks_saved_" + this.props.assignmentId, true)
+        localStorage.setItem("customBenchmarksSaved_" + this.assignmentId, true)
     }
 
     toggle(event) {
@@ -75,8 +81,8 @@ class AlgorithmBenchmarks extends Component {
     }
 
     componentDidMount() {
-        Object.keys(this.props.benchmarks).forEach(benchmark => {
-            var value = this.props.benchmarks[benchmark];
+        Object.keys(this.benchmarks).forEach(benchmark => {
+            var value = this.benchmarks[benchmark];
             this.setState({
                 [benchmark]: value,
             })

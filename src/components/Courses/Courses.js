@@ -2,12 +2,12 @@ import React, { Component } from 'react';
 import { Container } from 'reactstrap';
 import { Link } from "react-router-dom";
 import Flexbox from 'flexbox-react';
+import history from '../../history';
 import Loader from 'react-loader-spinner';
 
 import CardComp from '../CourseCard/CourseCard';
 import JumbotronComp from '../JumbotronComp/JumbotronComp';
 import SidebarComp from '../SideBar/SideBar';
-import UnauthorizedError from '../UnauthorizedError/UnauthorizedError';
 
 import './Courses.css';
 
@@ -17,10 +17,8 @@ class Courses extends Component {
 
         this.state = {
             courses: [],
-            error: false,
-            error_message: null,
             loaded: false,
-            showCourse: false,
+            url: '/courses',
             user: [],
         }
 
@@ -40,22 +38,35 @@ class Courses extends Component {
             .then(res => {
                 switch (res.status) {
                     case 200:
-                        res.json().then(data => {
+                        res.json().then(res => {
                             this.setState({
-                                courses: data.courses,
+                                courses: res.courses,
                                 loaded: true,
-                                user: data.first_name,
+                                user: res.firstName,
                             })
                         })
                         break;
                     case 400:
-                        console.log("ran into an error when trying to pull the list of courses from canvas")
+                    res.json().then(res => {
+                        history.push({
+                            pathname: '/error',
+                            state: {
+                                context: '',
+                                error: res.error,
+                                location: "Courses.js: fetchCourses() (error came from Canvas)",
+                                message: res.message,
+                            }
+                        })
+                    })
                         break;
                     case 401:
                         res.json().then(res => {
-                            this.setState({
-                                error: true,
-                                error_message: res.message,
+                            history.push({
+                                pathname: '/unauthorized',
+                                state: {
+                                    location: res.location,
+                                    message: res.message,
+                                }
                             })
                         })
                         break;
@@ -66,22 +77,10 @@ class Courses extends Component {
             })
     }
 
-    onClick() {
-        this.setState({
-            showCourse: true
-        });
-    }
-
     signOut() {
         fetch('/logout', {
             credentials: 'include'
         })
-    }
-
-    componentWillMount() {
-        this.setState({
-            courses: null
-        });
     }
 
     componentDidMount() {
@@ -89,47 +88,37 @@ class Courses extends Component {
     }
 
     render() {
-        if (this.state.error) {
+        if (this.state.loaded) {
             return (
-                <UnauthorizedError message={this.state.error_message} />
-            )
-        }
-
-        if (!this.state.loaded) {
-            return (
-                <Loader className="loader" type="TailSpin" color="black" height={80} width={80} />
-            );
-        }
-        return (
-            <div>
-                <Container>
-                    <SidebarComp
-                        content={
-                            <div>
-                                <JumbotronComp mainTitle={this.state.user} />
-                                <Container className="well1-container" fluid>
-                                    <Flexbox className="well1-flexbox" minWidth="700px" width="90vw"
-                                        flexWrap="wrap" inline="true">
-                                        {/*<h1 className="pagetitle">Courses</h1>*/}
+                <div>
+                    <Container>
+                        <SidebarComp
+                            content={
+                                <div>
+                                    <JumbotronComp mainTitle={this.state.user} />
+                                    <Container className="well1-container" fluid>
                                         <Flexbox className="well1-flexbox" minWidth="700px" width="90vw"
                                             flexWrap="wrap" inline="true">
-                                            {
-                                                this.state.courses.length > 0 ?
-                                                    this.state.courses.map(course =>
-                                                        <Link to={`/courses/${course.id}`}>
-                                                            <CardComp name={course.name} />
-                                                        </Link>)
-                                                    :
-                                                    <h1>No classes as a teacher</h1>
-                                            }
+                                            {/*<h1 className="pagetitle">Courses</h1>*/}
+                                            <Flexbox className="well1-flexbox" minWidth="700px" width="90vw"
+                                                flexWrap="wrap" inline="true">
+                                                {
+                                                    this.state.courses.length > 0 ?
+                                                        this.state.courses.map(course =>
+                                                            <Link to={`/courses/${course.id}`}>
+                                                                <CardComp name={course.name} />
+                                                            </Link>)
+                                                        :
+                                                        <h1>No classes as a teacher</h1>
+                                                }
+                                            </Flexbox>
                                         </Flexbox>
-                                    </Flexbox>
-                                </Container>
-                            </div>
-                        } />
-                </Container>
+                                    </Container>
+                                </div>
+                            } />
+                    </Container>
 
-                {/* <JumbotronComp mainTitle={this.state.user} />
+                    {/* <JumbotronComp mainTitle={this.state.user} />
 
                         <Container className="well1-container" fluid>
                             <Flexbox className="well1-flexbox" minWidth="700px" width="90vw"
@@ -156,14 +145,18 @@ class Courses extends Component {
 
 
 
-                {/*<Well className="bottom" fluid>
+                    {/*<Well className="bottom" fluid>
                     <Container className="bottom-container" fluid>
                         <button className="about-button" >About Us</button>
                         <button className="about-button">About untitled</button>
                     </Container>
                 </Well>*/}
-            </div>
+                </div>
 
+            );
+        }
+        return (
+            <Loader className="loader" type="TailSpin" color="black" height={80} width={80} />
         );
     }
 }

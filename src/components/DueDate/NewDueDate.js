@@ -1,37 +1,46 @@
 import React, { Component } from 'react';
-import './NewDueDate.css';
-import 'rc-time-picker/assets/index.css';
+
 import NewDueDateForm from './NewDueDateForm';
 
+import 'rc-time-picker/assets/index.css';
+
+import './NewDueDate.css';
 
 class NewDueDate extends Component {
-
     constructor(props) {
         super(props);
 
+        this.state = {
+            number: Number(this.props.number),
+        }
+
+        this.assignmentId = this.props.assignmentId
     }
 
     render() {
-        return (
-            (this.props.number == "2" ?
-                (localStorage.getItem("dateTime" + this.props.assignmentId + "_1") ?
-                    <NewDueDateForm isGray={false} assignmentId={this.props.assignmentId} number={this.props.number} />
-                    :
-                    <NewDueDateForm isGray={true} assignmentId={this.props.assignmentId} number={this.props.number} />
-                )
-                :
-                (this.props.number == "3" ?
-                    ((localStorage.getItem("dateTime" + this.props.assignmentId + "_1") &&
-                        localStorage.getItem("dateTime" + this.props.assignmentId + "_2")) ?
-                        <NewDueDateForm isGray={false} assignmentId={this.props.assignmentId} number={this.props.number} />
+        switch (this.state.number) {
+            case 1:
+                return (
+                    <NewDueDateForm assignmentId={this.assignmentId} number={this.state.number} />
+                );
+            case 2:
+                return (
+                    (localStorage.getItem("dueDate_" + this.assignmentId + "_1") ?
+                        <NewDueDateForm assignmentId={this.assignmentId} number={this.state.number} />
                         :
-                        <NewDueDateForm isGray={true} assignmentId={this.props.assignmentId} number={this.props.number} />
+                        <NewDueDateForm isGray assignmentId={this.assignmentId} number={this.state.number} />
                     )
-                    :
-                    <NewDueDateForm isGray={false} assignmentId={this.props.assignmentId} number={this.props.number} />
                 )
-            )
-        )
+            case 3:
+                return (
+                    ((localStorage.getItem("dueDate_" + this.assignmentId + "_1") &&
+                        localStorage.getItem("dueDate_" + this.assignmentId + "_2")) ?
+                        <NewDueDateForm assignmentId={this.assignmentId} number={this.state.number} />
+                        :
+                        <NewDueDateForm isGray assignmentId={this.assignmentId} number={this.state.number} />
+                    )
+                )
+        }
     }
 };
 

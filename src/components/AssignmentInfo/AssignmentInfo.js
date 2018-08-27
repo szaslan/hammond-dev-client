@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
+import { Well } from 'react-bootstrap';
+import history from '../../history';
 import Loader from 'react-loader-spinner'
-import {Well} from 'react-bootstrap';
 
 import AnalyzeButton from '../AnalyzeButton/AnalyzeButton';
-import UnauthorizedError from '../UnauthorizedError/UnauthorizedError';
 
 import './AssignmentInfo.css';
 
@@ -12,12 +12,11 @@ class AssignmentInfo extends Component {
         super(props);
 
         this.state = {
-            assignment: null,
-            assignmentClicked: false,
-            error: false,
-            error_message: null,
-            url: '',
-            id: this.props.match.params.assignment_id,
+            assignmentId: this.props.match.params.assignment_id, //assignment_id prop passed through route in app.js\
+            assignmentJSON: null,
+            courseId: this.props.match.params.course_id,
+            loaded: false,
+            url: `/courses/${this.props.match.params.course_id}/assignments/`,
 
             ...props,
         }
@@ -27,19 +26,16 @@ class AssignmentInfo extends Component {
 
     //fetches assigment data
     fetchAssignmentData() {
-        const { match: { params } } = this.props;
-
         this.setState({
-            assignmentClicked: true,
-            url: `/courses/${params.course_id}/assignments/`
-        });
+            loaded: false,
+        })
 
         let data = {
-            course_id: params.course_id,
-            assignment_id: params.assignment_id
+            assignmentId: this.state.assignmentId,
+            courseId: this.state.courseId,
         }
 
-        fetch('/api/assignmentinfo', {
+        fetch('/api/assignmentInfo', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -51,18 +47,31 @@ class AssignmentInfo extends Component {
                     case 200:
                         res.json().then(res => {
                             this.setState({
-                                assignment: res
+                                assignmentJSON: res,
+                                loaded: true,
                             })
                         })
                         break;
                     case 400:
-                        console.log("an error occcurred when pulling info for a specific assignment from canvas")
+                        res.json().then(res => {
+                            history.push({
+                                pathname: '/error',
+                                state: {
+                                    context: '',
+                                    location: "AssignmentInfo.js: fetchAssignmentData() (error came from Canvas)",
+                                    message: res.message,
+                                }
+                            })
+                        })
                         break;
                     case 401:
                         res.json().then(res => {
-                            this.setState({
-                                error: true,
-                                error_message: res.message,
+                            history.push({
+                                pathname: '/unauthorized',
+                                state: {
+                                    location: res.location,
+                                    message: res.message,
+                                }
                             })
                         })
                         break;
@@ -78,51 +87,39 @@ class AssignmentInfo extends Component {
     }
 
     componentDidUpdate(prevProps) {
-        if (this.props.match.params.assignment_id !== prevProps.match.params.assignment_id) {
+        if (this.state.assignmentId !== prevProps.match.params.assignment_id) {
             this.fetchAssignmentData();
         }
     }
 
     static getDerivedStateFromProps(nextProps, prevState) {
-        if (nextProps.match.params.assignment_id !== prevState.id) {
+        if (nextProps.match.params.assignment_id !== prevState.assignmentId) {
             return {
-                id: nextProps.match.params.assignment_id,
-                assignment: null
+                assignmentId: nextProps.match.params.assignment_id,
+                assignmentJSON: null,
             }
         }
         return null;
     }
 
     render() {
-        if (this.state.error) {
+        if (this.state.loaded) {
             return (
-                <UnauthorizedError message={this.state.error_message} />
+                <div className="assignment-info">
+                    <h2 className="headertext">
+                        Score Details
+                    </h2>
+                    <hr className="hr-2"></hr>
+                    <br></br>
+                    <AnalyzeButton assignmentId={this.state.assignmentId} assignmentInfo={this.state.assignmentJSON} courseId={this.state.courseId} />
+                </div>
             )
         }
 
-        if (this.state.assignment == null)
-            return (
-                <Well className="assignment-info">
-                    <Loader type="TailSpin" color="black" height={80} width={80} />
-                </Well>
-            )
-            
         return (
-            <div className="assignment-info">
-                <h2 className="headertext">
-                    Score Details
-                    </h2>
-                <hr className="hr-2"></hr>
-                {/*<p><strong>Title: </strong>{this.state.assignment.name}</p>*/}
-                <br></br>
-
-                <AnalyzeButton
-                    assignmentInfo={this.state.assignment}
-                    courseId={this.props.match.params.course_id}
-                    assignmentId={this.props.match.params.assignment_id}
-                />
-
-            </div>
+            <Well className="assignment-info">
+                <Loader type="TailSpin" color="black" height={80} width={80} />
+            </Well>
         )
     }
 }

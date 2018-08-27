@@ -1,11 +1,8 @@
 import React, { Component } from 'react';
-import { Container, Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
+import { Dropdown, DropdownItem, DropdownMenu, DropdownToggle } from 'reactstrap';
 import { Link } from "react-router-dom";
-import {Well} from 'react-bootstrap';
-import Loader from 'react-loader-spinner'
+import { Well } from 'react-bootstrap';
 import history from '../../history';
-
-import UnauthorizedError from '../UnauthorizedError/UnauthorizedError';
 
 import '../BreadcrumbComp/BreadcrumbComp.css';
 
@@ -13,18 +10,23 @@ import './Assignments.css';
 
 function FilterAssignments(props) {
     const currAssignment = props.currAssigment;
+    let assignmentId = currAssignment.id;
 
     if (currAssignment.peer_reviews) {
         return (
-            <Link className="assignment-link" to={{ pathname: props.link, state: { assignment_id: props.assignmentId, assignment_name: currAssignment.name, course_id: props.courseId } }} key={props.id}>
-                {/* <li key={currAssignment.id} className="assignment-name">{currAssignment.name}</li>  */}
-                <DropdownItem className="dropdown-ite" key={currAssignment.id} /*className="assignment-name"*/>{currAssignment.name}</DropdownItem>
+            <Link className="assignment-link" to={{ pathname: props.link + assignmentId, state: { assignment_id: assignmentId, assignment_name: currAssignment.name, course_id: props.courseId } }} key={assignmentId}>
+                <DropdownItem className="dropdown-ite" key={currAssignment.id}>
+                    {currAssignment.name}
+                </DropdownItem>
             </Link>
         )
     }
     else {
-        // return <li key={currAssignment.id} className="assignment-name not-pr">{currAssignment.name}</li>
-        return <DropdownItem disabled className="dropdown-ite not-pr" key={currAssignment.id} /*className="assignment-name not-pr"*/>{currAssignment.name}</DropdownItem>
+        return (
+            <DropdownItem disabled className="dropdown-ite not-pr" key={currAssignment.id}>
+                {currAssignment.name}
+            </DropdownItem>
+        )
     }
 }
 
@@ -33,12 +35,11 @@ class Assignments extends Component {
         super(props, context);
 
         this.state = {
-            assignments: null,
+            assignments: [],
+            courseId: this.props.match.params.course_id,
             dropdownOpen: false,
-            error: false,
-            error_message: null,
-            mounted: false,
-            url: '',
+            loaded: false,
+            url: `/courses/${this.props.match.params.course_id}/assignments/`,
 
             ...props,
         }
@@ -48,13 +49,9 @@ class Assignments extends Component {
     }
 
     pullAssignments() {
-        const { match: { params } } = this.props;
-
         let data = {
-            course_id: params.course_id,
+            courseId: this.state.courseId,
         }
-
-        console.log(data)
 
         fetch('/api/assignments', {
             method: 'POST',
@@ -70,18 +67,30 @@ class Assignments extends Component {
                         res.json().then(data => {
                             this.setState({
                                 assignments: data,
-                                mounted: true
+                                loaded: true
                             })
                         })
                         break;
                     case 400:
-                        console.log("an error occcurred when pulling the list of assignments from canvas")
+                    res.json().then(res => {
+                        history.push({
+                            pathname: '/error',
+                            state: {
+                                context: '',
+                                location: "Assignments.js: pullAssignments() (error came from Canvas)",
+                                message: res.message,
+                            }
+                        })
+                    })
                         break;
                     case 401:
                         res.json().then(res => {
-                            this.setState({
-                                error: true,
-                                error_message: res.message,
+                            history.push({
+                                pathname: '/unauthorized',
+                                state: {
+                                    location: res.location,
+                                    message: res.message,
+                                }
                             })
                         })
                         break;
@@ -99,56 +108,41 @@ class Assignments extends Component {
     }
 
     componentDidMount() {
-        const { match: { params } } = this.props;
-        this.setState({
-            url: `/courses/${params.course_id}/${params.assignment_name}/assignments/`
-        });
-
         this.pullAssignments()
     }
 
     render() {
-        if (this.state.error) {
+        if (this.state.loaded) {
             return (
-                <UnauthorizedError message={this.state.error_message} />
-            )
-        }
-
-        if (this.state.mounted) {
-            return (
-              <div className="all-assignments">
-                    <Well className = "body-well">
-                    <Dropdown direction="down" isOpen={this.state.dropdownOpen} toggle={this.toggle}>
-                        <DropdownToggle className="dropdown-tog" caret>
-                            {
-                                this.props.location.state.assignment_name ?
-                                    this.props.location.state.assignment_name
-                                    :
-                                    "Assignment Title"
-                            }
-                        </DropdownToggle>
-                                          <hr className="hr-2"></hr>
-                        <DropdownMenu className="dropdown-men">
-                            {
-                                this.state.assignments.map(assignments =>
-                                    <FilterAssignments className="assign-name" link={this.state.url + assignments.id} assignmentId={assignments.id} name={this.state.match.params.assignment_name} courseId={this.state.match.params.course_id} currAssigment={assignments} id={assignments.id} />
-                                    //     <Link className="assignment-link" to={{ pathname: this.state.url + assignments.id, state: { assignment_id: assignments.id, name: this.state.match.params.assignment_name, course_id: this.state.match.params.course_id } }} key={assignments.id}>
-                                    //         <FilterAssignments currAssigment={assignments}   />
-                                    //     </Link>
-                                )
-                            }
-                        </DropdownMenu>
-                    </Dropdown>
-                          </Well>
+                <div className="all-assignments">
+                    <Well className="body-well">
+                        <Dropdown direction="down" isOpen={this.state.dropdownOpen} toggle={this.toggle}>
+                            <DropdownToggle className="dropdown-tog" caret>
+                                {
+                                    this.props.location.state.assignment_name ?
+                                        this.props.location.state.assignment_name
+                                        :
+                                        "Assignment Title"
+                                }
+                            </DropdownToggle>
+                            <hr className="hr-2"></hr>
+                            <DropdownMenu className="dropdown-men">
+                                {
+                                    this.state.assignments.map(assignment =>
+                                        <FilterAssignments className="assign-name" link={this.state.url} courseId={this.state.courseId} currAssigment={assignment} />
+                                    )
+                                }
+                            </DropdownMenu>
+                        </Dropdown>
+                    </Well>
                     <hr className="hr-3"></hr>
 
                 </div>
             );
         }
-        
+
         return (
             <div></div>
-            // <Loader type="TailSpin" color="black" height={80} width={80} />
         )
     }
 }

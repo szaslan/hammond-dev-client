@@ -1,15 +1,14 @@
 import React, { Component } from 'react';
 import { UncontrolledTooltip } from 'reactstrap';
 import Flexbox from 'flexbox-react';
+import history from '../../history';
 import moment from 'moment';
-import { Row } from 'react-bootstrap';
+
 import AlgorithmBenchmarks from '../AlgorithmBenchmarks/AlgorithmBenchmarks';
 import AnalyzeResults from '../AnalyzeResults/AnalyzeResults';
 import CustomizableParameters from '../CustomizableParameters/CustomizableParameters';
-import DueDates from '../DueDates/DueDates';
 import FinalizeResults from '../FinalizeResults/FinalizeResults';
 import NewDueDate from '../DueDate/NewDueDate';
-import UnauthorizedError from '../UnauthorizedError/UnauthorizedError';
 
 import 'bootstrap/dist/css/bootstrap.css';
 
@@ -26,7 +25,7 @@ const BENCHMARKS = {
 	"MIN_NUMBER_OF_REVIEWS_FOR_SINGLE_SUBMISSION_FOR_GRADING": 5,
 	"MIN_RATIO_OF_COMPLETED_TO_ASSIGNED_REVIEWS_FOR_SINGLE_SUBMISSION_FOR_GRADING": 1 / 2,
 }
-const benchmark_names = ["WIDTH_OF_STD_DEV_RANGE", "THRESHOLD", "COULD_BE_LOWER_BOUND", "COULD_BE_UPPER_BOUND", "MIN_NUMBER_OF_REVIEWS_PER_STUDENT_FOR_CLASSIFICATION", "MIN_NUMBER_OF_ASSIGNMENTS_IN_COURSE_FOR_CLASSIFICATION", "MIN_NUMBER_OF_REVIEWS_FOR_SINGLE_SUBMISSION_FOR_GRADING", "MIN_RATIO_OF_COMPLETED_TO_ASSIGNED_REVIEWS_FOR_SINGLE_SUBMISSION_FOR_GRADING"]
+const benchmarkNames = ["WIDTH_OF_STD_DEV_RANGE", "THRESHOLD", "COULD_BE_LOWER_BOUND", "COULD_BE_UPPER_BOUND", "MIN_NUMBER_OF_REVIEWS_PER_STUDENT_FOR_CLASSIFICATION", "MIN_NUMBER_OF_ASSIGNMENTS_IN_COURSE_FOR_CLASSIFICATION", "MIN_NUMBER_OF_REVIEWS_FOR_SINGLE_SUBMISSION_FOR_GRADING", "MIN_RATIO_OF_COMPLETED_TO_ASSIGNED_REVIEWS_FOR_SINGLE_SUBMISSION_FOR_GRADING"]
 const message1 = "Peer reviews submitted after this date will be considered late. Any student who has not submitted reviews by this date will receive a notification message from Canvas.";
 const message2 = "Late peer reviews submitted after this date will be reassigned to students who have completed all of their reviews for this assignment.";
 const message3 = "Reassigned peer reviews must be submitted by this deadline. After this date, any unsubmitted peer reviews will be deleted from Canvas.";
@@ -42,15 +41,13 @@ class AnalyzeButton extends Component {
 		this.state = {
 			analyzeDisplayText: false,
 			analyzePressed: false,
-			assigned_new_peer_reviews: false,
-			curr_time: null,
-			deleted_incomplete_peer_reviews: false,
+			assignedNewPeerReviews: false,
+			currTime: null,
+			deletedIncompletePeerReviews: false,
 			finalizeDisplayText: false,
 			finalizePressed: false,
 			tooltipOpen1: false,
 			tooltipOpen2: false,
-			unauthorized_error: false,
-			unauthorized_error_message: null,
 		};
 
 		this.assignNewPeerReviews = this.assignNewPeerReviews.bind(this);
@@ -65,7 +62,7 @@ class AnalyzeButton extends Component {
 		this.saveOriginallyAssignedNumbers = this.saveOriginallyAssignedNumbers.bind(this);
 		this.sendIncompleteMessages = this.sendIncompleteMessages.bind(this);
 
-		this.algorithm_benchmarks = {
+		this.algorithmBenchmarks = {
 			WIDTH_OF_STD_DEV_RANGE: BENCHMARKS.WIDTH_OF_STD_DEV_RANGE,
 			THRESHOLD: BENCHMARKS.THRESHOLD,
 			COULD_BE_LOWER_BOUND: BENCHMARKS.COULD_BE_LOWER_BOUND,
@@ -75,9 +72,9 @@ class AnalyzeButton extends Component {
 			MIN_NUMBER_OF_REVIEWS_FOR_SINGLE_SUBMISSION_FOR_GRADING: BENCHMARKS.MIN_NUMBER_OF_REVIEWS_FOR_SINGLE_SUBMISSION_FOR_GRADING,
 			MIN_RATIO_OF_COMPLETED_TO_ASSIGNED_REVIEWS_FOR_SINGLE_SUBMISSION_FOR_GRADING: BENCHMARKS.MIN_RATIO_OF_COMPLETED_TO_ASSIGNED_REVIEWS_FOR_SINGLE_SUBMISSION_FOR_GRADING,
 		}
-		this.assignment_id = this.props.assignmentId;
-		this.assignment_info = this.props.assignmentInfo;
-		this.course_id = this.props.courseId;
+		this.assignmentId = this.props.assignmentId;
+		this.assignmentInfo = this.props.assignmentInfo;
+		this.courseId = this.props.courseId;
 		this.deadline_1 = null;
 		this.deadline_2 = null;
 		this.deadline_3 = null;
@@ -86,11 +83,11 @@ class AnalyzeButton extends Component {
 
 	assignNewPeerReviews() {
 		let data = {
-			assignment_id: this.assignment_id,
-			course_id: this.course_id,
+			assignmentId: this.assignmentId,
+			courseId: this.courseId,
 		}
 
-		fetch('/api/assign_new_peer_reviews', {
+		fetch('/api/assignNewPeerReviews', {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json'
@@ -102,11 +99,31 @@ class AnalyzeButton extends Component {
 					case 204:
 						//success
 						this.setState({
-							assigned_new_peer_reviews: true,
+							assignedNewPeerReviews: true,
 						})
 						break;
 					case 400:
-						console.log("there was an error when reassigning incomplete peer reviews")
+						res.json().then(res => {
+							history.push({
+								pathname: '/error',
+								state: {
+									context: 'This function is called on Due Date 2. This function reassigns ',
+									error: res.error,
+									location: "AnalyzeButton.js: assignNewPeerReviews()",
+								}
+							})
+						})
+						break;
+					case 401:
+						res.json().then(res => {
+							history.push({
+								pathname: '/unauthorized',
+								state: {
+									location: res.location,
+									message: res.message,
+								}
+							})
+						})
 						break;
 					case 404:
 						console.log("there are no incomplete peer reviews that need to be reassigned")
@@ -116,23 +133,23 @@ class AnalyzeButton extends Component {
 	}
 
 	checkForPreviousAnalyzeAndFinalizePresses() {
-		if (localStorage.getItem("analyzePressed_" + this.assignment_id)) {
+		if (localStorage.getItem("analyzePressed_" + this.assignmentId)) {
 			this.setState({
 				analyzeDisplayText: true,
 			})
 
 			//To automatically finalize if all peer reviews are in
-			if (localStorage.getItem("analyzeDisplayTextMessage_" + this.assignment_id) && localStorage.getItem("analyzeDisplayTextMessage_" + this.assignment_id) == "All reviews accounted for") {
+			if (localStorage.getItem("analyzeDisplayTextMessage_" + this.assignmentId) && localStorage.getItem("analyzeDisplayTextMessage_" + this.assignmentId) == "All reviews accounted for") {
 				console.log("all peer reviews are in, so we can finalize this assignment")
 				this.handleFinalizeClick()
 			}
 		}
 
 		let data = {
-			assignment_id: this.assignment_id
+			assignmentId: this.assignmentId
 		}
 
-		fetch('/api/has_finalize_been_pressed', {
+		fetch('/api/hasFinalizeBeenPressed', {
 			method: "POST",
 			headers: {
 				'Content-Type': 'application/json'
@@ -157,15 +174,15 @@ class AnalyzeButton extends Component {
 	clearCustomBenchmarks() {
 		console.log("clearing custom benchmarks")
 
-		localStorage.removeItem("custom_benchmarks_" + this.assignment_id)
+		localStorage.removeItem("customBenchmarks_" + this.assignmentId)
 
-		benchmark_names.forEach(benchmark => {
-			if (localStorage.getItem(benchmark + "_" + this.assignment_id)) {
-				localStorage.removeItem(benchmark + "_" + this.assignment_id);
+		benchmarkNames.forEach(benchmark => {
+			if (localStorage.getItem(benchmark + "_" + this.assignmentId)) {
+				localStorage.removeItem(benchmark + "_" + this.assignmentId);
 			}
 		})
 
-		this.algorithm_benchmarks = {
+		this.algorithmBenchmarks = {
 			WIDTH_OF_STD_DEV_RANGE: BENCHMARKS.WIDTH_OF_STD_DEV_RANGE,
 			THRESHOLD: BENCHMARKS.THRESHOLD,
 			COULD_BE_LOWER_BOUND: BENCHMARKS.COULD_BE_LOWER_BOUND,
@@ -179,12 +196,11 @@ class AnalyzeButton extends Component {
 
 	deleteIncompletePeerReviews() {
 		let data = {
-			course_id: this.course_id,
-			assignment_id: this.assignment_id,
-			points_possible: this.assignment_info.points_possible,
+			assignmentId: this.assignmentId,
+			courseId: this.courseId,
 		}
 
-		fetch('/api/delete_incomplete_peer_reviews', {
+		fetch('/api/deleteIncompletePeerReviews', {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json'
@@ -195,18 +211,27 @@ class AnalyzeButton extends Component {
 				switch (res.status) {
 					case 204:
 						this.setState({
-							deleted_incomplete_peer_reviews: true,
+							deletedIncompletePeerReviews: true,
 						})
 						this.assignNewPeerReviews()
 						break;
 					case 400:
-						console.log("encountered an error when trying to delete incomplete peer reviews that are being reassigned")
+						res.json().then(res => {
+							history.push({
+								pathname: '/error',
+								state: {
+									context: '',
+									error: res.error,
+									location: "AnalyzeButton.js: deleteIncompletePeerReviews()",
+								}
+							})
+						})
 						break;
 					case 404:
 						console.log("no incomplete peer reviews to delete")
 						//to advance the algorithm
 						this.setState({
-							assigned_new_peer_reviews: true,
+							assignedNewPeerReviews: true,
 						})
 						this.handleFinalizeClick()
 						break;
@@ -221,7 +246,7 @@ class AnalyzeButton extends Component {
 	}
 
 	handleFinalizeClick() {
-		localStorage.setItem("finalized_" + this.assignment_id, this.state.curr_time)
+		localStorage.setItem("finalized_" + this.assignmentId, this.state.currTime)
 		this.setState({
 			finalizePressed: true,
 		})
@@ -229,22 +254,22 @@ class AnalyzeButton extends Component {
 
 	pullDueDatesFromLocalStorage() {
 		for (var i = 1; i <= 3; i++) {
-			if (localStorage.getItem("calendarDate_" + this.assignment_id + "_" + i)) {
-				let formatted_date = localStorage.getItem("calendarDate_" + this.assignment_id + "_" + i);
-				var new_date = new Date(formatted_date)
+			if (localStorage.getItem("calendarDate_" + this.assignmentId + "_" + i)) {
+				let formattedDate = localStorage.getItem("calendarDate_" + this.assignmentId + "_" + i);
+				var newDate = new Date(formattedDate)
 
-				this["deadline_" + i] = moment(new_date).format('l') + ", " + moment(new_date).format('LTS')
+				this["deadline_" + i] = moment(newDate).format('l') + ", " + moment(newDate).format('LTS')
 			}
 		}
 	}
 
 	pullSavedBenchmarksFromLocalStorage() {
-		benchmark_names.forEach((benchmark) => {
+		benchmarkNames.forEach((benchmark) => {
 			//If the benchmarks has been locally stored
-			if (localStorage.getItem(benchmark + "_" + this.assignment_id)) {
+			if (localStorage.getItem(benchmark + "_" + this.assignmentId)) {
 				//If the locally stored benchmark is different from what's currently saved in the object
-				if (this.algorithm_benchmarks[benchmark] != localStorage.getItem(benchmark + "_" + this.assignment_id)) {
-					this.algorithm_benchmarks[benchmark] = Number(localStorage.getItem(benchmark + "_" + this.assignment_id))
+				if (this.algorithmBenchmarks[benchmark] != localStorage.getItem(benchmark + "_" + this.assignmentId)) {
+					this.algorithmBenchmarks[benchmark] = Number(localStorage.getItem(benchmark + "_" + this.assignmentId))
 				}
 			}
 		})
@@ -252,12 +277,12 @@ class AnalyzeButton extends Component {
 
 	saveAllPeerReviews(deadline) {
 		let data = {
-			course_id: this.course_id,
-			assignment_id: this.assignment_id,
-			points_possible: this.assignment_info.points_possible,
+			courseId: this.courseId,
+			assignmentId: this.assignmentId,
+			pointsPossible: this.assignmentInfo.points_possible, //points_possible is JSON field returned from Canvas
 		}
 
-		fetch('/api/save_all_peer_reviews', {
+		fetch('/api/saveAllPeerReviews', {
 			method: "POST",
 			headers: {
 				'Content-Type': 'application/json'
@@ -279,13 +304,26 @@ class AnalyzeButton extends Component {
 						}
 						break;
 					case 400:
-						console.log("ran into an error when trying to save all peer reviews from canvas")
+						res.json().then(res => {
+							history.push({
+								pathname: '/error',
+								state: {
+									context: '',
+									error: res.error,
+									location: "AnalyzeButton.js: saveAllPeerReviews() (error came from Canvas)",
+									message: res.message,
+								}
+							})
+						})
 						break;
 					case 401:
 						res.json().then(res => {
-							this.setState({
-								unauthorized_error: true,
-								unauthorized_error_message: res.message,
+							history.push({
+								pathname: '/unauthorized',
+								state: {
+									location: res.location,
+									message: res.message,
+								}
 							})
 						})
 						break;
@@ -298,10 +336,10 @@ class AnalyzeButton extends Component {
 
 	saveOriginallyAssignedNumbers() {
 		let data = {
-			assignment_id: this.assignment_id,
+			assignmentId: this.assignmentId,
 		}
 
-		fetch('/api/save_peer_review_numbers', {
+		fetch('/api/savePeerReviewNumbers', {
 			method: "POST",
 			headers: {
 				'Content-Type': 'application/json'
@@ -314,7 +352,16 @@ class AnalyzeButton extends Component {
 						this.deleteIncompletePeerReviews();
 						break;
 					case 400:
-						console.log("encountered an error when trying to save originally assigned peer review numbers")
+						res.json().then(res => {
+							history.push({
+								pathname: '/error',
+								state: {
+									context: '',
+									error: res.error,
+									location: "AnalyzeButton.js: saveOriginallyAssignedNumbers()",
+								}
+							})
+						})
 						break;
 					case 404:
 						console.log("no peer reviews have been completed for this assignment")
@@ -325,13 +372,13 @@ class AnalyzeButton extends Component {
 
 	sendIncompleteMessages() {
 		var data = {
-			assignment_id: this.assignment_id,
-			assignment_name: this.assignment_info.name,
-			course_id: this.course_id,
-			due_date: localStorage.getItem("calendarDate_" + this.assignment_id + "_2"),
+			assignmentId: this.assignmentId,
+			assignmentName: this.assignmentInfo.name,
+			courseId: this.courseId,
+			dueDate: localStorage.getItem("calendarDate_" + this.assignmentId + "_2"),
 		}
 
-		fetch('/api/send_incomplete_messages', {
+		fetch('/api/sendIncompleteMessages', {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json'
@@ -344,7 +391,16 @@ class AnalyzeButton extends Component {
 						//success
 						break;
 					case 400:
-						console.log("there was an error when sending messages to all students with incomplete peer reviews")
+						res.json().then(res => {
+							history.push({
+								pathname: '/error',
+								state: {
+									context: '',
+									error: res.error,
+									location: "AnalyzeButton.js: sendIncompleteMessages()",
+								}
+							})
+						})
 						break;
 					case 404:
 						//******* want to automatically finalize here *******
@@ -362,7 +418,7 @@ class AnalyzeButton extends Component {
 
 		setInterval(() => {
 			this.setState({
-				curr_time: new Date().toLocaleString(),
+				currTime: new Date().toLocaleString(),
 			})
 		},
 			1000
@@ -374,57 +430,33 @@ class AnalyzeButton extends Component {
 		this.pullSavedBenchmarksFromLocalStorage();
 
 		//To automatically finalize if all peer reviews are in
-		if (localStorage.getItem("analyzeDisplayTextMessage_" + this.assignment_id) && localStorage.getItem("analyzeDisplayTextMessage_" + this.assignment_id) == "All reviews accounted for" && !this.state.finalizePressed) {
+		if (localStorage.getItem("analyzeDisplayTextMessage_" + this.assignmentId) && localStorage.getItem("analyzeDisplayTextMessage_" + this.assignmentId) == "All reviews accounted for" && !this.state.finalizePressed) {
 			console.log("all peer reviews are in, so we can finalize this assignment")
 			this.handleFinalizeClick()
 		}
 	}
 
 	render() {
-		if (this.state.unauthorized_error) {
-			return (
-				<UnauthorizedError message={this.state.unauthorized_error_message} />
-			)
-		}
-
 		return (
 			<div>
 				{
 					!this.state.finalizePressed ?
 						<div className="assignment-info-content">
-							{/* <Row> */}
-{/*
-							<div className="calendar-case">					
-									<Flexbox flexWrap="wrap">
-										<NewDueDate number="1" assignmentId={this.assignment_id} />
-										<NewDueDate number="2" assignmentId={this.assignment_id} />
-										<NewDueDate number="3" assignmentId={this.assignment_id} />
-									</Flexbox>
+							<div className="calendar-case">
+								<Flexbox flexWrap="wrap">
+									<NewDueDate number="1" assignmentId={this.assignmentId} />
+									<NewDueDate number="2" assignmentId={this.assignmentId} />
+									<NewDueDate number="3" assignmentId={this.assignmentId} />
+								</Flexbox>
 							</div>
 
-							<form>
-								<label>
-									<input name="sendIncompleteMessages" type="checkbox" checked={this.state.sendIncompleteMessages} onChange={this.handleInputChange} />
-									Send Messages to All Students Who Have Incomplete Peer Reviews At Due Date 1?:
-								</label>
-								<br></br>
-								<label>
-									<input name="custom_benchmarks" type="checkbox" checked={this.state.custom_benchmarks} onChange={this.handleInputChange} />
-									Custom Benchmarks For Grading Algorithm?:
-								</label>
-								<label>
-									<input name="penalizing_for_incompletes" type="checkbox" checked={this.state.penalizing_for_incompletes} onChange={this.handleInputChange} />
-									Would You Like to Penalize Students' Weights For Incomplete Peer Reviews?:
-								</label>
-*/}
-							<DueDates assignmentId={this.assignment_id} messages={{ message1: message1, message2: message2, message3: message3 }} />
-							<CustomizableParameters assignmentId={this.assignment_id} />
+							<CustomizableParameters assignmentId={this.assignmentId} />
 
 							<Flexbox className="flex-dropdown" width="300px" flexWrap="wrap" justify-content="space-around">
 								{
-									localStorage.getItem("custom_benchmarks_" + this.assignment_id) && !localStorage.getItem("custom_benchmarks_saved_" + this.assignment_id) ?
+									localStorage.getItem("customBenchmarks_" + this.assignmentId) && !localStorage.getItem("customBenchmarksSaved_" + this.assignmentId) ?
 										<div>
-											<AlgorithmBenchmarks originalBenchmarks={BENCHMARKS} benchmarks={this.algorithm_benchmarks} assignmentId={this.assignment_id} />
+											<AlgorithmBenchmarks originalBenchmarks={BENCHMARKS} benchmarks={this.algorithmBenchmarks} assignmentId={this.assignmentId} />
 											<button className="clear-local-button" onClick={this.clearCustomBenchmarks}> Clear All</button>
 										</div>
 										:
@@ -457,24 +489,24 @@ class AnalyzeButton extends Component {
 							//algorithm has already been run so only rendering the results
 							<div>
 								<FinalizeResults
-									assignmentId={this.assignment_id}
-									assignmentInfo={this.assignment_info}
-									benchmarks={localStorage.getItem("custom_benchmarks_" + this.assignment_id) ? this.algorithm_benchmarks : BENCHMARKS}
-									courseId={this.course_id}
-									penalizingForIncompletes={localStorage.getItem("penalizing_for_incompletes" + this.assignment_id) ? true : false}
-									penalizingForReassigned={localStorage.getItem("penalizing_for_reassigned" + this.assignment_id) ? true : false}
+									assignmentId={this.assignmentId}
+									assignmentInfo={this.assignmentInfo}
+									benchmarks={localStorage.getItem("customBenchmarks_" + this.assignmentId) ? this.algorithmBenchmarks : BENCHMARKS}
+									courseId={this.courseId}
+									penalizingForIncompletes={localStorage.getItem("penalizingForIncompletes_" + this.assignmentId) ? true : false}
+									penalizingForReassigned={localStorage.getItem("penalizingForReassigned_" + this.assignmentId) ? true : false}
 								/>
 							</div>
 							:
 							//running algorithm
 							<div>
 								<FinalizeResults
-									assignmentId={this.assignment_id}
-									assignmentInfo={this.assignment_info}
-									benchmarks={localStorage.getItem("custom_benchmarks_" + this.assignment_id) ? this.algorithm_benchmarks : BENCHMARKS}
-									courseId={this.course_id}
-									penalizingForIncompletes={localStorage.getItem("penalizing_for_incompletes" + this.assignment_id) ? true : false}
-									penalizingForReassigned={localStorage.getItem("penalizing_for_reassigned" + this.assignment_id) ? true : false}
+									assignmentId={this.assignmentId}
+									assignmentInfo={this.assignmentInfo}
+									benchmarks={localStorage.getItem("customBenchmarks_" + this.assignmentId) ? this.algorithmBenchmarks : BENCHMARKS}
+									courseId={this.courseId}
+									penalizingForIncompletes={localStorage.getItem("penalizingForIncompletes_" + this.assignmentId) ? true : false}
+									penalizingForReassigned={localStorage.getItem("penalizingForReassigned_" + this.assignmentId) ? true : false}
 									pressed
 								/>
 								{
@@ -491,9 +523,9 @@ class AnalyzeButton extends Component {
 									//analyze has been clicked
 									<div>
 										<AnalyzeResults
-											assignmentId={this.assignment_id}
-											assignmentInfo={this.assignment_info}
-											courseId={this.course_id}
+											assignmentId={this.assignmentId}
+											assignmentInfo={this.assignmentInfo}
+											courseId={this.courseId}
 											pressed
 										/>
 										{
@@ -509,7 +541,7 @@ class AnalyzeButton extends Component {
 							{
 								this.state.analyzeDisplayText ?
 									<AnalyzeResults
-										assignmentId={this.assignment_id}
+										assignmentId={this.assignmentId}
 									/>
 									:
 									null
@@ -519,19 +551,19 @@ class AnalyzeButton extends Component {
 
 				{/* Due Date Functionality */}
 				{
-					this.deadline_1 != null && this.deadline_1 == this.state.curr_time && localStorage.getItem("send_incomplete_messages_" + this.assignment_id) ?
+					this.deadline_1 != null && this.deadline_1 == this.state.currTime && localStorage.getItem("sendIncompleteMessages_" + this.assignmentId) ?
 						this.saveAllPeerReviews(1)
 						:
 						null
 				}
 				{
-					this.deadline_2 != null && this.deadline_2 == this.state.curr_time && !this.state.assigned_new_peer_reviews && !this.state.deleted_incomplete_peer_reviews ?
+					this.deadline_2 != null && this.deadline_2 == this.state.currTime && !this.state.assignedNewPeerReviews && !this.state.deletedIncompletePeerReviews ?
 						this.saveAllPeerReviews(2)
 						:
 						null
 				}
 				{
-					this.deadline_3 != null && this.deadline_3 == this.state.curr_time && !this.state.finalizePressed ?
+					this.deadline_3 != null && this.deadline_3 == this.state.currTime && !this.state.finalizePressed ?
 						this.handleFinalizeClick()
 						:
 						null

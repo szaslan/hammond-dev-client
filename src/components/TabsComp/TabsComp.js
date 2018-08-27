@@ -1,12 +1,8 @@
 import React, { Component } from 'react';
-import { Link } from "react-router-dom";
 import { Row, Col } from 'react-bootstrap';
 import { TabContent, TabPane, Nav, NavItem, NavLink, } from 'reactstrap';
 import classnames from 'classnames';
 import Iframe from 'react-iframe';
-
-import AssignmentInfo from '../AssignmentInfo/AssignmentInfo';
-import Assignments from '../Assignments/Assignments';
 
 class TabsComp extends Component {
     constructor(props) {

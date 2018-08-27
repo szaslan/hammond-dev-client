@@ -4,19 +4,18 @@ import { Ellipse } from 'react-shapes';
 import { Progress, Tooltip } from 'reactstrap';
 import { Well, Row, Col } from 'react-bootstrap';
 import Flexbox from 'flexbox-react';
+import history from '../../history';
 import Popup from 'reactjs-popup';
 import ReactSvgPieChart from "react-svg-piechart";
 import SideNav from 'react-simple-sidenav';
-
-import UnauthorizedError from '../UnauthorizedError/UnauthorizedError';
 
 import 'bootstrap/dist/css/bootstrap.css';
 
 import '../Assignments/Assignments.css'
 
 var progress = 0;
-var progress_num_steps = 15;
-var progress_bar_message = "";
+var progressNumSteps = 15;
+var progressBarMessage = "";
 
 var message = "";
 
@@ -52,8 +51,8 @@ class FinalizeResults extends Component {
             sectorValue1: '',
             sectorTitle2: '',
             sectorValue2: '',
-            penalizing_for_incompletes: false,
-            penalizing_for_reassigned: false,
+            penalizingForIncompletes: false,
+            penalizingForReassigned: false,
             tooltipOpen: false,
         };
 
@@ -75,16 +74,16 @@ class FinalizeResults extends Component {
         this.assignmentId = this.props.assignmentId
         this.assignmentInfo = this.props.assignmentInfo
         this.courseId = this.props.courseId
-        this.error_message = "An error has occurred. Please consult the console to see what has gone wrong"
+        this.errorMessage = "An error has occurred. Please consult the console to see what has gone wrong"
     }
 
     attachNamesToDatabase() {
         let data = {
-            course_id: this.courseId,
+            courseId: this.courseId,
         }
 
         //Step 8
-        fetch('/api/attach_names_in_database', {
+        fetch('/api/attachNamesInDatabase', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -98,18 +97,26 @@ class FinalizeResults extends Component {
                         this.countStudentsInEachBucket()
                         break;
                     case 400:
-                        if (!this.state.error) {
-                            this.setState({
-                                error: true
-                            })
-                        }
-                        console.log("ran into an error when trying to attach actual names to entries in SQL tables")
+                    res.json().then(res => {
+                        history.push({
+                            pathname: '/error',
+                            state: {
+                                context: '',
+                                error: res.error,
+                                location: "FinalizeResults.js: attachNamesToDatabase() (error came from Canvas)",
+                                message: res.message,
+                            }
+                        })
+                    })
                         break;
                     case 401:
                         res.json().then(res => {
-                            this.setState({
-                                error: true,
-                                error_message: res.message,
+                            history.push({
+                                pathname: '/unauthorized',
+                                state: {
+                                    location: res.location,
+                                    message: res.message,
+                                }
                             })
                         })
                         break;
@@ -143,15 +150,15 @@ class FinalizeResults extends Component {
 
     finalizePeerReviewGrades() {
         let data = {
-            assignment_id: this.assignmentId,
-            points_possible: this.assignmentInfo.points_possible,
+            assignmentId: this.assignmentId,
+            pointsPossible: this.assignmentInfo.points_possible,
             benchmarks: this.state.benchmarks,
-            penalizing_for_incompletes: this.props.penalizingForIncompletes,
-            penalizing_for_reassigned: this.props.penalizingForReassigned,
+            penalizingForIncompletes: this.props.penalizingForIncompletes,
+            penalizingForReassigned: this.props.penalizingForReassigned,
         }
 
         //Step 5
-        fetch('/api/peer_reviews_finalizing', {
+        fetch('/api/peerReviewsFinalizing', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -165,21 +172,25 @@ class FinalizeResults extends Component {
                         res.json().then(res => message = res)
                             //Step 6
                             .then(() => {
-                                localStorage.setItem("finalizeDisplayTextNumCompleted_" + this.assignmentId, message.num_completed);
-                                localStorage.setItem("finalizeDisplayTextNumAssigned_" + this.assignmentId, message.num_assigned);
+                                localStorage.setItem("finalizeDisplayTextNumCompleted_" + this.assignmentId, message.numCompleted);
+                                localStorage.setItem("finalizeDisplayTextNumAssigned_" + this.assignmentId, message.numAssigned);
                                 localStorage.setItem("finalizeDisplayTextAverage_" + this.assignmentId, message.average);
-                                localStorage.setItem("finalizeDisplayTextOutOf_" + this.assignmentId, message.out_of);
+                                localStorage.setItem("finalizeDisplayTextOutOf_" + this.assignmentId, message.outOf);
                             })
                             .then(() => this.setProgress(5))
                             .then(() => this.sendGradesToCanvas())
                         break;
                     case 400:
-                        if (!this.state.error) {
-                            this.setState({
-                                error: true
-                            })
-                        }
-                        console.log("there was an error when running the finalize algorithm")
+                    res.json().then(res => {
+                        history.push({
+                            pathname: '/error',
+                            state: {
+                                context: '',
+                                error: res.error,
+                                location: "FinalizeResults.js: finalizePeerReviewGrades()",
+                            }
+                        })
+                    })
                         break;
                     case 404:
                         if (!this.state.error) {
@@ -195,11 +206,11 @@ class FinalizeResults extends Component {
 
     findCompletedAllReviews() {
         let data = {
-            assignment_id: this.assignmentId,
+            assignmentId: this.assignmentId,
         }
 
         //Step 15
-        fetch('/api/find_completed_all_reviews', {
+        fetch('/api/findCompletedAllReviews', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -212,19 +223,23 @@ class FinalizeResults extends Component {
                         this.setProgress(14)
                         //Step 16
                         res.json().then(res => {
-                            localStorage.setItem("completed_all_reviews_" + this.assignmentId, res.completed_all)
-                            localStorage.setItem("completed_some_reviews_" + this.assignmentId, res.completed_some)
-                            localStorage.setItem("completed_no_reviews_" + this.assignmentId, res.completed_none)
+                            localStorage.setItem("completedAllReviews_" + this.assignmentId, res.completedAll)
+                            localStorage.setItem("completedSomeReviews_" + this.assignmentId, res.completedSome)
+                            localStorage.setItem("completedNoReviews_" + this.assignmentId, res.completedNone)
                             this.setProgress(15)
                         })
                         break;
                     case 400:
-                        if (!this.state.error) {
-                            this.setState({
-                                error: true
-                            })
-                        }
-                        console.log("encountered an error when trying to determine stats for completion pie chart")
+                    res.json().then(res => {
+                        history.push({
+                            pathname: '/error',
+                            state: {
+                                context: '',
+                                error: res.error,
+                                location: "FinalizeResults.js: findCompletedAllReviews()",
+                            }
+                        })
+                    })
                         break;
                 }
             })
@@ -232,11 +247,11 @@ class FinalizeResults extends Component {
 
     findFlaggedGrades() {
         let data = {
-            assignment_id: this.assignmentId,
+            assignmentId: this.assignmentId,
         }
 
         //Step 11
-        fetch('/api/find_flagged_grades', {
+        fetch('/api/findFlaggedGrades', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -249,7 +264,7 @@ class FinalizeResults extends Component {
                         this.setProgress(10)
                         //Step 12
                         res.json().then(res => {
-                            localStorage.setItem("flagged_students_" + this.assignmentId, JSON.stringify(res))
+                            localStorage.setItem("flaggedStudents_" + this.assignmentId, JSON.stringify(res))
                             this.setProgress(11)
                         })
                             .then(() => this.pullBoxPlotFromCanvas())
@@ -258,17 +273,21 @@ class FinalizeResults extends Component {
                         //no flagged grades
                         this.setProgress(10)
                         //Step 12
-                        localStorage.setItem("flagged_students_" + this.assignmentId, JSON.stringify([]))
+                        localStorage.setItem("flaggedStudents_" + this.assignmentId, JSON.stringify([]))
                         this.setProgress(11)
                         this.pullBoxPlotFromCanvas()
                         break;
                     case 400:
-                        if (!this.state.error) {
-                            this.setState({
-                                error: true
-                            })
-                        }
-                        console.log("encountered an error when trying to determine flagged grades")
+                    res.json().then(res => {
+                        history.push({
+                            pathname: '/error',
+                            state: {
+                                context: '',
+                                error: res.error,
+                                location: "FinalizeResults.js: findFlaggedGrades()",
+                            }
+                        })
+                    })
                         break;
                 }
             })
@@ -276,12 +295,12 @@ class FinalizeResults extends Component {
 
     pullBoxPlotFromCanvas() {
         let data = {
-            course_id: this.courseId,
-            assignment_id: this.assignmentId
+            courseId: this.courseId,
+            assignmentId: this.assignmentId
         }
 
         //Step 13
-        fetch('/api/pull_box_plot_from_canvas', {
+        fetch('/api/pullBoxPlotFromCanvas', {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json'
@@ -294,28 +313,35 @@ class FinalizeResults extends Component {
                         this.setProgress(12)
                         //Step 14
                         res.json().then(data => {
-                            localStorage.setItem("min_" + this.assignmentId, data.min_score);
-                            localStorage.setItem("q1_" + this.assignmentId, data.first_quartile);
+                            localStorage.setItem("min_" + this.assignmentId, data.min);
+                            localStorage.setItem("q1_" + this.assignmentId, data.q1);
                             localStorage.setItem("median_" + this.assignmentId, data.median);
-                            localStorage.setItem("q3_" + this.assignmentId, data.third_quartile);
-                            localStorage.setItem("max_" + this.assignmentId, data.max_score);
+                            localStorage.setItem("q3_" + this.assignmentId, data.q3);
+                            localStorage.setItem("max_" + this.assignmentId, data.max);
                             this.setProgress(13)
                         })
                             .then(() => this.findCompletedAllReviews())
                         break;
                     case 400:
-                        if (!this.state.error) {
-                            this.setState({
-                                error: true
-                            })
-                        }
-                        console.log("ran into an error when trying to pull boxplot from canvas")
+                    res.json().then(res => {
+                        history.push({
+                            pathname: '/error',
+                            state: {
+                                context: '',
+                                location: "FinalizeResults.js: pullBoxPlotFromCanvas() (error came from Canvas)",
+                                message: res.message,
+                            }
+                        })
+                    })
                         break;
                     case 401:
                         res.json().then(res => {
-                            this.setState({
-                                error: true,
-                                error_message: res.message,
+                            history.push({
+                                pathname: '/unauthorized',
+                                state: {
+                                    location: res.location,
+                                    message: res.message,
+                                }
                             })
                         })
                         break;
@@ -333,11 +359,11 @@ class FinalizeResults extends Component {
 
     saveOriginallyAssignedNumbersToDatabase() {
         let data = {
-            assignment_id: this.assignmentId,
+            assignmentId: this.assignmentId,
         }
 
         //Step 4
-        fetch('/api/save_peer_review_numbers', {
+        fetch('/api/savePeerReviewNumbers', {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json'
@@ -351,12 +377,16 @@ class FinalizeResults extends Component {
                         this.finalizePeerReviewGrades();
                         break;
                     case 400:
-                        if (!this.state.error) {
-                            this.setState({
-                                error: true
-                            })
-                        }
-                        console.log("encountered an error when trying to save originally assigned peer review numbers")
+                        res.json().then(res => {
+							history.push({
+								pathname: '/error',
+								state: {
+                                    context: '',
+									error: res.error,
+									location: "FinalizeResults.js: saveOriginallyAssignedNumbersToDabase()",
+								}
+							})
+						})
                         break;
                     case 404:
                         if (!this.state.error) {
@@ -372,13 +402,13 @@ class FinalizeResults extends Component {
 
     savePeerReviewsFromCanvasToDatabase() {
         let data = {
-            course_id: this.courseId,
-            assignment_id: this.assignmentId,
-            points_possible: this.assignmentInfo.points_possible,
+            courseId: this.courseId,
+            assignmentId: this.assignmentId,
+            pointsPossible: this.assignmentInfo.points_possible,
         }
 
         //Step 2
-        fetch('/api/save_all_peer_reviews', {
+        fetch('/api/saveAllPeerReviews', {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json'
@@ -392,18 +422,26 @@ class FinalizeResults extends Component {
                         this.saveRubricScoresFromCanvasToDatabase()
                         break;
                     case 400:
-                        if (!this.state.error) {
-                            this.setState({
-                                error: true
-                            })
-                        }
-                        console.log("ran into an error when trying to save all peer reviews from canvas")
+                    res.json().then(res => {
+                        history.push({
+                            pathname: '/error',
+                            state: {
+                                context: '',
+                                error: res.error,
+                                location: "FinalizeResults.js: savePeerReviewsFromCanvasToDatabase() (error came from Canvas)",
+                                message: res.message,
+                            }
+                        })
+                    })
                         break;
                     case 401:
                         res.json().then(res => {
-                            this.setState({
-                                error: true,
-                                error_message: res.message,
+                            history.push({
+                                pathname: '/unauthorized',
+                                state: {
+                                    location: res.location,
+                                    message: res.message,
+                                }
                             })
                         })
                         break;
@@ -421,13 +459,13 @@ class FinalizeResults extends Component {
 
     saveRubricScoresFromCanvasToDatabase() {
         let data = {
-            course_id: this.courseId,
-            assignment_id: this.assignmentId,
-            rubric_settings: this.assignmentInfo.rubric_settings.id
+            courseId: this.courseId,
+            assignmentId: this.assignmentId,
+            rubricSettings: this.assignmentInfo.rubric_settings.id
         }
 
         //Step 3
-        fetch('/api/save_all_rubrics', {
+        fetch('/api/saveAllRubrics', {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json'
@@ -441,18 +479,26 @@ class FinalizeResults extends Component {
                         this.saveOriginallyAssignedNumbersToDatabase();
                         break;
                     case 400:
-                        if (!this.state.error) {
-                            this.setState({
-                                error: true
-                            })
-                        }
-                        console.log("ran into an error when trying to save all rubric assessments from canvas")
+                    res.json().then(res => {
+                        history.push({
+                            pathname: '/error',
+                            state: {
+                                context: '',
+                                error: res.error,
+                                location: "FinalizeResults.js: saveRubricScoresFromCanvasToDatabase() (error came from Canvas)",
+                                message: res.message,
+                            }
+                        })
+                    })
                         break;
                     case 401:
                         res.json().then(res => {
-                            this.setState({
-                                error: true,
-                                error_message: res.message,
+                            history.push({
+                                pathname: '/unauthorized',
+                                state: {
+                                    location: res.location,
+                                    message: res.message,
+                                }
                             })
                         })
                         break;
@@ -470,12 +516,12 @@ class FinalizeResults extends Component {
 
     sendGradesToCanvas() {
         let data = {
-            course_id: this.courseId,
-            assignment_id: this.assignmentId,
+            courseId: this.courseId,
+            assignmentId: this.assignmentId,
         }
 
         //Step 7
-        fetch('/api/send_grades_to_canvas', {
+        fetch('/api/sendGradesToCanvas', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -489,12 +535,16 @@ class FinalizeResults extends Component {
                         this.attachNamesToDatabase()
                         break;
                     case 400:
-                        if (!this.state.error) {
-                            this.setState({
-                                error: true
-                            })
-                        }
-                        console.log("ran into an error in sending grades to canvas when reading the actual grade saved in the SQL gradebook")
+                    res.json().then(res => {
+                        history.push({
+                            pathname: '/error',
+                            state: {
+                                context: '',
+                                error: res.error,
+                                location: "FinalizeResults.js: sendGradesToCanvas()",
+                            }
+                        })
+                    })
                         break;
                     case 404:
                         if (!this.state.error) {
@@ -509,13 +559,13 @@ class FinalizeResults extends Component {
     }
 
     setProgress(step) {
-        progress = (step / progress_num_steps) * 100;
-        progress_bar_message = [progress.toFixed(0) + "%"]
+        progress = (step / progressNumSteps) * 100;
+        progressBarMessage = [progress.toFixed(0) + "%"]
     }
 
     countStudentsInEachBucket() {
         //Step 9
-        fetch('/api/count_students_in_each_bucket', {
+        fetch('/api/countStudentsInEachBucket', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -528,23 +578,27 @@ class FinalizeResults extends Component {
                         //Step 10
                         res.json().then(res => {
                             localStorage.setItem("spazzy_" + this.assignmentId, JSON.stringify(res.spazzy))
-                            localStorage.setItem("definitely_harsh_" + this.assignmentId, JSON.stringify(res.definitely_harsh))
-                            localStorage.setItem("could_be_harsh_" + this.assignmentId, JSON.stringify(res.could_be_harsh))
-                            localStorage.setItem("could_be_lenient_" + this.assignmentId, JSON.stringify(res.could_be_lenient))
-                            localStorage.setItem("definitely_lenient_" + this.assignmentId, JSON.stringify(res.definitely_lenient))
-                            localStorage.setItem("could_be_fair_" + this.assignmentId, JSON.stringify(res.could_be_fair))
-                            localStorage.setItem("definitely_fair_" + this.assignmentId, JSON.stringify(res.definitely_fair))
+                            localStorage.setItem("definitelyHarsh_" + this.assignmentId, JSON.stringify(res.definitelyHarsh))
+                            localStorage.setItem("couldBeHarsh_" + this.assignmentId, JSON.stringify(res.couldBeHarsh))
+                            localStorage.setItem("couldBeLenient_" + this.assignmentId, JSON.stringify(res.couldBeLenient))
+                            localStorage.setItem("definitelyLenient_" + this.assignmentId, JSON.stringify(res.definitelyLenient))
+                            localStorage.setItem("couldBeFair_" + this.assignmentId, JSON.stringify(res.couldBeFair))
+                            localStorage.setItem("definitelyFair_" + this.assignmentId, JSON.stringify(res.definitelyFair))
                             this.setProgress(9)
                         })
                             .then(() => this.findFlaggedGrades())
                         break;
                     case 400:
-                        if (!this.state.error) {
-                            this.setState({
-                                error: true
-                            })
-                        }
-                        console.log("encountered an error when trying to sort students into the seven buckets")
+                    res.json().then(res => {
+                        history.push({
+                            pathname: '/error',
+                            state: {
+                                context: '',
+                                error: res.error,
+                                location: "FinalizeResults.js: countStudentsInEachBucket()",
+                            }
+                        })
+                    })
                         break;
                 }
             })
@@ -564,7 +618,9 @@ class FinalizeResults extends Component {
     render() {
         if (this.state.error) {
             return (
-                <UnauthorizedError message={this.state.error_message} />
+                <div>
+                    {this.state.errorMessage}
+                </div>
             )
         }
 
@@ -575,7 +631,7 @@ class FinalizeResults extends Component {
             )
         }
 
-        if (localStorage.getItem("completed_all_reviews_" + this.assignmentId)) {
+        if (localStorage.getItem("completedAllReviews_" + this.assignmentId)) {
             return (
                 <div>
                     {/* <SideNav
@@ -632,9 +688,9 @@ class FinalizeResults extends Component {
                                 expandSize={3}
                                 expandOnHover="false"
                                 data={[
-                                    { title: "Completed all reviews", value: Number(localStorage.getItem("completed_all_reviews_" + this.assignmentId)), color: '#063D11' },
-                                    { title: "Completed some reviews", value: Number(localStorage.getItem("completed_some_reviews_" + this.assignmentId)), color: '#C68100' },
-                                    { title: "Completed no reviews", value: Number(localStorage.getItem("completed_no_reviews_" + this.assignmentId)), color: '#AD1F1F' },
+                                    { title: "Completed all reviews", value: Number(localStorage.getItem("completedAllReviews_" + this.assignmentId)), color: '#063D11' },
+                                    { title: "Completed some reviews", value: Number(localStorage.getItem("completedSomeReviews_" + this.assignmentId)), color: '#C68100' },
+                                    { title: "Completed no reviews", value: Number(localStorage.getItem("completedNoReviews_" + this.assignmentId)), color: '#AD1F1F' },
                                 ]}
                                 onSectorHover={(d) => {
                                     if (d) {
@@ -675,12 +731,12 @@ class FinalizeResults extends Component {
                                 expandSize={3}
                                 expandOnHover="false"
                                 data={[
-                                    { title: "Definitely Harsh", value: Number(localStorage.getItem("definitely_harsh_" + this.assignmentId)), color: '#AD1F1F' },
-                                    { title: "Could be Harsh", value: Number(localStorage.getItem("could_be_harsh_" + this.assignmentId)), color: '#D6A0A0' },
-                                    { title: "Definitely Lenient", value: Number(localStorage.getItem("definitely_lenient_" + this.assignmentId)), color: '#001887' },
-                                    { title: "Could be Lenient", value: Number(localStorage.getItem("could_be_lenient_" + this.assignmentId)), color: '#B3BBDD' },
-                                    { title: "Definitely Fair", value: Number(localStorage.getItem("definitely_fair_" + this.assignmentId)), color: '#063D11' },
-                                    { title: "Could be Fair", value: Number(localStorage.getItem("could_be_fair_" + this.assignmentId)), color: '#94B29A' },
+                                    { title: "Definitely Harsh", value: Number(localStorage.getItem("definitelyHarsh_" + this.assignmentId)), color: '#AD1F1F' },
+                                    { title: "Could be Harsh", value: Number(localStorage.getItem("couldBeHarsh_" + this.assignmentId)), color: '#D6A0A0' },
+                                    { title: "Definitely Lenient", value: Number(localStorage.getItem("definitelyLenient_" + this.assignmentId)), color: '#001887' },
+                                    { title: "Could be Lenient", value: Number(localStorage.getItem("couldBeLenient_" + this.assignmentId)), color: '#B3BBDD' },
+                                    { title: "Definitely Fair", value: Number(localStorage.getItem("definitelyFair_" + this.assignmentId)), color: '#063D11' },
+                                    { title: "Could be Fair", value: Number(localStorage.getItem("couldBeFair_" + this.assignmentId)), color: '#94B29A' },
                                     { title: "Spazzy", value: Number(localStorage.getItem("spazzy_" + this.assignmentId)), color: '#C68100' }
                                 ]}
                                 onSectorHover={(d) => {
@@ -744,14 +800,14 @@ class FinalizeResults extends Component {
                     </Row>
                     <hr className="hr-4"></hr>
                     <Popup className="pop-up"
-                        trigger={<button className="flaggedbutton"> View Flagged Grades ({JSON.parse(localStorage.getItem("flagged_students_" + this.assignmentId)).length})</button>}
+                        trigger={<button className="flaggedbutton"> View Flagged Grades ({JSON.parse(localStorage.getItem("flaggedStudents_" + this.assignmentId)).length})</button>}
                         modal
                         closeOnDocumentClick
                     >
                         <span><h5 className="modaltext">Flagged Grades</h5></span>
                         <hr />
                         <span className="studentlist">
-                            {JSON.parse(localStorage.getItem("flagged_students_" + this.assignmentId))}
+                            {JSON.parse(localStorage.getItem("flaggedStudents_" + this.assignmentId))}
                         </span>
                     </Popup>
                 </div>
@@ -759,7 +815,7 @@ class FinalizeResults extends Component {
         }
 
         return (
-            <Progress value={progress}> {progress_bar_message} </Progress>
+            <Progress value={progress}> {progressBarMessage} </Progress>
         )
     }
 }

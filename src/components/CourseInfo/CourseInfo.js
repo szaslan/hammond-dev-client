@@ -2,11 +2,12 @@ import React, { Component } from 'react';
 import { Container } from 'reactstrap';
 import { Link } from "react-router-dom";
 import Flexbox from 'flexbox-react';
+import history from '../../history';
 import Iframe from 'react-iframe';
+import Loader from 'react-loader-spinner';
 
 import JumbotronComp from '../JumbotronComp/JumbotronComp'
 import SidebarComp from '../SideBar/SideBar';
-import UnauthorizedError from '../UnauthorizedError/UnauthorizedError';
 
 import './CourseInfo.css';
 
@@ -15,11 +16,10 @@ class CourseInfo extends Component {
         super(props);
 
         this.state = {
-            courseJSON: [],
-            error: false,
-            error_message: null,
+            courseId: this.props.match.params.course_id,
+            courseJSON: null,
             loaded: false,
-            url: '',
+            url: `/courses/${this.props.match.params.course_id}`,
 
             ...props
         }
@@ -30,7 +30,7 @@ class CourseInfo extends Component {
     }
 
     createTables() {
-        fetch('/api/create_tables', {
+        fetch('/api/createTables', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -42,20 +42,27 @@ class CourseInfo extends Component {
                         //no issues
                         break;
                     case 400:
-                        console.log("ran into an error when creating nonexistent SQL tables")
+                    res.json().then(res => {
+                        history.push({
+                            pathname: '/error',
+                            state: {
+                                context: '',
+                                error: res.error,
+                                location: "CourseInfo.js: createTables()",
+                            }
+                        })
+                    })
                         break;
                 }
             })
     }
 
     fetchCourseInfo() {
-        const { match: { params } } = this.props;
-
         var data = {
-            course_id: params.course_id,
+            courseId: this.state.courseId,
         }
 
-        fetch('/api/courseinfo', {
+        fetch('/api/courseInfo', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -69,18 +76,30 @@ class CourseInfo extends Component {
                         res.json().then(data => {
                             this.setState({
                                 courseJSON: data,
-                                loaded: true
+                                loaded: true,
                             })
                         })
                         break;
                     case 400:
-                        console.log("ran into an error when trying to pull course info from canvas")
+                    res.json().then(res => {
+                        history.push({
+                            pathname: '/error',
+                            state: {
+                                context: '',
+                                location: "CourseInfo.js: fetchCourseInfo() (error came from Canvas)",
+                                message: res.message,
+                            }
+                        })
+                    })
                         break;
                     case 401:
                         res.json().then(res => {
-                            this.setState({
-                                error: true,
-                                error_message: res.message,
+                            history.push({
+                                pathname: '/unauthorized',
+                                state: {
+                                    location: res.location,
+                                    message: res.message,
+                                }
                             })
                         })
                         break;
@@ -92,7 +111,7 @@ class CourseInfo extends Component {
     }
 
     resetTables() {
-        fetch('/api/reset_tables', {
+        fetch('/api/resetTables', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -104,30 +123,27 @@ class CourseInfo extends Component {
                         //no issues
                         break;
                     case 400:
-                        console.log("ran into an error when creating nonexistent SQL tables")
+                    res.json().then(res => {
+                        history.push({
+                            pathname: '/error',
+                            state: {
+                                context: '',
+                                error: res.error,
+                                location: "CourseInfo.js: resetTables()",
+                            }
+                        })
+                    })
                         break;
                 }
             })
     }
 
     componentDidMount() {
-        const { match: { params } } = this.props;
-
-        this.setState({
-            url: `/courses/${params.course_id}`
-        });
-
         this.fetchCourseInfo();
         this.createTables();
     }
 
     render() {
-        if (this.state.error) {
-            return (
-                <UnauthorizedError message={this.state.error_message} />
-            )
-        }
-
         if (this.state.loaded) {
             return (
                 <div>
@@ -140,10 +156,10 @@ class CourseInfo extends Component {
                                         <Flexbox className="big-buttons-flexbox" minWidth="700px" width="60vw" justifyContent="center"
                                             minHeight="50vh" flexDirection="column">
                                             <Flexbox justifyContent="space-around" flexWrap="nowrap">
-                                                <Link to={{ pathname: this.state.url + '/' + this.state.courseJSON.name + "/assignments/", state: { name: this.state.courseJSON.name }, }}>
+                                                <Link to={{ pathname: this.state.url /*+ '/' + this.state.courseJSON.name*/ + "/assignments/", state: { name: this.state.courseJSON.name }, }}>
                                                     <button className="pull-left big-button">Assignments</button>
                                                 </Link>
-                                                <Link to={{ pathname: this.state.url + "/" + this.state.courseJSON.name + "/students", state: { name: this.state.courseJSON.name } }}>
+                                                <Link to={{ pathname: this.state.url /*+ "/" + this.state.courseJSON.name*/ + "/students", state: { name: this.state.courseJSON.name } }}>
                                                     <button className="pull-right big-button">Students</button>
                                                 </Link>
                                             </Flexbox>
@@ -161,7 +177,7 @@ class CourseInfo extends Component {
         }
         
         return (
-            <div></div>
+            <Loader type="TailSpin" color="black" height={80} width={80} />
         )
     }
 }

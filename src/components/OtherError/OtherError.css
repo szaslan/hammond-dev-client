@@ -1,0 +1,17 @@
+.error-message {
+    margin-left: 1vw;
+}
+
+.row {
+    margin: 0px !important;
+    text-align: center;
+}
+
+.error-message-title {
+    font-weight: bold;
+    font-size:3vw
+}
+
+.error-message-body {
+
+}
