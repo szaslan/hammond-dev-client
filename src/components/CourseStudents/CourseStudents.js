@@ -28,6 +28,7 @@ class CourseStudents extends Component {
             students: [],
             loaded: false,
             dropdownOpen: false,
+            value: '',
             ...props,
             url: `/courses/${this.props.match.params.course_id}/students/`,
 
@@ -38,6 +39,7 @@ class CourseStudents extends Component {
     reDirect(event) {
       const { match: { params } } = this.props;
       let id = event.value.toString();
+      this.setState({value: event.value})
       console.log(this.state.url+id)
       console.log(event);
       console.log("redirecting");
