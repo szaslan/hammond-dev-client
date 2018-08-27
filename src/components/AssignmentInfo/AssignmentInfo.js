@@ -106,12 +106,15 @@ class AssignmentInfo extends Component {
         if (this.state.loaded) {
             return (
                 <div className="assignment-info">
-                    <h2 className="headertext">
-                        Score Details
-                    </h2>
-                    <hr className="hr-2"></hr>
-                    <br></br>
+                      {/*<h2 className="headertext">Score Details
+                      <button className="clear-local-button" onClick={this.clearLocalStorage}> Clear Local Storage</button>
+                      </h2>
+                      <hr className="hr-2"></hr>
+                        <p><strong>Title: </strong>{this.state.assignment.name}</p>
+                        <br></br>*/}
+
                     <AnalyzeButton assignmentId={this.state.assignmentId} assignmentInfo={this.state.assignmentJSON} courseId={this.state.courseId} />
+
                 </div>
             )
         }

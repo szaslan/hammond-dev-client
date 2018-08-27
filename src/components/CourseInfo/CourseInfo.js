@@ -144,34 +144,46 @@ class CourseInfo extends Component {
     }
 
     render() {
-        if (this.state.loaded) {
-            return (
-                <div>
-                    <SidebarComp
-                        content={
-                            <div>
-                                <JumbotronComp mainTitle={this.state.courseJSON.name} tabs />
-                                {
-                                    <Container className="well1-container" fluid>
-                                        <Flexbox className="big-buttons-flexbox" minWidth="700px" width="60vw" justifyContent="center"
-                                            minHeight="50vh" flexDirection="column">
-                                            <Flexbox justifyContent="space-around" flexWrap="nowrap">
-                                                <Link to={{ pathname: this.state.url /*+ '/' + this.state.courseJSON.name*/ + "/assignments/", state: { name: this.state.courseJSON.name }, }}>
-                                                    <button className="pull-left big-button">Assignments</button>
-                                                </Link>
-                                                <Link to={{ pathname: this.state.url /*+ "/" + this.state.courseJSON.name*/ + "/students", state: { name: this.state.courseJSON.name } }}>
-                                                    <button className="pull-right big-button">Students</button>
-                                                </Link>
-                                            </Flexbox>
-                                        </Flexbox>
-                                    </Container>
-                                }
 
-                                <button onClick={this.resetTables}>Reset Database Tables</button>
-                            </div>
-                        }
-                    />
+        // if (!this.state.auth){
+        //     return(
+        //         <div>Not authenticated</div>
+        //     )
+        // }
+
+        return (
+            <div>
+              <SidebarComp
+                content={
+                  <div>
+                  <JumbotronComp mainTitle={this.state.courseJSON.name}
+                    tabs />
+                {/*{
+                    this.state.loaded ?
+                        <Container className="well1-container" fluid>
+                            <Flexbox className="big-buttons-flexbox" minWidth="700px" width="60vw" justifyContent="center"
+                                minHeight="50vh" flexDirection="column">
+                                <Flexbox
+                                    justifyContent="space-around"
+                                    flexWrap="nowrap">
+                                    <Link to={{ pathname: this.state.url + '/' + this.state.courseJSON.name + "/assignments/", state: { name: this.state.courseJSON.name }, }}>
+                                        <button className="pull-left big-button">Assignments</button>
+                                    </Link>
+                                    <Link to={{ pathname: this.state.url + "/" + this.state.courseJSON.name + "/students", state: { name: this.state.courseJSON.name } }}>
+                                        <button className="pull-right big-button">Students</button>
+                                    </Link>
+                                </Flexbox>
+                            </Flexbox>
+                        </Container>
+                        :
+                        <Loader type="TailSpin" color="black" height={80} width={80} />
+                */}
+
+                <button onClick={this.ResetTables}>Reset Database Tables</button>}
                 </div>
+              }
+              />
+            </div>
 
             );
         }

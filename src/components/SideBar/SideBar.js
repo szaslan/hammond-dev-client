@@ -40,7 +40,7 @@ class SidebarComp extends React.Component {
 						<a href="" className="sidebarcontent">Account</a>
 						<br />
 						<br />
-						<a href="" className="sidebarcontent">Courses</a>
+						<a href="/courses" className="sidebarcontent">Courses</a>
 						<br />
 						<Link to="/logout">
 							<button className="signoutbutton" onClick={this.signOut}>Sign Out</button>
