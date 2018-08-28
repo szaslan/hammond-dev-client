@@ -4,7 +4,7 @@
 
 .row {
     margin: 0px !important;
-    text-align: center;
+    text-align: left !important;
 }
 
 .error-message-title {

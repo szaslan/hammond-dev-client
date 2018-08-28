@@ -10,25 +10,24 @@ class UserRegistration extends Component {
 		super(props);
 
 		this.state = {
-			email: '',
 			errors: [],
-			firstName: '',
-			lastName: '',
 			loaded: false,
 			msg: '',
-			password: '',
-			password2: '',
 			reDirect: false,
 		}
 
 		this.handleChange = this.handleChange.bind(this);
 		this.handleSubmit = this.handleSubmit.bind(this);
+
+		this.email = '';
+		this.firstName = '';
+		this.lastName = '';
+		this.password = '';
+		this.password2 = '';
 	}
 
 	handleChange(e) {
-		this.setState({
-			[e.target.name]: e.target.value
-		});
+		this[e.target.name] = e.target.value;
 	}
 
 	handleSubmit(event) {
@@ -40,11 +39,11 @@ class UserRegistration extends Component {
 		})
 
 		var data = {
-			firstName: this.state.firstName,
-			lastName: this.state.lastName,
-			email: this.state.email,
-			password: this.state.password,
-			password2: this.state.password2
+			firstName: this.firstName,
+			lastName: this.lastName,
+			email: this.email,
+			password: this.password,
+			password2: this.password2
 		}
 
 		fetch('/register', {
@@ -94,10 +93,10 @@ class UserRegistration extends Component {
 						<button className="new-button">Submit</button>
 						<Well>
 							{
-								this.state.errors.length > 0?
+								this.state.errors.length > 0 ?
 									<ul className="errors">
 										{
-											this.state.errors.map(error => 
+											this.state.errors.map(error =>
 												<li>{error.msg}</li>
 											)
 										}
