@@ -47,17 +47,17 @@ class Courses extends Component {
                         })
                         break;
                     case 400:
-                    res.json().then(res => {
-                        history.push({
-                            pathname: '/error',
-                            state: {
-                                context: '',
-                                error: res.error,
-                                location: "Courses.js: fetchCourses() (error came from Canvas)",
-                                message: res.message,
-                            }
+                        res.json().then(res => {
+                            history.push({
+                                pathname: '/error',
+                                state: {
+                                    context: 'This function is called after a user logs in or registers for a new account. This function fetches the list of courses that the current user is enrolled in as a teacher from Canvas.',
+                                    error: res.error,
+                                    location: "Courses.js: fetchCourses()",
+                                    message: res.message,
+                                }
+                            })
                         })
-                    })
                         break;
                     case 401:
                         res.json().then(res => {
@@ -71,7 +71,14 @@ class Courses extends Component {
                         })
                         break;
                     case 404:
-                        console.log("no courses found on canvas where you are listed as teacher")
+                        history.push({
+                            pathname: '/notfound',
+                            state: {
+                                context: 'This function is called after a user logs in or registers for a new account. This function fetches the list of courses that the current user is enrolled in as a teacher from Canvas.',
+                                location: "Courses.js: fetchCourses()",
+                                message: 'No course found where you are listed as a teacher on Canvas.',
+                            }
+                        })
                         break;
                 }
             })

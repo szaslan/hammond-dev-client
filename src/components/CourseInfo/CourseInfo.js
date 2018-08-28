@@ -1,9 +1,5 @@
 import React, { Component } from 'react';
-import { Container } from 'reactstrap';
-import { Link } from "react-router-dom";
-import Flexbox from 'flexbox-react';
 import history from '../../history';
-import Iframe from 'react-iframe';
 import Loader from 'react-loader-spinner';
 
 import JumbotronComp from '../JumbotronComp/JumbotronComp'
@@ -27,6 +23,7 @@ class CourseInfo extends Component {
         this.createTables = this.createTables.bind(this);
         this.fetchCourseInfo = this.fetchCourseInfo.bind(this);
         this.resetTables = this.resetTables.bind(this);
+        this.send400Error = this.send400Error.bind(this);
     }
 
     createTables() {
@@ -43,14 +40,7 @@ class CourseInfo extends Component {
                         break;
                     case 400:
                         res.json().then(res => {
-                            history.push({
-                                pathname: '/error',
-                                state: {
-                                    context: '',
-                                    error: res.error,
-                                    location: "CourseInfo.js: createTables()",
-                                }
-                            })
+                            this.send400Error("This function is called anytime a course is selected from the general homepage. This function ensures that every SQL table exists and has the necessary formatting.", res.error, "CourseInfo.js: createTables()", res.message)
                         })
                         break;
                 }
@@ -82,14 +72,7 @@ class CourseInfo extends Component {
                         break;
                     case 400:
                         res.json().then(res => {
-                            history.push({
-                                pathname: '/error',
-                                state: {
-                                    context: '',
-                                    location: "CourseInfo.js: fetchCourseInfo() (error came from Canvas)",
-                                    message: res.message,
-                                }
-                            })
+                            this.send400Error("This function is called anytime a course is selected from the general homepage. This function fetches all of the information about a course from Canvas.", res.error, "CourseInfo.js: fetchCourseInfo()", res.message)
                         })
                         break;
                     case 401:
@@ -104,7 +87,14 @@ class CourseInfo extends Component {
                         })
                         break;
                     case 404:
-                        console.log("there are no courses where you are listed as a teacher on canvas")
+                        history.push({
+                            pathname: '/notfound',
+                            state: {
+                                context: 'This function is called anytime a course is selected from the general homepage. This function fetches all of the information about a course from Canvas.',
+                                location: "CourseInfo.js: fetchCourseInfo()",
+                                message: 'Course not found on Canvas.',
+                            }
+                        })
                         break;
                 }
             })
@@ -124,19 +114,24 @@ class CourseInfo extends Component {
                         break;
                     case 400:
                         res.json().then(res => {
-                            history.push({
-                                pathname: '/error',
-                                state: {
-                                    context: '',
-                                    error: res.error,
-                                    location: "CourseInfo.js: resetTables()",
-                                }
-                            })
+                            this.send400Error("", res.error, "CourseInfo.js: resetTables()", res.message)
                         })
                         break;
                 }
             })
     }
+
+    send400Error(context, error, location, message) {
+		history.push({
+			pathname: '/error',
+			state: {
+				context: context,
+				error: error,
+				location: location,
+				message: message,
+			}
+		})
+	}
 
     componentDidMount() {
         this.fetchCourseInfo();
@@ -144,12 +139,6 @@ class CourseInfo extends Component {
     }
 
     render() {
-
-        // if (!this.state.auth){
-        //     return(
-        //         <div>Not authenticated</div>
-        //     )
-        // }
         if (this.state.loaded) {
             return (
                 <div>
@@ -179,8 +168,8 @@ class CourseInfo extends Component {
                         <Loader type="TailSpin" color="black" height={80} width={80} />
                 */}
 
-                                <button onClick={this.ResetTables}>Reset Database Tables</button>}
-                </div>
+                                <button onClick={this.resetTables}>Reset Database Tables</button>
+                            </div>
                         }
                     />
                 </div>

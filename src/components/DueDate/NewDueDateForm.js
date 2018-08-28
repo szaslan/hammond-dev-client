@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 import { Modal, ModalBody, ModalHeader } from 'reactstrap';
 import Datetime from 'react-datetime';
 import Flexbox from 'flexbox-react';
-import TimePicker from 'rc-time-picker';
 import moment from 'moment';
+import TimePicker from 'rc-time-picker';
 
 import 'rc-time-picker/assets/index.css';
 
@@ -34,11 +34,11 @@ class NewDueDate extends Component {
         this.onChange = this.onChange.bind(this);
         this.toggle = this.toggle.bind(this);
 
-        this.dueDateExtentsion = this.props.assignmentId + "_" + this.state.number;
+        this.dueDateExtension = this.props.assignmentId + "_" + this.state.number;
         this.isBeforeDates = false;
         this.isInPast = false;
         this.isValidTime = true;
-        this.previousDueDateExtension = this.props.assignmentId + "_" + this.previousDueDateNumber;
+        this.previousDueDateExtension = this.props.assignmentId + "_" + (Number(this.state.number) - 1);
         this.previousDueDateNumber = Number(this.state.number) - 1;
     }
 
@@ -69,7 +69,7 @@ class NewDueDate extends Component {
         this.isValidTime = true;
 
         var concatDateTime = (this.state.dateValue).format('ddd MMM DD YYYY') + " " + (this.state.timeValue).format('HH:mm:ss') + " GMT-0500";
-        localStorage.setItem("dueDate_" + this.dueDateExtenstion, concatDateTime);
+        localStorage.setItem("dueDate_" + this.dueDateExtension, concatDateTime);
 
         var currentTime = Datetime.moment();
         var chosenDueDate = Datetime.moment(concatDateTime);
@@ -99,13 +99,15 @@ class NewDueDate extends Component {
     }
 
     onChange(value) {
-        this.setState({
-            timeValue: value
-        });
+        if (value) {
+            this.setState({
+                timeValue: value
+            });
+        }
     }
 
     toggle() {
-        localStorage.removeItem("dueDate_" + this.dueDateExtenstion);
+        localStorage.removeItem("dueDate_" + this.dueDateExtension);
 
         this.setState({
             modal: !this.state.modal,
@@ -120,31 +122,33 @@ class NewDueDate extends Component {
         return (
             <div className={"dateTime " + (this.props.isGray ? "grayOut" : null)}>
                 <form onSubmit={this.handleSubmit} className="dateTimeForm">
-                    <Datetime dateFormat="MM/DD/YYYY" timeFormat={false} onChange={this.handleChange} isValidDate={this.checkDate}
-                        inputProps={{
-                            disabled: true,
-                            placeholder: (localStorage.getItem("dueDate_" + this.dueDateExtenstion) ?
-                                (moment(localStorage.getItem("dueDate_" + this.dueDateExtenstion))).format('MM/DD/YYYY')
-                                :
-                                "Select a Date")
-                        }}
-                    />
-
-                    <Flexbox justifyContent="space-between">
-                        <TimePicker
-                            className="timePicker"
-                            format={format}
-                            inputReadOnly
-                            onChange={this.onChange}
-                            showSecond={false}
-                            use12Hours
-                            placeholder={(localStorage.getItem("dueDate_" + this.dueDateExtenstion) ?
-                                (moment(localStorage.getItem("dueDate_" + this.dueDateExtenstion))).format('h:mm a')
-                                :
-                                "Select a Time")}
+                    <div className={"color-border-" + (localStorage.getItem("dueDate_" + this.dueDateExtension) ? "green" : "red")}>
+                        <Datetime dateFormat="MM/DD/YYYY" timeFormat={false} onChange={this.handleChange} isValidDate={this.checkDate}
+                            inputProps={{
+                                disabled: true,
+                                placeholder: (localStorage.getItem("dueDate_" + this.dueDateExtension) ?
+                                    (moment(localStorage.getItem("dueDate_" + this.dueDateExtension))).format('MM/DD/YYYY')
+                                    :
+                                    "Select a Date")
+                            }}
                         />
-                        <input type="submit" value="Submit" className="dateTimeSubmit" />
-                    </Flexbox>
+
+                        <Flexbox justifyContent="space-between">
+                            <TimePicker
+                                className="timePicker"
+                                format={format}
+                                inputReadOnly
+                                onChange={this.onChange}
+                                showSecond={false}
+                                use12Hours
+                                placeholder={(localStorage.getItem("dueDate_" + this.dueDateExtension) ?
+                                    (moment(localStorage.getItem("dueDate_" + this.dueDateExtension))).format('h:mm a')
+                                    :
+                                    "Select a Time")}
+                            />
+                            <input type="submit" value="Submit" className="dateTimeSubmit" />
+                        </Flexbox>
+                    </div>
 
                     <Modal isOpen={this.state.modal} className="invalidModal">
                         <ModalHeader toggle={this.toggle}>Invalid Time Selected</ModalHeader>

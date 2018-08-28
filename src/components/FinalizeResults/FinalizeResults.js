@@ -43,7 +43,6 @@ class FinalizeResults extends Component {
 
         this.state = {
             benchmarks: this.props.benchmarks,
-            error: false,
             finalizeDisplayText: false,
             hoveringOverPieChart1: false,
             hoveringOverPieChart2: false,
@@ -67,6 +66,9 @@ class FinalizeResults extends Component {
         this.savePeerReviewsFromCanvasToDatabase = this.savePeerReviewsFromCanvasToDatabase.bind(this); //Step 2
         this.saveRubricScoresFromCanvasToDatabase = this.saveRubricScoresFromCanvasToDatabase.bind(this); //Step 3
         this.sendGradesToCanvas = this.sendGradesToCanvas.bind(this); //Step 7
+        this.send400Error = this.send400Error.bind(this);
+        this.send401Error = this.send401Error.bind(this);
+        this.send404Error = this.send404Error.bind(this);
         this.setProgress = this.setProgress.bind(this);
         this.countStudentsInEachBucket = this.countStudentsInEachBucket.bind(this); //Steps 9 & 10
         this.toggle = this.toggle.bind(this);
@@ -74,7 +76,6 @@ class FinalizeResults extends Component {
         this.assignmentId = this.props.assignmentId
         this.assignmentInfo = this.props.assignmentInfo
         this.courseId = this.props.courseId
-        this.errorMessage = "An error has occurred. Please consult the console to see what has gone wrong"
     }
 
     attachNamesToDatabase() {
@@ -97,36 +98,17 @@ class FinalizeResults extends Component {
                         this.countStudentsInEachBucket()
                         break;
                     case 400:
-                    res.json().then(res => {
-                        history.push({
-                            pathname: '/error',
-                            state: {
-                                context: '',
-                                error: res.error,
-                                location: "FinalizeResults.js: attachNamesToDatabase() (error came from Canvas)",
-                                message: res.message,
-                            }
+                        res.json().then(res => {
+                            this.send400Error("This function is called in Step 8 of the grading process. This function syncs syncs each student's actual name with all of their entries in the SQL tables", res.error, "FinalizeResults.js: attachNamesToDatabase()", res.message)
                         })
-                    })
                         break;
                     case 401:
                         res.json().then(res => {
-                            history.push({
-                                pathname: '/unauthorized',
-                                state: {
-                                    location: res.location,
-                                    message: res.message,
-                                }
-                            })
+                            this.send401Error(res)
                         })
                         break;
                     case 404:
-                        if (!this.state.error) {
-                            this.setState({
-                                error: true
-                            })
-                        }
-                        console.log("there are no students enrolled in this course")
+                        this.send404Error("This function is called in Step 8 of the grading process. This function syncs syncs each student's actual name with all of their entries in the SQL tables", "FinalizeResults.js: attachNamesToDatabase()", "No students enrolled in this course on Canvas.")
                         break;
                 }
             })
@@ -181,24 +163,12 @@ class FinalizeResults extends Component {
                             .then(() => this.sendGradesToCanvas())
                         break;
                     case 400:
-                    res.json().then(res => {
-                        history.push({
-                            pathname: '/error',
-                            state: {
-                                context: '',
-                                error: res.error,
-                                location: "FinalizeResults.js: finalizePeerReviewGrades()",
-                            }
+                        res.json().then(res => {
+                            this.send400Error("This function is called in Steps 5 and 6 of the grading process. This function runs the grading algorithm and returns statistics about the assignment.", res.error, "FinalizeResults.js: finalizePeerReviewGrades()", res.message)
                         })
-                    })
                         break;
                     case 404:
-                        if (!this.state.error) {
-                            this.setState({
-                                error: true
-                            })
-                        }
-                        console.log("no peer reviews have been completed for this assignment")
+                        this.send404Error("This function is called in Steps 5 and 6 of the grading process. This function runs the grading algorithm and returns statistics about the assignment.", "FinalizeResults.js: finalizePeerReviewGrades()", "No peer reviews have been assigned in this course on Canvas.")
                         break;
                 }
             })
@@ -230,16 +200,9 @@ class FinalizeResults extends Component {
                         })
                         break;
                     case 400:
-                    res.json().then(res => {
-                        history.push({
-                            pathname: '/error',
-                            state: {
-                                context: '',
-                                error: res.error,
-                                location: "FinalizeResults.js: findCompletedAllReviews()",
-                            }
+                        res.json().then(res => {
+                            this.send400Error("This function is called in Steps 15 & 16 of the grading process. This function counts how many students completed all/some/none of their peer reviews.", res.error, "FinalizeResults.js: findCompletedAllReviews()", res.message)
                         })
-                    })
                         break;
                 }
             })
@@ -278,16 +241,9 @@ class FinalizeResults extends Component {
                         this.pullBoxPlotFromCanvas()
                         break;
                     case 400:
-                    res.json().then(res => {
-                        history.push({
-                            pathname: '/error',
-                            state: {
-                                context: '',
-                                error: res.error,
-                                location: "FinalizeResults.js: findFlaggedGrades()",
-                            }
+                        res.json().then(res => {
+                            this.send400Error("This function is called in Steps 11 & 12 of the grading process. This function gathers the names of every student who did not have enough data to accurrately calculate their grade.", res.error, "FinalizeResults.js: findFlaggedGrades()", res.message)
                         })
-                    })
                         break;
                 }
             })
@@ -323,35 +279,17 @@ class FinalizeResults extends Component {
                             .then(() => this.findCompletedAllReviews())
                         break;
                     case 400:
-                    res.json().then(res => {
-                        history.push({
-                            pathname: '/error',
-                            state: {
-                                context: '',
-                                location: "FinalizeResults.js: pullBoxPlotFromCanvas() (error came from Canvas)",
-                                message: res.message,
-                            }
+                        res.json().then(res => {
+                            this.send400Error("This function is called in Steps 13 & 14 on the grading process. This function fetches the five-number summary of grades from Canvas.", res.error, "FinalizeResults.js: pullBoxPlotFromCanvas()", res.message)
                         })
-                    })
                         break;
                     case 401:
                         res.json().then(res => {
-                            history.push({
-                                pathname: '/unauthorized',
-                                state: {
-                                    location: res.location,
-                                    message: res.message,
-                                }
-                            })
+                            this.send401Error(res)
                         })
                         break;
                     case 404:
-                        if (!this.state.error) {
-                            this.setState({
-                                error: true
-                            })
-                        }
-                        console.log("no assignments created on canvas")
+                        this.send404Error("This function is called in Steps 13 & 14 on the grading process. This function fetches the five-number summary of grades from Canvas.", "inalizeResults.js: pullBoxPlotFromCanvas()", "No assignments created in this course on Canvas.")
                         break;
                 }
             })
@@ -378,23 +316,11 @@ class FinalizeResults extends Component {
                         break;
                     case 400:
                         res.json().then(res => {
-							history.push({
-								pathname: '/error',
-								state: {
-                                    context: '',
-									error: res.error,
-									location: "FinalizeResults.js: saveOriginallyAssignedNumbersToDabase()",
-								}
-							})
-						})
+                            this.send400Error("This function is called in Step 4 of the grading process. This function records the number of peer reviews assigned and completed by Due Date 2. This information is used to then track stats about any reassigned peer reviews.", res.error, "FinalizeResults.js: saveOriginallyAssignedNumbersToDabase()", res.message)
+                        })
                         break;
                     case 404:
-                        if (!this.state.error) {
-                            this.setState({
-                                error: true
-                            })
-                        }
-                        console.log("no peer reviews have been completed for this assignment")
+                        this.send404Error("This function is called in Step 4 of the grading process. This function records the number of peer reviews assigned and completed by Due Date 2. This information is used to then track stats about any reassigned peer reviews.", "FinalizeResults.js: saveOriginallyAssignedNumbersToDabase()", "No peer reviews have been assigned in this course on Canvas.")
                         break;
                 }
             })
@@ -422,36 +348,17 @@ class FinalizeResults extends Component {
                         this.saveRubricScoresFromCanvasToDatabase()
                         break;
                     case 400:
-                    res.json().then(res => {
-                        history.push({
-                            pathname: '/error',
-                            state: {
-                                context: '',
-                                error: res.error,
-                                location: "FinalizeResults.js: savePeerReviewsFromCanvasToDatabase() (error came from Canvas)",
-                                message: res.message,
-                            }
+                        res.json().then(res => {
+                            this.send400Error("This function is called in Step 2 of the grading process. This function fetches all peer review objects from Canvas and saves them to the SQL database.", res.error, "FinalizeResults.js: savePeerReviewsFromCanvasToDatabase()", res.message)
                         })
-                    })
                         break;
                     case 401:
                         res.json().then(res => {
-                            history.push({
-                                pathname: '/unauthorized',
-                                state: {
-                                    location: res.location,
-                                    message: res.message,
-                                }
-                            })
+                            this.send401Error(res)
                         })
                         break;
                     case 404:
-                        if (!this.state.error) {
-                            this.setState({
-                                error: true
-                            })
-                        }
-                        console.log("no peer reviews assigned for this assignment")
+                        this.send404Error("This function is called in Step 2 of the grading process. This function fetches all peer review objects from Canvas and saves them to the SQL database", "FinalizeResults.js: savePeerReviewsFromCanvasToDatabase()", "No peer reviews assigned for this assignment on Canvas.")
                         break;
                 }
             })
@@ -479,36 +386,17 @@ class FinalizeResults extends Component {
                         this.saveOriginallyAssignedNumbersToDatabase();
                         break;
                     case 400:
-                    res.json().then(res => {
-                        history.push({
-                            pathname: '/error',
-                            state: {
-                                context: '',
-                                error: res.error,
-                                location: "FinalizeResults.js: saveRubricScoresFromCanvasToDatabase() (error came from Canvas)",
-                                message: res.message,
-                            }
+                        res.json().then(res => {
+                            this.send400Error("This function is called in Step 3 of the grading process. This function fetches all rubric assessments from Canvas and syncs the scores with the corresponding peer reviews in the SQL table.", res.error, "FinalizeResults.js: saveRubricScoresFromCanvasToDatabase()", res.message)
                         })
-                    })
                         break;
                     case 401:
                         res.json().then(res => {
-                            history.push({
-                                pathname: '/unauthorized',
-                                state: {
-                                    location: res.location,
-                                    message: res.message,
-                                }
-                            })
+                            this.send401Error(res)
                         })
                         break;
                     case 404:
-                        if (!this.state.error) {
-                            this.setState({
-                                error: true
-                            })
-                        }
-                        console.log("no rubric assessments found for current assignment")
+                        this.send404Error("This function is called in Step 3 of the grading process. This function fetches all rubric assessments from Canvas and syncs the scores with the corresponding peer reviews in the SQL table.", "FinalizeResults.js: saveRubricScoresFromCanvasToDatabase()", "No rubric assessments found for this assignment on Canvas.")
                         break;
                 }
             })
@@ -535,27 +423,48 @@ class FinalizeResults extends Component {
                         this.attachNamesToDatabase()
                         break;
                     case 400:
-                    res.json().then(res => {
-                        history.push({
-                            pathname: '/error',
-                            state: {
-                                context: '',
-                                error: res.error,
-                                location: "FinalizeResults.js: sendGradesToCanvas()",
-                            }
+                        res.json().then(res => {
+                            this.send400Error("This function is called in Step 7 of the grading process. This function posts each calculated grade to the Canvas gradbeook.", res.error, "FinalizeResults.js: sendGradesToCanvas()", res.message)
                         })
-                    })
                         break;
                     case 404:
-                        if (!this.state.error) {
-                            this.setState({
-                                error: true
-                            })
-                        }
-                        console.log("no students found in gradebook SQL table")
+                        this.send404Error("This function is called in Step 7 of the grading process. This function posts each calculated grade to the Canvas gradbeook.", "FinalizeResults.js: sendGradesToCanvas()", "No students found in gradebook SQL table.")
                         break;
                 }
             })
+    }
+
+    send400Error(context, error, location, message) {
+        history.push({
+            pathname: '/error',
+            state: {
+                context: context,
+                error: error,
+                location: location,
+                message: message,
+            }
+        })
+    }
+
+    send401Error(res) {
+        history.push({
+            pathname: '/unauthorized',
+            state: {
+                location: res.location,
+                message: res.message,
+            }
+        })
+    }
+
+    send404Error(context, location, message) {
+        history.push({
+            pathname: '/notfound',
+            state: {
+                context: context,
+                location: location,
+                message: message,
+            }
+        })
     }
 
     setProgress(step) {
@@ -589,16 +498,9 @@ class FinalizeResults extends Component {
                             .then(() => this.findFlaggedGrades())
                         break;
                     case 400:
-                    res.json().then(res => {
-                        history.push({
-                            pathname: '/error',
-                            state: {
-                                context: '',
-                                error: res.error,
-                                location: "FinalizeResults.js: countStudentsInEachBucket()",
-                            }
+                        res.json().then(res => {
+                            this.send400Error("This function is called in Steps 9 & 10 of the grading process. This function counts the number of students that fell into each of the buckets.", res.error, "FinalizeResults.js: countStudentsInEachBucket()", res.message)
                         })
-                    })
                         break;
                 }
             })
@@ -616,13 +518,6 @@ class FinalizeResults extends Component {
     }
 
     render() {
-        if (this.state.error) {
-            return (
-                <div>
-                    {this.state.errorMessage}
-                </div>
-            )
-        }
         /*else {
             if (this.state.error) {
                 return (
@@ -643,215 +538,215 @@ class FinalizeResults extends Component {
                                         items={['Item 1', 'Item 2']}
                                         showNav={this.state.showNav}
                                     />}*/
-//                                     <hr className="hr-6"></hr>
-//                                           <h2 className="headertext">Score Details
-//                                           {/*<button className="clear-local-button" onClick={this.clearLocalStorage}> Clear Local Storage</button>*/}
-//                                           </h2>
-//                                           <hr className="hr-2"></hr>
-//                                             {/*<p><strong>Title: </strong>{this.state.assignment.name}</p>*/}
-//                                             <br></br>
-//                                     <p className="totalscore"> -/{localStorage.getItem("finalizeDisplayTextOutOf_" + this.props.assignmentId)}pts</p>
-//                                     <Row className="scoredets">
-//                                       <p className="stats"> Mean: {localStorage.getItem("finalizeDisplayTextAverage_" + this.props.assignmentId)}</p>
-//                                       <p className="stats"> High: {localStorage.getItem("max_" + this.props.assignmentId)}</p>
-//                                       <p className="stats"> Low: {localStorage.getItem("min_" + this.props.assignmentId)}</p>
-//                                       <span className="boxplot" id={"TooltipBoxplot"}>
-//                                         <Boxplot
-//                                             width={350} height={25} orientation="horizontal"
-//                                             min={0} max={100}
-//                                             stats={{
-//                                                 whiskerLow: localStorage.getItem("min_" + this.props.assignmentId),
-//                                                 quartile1: localStorage.getItem("q1_" + this.props.assignmentId),
-//                                                 quartile2: localStorage.getItem("median_" + this.props.assignmentId),
-//                                                 quartile3: localStorage.getItem("q3_" + this.props.assignmentId),
-//                                                 whiskerHigh: localStorage.getItem("max_" + this.props.assignmentId),
-//                                                 outliers: [],
-//                                             }} />
-//                                       </span>
-//                                     </Row>
-//                                     <br></br>
-//                                     <br></br>
-//                                     <hr className="hr-5"></hr>
-//                                     <Row>
-//                                       <p className="pagetext">Completed Peer Reviews: {localStorage.getItem("finalizeDisplayTextNumCompleted_" + this.props.assignmentId)} / {localStorage.getItem("finalizeDisplayTextNumAssigned_" + this.props.assignmentId)}</p>
-//                                       <p className="date">Date Finalized: {localStorage.getItem("finalized_" + this.props.assignmentId)}</p>
-//                                       <Popup className="pop-up"
-//                                           trigger={<button className="flaggedbutton"> View Flagged Grades </button>}
-//                                           modal
-//                                           closeOnDocumentClick
-//                                       >
-//                                           <span><h5 className="modaltext">Flagged Grades</h5></span>
-//                                           <hr />
-//                                           <span className="studentlist">
-//                                             {JSON.parse(localStorage.getItem("flagged_students_" + this.props.assignmentId)).join(", ")}
-//                                           </span>
-//                                       </Popup>
-//                                     </Row>
-//                                     <br></br>
-//                                     <hr className="hr-5"></hr>
-//                                     {/* <strong>Completed All Reviews: </strong>{localStorage.getItem("completed_all_reviews_" + this.props.assignmentId)} / {Number(localStorage.getItem("completed_all_reviews_out_of_" + this.props.assignmentId)) + Number(localStorage.getItem("completed_all_reviews_" + this.props.assignmentId))} */}
-//                                     <Tooltip placement="right" delay={{ show: "300" }} isOpen={this.state.tooltipOpen} target={"TooltipBoxplot"} toggle={this.toggle}>
-//                                         <strong>Min Score:</strong> {localStorage.getItem("min_" + this.props.assignmentId)}
-//                                         <br></br>
-//                                         <strong>First Quartile:</strong> {localStorage.getItem("q1_" + this.props.assignmentId)}
-//                                         <br></br>
-//                                         <strong>Median Score:</strong> {localStorage.getItem("median_" + this.props.assignmentId)}
-//                                         <br></br>
-//                                         <strong>Third Quartile:</strong> {localStorage.getItem("q3_" + this.props.assignmentId)}
-//                                         <br></br>
-//                                         <strong>Max Score:</strong> {localStorage.getItem("max_" + this.props.assignmentId)}
-//                                     </Tooltip>
+        //                                     <hr className="hr-6"></hr>
+        //                                           <h2 className="headertext">Score Details
+        //                                           {/*<button className="clear-local-button" onClick={this.clearLocalStorage}> Clear Local Storage</button>*/}
+        //                                           </h2>
+        //                                           <hr className="hr-2"></hr>
+        //                                             {/*<p><strong>Title: </strong>{this.state.assignment.name}</p>*/}
+        //                                             <br></br>
+        //                                     <p className="totalscore"> -/{localStorage.getItem("finalizeDisplayTextOutOf_" + this.props.assignmentId)}pts</p>
+        //                                     <Row className="scoredets">
+        //                                       <p className="stats"> Mean: {localStorage.getItem("finalizeDisplayTextAverage_" + this.props.assignmentId)}</p>
+        //                                       <p className="stats"> High: {localStorage.getItem("max_" + this.props.assignmentId)}</p>
+        //                                       <p className="stats"> Low: {localStorage.getItem("min_" + this.props.assignmentId)}</p>
+        //                                       <span className="boxplot" id={"TooltipBoxplot"}>
+        //                                         <Boxplot
+        //                                             width={350} height={25} orientation="horizontal"
+        //                                             min={0} max={100}
+        //                                             stats={{
+        //                                                 whiskerLow: localStorage.getItem("min_" + this.props.assignmentId),
+        //                                                 quartile1: localStorage.getItem("q1_" + this.props.assignmentId),
+        //                                                 quartile2: localStorage.getItem("median_" + this.props.assignmentId),
+        //                                                 quartile3: localStorage.getItem("q3_" + this.props.assignmentId),
+        //                                                 whiskerHigh: localStorage.getItem("max_" + this.props.assignmentId),
+        //                                                 outliers: [],
+        //                                             }} />
+        //                                       </span>
+        //                                     </Row>
+        //                                     <br></br>
+        //                                     <br></br>
+        //                                     <hr className="hr-5"></hr>
+        //                                     <Row>
+        //                                       <p className="pagetext">Completed Peer Reviews: {localStorage.getItem("finalizeDisplayTextNumCompleted_" + this.props.assignmentId)} / {localStorage.getItem("finalizeDisplayTextNumAssigned_" + this.props.assignmentId)}</p>
+        //                                       <p className="date">Date Finalized: {localStorage.getItem("finalized_" + this.props.assignmentId)}</p>
+        //                                       <Popup className="pop-up"
+        //                                           trigger={<button className="flaggedbutton"> View Flagged Grades </button>}
+        //                                           modal
+        //                                           closeOnDocumentClick
+        //                                       >
+        //                                           <span><h5 className="modaltext">Flagged Grades</h5></span>
+        //                                           <hr />
+        //                                           <span className="studentlist">
+        //                                             {JSON.parse(localStorage.getItem("flagged_students_" + this.props.assignmentId)).join(", ")}
+        //                                           </span>
+        //                                       </Popup>
+        //                                     </Row>
+        //                                     <br></br>
+        //                                     <hr className="hr-5"></hr>
+        //                                     {/* <strong>Completed All Reviews: </strong>{localStorage.getItem("completed_all_reviews_" + this.props.assignmentId)} / {Number(localStorage.getItem("completed_all_reviews_out_of_" + this.props.assignmentId)) + Number(localStorage.getItem("completed_all_reviews_" + this.props.assignmentId))} */}
+        //                                     <Tooltip placement="right" delay={{ show: "300" }} isOpen={this.state.tooltipOpen} target={"TooltipBoxplot"} toggle={this.toggle}>
+        //                                         <strong>Min Score:</strong> {localStorage.getItem("min_" + this.props.assignmentId)}
+        //                                         <br></br>
+        //                                         <strong>First Quartile:</strong> {localStorage.getItem("q1_" + this.props.assignmentId)}
+        //                                         <br></br>
+        //                                         <strong>Median Score:</strong> {localStorage.getItem("median_" + this.props.assignmentId)}
+        //                                         <br></br>
+        //                                         <strong>Third Quartile:</strong> {localStorage.getItem("q3_" + this.props.assignmentId)}
+        //                                         <br></br>
+        //                                         <strong>Max Score:</strong> {localStorage.getItem("max_" + this.props.assignmentId)}
+        //                                     </Tooltip>
 
-//                                     <br></br>
-//                                     <br></br>
+        //                                     <br></br>
+        //                                     <br></br>
 
-//                                     <Row>
-//                                         <Well className="well2">
-//                                             <Flexbox className="accordion-flexbox" flexDirection="column" minWidth="300px" maxWidth="500px" width="100%" flexWrap="wrap">
-//                                                 {/* <Accordion name="Definitely Harsh" content={JSON.parse(localStorage.getItem("harsh_students_" + this.props.assignmentId))} /> */}
-//                                                 {/* <Accordion name="Definitely Lenient" content={JSON.parse(localStorage.getItem("lenient_students_" + this.props.assignmentId))} /> */}
-//                                                 {/* <Accordion name="Missing Some Peer Reviews" content={JSON.parse(localStorage.getItem("some_incomplete_students_" + this.props.assignmentId))} /> */}
-//                                                 {/* <Accordion name="Missing All Peer Reviews" content={JSON.parse(localStorage.getItem("all_incomplete_students_" + this.props.assignmentId))} /> */}
-//                                                 {/*<Accordion name="Flagged Grades" content={JSON.parse(localStorage.getItem("flagged_students_" + this.props.assignmentId))} /> */}
-//                                             </Flexbox>
-//                                         </Well>
-//                                     </Row>
-//                                     <br></br>
-//                                     <Row>
-//                                       <Col className="graph1">
-//                                             <h5 className="graphTitle">Completion</h5>
-//                                             <p className="graphsub">Total: {Number(localStorage.getItem("completed_all_reviews_" + this.props.assignmentId)) + Number(localStorage.getItem("completed_some_reviews_" + this.props.assignmentId)) + Number(localStorage.getItem("completed_no_reviews_" + this.props.assignmentId))}</p>
-//                                             <Flexbox className="chartbox" flexDirection="column" flexWrap="wrap">
-//                                             <ReactSvgPieChart className="piechart"
-//                                                 expandSize={3}
-//                                                 expandOnHover="false"
-//                                                 data={[
-//                                                     {title: "Completed all reviews", value: Number(localStorage.getItem("completed_all_reviews_" + this.props.assignmentId)), color: '#E38627' },
-//                                                     {title: "Completed some reviews", value: Number(localStorage.getItem("completed_no_reviews_" + this.props.assignmentId)), color: '#C13C37' },
-//                                                     {title: "Completed no reviews", value: Number(localStorage.getItem("completed_some_reviews_" + this.props.assignmentId)), color: '#6A2135' },
-//                                                 ]}
-//                                                 onSectorHover={(d) => {
-//                                                     if (d) {
-//                                                         // console.log("value: ", d.value);
-//                                                         this.state.sectorValue1 = d.value;
-//                                                         this.state.sectorTitle1 = d.title;
-//                                                         this.state.check = true;
-//                                                     }
-//                                                 }
-//                                                 }
-//                                             />
+        //                                     <Row>
+        //                                         <Well className="well2">
+        //                                             <Flexbox className="accordion-flexbox" flexDirection="column" minWidth="300px" maxWidth="500px" width="100%" flexWrap="wrap">
+        //                                                 {/* <Accordion name="Definitely Harsh" content={JSON.parse(localStorage.getItem("harsh_students_" + this.props.assignmentId))} /> */}
+        //                                                 {/* <Accordion name="Definitely Lenient" content={JSON.parse(localStorage.getItem("lenient_students_" + this.props.assignmentId))} /> */}
+        //                                                 {/* <Accordion name="Missing Some Peer Reviews" content={JSON.parse(localStorage.getItem("some_incomplete_students_" + this.props.assignmentId))} /> */}
+        //                                                 {/* <Accordion name="Missing All Peer Reviews" content={JSON.parse(localStorage.getItem("all_incomplete_students_" + this.props.assignmentId))} /> */}
+        //                                                 {/*<Accordion name="Flagged Grades" content={JSON.parse(localStorage.getItem("flagged_students_" + this.props.assignmentId))} /> */}
+        //                                             </Flexbox>
+        //                                         </Well>
+        //                                     </Row>
+        //                                     <br></br>
+        //                                     <Row>
+        //                                       <Col className="graph1">
+        //                                             <h5 className="graphTitle">Completion</h5>
+        //                                             <p className="graphsub">Total: {Number(localStorage.getItem("completed_all_reviews_" + this.props.assignmentId)) + Number(localStorage.getItem("completed_some_reviews_" + this.props.assignmentId)) + Number(localStorage.getItem("completed_no_reviews_" + this.props.assignmentId))}</p>
+        //                                             <Flexbox className="chartbox" flexDirection="column" flexWrap="wrap">
+        //                                             <ReactSvgPieChart className="piechart"
+        //                                                 expandSize={3}
+        //                                                 expandOnHover="false"
+        //                                                 data={[
+        //                                                     {title: "Completed all reviews", value: Number(localStorage.getItem("completed_all_reviews_" + this.props.assignmentId)), color: '#E38627' },
+        //                                                     {title: "Completed some reviews", value: Number(localStorage.getItem("completed_no_reviews_" + this.props.assignmentId)), color: '#C13C37' },
+        //                                                     {title: "Completed no reviews", value: Number(localStorage.getItem("completed_some_reviews_" + this.props.assignmentId)), color: '#6A2135' },
+        //                                                 ]}
+        //                                                 onSectorHover={(d) => {
+        //                                                     if (d) {
+        //                                                         // console.log("value: ", d.value);
+        //                                                         this.state.sectorValue1 = d.value;
+        //                                                         this.state.sectorTitle1 = d.title;
+        //                                                         this.state.check = true;
+        //                                                     }
+        //                                                 }
+        //                                                 }
+        //                                             />
 
-//                                         </Flexbox>
-//                                             <Well className="pieinfo">
-//                                                 {this.state.check ?
-//                                                     this.state.sectorTitle1 + ": " + this.state.sectorValue1 + " student(s)"
-//                                                 :
-//                                                 "Hover over a sector to display completion data. There may be a slight delay."}
-//                                                 </Well>
-//                                             <br />
+        //                                         </Flexbox>
+        //                                             <Well className="pieinfo">
+        //                                                 {this.state.check ?
+        //                                                     this.state.sectorTitle1 + ": " + this.state.sectorValue1 + " student(s)"
+        //                                                 :
+        //                                                 "Hover over a sector to display completion data. There may be a slight delay."}
+        //                                                 </Well>
+        //                                             <br />
 
-//                                         <div className="legend">
-//                                             <Row>
-//                                                 <Ellipse className="keycolor" rx={7} ry={4} fill={{ color: '#E38627' }} strokeWidth={5} />
-//                                                 <p className="compkey">Completed all reviews</p>
-//                                             </Row>
-//                                             <Row>
-//                                                 <Ellipse rx={7} ry={4} fill={{ color: '#C13C37' }} strokeWidth={5} />
-//                                                 <p className="compkey">Completed some reviews</p>
-//                                             </Row>
-//                                             <Row>
-//                                                 <Ellipse rx={7} ry={4} fill={{ color: '#6A2135' }} strokeWidth={5} />
-//                                                 <p className="compkey">Completed no reviews</p>
-//                                             </Row>
-//                                             </div>
-//                                           </Col>
-//                                           <Col className="graph2">
-//                                             <h5 className="graphTitle">Grading Classification</h5>
-//                                             <p className="graphsub">Total: {Number(localStorage.getItem("definitely_harsh_" + this.props.assignmentId)) +
-//                                             Number(localStorage.getItem("could_be_harsh_" + this.props.assignmentId)) +
-//                                             Number(localStorage.getItem("definitely_lenient_" + this.props.assignmentId)) +
-//                                             Number(localStorage.getItem("could_be_lenient_" + this.props.assignmentId)) +
-//                                             Number(localStorage.getItem("definitely_fair_" + this.props.assignmentId)) +
-//                                             Number(localStorage.getItem("could_be_fair_" + this.props.assignmentId)) +
-//                                             Number(localStorage.getItem("spazzy_" + this.props.assignmentId))}</p>
-//                                             <Flexbox className="chartbox" flexDirection="column" flexWrap="wrap">
-//                                             <ReactSvgPieChart className="piechart"
-//                                                 expandSize={3}
-//                                                 expandOnHover="false"
-//                                                 data={[
-//                                                     {title: "Definitely harsh", value: Number(localStorage.getItem("definitely_harsh_" + this.props.assignmentId)), color: '#ad1f1f' },
-//                                                     {title: "Could be harsh", value: Number(localStorage.getItem("could_be_harsh_" + this.props.assignmentId)), color: '#d6a0a0' },
-//                                                     {title: "Definitely lenient", value: Number(localStorage.getItem("definitely_lenient_" + this.props.assignmentId)), color: '#001887' },
-//                                                     {title: "Could be lenient", value: Number(localStorage.getItem("could_be_lenient_" + this.props.assignmentId)), color: '#b3bbdd' },
-//                                                     {title: "Definitely fair", value: Number(localStorage.getItem("definitely_fair_" + this.props.assignmentId)), color: '#063d11' },
-//                                                     {title: "Could be fair", value: Number(localStorage.getItem("could_be_fair_" + this.props.assignmentId)), color: '#94b29a' },
-//                                                     {title:"Spazzy", value: Number(localStorage.getItem("spazzy_" + this.props.assignmentId)), color: '#c68100' }
-//                                                 ]}
-//                                                 onSectorHover={(d) => {
-//                                                     if (d) {
-//                                                         // console.log("value: ", d.value);
-//                                                         this.state.sectorValue2 = d.value;
-//                                                         this.state.sectorTitle2 = d.title;
-//                                                         this.state.check2 = true;
-//                                                     }
-//                                                 }
-//                                                 }
-//                                             />
+        //                                         <div className="legend">
+        //                                             <Row>
+        //                                                 <Ellipse className="keycolor" rx={7} ry={4} fill={{ color: '#E38627' }} strokeWidth={5} />
+        //                                                 <p className="compkey">Completed all reviews</p>
+        //                                             </Row>
+        //                                             <Row>
+        //                                                 <Ellipse rx={7} ry={4} fill={{ color: '#C13C37' }} strokeWidth={5} />
+        //                                                 <p className="compkey">Completed some reviews</p>
+        //                                             </Row>
+        //                                             <Row>
+        //                                                 <Ellipse rx={7} ry={4} fill={{ color: '#6A2135' }} strokeWidth={5} />
+        //                                                 <p className="compkey">Completed no reviews</p>
+        //                                             </Row>
+        //                                             </div>
+        //                                           </Col>
+        //                                           <Col className="graph2">
+        //                                             <h5 className="graphTitle">Grading Classification</h5>
+        //                                             <p className="graphsub">Total: {Number(localStorage.getItem("definitely_harsh_" + this.props.assignmentId)) +
+        //                                             Number(localStorage.getItem("could_be_harsh_" + this.props.assignmentId)) +
+        //                                             Number(localStorage.getItem("definitely_lenient_" + this.props.assignmentId)) +
+        //                                             Number(localStorage.getItem("could_be_lenient_" + this.props.assignmentId)) +
+        //                                             Number(localStorage.getItem("definitely_fair_" + this.props.assignmentId)) +
+        //                                             Number(localStorage.getItem("could_be_fair_" + this.props.assignmentId)) +
+        //                                             Number(localStorage.getItem("spazzy_" + this.props.assignmentId))}</p>
+        //                                             <Flexbox className="chartbox" flexDirection="column" flexWrap="wrap">
+        //                                             <ReactSvgPieChart className="piechart"
+        //                                                 expandSize={3}
+        //                                                 expandOnHover="false"
+        //                                                 data={[
+        //                                                     {title: "Definitely harsh", value: Number(localStorage.getItem("definitely_harsh_" + this.props.assignmentId)), color: '#ad1f1f' },
+        //                                                     {title: "Could be harsh", value: Number(localStorage.getItem("could_be_harsh_" + this.props.assignmentId)), color: '#d6a0a0' },
+        //                                                     {title: "Definitely lenient", value: Number(localStorage.getItem("definitely_lenient_" + this.props.assignmentId)), color: '#001887' },
+        //                                                     {title: "Could be lenient", value: Number(localStorage.getItem("could_be_lenient_" + this.props.assignmentId)), color: '#b3bbdd' },
+        //                                                     {title: "Definitely fair", value: Number(localStorage.getItem("definitely_fair_" + this.props.assignmentId)), color: '#063d11' },
+        //                                                     {title: "Could be fair", value: Number(localStorage.getItem("could_be_fair_" + this.props.assignmentId)), color: '#94b29a' },
+        //                                                     {title:"Spazzy", value: Number(localStorage.getItem("spazzy_" + this.props.assignmentId)), color: '#c68100' }
+        //                                                 ]}
+        //                                                 onSectorHover={(d) => {
+        //                                                     if (d) {
+        //                                                         // console.log("value: ", d.value);
+        //                                                         this.state.sectorValue2 = d.value;
+        //                                                         this.state.sectorTitle2 = d.title;
+        //                                                         this.state.check2 = true;
+        //                                                     }
+        //                                                 }
+        //                                                 }
+        //                                             />
 
-//                                           </Flexbox>
-//                                             <Well className="pieinfo">
-//                                             {this.state.check2 ?
-//                                                 this.state.sectorTitle2 + ": " + this.state.sectorValue2 + " student(s)"
-//                                             :
-//                                             "Hover over a sector to display grading classification data. There may be a slight delay."}
-//                                             </Well>
-//                                                 <br />
-//                                             <div className="legend">
-//                                             <Row>
-//                                               <Col>
-//                                                 <Row>
-//                                                   <Ellipse rx={7} ry={4} fill={{ color: '#ad1f1f' }} strokeWidth={5} />
-//                                                   <p className="graphKey">Definitely Harsh</p>
-//                                                 </Row>
-//                                                 <Row>
-//                                                   <Ellipse rx={7} ry={4} fill={{ color: '#d6a0a0' }} strokeWidth={5} />
-//                                                   <p className="graphKey">Could be Harsh</p>
-//                                                 </Row>
-//                                                 <Row>
-//                                                   <Ellipse rx={7} ry={4} fill={{ color: '#001887' }} strokeWidth={5} />
-//                                                   <p className="graphKey">Definitely Lenient</p>
-//                                                 </Row>
-//                                                 <Row>
-//                                                   <Ellipse rx={7} ry={4} fill={{ color: '#b3bbdd' }} strokeWidth={5} />
-//                                                   <p className="graphKey">Could be Lenient</p>
-//                                                 </Row>
-//                                               </Col>
-//                                               <Col>
-//                                                 <Row>
-//                                                   <Ellipse rx={7} ry={4} fill={{ color: '#063d11' }} strokeWidth={5} />
-//                                                   <p className="graphKey">Definitely Fair</p>
-//                                                 </Row>
-//                                                 <Row>
-//                                                   <Ellipse rx={7} ry={4} fill={{ color: '#94b29a' }} strokeWidth={5} />
-//                                                   <p className="graphKey">Could be Fair</p>
-//                                                 </Row>
-//                                                 <Row>
-//                                                   <Ellipse rx={7} ry={4} fill={{ color: '#c68100' }} strokeWidth={5} />
-//                                                   <p className="graphKey">Spazzy</p>
-//                                                 </Row>
-//                                               </Col>
-//                                             </Row>
-//                                           </div>
-//                                         </Col>
-//                                     </Row>
+        //                                           </Flexbox>
+        //                                             <Well className="pieinfo">
+        //                                             {this.state.check2 ?
+        //                                                 this.state.sectorTitle2 + ": " + this.state.sectorValue2 + " student(s)"
+        //                                             :
+        //                                             "Hover over a sector to display grading classification data. There may be a slight delay."}
+        //                                             </Well>
+        //                                                 <br />
+        //                                             <div className="legend">
+        //                                             <Row>
+        //                                               <Col>
+        //                                                 <Row>
+        //                                                   <Ellipse rx={7} ry={4} fill={{ color: '#ad1f1f' }} strokeWidth={5} />
+        //                                                   <p className="graphKey">Definitely Harsh</p>
+        //                                                 </Row>
+        //                                                 <Row>
+        //                                                   <Ellipse rx={7} ry={4} fill={{ color: '#d6a0a0' }} strokeWidth={5} />
+        //                                                   <p className="graphKey">Could be Harsh</p>
+        //                                                 </Row>
+        //                                                 <Row>
+        //                                                   <Ellipse rx={7} ry={4} fill={{ color: '#001887' }} strokeWidth={5} />
+        //                                                   <p className="graphKey">Definitely Lenient</p>
+        //                                                 </Row>
+        //                                                 <Row>
+        //                                                   <Ellipse rx={7} ry={4} fill={{ color: '#b3bbdd' }} strokeWidth={5} />
+        //                                                   <p className="graphKey">Could be Lenient</p>
+        //                                                 </Row>
+        //                                               </Col>
+        //                                               <Col>
+        //                                                 <Row>
+        //                                                   <Ellipse rx={7} ry={4} fill={{ color: '#063d11' }} strokeWidth={5} />
+        //                                                   <p className="graphKey">Definitely Fair</p>
+        //                                                 </Row>
+        //                                                 <Row>
+        //                                                   <Ellipse rx={7} ry={4} fill={{ color: '#94b29a' }} strokeWidth={5} />
+        //                                                   <p className="graphKey">Could be Fair</p>
+        //                                                 </Row>
+        //                                                 <Row>
+        //                                                   <Ellipse rx={7} ry={4} fill={{ color: '#c68100' }} strokeWidth={5} />
+        //                                                   <p className="graphKey">Spazzy</p>
+        //                                                 </Row>
+        //                                               </Col>
+        //                                             </Row>
+        //                                           </div>
+        //                                         </Col>
+        //                                     </Row>
 
-//                                 </div>
-//                                 :
-//                                 <Progress className="progressbar" value={progress}> {progress_bar_message} </Progress>
-//                         }
-//                     </div>
-//                 )
-//             }
+        //                                 </div>
+        //                                 :
+        //                                 <Progress className="progressbar" value={progress}> {progress_bar_message} </Progress>
+        //                         }
+        //                     </div>
+        //                 )
+        //             }
 
         if (this.props.pressed) {
             this.savePeerReviewsFromCanvasToDatabase()
