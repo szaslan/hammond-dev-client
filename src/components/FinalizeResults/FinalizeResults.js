@@ -754,8 +754,7 @@ class FinalizeResults extends Component {
                 <div></div>
             )
         }
-
-        if (localStorage.getItem("completedAllReviews_" + this.assignmentId)) {
+        else if (localStorage.getItem("completedAllReviews_" + this.assignmentId)) {
             return (
                 <div>
                     {/* <SideNav
@@ -938,10 +937,13 @@ class FinalizeResults extends Component {
             )
         }
 
-        return (
+       else {
+           return (
             <Progress value={progress}> {progressBarMessage} </Progress>
         )
     }
+
+}
 }
 
 export default FinalizeResults;

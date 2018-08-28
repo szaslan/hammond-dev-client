@@ -124,6 +124,7 @@ class StudentInfo extends Component {
             body: JSON.stringify(data),
         })
             .then(res => {
+                console.log(res)
                 switch (res.status) {
                     case 204:
                         this.setState({
@@ -379,6 +380,7 @@ class StudentInfo extends Component {
                 switch (res.status) {
                     case 200:
                         res.json().then(res => {
+                            console.log(res)
                             this.setState({
                                 peerReviewsCompletedByCurrentStudent: res
                             })
@@ -401,6 +403,7 @@ class StudentInfo extends Component {
         let data = {
             studentId: this.state.selectedStudentId,
         }
+        console.log(data)
 
         fetch('/api/pullStudentEvaluatingData', {
             method: 'POST',
@@ -522,6 +525,7 @@ class StudentInfo extends Component {
     }
     //everytime a new assignment is clicked on, component re-renders and new assignment is fetched
     componentDidMount() {
+        console.log(this.props)
         this.setState({
             errorMessage: ""
         })
@@ -538,7 +542,7 @@ class StudentInfo extends Component {
                 graphsLoaded: false,
                 message: '',
                 peerReviewsCompletedByCurrentStudent: [],
-                selectedStudentId: this.props.match.params.student_id,
+                selectedStudentId: this.props.location.state.student_id,
                 value: "Select an Assignment",
                 value2: "Select a Peer Review",
             }, () => {

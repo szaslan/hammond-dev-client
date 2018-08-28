@@ -1,4 +1,10 @@
 import React, { Component } from 'react';
+import { Link } from "react-router-dom";
+import { Container, Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
+import JumbotronComp from '../JumbotronComp/JumbotronComp';
+// import Select from 'react-select';
+// import linkState from 'react-link-state';
+import { Redirect } from 'react-router-dom'
 import history from '../../history';
 import Loader from 'react-loader-spinner';
 import SelectSearch from 'react-select-search'
@@ -17,8 +23,8 @@ class CourseStudents extends Component {
             students: [],
             url: `/courses/${this.props.match.params.course_id}/students/`,
             value: null,
-
-            ...props,
+          
+          ...props,
 
         }
         this.fetchStudentsFromCanvas = this.fetchStudentsFromCanvas.bind(this);
@@ -87,6 +93,23 @@ class CourseStudents extends Component {
     }
 
     reDirect(event) {
+      /*
+      const { match: { params } } = this.props;
+      let id = event.value.toString();
+      this.setState({value: event.value})
+      console.log(this.state.url+id)
+      console.log(event);
+      console.log("redirecting");
+      <Redirect push to={{
+          pathname: this.state.url + id,
+          state: {student_id: event.value, student_name: event.name}}} />
+    // <Link className="student-link" to={{ pathname: this.state.url + student.id, state: { student: student, course_id: this.state.courseId } }} key={student.id}>
+
+      history.push({pathname:`/courses/${params.course_id}/students/${event.value}`,
+                    state: {student_id: event.value,
+                            student_name: event.name
+                        }})*/
+      
         this.setState({
             value: event.value,
         })
@@ -148,9 +171,9 @@ class CourseStudents extends Component {
             );
         }
 
-        return (
-            <Loader type="TailSpin" color="black" height={80} width={80} />
-        )
+        // return (
+        //     <Loader type="TailSpin" color="black" height={80} width={80} />
+        // )
     }
 }
 

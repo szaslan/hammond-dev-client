@@ -139,15 +139,22 @@ class CourseInfo extends Component {
     }
 
     render() {
-        if (this.state.loaded) {
-            return (
-                <div>
-                    <SidebarComp
-                        content={
-                            <div>
-                                <JumbotronComp mainTitle={this.state.courseJSON.name}
-                                    tabs />
-                                {/*{
+
+        // if (!this.state.auth){
+        //     return(
+        //         <div>Not authenticated</div>
+        //     )
+        // }
+
+            if (this.state.loaded){
+            return(
+            <div>
+              <SidebarComp
+                content={
+                  <div>
+                  <JumbotronComp mainTitle={this.state.courseJSON.name}
+                    tabs />
+                {/*{
                     this.state.loaded ?
                         <Container className="well1-container" fluid>
                             <Flexbox className="big-buttons-flexbox" minWidth="700px" width="60vw" justifyContent="center"
@@ -168,19 +175,15 @@ class CourseInfo extends Component {
                         <Loader type="TailSpin" color="black" height={80} width={80} />
                 */}
 
-                                <button onClick={this.resetTables}>Reset Database Tables</button>
-                            </div>
-                        }
-                    />
+                <button onClick={this.resetTables}>Reset Database Tables</button>
                 </div>
-
-            );
+              }
+              />
+            </div>
+            )
         }
-
-        return (
-            <Loader type="TailSpin" color="black" height={80} width={80} />
-        )
-    }
+        else return (<Loader type="TailSpin" color="black" height={80} width={80} />)
+        }
 }
 
 export default CourseInfo;
