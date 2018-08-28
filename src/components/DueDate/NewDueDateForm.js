@@ -51,6 +51,7 @@ class NewDueDate extends Component {
         }
         else {
             //Make sure date selected is either on or after the previous due date day
+
             var lowerBoundDate = Datetime.moment(localStorage.getItem("dueDate_" + this.previousDueDateExtension)).subtract(1, 'day');
             return current.isAfter(lowerBoundDate);
         }
