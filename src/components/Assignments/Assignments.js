@@ -6,6 +6,7 @@ import SelectSearch from 'react-select-search'
 import '../BreadcrumbComp/BreadcrumbComp.css';
 
 import './Assignments.css';
+import AssignmentInfo from '../AssignmentInfo/AssignmentInfo';
 
 const array = [];
 
@@ -30,17 +31,17 @@ class Assignments extends Component {
 
         this.state = {
             assignments: [],
-            courseId: this.props.match.params.course_id,
+            courseId: this.props.courseJSON.id,
             dropdownOpen: false,
             loaded: false,
-            url: `/courses/${this.props.match.params.course_id}/assignments/`,
+            url: `/courses/${this.props.courseJSON.id}/assignments/`,
             value: null,
 
             ...props,
         }
 
         this.pullAssignments = this.pullAssignments.bind(this);
-        this.reDirect = this.reDirect.bind(this);
+        this.select = this.select.bind(this);
         this.toggle = this.toggle.bind(this);
     }
 
@@ -48,7 +49,6 @@ class Assignments extends Component {
         let data = {
             courseId: this.state.courseId,
         }
-
         fetch('/api/assignments', {
             method: 'POST',
             headers: {
@@ -104,12 +104,12 @@ class Assignments extends Component {
             })
     }
 
-    reDirect(event) {
+    select(event) {
         this.setState({
             value: event.value,
         })
 
-        history.push(`/courses/${this.state.courseId}/assignments/${event.value}`)
+        // history.push(`/courses/${this.state.courseId}/assignments/${event.value}`)
     }
 
     toggle() {
@@ -131,15 +131,22 @@ class Assignments extends Component {
 
         if (this.state.loaded && array.length == this.state.assignments.length) {
             return (
-                <div className="assigndrop">
-                    <SelectSearch
-                        className="select-search-box"
-                        options={array}
-                        search="true"
-                        placeholder="Select an Assignment"
-                        value={this.state.value}
-                        onChange={this.reDirect}
-                    />
+                <div>
+                    <div className="assigndrop">
+                        <SelectSearch
+                            className="select-search-box"
+                            options={array}
+                            search="true"
+                            placeholder="Select an Assignment"
+                            value={this.state.value}
+                            onChange={this.select}
+                        />
+                    </div>
+
+                    {console.log(this.state.value)}
+                    {this.state.value ? <AssignmentInfo courseJSON={this.props.courseJSON} assignmentId={this.state.value}/>
+                    :
+                    null}
                 </div>
             );
         }

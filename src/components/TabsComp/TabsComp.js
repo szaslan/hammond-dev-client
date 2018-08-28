@@ -5,6 +5,7 @@ import classnames from 'classnames';
 import Iframe from 'react-iframe';
 
 import '../TabsComp/TabsComp.css'
+import Assignments from '../Assignments/Assignments';
 
 class TabsComp extends Component {
     constructor(props) {
@@ -26,6 +27,7 @@ class TabsComp extends Component {
         }
     }
     render() {
+        let { courseJSON } = this.props;
         return (
             <div>
                 <Nav tabs className="tabs-nav">
@@ -58,10 +60,11 @@ class TabsComp extends Component {
 
                     <TabPane tabId="1">
                       <div>
-                      <Iframe className="iframe" url="http://localhost:3000/courses/83831/assignments"
+                      {/* <Iframe className="iframe" url="http://localhost:3000/courses/83831/assignments"
                         width="85%"
                         height="70%"
-                        />
+                        /> */}
+                        <Assignments courseJSON={courseJSON} />
                       </div>
                     </TabPane>
 

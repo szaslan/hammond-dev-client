@@ -47,7 +47,7 @@ class JumbotronComp extends Component {
                 <div className="tabcontain">
                     {
                         this.props.tabs ?
-                            <TabsComp />
+                            <TabsComp courseJSON={this.props.courseJSON}/>
                             :
                             <hr className="hr-1"></hr>
                     }

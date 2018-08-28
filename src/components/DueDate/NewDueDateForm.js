@@ -50,7 +50,7 @@ class NewDueDate extends Component {
         }
         else {
             //Make sure date selected is either on or after the previous due date day
-            var lowerBoundDate = Datetime.moment(localStorage.getItem("dueDate_" + this.previousdueDateExtension)).subtract(1, 'day');
+            var lowerBoundDate = Datetime.moment(localStorage.getItem("dueDate_" + this.previousueDateExtension)).subtract(1, 'day');
             return current.isAfter(lowerBoundDate);
         }
     }
@@ -86,7 +86,7 @@ class NewDueDate extends Component {
                 this.isValidTime = true;
             }
             else {
-                var previousDueDate = Datetime.moment(localStorage.getItem("dueDate_" + this.previousdueDateExtension));
+                var previousDueDate = Datetime.moment(localStorage.getItem("dueDate_" + this.previousDueDateExtension));
                 this.isValidTime = previousDueDate.isBefore(chosenDueDate);
                 this.isBeforeDates = chosenDueDate.isBefore(previousDueDate);
             }
@@ -173,7 +173,7 @@ class NewDueDate extends Component {
                                                 Please choose one that does not.
                                                 <br></br>
                                                 <br></br>
-                                                Due Date {this.previousDueDateNumber}: {moment(localStorage.getItem("dueDate_" + this.previousdueDateExtension)).format('MM/DD/YYYY')} {moment(localStorage.getItem("dueDate_" + this.previousdueDateExtension)).format('h:mm a')}
+                                                Due Date {this.previousDueDateNumber}: {moment(localStorage.getItem("dueDate_" + this.previousDueDateExtension)).format('MM/DD/YYYY')} {moment(localStorage.getItem("dueDate_" + this.previousDueDateExtension)).format('h:mm a')}
                                                 <br></br>
                                                 Due Date Selected: {this.state.dateValue.format('MM/DD/YYYY')} {this.state.timeValue.format('h:mm a')}
                                             </ModalBody>

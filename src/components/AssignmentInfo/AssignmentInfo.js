@@ -12,11 +12,11 @@ class AssignmentInfo extends Component {
         super(props);
 
         this.state = {
-            assignmentId: this.props.match.params.assignment_id, //assignment_id prop passed through route in app.js\
+            assignmentId: this.props.assignmentId, //assignment_id prop passed through route in app.js\
             assignmentJSON: null,
-            courseId: this.props.match.params.course_id,
+            courseId: this.props.courseJSON.id,
             loaded: false,
-            url: `/courses/${this.props.match.params.course_id}/assignments/`,
+            url: `/courses/${this.props.courseId}/assignments/`,
 
             ...props,
         }
@@ -34,6 +34,7 @@ class AssignmentInfo extends Component {
             assignmentId: this.state.assignmentId,
             courseId: this.state.courseId,
         }
+        console.log(data)
 
         fetch('/api/assignmentInfo', {
             method: 'POST',
@@ -94,15 +95,15 @@ class AssignmentInfo extends Component {
     }
 
     componentDidUpdate(prevProps) {
-        if (this.state.assignmentId !== prevProps.match.params.assignment_id) {
+        if (this.state.assignmentId !== prevProps.assignmentId) {
             this.fetchAssignmentData();
         }
     }
 
     static getDerivedStateFromProps(nextProps, prevState) {
-        if (nextProps.match.params.assignment_id !== prevState.assignmentId) {
+        if (nextProps.assignmentId !== prevState.assignmentId) {
             return {
-                assignmentId: nextProps.match.params.assignment_id,
+                assignmentId: nextProps.assignmentId,
                 assignmentJSON: null,
             }
         }
