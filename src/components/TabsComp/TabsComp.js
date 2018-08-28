@@ -6,6 +6,7 @@ import Iframe from 'react-iframe';
 
 import '../TabsComp/TabsComp.css'
 import Assignments from '../Assignments/Assignments';
+import CourseStudents from '../CourseStudents/CourseStudents';
 
 class TabsComp extends Component {
     constructor(props) {
@@ -60,20 +61,17 @@ class TabsComp extends Component {
 
                     <TabPane tabId="1">
                       <div>
-                      {/* <Iframe className="iframe" url="http://localhost:3000/courses/83831/assignments"
-                        width="85%"
-                        height="70%"
-                        /> */}
                         <Assignments courseJSON={courseJSON} />
                       </div>
                     </TabPane>
 
                     <TabPane tabId="2">
                       <div>
-                      <Iframe className="iframe" url="http://localhost:3000/courses/83831/students"
+                        <CourseStudents courseId={courseJSON.id}/>
+                      {/* <Iframe className="iframe" url="http://localhost:3000/courses/83831/students"
                         width="85%"
                         height="70%"
-                        />
+                        /> */}
                       </div>
                     </TabPane>
                 </TabContent>

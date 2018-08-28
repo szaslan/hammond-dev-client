@@ -22,7 +22,7 @@ class CourseStudents extends Component {
         // this.handleChange = this.handleChange.bind(this)
         //URL is the current url while taking in the parameters from the props of the previous url
         this.state = {
-            courseId: this.props.match.params.course_id,
+            courseId: this.props.courseId,
             dropdownOpen: false,
             loaded: false,
             students: [],
@@ -31,7 +31,7 @@ class CourseStudents extends Component {
             studentName: '',
             studentId: '',
             ...props,
-            url: `/courses/${this.props.match.params.course_id}/students/`,
+            url: `/courses/${this.props.courseId}/students/`,
             value: null,
           
           ...props,
@@ -49,11 +49,10 @@ class CourseStudents extends Component {
 
     //fetch assignments for course with course_id passed down
     componentDidMount() {
-        const { match: { params } } = this.props;
-        if (this.props.location.state.student_name.length > 0) console.log('name found')
-        this.setState({
-            url: `/courses/${params.course_id}/students/`
-        })
+        // if (this.props.location.state.student_name.length > 0) console.log('name found')
+        // this.setState({
+        //     url: `/courses/${params.course_id}/students/`
+        // })
     };
 
     fetchStudentsFromCanvas() {
