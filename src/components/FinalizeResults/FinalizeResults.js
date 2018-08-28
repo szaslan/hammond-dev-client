@@ -762,6 +762,9 @@ class FinalizeResults extends Component {
                         items={['Item 1', 'Item 2']}
                         showNav={this.state.showNav}
                     /> */}
+                    <hr className="hr-6"></hr>
+                            <h2 className="headertext">Score Details</h2>
+                    <hr className="hr-2"></hr>
                     <p className="totalscore"> -/{localStorage.getItem("finalizeDisplayTextOutOf_" + this.assignmentId)}pts</p>
                     <Row className="scoredets">
                         <p className="stats"> Mean: {Number(localStorage.getItem("finalizeDisplayTextAverage_" + this.assignmentId)).toFixed(1)}</p>
@@ -781,15 +784,24 @@ class FinalizeResults extends Component {
                                 }} />
                         </span>
                     </Row>
-                    <br></br>
-                    <br></br>
-                    <hr className="hr-4"></hr>
+                    <hr className="hr-5"></hr>
                     <Row>
                         <p className="pagetext">Completed Peer Reviews: {localStorage.getItem("finalizeDisplayTextNumCompleted_" + this.assignmentId)} / {localStorage.getItem("finalizeDisplayTextNumAssigned_" + this.assignmentId)}</p>
                         <p className="date">Date Finalized: {localStorage.getItem("finalized_" + this.assignmentId)}</p>
+                        <Popup className="pop-up"
+                            trigger={<button className="flaggedbutton"> View Flagged Grades ({JSON.parse(localStorage.getItem("flaggedStudents_" + this.assignmentId)).length})</button>}
+                            modal
+                            closeOnDocumentClick
+                        >
+                            <span><h5 className="modaltext">Flagged Grades</h5></span>
+                            <hr />
+                            <span className="studentlist">
+                                {JSON.parse(localStorage.getItem("flaggedStudents_" + this.assignmentId))}
+                            </span>
+                        </Popup>
                     </Row>
                     <br></br>
-                    <hr className="hr-4"></hr>
+                    <hr className="hr-5"></hr>
                     <Tooltip placement="right" isOpen={this.state.tooltipOpen} target={"TooltipBoxplot"} toggle={this.toggle}>
                         <strong>Min Score:</strong> {localStorage.getItem("min_" + this.assignmentId)}
                         <br></br>
@@ -805,8 +817,11 @@ class FinalizeResults extends Component {
                     <br></br>
                     <br></br>
                     <Row>
-                        <Flexbox className="chartbox" flexDirection="column" width="200px" flexWrap="wrap">
+                      <Col className="graph1">
                             <h5 className="graphTitle">Completion</h5>
+                            <p className="graphsub">Total: {Number(localStorage.getItem("completedAllReviews_" + this.props.assignmentId)) + Number(localStorage.getItem("completedSomeReviews_" + this.props.assignmentId)) + Number(localStorage.getItem("completedNoReviews_" + this.props.assignmentId))}</p>
+
+                            <Flexbox className="chartbox" flexDirection="column" flexWrap="wrap">
                             <ReactSvgPieChart className="piechart"
                                 expandSize={3}
                                 expandOnHover="false"
@@ -828,6 +843,7 @@ class FinalizeResults extends Component {
                                     }
                                 }}
                             />
+                          </Flexbox>
                             <Well className="pieinfo">
                                 {this.state.hoveringOverPieChart1 ?
                                     this.state.sectorTitle1 + ": " + this.state.sectorValue1 + " student" + (this.state.sectorValue1 != 1 ? "s" : "")
@@ -835,6 +851,7 @@ class FinalizeResults extends Component {
                                     "Hover over a sector to display completion data. There may be a slight delay."}
                             </Well>
                             <br />
+                            <div className="legend">
                             <Row>
                                 <Ellipse className="keycolor" rx={7} ry={4} fill={{ color: '#063D11' }} strokeWidth={5} />
                                 <p className="compkey" style={this.state.sectorTitle1 == "Completed all reviews" ? { fontWeight: 'bold' } : null}>Completed all reviews</p>
@@ -847,9 +864,19 @@ class FinalizeResults extends Component {
                                 <Ellipse className="keycolor" rx={7} ry={4} fill={{ color: '#AD1F1F' }} strokeWidth={5} />
                                 <p className="compkey" style={this.state.sectorTitle1 == "Completed no reviews" ? { fontWeight: 'bold' } : null}>Completed no reviews</p>
                             </Row>
-                        </Flexbox>
-                        <Flexbox className="chartbox" flexDirection="column" width="200px" flexWrap="wrap">
+                            </div>
+                        </Col>
+                        <Col className="graph2">
                             <h5 className="graphTitle">Grading Classification</h5>
+                            <p className="graphsub">Total: {Number(localStorage.getItem("definitelyHarsh_" + this.props.assignmentId)) +
+                                                                        Number(localStorage.getItem("couldBeHarsh_" + this.props.assignmentId)) +
+                                                                        Number(localStorage.getItem("definitelyLenient_" + this.props.assignmentId)) +
+                                                                        Number(localStorage.getItem("couldBeLenient_" + this.props.assignmentId)) +
+                                                                        Number(localStorage.getItem("definitelyFair_" + this.props.assignmentId)) +
+                                                                        Number(localStorage.getItem("couldBeFair_" + this.props.assignmentId)) +
+                                                                        Number(localStorage.getItem("spazzy_" + this.props.assignmentId))}</p>
+
+                            <Flexbox className="chartbox" flexDirection="column" flexWrap="wrap">
                             <ReactSvgPieChart className="piechart"
                                 expandSize={3}
                                 expandOnHover="false"
@@ -876,6 +903,7 @@ class FinalizeResults extends Component {
                                 }
                                 }
                             />
+                          </Flexbox>
                             <Well className="pieinfo">
                                 {this.state.hoveringOverPieChart2 ?
                                     this.state.sectorTitle2 + ": " + this.state.sectorValue2 + " student" + (this.state.sectorValue2 != 1 ? "s" : "")
@@ -919,27 +947,15 @@ class FinalizeResults extends Component {
                                     </Col>
                                 </Row>
                             </div>
-                        </Flexbox>
+                      </Col>
                     </Row>
-                    <hr className="hr-4"></hr>
-                    <Popup className="pop-up"
-                        trigger={<button className="flaggedbutton"> View Flagged Grades ({JSON.parse(localStorage.getItem("flaggedStudents_" + this.assignmentId)).length})</button>}
-                        modal
-                        closeOnDocumentClick
-                    >
-                        <span><h5 className="modaltext">Flagged Grades</h5></span>
-                        <hr />
-                        <span className="studentlist">
-                            {JSON.parse(localStorage.getItem("flaggedStudents_" + this.assignmentId))}
-                        </span>
-                    </Popup>
+
                 </div>
             )
         }
 
-       else {
-           return (
-            <Progress value={progress}> {progressBarMessage} </Progress>
+        return (
+            <Progress className="progressbar" value={progress}> {progressBarMessage} </Progress>
         )
     }
 

@@ -101,6 +101,7 @@ class CourseInfo extends Component {
     }
 
     resetTables() {
+      console.log("resetting tables")
         fetch('/api/resetTables', {
             method: 'POST',
             headers: {
@@ -145,16 +146,15 @@ class CourseInfo extends Component {
         //         <div>Not authenticated</div>
         //     )
         // }
-
-            if (this.state.loaded){
-            return(
-            <div>
-              <SidebarComp
-                content={
-                  <div>
-                  <JumbotronComp mainTitle={this.state.courseJSON.name}
-                    tabs />
-                {/*{
+        if (this.state.loaded) {
+            return (
+                <div>
+                    <SidebarComp
+                        content={
+                            <div>
+                                <JumbotronComp mainTitle={this.state.courseJSON.name}
+                                    tabs />
+                                {/*
                     this.state.loaded ?
                         <Container className="well1-container" fluid>
                             <Flexbox className="big-buttons-flexbox" minWidth="700px" width="60vw" justifyContent="center"

@@ -2,6 +2,8 @@
   margin-left: 5%;
   margin-top: 4%;
   min-width: 1100px;
+  background-color: #FFEFE2;
+  z-index: 1;
 }
 
 .nav-item-1, .nav-item-2{

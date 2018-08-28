@@ -6,7 +6,9 @@ import Popup from 'reactjs-popup';
 
 import 'bootstrap/dist/css/bootstrap.css';
 
-import '../Assignments/Assignments.css'
+import '../Assignments/Assignments.css';
+import '../DueDate/NewDueDate.css'
+
 
 var progress = 0;
 var progressNumSteps = 6;
@@ -268,23 +270,24 @@ class AnalyzeResults extends Component {
         if (localStorage.getItem("analyzeDisplayTextNames_" + this.assignmentId)) {
             return (
                 <div>
+                <hr className="hr-4"></hr>
+                  <div className="textmessage">
                     {localStorage.getItem("analyzeDisplayTextMessage_" + this.assignmentId)}
+                  </div>
                     <br></br>
                     <br></br>
                     <Row>
-                        <Well className="well2">
+                        <Well className="text">
                             <strong>Completed Peer Reviews:</strong> {localStorage.getItem("analyzeDisplayTextNumCompleted_" + this.assignmentId)} / {localStorage.getItem("analyzeDisplayTextNumAssigned_" + this.assignmentId)}
                         </Well>
-                    </Row>
-
-                    <hr className="hr-4"></hr>
-                    <Popup className="pop-up" trigger={<button className="flaggedbutton"> View Flagged Grades ({JSON.parse(localStorage.getItem("analyzeDisplayTextNames_" + this.assignmentId)).length})</button>} modal closeOnDocumentClick >
-                        <span><h5 className="modaltext">Flagged Grades</h5></span>
+                    <Popup className="pop-up" trigger={<button className="flagbutton"> View Flagged Grades ({JSON.parse(localStorage.getItem("analyzeDisplayTextNames_" + this.assignmentId)).length})</button>} modal closeOnDocumentClick >
+                        <span><h5>Flagged Grades</h5></span>
                         <hr />
                         <span className="studentlist">
                             {JSON.parse(localStorage.getItem("analyzeDisplayTextNames_" + this.assignmentId))}
                         </span>
                     </Popup>
+                  </Row>
                 </div>
             )
         }

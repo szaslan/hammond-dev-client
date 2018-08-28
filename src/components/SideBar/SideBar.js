@@ -37,9 +37,9 @@ class SidebarComp extends React.Component {
 					<b>
 						<a href=""><img className="logo" src={logo} width={"60px"} /></a>
 						<br />
-						<a href="/courses" className="sidebarcontent">Account</a>
+						{/*<a href="" className="sidebarcontent">Account</a>
 						<br />
-						<br />
+						<br />*/}
 						<a href="/courses" className="sidebarcontent">Courses</a>
 						<br />
 						<Link to="/logout">

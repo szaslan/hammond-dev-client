@@ -3,7 +3,7 @@ import { UncontrolledTooltip } from 'reactstrap';
 import Flexbox from 'flexbox-react';
 import history from '../../history';
 import moment from 'moment';
-
+import { Row, Col } from 'react-bootstrap';
 import AlgorithmBenchmarks from '../AlgorithmBenchmarks/AlgorithmBenchmarks';
 import AnalyzeResults from '../AnalyzeResults/AnalyzeResults';
 import CustomizableParameters from '../CustomizableParameters/CustomizableParameters';
@@ -13,6 +13,7 @@ import NewDueDate from '../DueDate/NewDueDate';
 import 'bootstrap/dist/css/bootstrap.css';
 
 import '../Assignments/Assignments.css';
+import '../DueDate/NewDueDate.css'
 
 //have to match constants defined in GradingAlgorithm.js (back-end)
 const BENCHMARKS = {
@@ -148,6 +149,7 @@ class AnalyzeButton extends Component {
 		})
 			.then(res => {
 				res.json().then(res => {
+					console.log(res)
 					if (res.result == "not found") {
 						//column in gradebook not found, so assignment has not been finalized
 					}
@@ -460,19 +462,20 @@ class AnalyzeButton extends Component {
 										:
 										null
 								}
-								<span id="analyze-button-1">
-									<button onClick={this.handleAnalyzeClick} className="analyze" id="analyze">Analyze</button>
-								</span>
-								<UncontrolledTooltip delay={{ show: "1200" }} placement="top" target="analyze-button-1">
-									Click to view statistics for submitted peer reviews
-								</UncontrolledTooltip>
-
-								<span id="finalize-button-1">
-									<button className="analyze" id="finalize" onClick={this.handleFinalizeClick}>Finalize</button>
-								</span>
-								<UncontrolledTooltip delay={{ show: "1200" }} placement="top" target="finalize-button-1">
-									Click to calculate grades and send to the Canvas gradebook
-								</UncontrolledTooltip>
+								<Row className="analyze">
+									<span id="analyze-button-1">
+											<button onClick={this.handleAnalyzeClick} className="analyzebutton">Analyze</button>
+									</span>
+								 		<UncontrolledTooltip delay={{ show: "1200" }} placement="top" target="analyze-button-1">
+												Click to view statistics for submitted peer reviews
+										</UncontrolledTooltip>
+										<span id="finalize-button-1">
+												<button className="finalizebutton" onClick={this.handleFinalizeClick}>Finalize</button>
+										</span>
+										<UncontrolledTooltip delay={{ show: "1200" }} placement="top" target="finalize-button-1">
+												Click to calculate grades and send to the Canvas gradebook
+										</UncontrolledTooltip>
+									</Row>
 							</Flexbox>
 						</div>
 						:

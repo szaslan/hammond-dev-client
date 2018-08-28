@@ -57,20 +57,21 @@ class TabsComp extends Component {
                 <TabContent activeTab={this.state.activeTab}>
 
                     <TabPane tabId="1">
-                        <div>
-                            <Iframe className="iframe" url="http://localhost:3000/courses/83831/assignments"
-                                width="85%"
-                                height="70%"
-                            />
-                        </div>
+                      <div>
+                      <Iframe className="iframe" url="http://localhost:3000/courses/83831/assignments"
+                        width="85%"
+                        height="70%"
+                        />
+                      </div>
                     </TabPane>
 
                     <TabPane tabId="2">
-                        <div>
-                            <Iframe url="http://localhost:3000/courses/83831/students"
-                                width="85%"
-                            />
-                        </div>
+                      <div>
+                      <Iframe className="iframe" url="http://localhost:3000/courses/83831/students"
+                        width="85%"
+                        height="70%"
+                        />
+                      </div>
                     </TabPane>
                 </TabContent>
             </div>
