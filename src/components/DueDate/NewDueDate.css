@@ -1,4 +1,3 @@
-
   .dateTime{
     margin-right: 11% !important;
     margin-bottom: 3%;
@@ -111,15 +110,14 @@
     /* box-shadow: 0 1px 3px rgba(0,0,0,.1); */
     box-shadow:none;
     border: none;
-  }
-
-  .form-control:disabled{
+}
+  
+.form-control:disabled{
     height:10%!important;
     border-radius:0px!important;
     box-shadow:none !important;
-    border:none!important;
-
-  }
+    border:none!important;    
+}
 
   .rdtStatic .rdtPicker {
     box-shadow: none;
@@ -350,4 +348,11 @@
   }
 .invalidModal{
   z-index:3;
+}
+
+.color-border-red {
+  border: 3px solid red !important;
+}
+.color-border-green {
+	border: 3px solid green !important;
 }

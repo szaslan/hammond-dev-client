@@ -38,20 +38,46 @@ class OtherError extends Component {
                     <Row className="error-message-title">
                         {this.errorMessageTitle}
                     </Row>
+                    {
+                        this.state.error ?
+                            //SQL Error
+                            <div className="sql-error">
+                                <Row>
+                                    <b>This was an SQL error</b>
+                                </Row>
+                                <Row>
+                                    Error: {this.state.error.code}
+                                </Row>
+                                <Row>
+                                    SQL Querry: {this.state.error.sql}
+                                </Row>
+                                <Row>
+                                    SQL Message: {this.state.error.sqlMessage}
+                                </Row>
+                            </div>
+                            :
+                            //Canvas Error
+                            <Row>
+                                This was an error with Canvas: {this.state.message}
+                            </Row>
+
+                    }
+                    <br></br>
+                    <br></br>
+                    <br></br>
                     <Row className="error-message-body">
-                        Message received from {this.state.location}: {this.state.error ? this.state.error.sql : this.state.message}
+                        Location of the error: {this.state.location}
                     </Row>
-                    <Row>
+                    <Row className="error-context">
                         Context: {this.state.context}
                     </Row>
                 </div>
             );
         }
-        else {
-            return (
-                <Loader className="loader" type="TailSpin" color="black" height={80} width={80} />
-            )
-        }
+
+        return (
+            <Loader className="loader" type="TailSpin" color="black" height={80} width={80} />
+        )
     }
 }
 

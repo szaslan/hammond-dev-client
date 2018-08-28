@@ -11,3 +11,11 @@
   font-weight: 100;
   color: #626262;
 }
+
+.not-active:hover {
+  cursor: pointer;
+}
+
+.active:hover {
+  cursor: default;
+}

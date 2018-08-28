@@ -1,11 +1,9 @@
 import React, { Component } from 'react';
-import { Row, Col } from 'react-bootstrap';
+import { Row } from 'react-bootstrap';
 import { TabContent, TabPane, Nav, NavItem, NavLink, } from 'reactstrap';
 import classnames from 'classnames';
 import Iframe from 'react-iframe';
 
-import AssignmentInfo from '../AssignmentInfo/AssignmentInfo';
-import Assignments from '../Assignments/Assignments';
 import '../TabsComp/TabsComp.css'
 
 class TabsComp extends Component {
@@ -34,7 +32,7 @@ class TabsComp extends Component {
                     {/* <div className = "tabs-div"> */}
                     <Row className="tabs">
                         {/* <Link to={this.props.tab1link}> */}
-                        <NavItem className="nav-item-1">
+                        <NavItem className={"nav-item-1 " + (this.state.activeTab === '1' ? "active" : "not-active")}>
                             <NavLink
                                 className={"tab-link " + classnames({ active: this.state.activeTab === '1' })}
                                 onClick={() => { this.toggle('1'); }}
@@ -44,7 +42,7 @@ class TabsComp extends Component {
                         </NavItem>
                         {/* </Link> */}
                         {/* <Link to={this.props.tab2link}> */}
-                        <NavItem className="nav-item-2">
+                        <NavItem className={"nav-item-2 " + (this.state.activeTab === '2' ? "active" : "not-active")}>
                             <NavLink
                                 className={"tab-link " + classnames({ active: this.state.activeTab === '2' })}
                                 onClick={() => { this.toggle('2'); }}

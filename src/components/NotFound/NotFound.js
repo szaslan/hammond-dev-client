@@ -9,17 +9,19 @@ class NotFound extends Component {
         super(props);
 
         this.state = {
+            context: null,
             loaded: false,
             location: null,
             message: null,
         }
 
 
-        this.errorMessageTitle = "Oops, it looks like something went wrong"
+        this.errorMessageTitle = "404 - Not Found: Oops, it looks like something went wrong"
     }
 
     componentDidMount() {
         this.setState({
+            context: this.props.location.state.context,
             loaded: true,
             location: this.props.location.state.location,
             message: this.props.location.state.message,
@@ -33,17 +35,25 @@ class NotFound extends Component {
                     <Row className="error-message-title">
                         {this.errorMessageTitle}
                     </Row>
+                    <Row>
+                        {this.state.message}
+                    </Row>
+                    <br></br>
+                    <br></br>
+                    <br></br>
                     <Row className="error-message-body">
-                        Message received from {this.state.location}: {this.state.message}
+                        Location of the error: {this.state.location}
+                    </Row>
+                    <Row className="error-context">
+                        Context: {this.state.context}
                     </Row>
                 </div>
             );
         }
-        else {
-            return (
-                <Loader className="loader" type="TailSpin" color="black" height={80} width={80} />
-            )
-        }
+
+        return (
+            <Loader className="loader" type="TailSpin" color="black" height={80} width={80} />
+        )
     }
 }
 

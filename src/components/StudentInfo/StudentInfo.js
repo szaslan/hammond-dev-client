@@ -11,7 +11,6 @@ import './StudentInfo.css';
 //filter for only peer reviewable assignments
 function FilterAssignments(props) {
     const currAssignment = props.currAssigment;
-    console.log(props)
 
     //only show assignments that are peer reviewable
     if (currAssignment.peer_reviews) {
@@ -58,6 +57,7 @@ class StudentInfo extends Component {
         this.pullStudentEvaluatingData = this.pullStudentEvaluatingData.bind(this);
         this.select = this.select.bind(this);
         this.selectPeerReview = this.selectPeerReview.bind(this);
+        this.send400Error = this.send400Error.bind(this);
         this.setMessage = this.setMessage.bind(this);
         this.toggleAssignment = this.toggleAssignment.bind(this);
         this.toggleReview = this.toggleReview.bind(this);
@@ -124,6 +124,7 @@ class StudentInfo extends Component {
             body: JSON.stringify(data),
         })
             .then(res => {
+                console.log(res)
                 switch (res.status) {
                     case 204:
                         this.setState({
@@ -132,16 +133,9 @@ class StudentInfo extends Component {
                         this.pullStudentEvaluatingData();
                         break;
                     case 400:
-                    res.json().then(res => {
-                        history.push({
-                            pathname: '/error',
-                            state: {
-                                context: '',
-                                error: res.error,
-                                location: "StudentInfo.js checkIfStudentHasSavedHistory()",
-                            }
+                        res.json().then(res => {
+                            this.send400Error("This function is called when a specific student has been clicked on from the dropdown under the students tab after all of the assignments have been successfully pulled from Canvas. This function checks if a student has any saved evaluating data in the SQL tables. This data will only exist after an assignment has been finalized.", res.error, "StudentInfo.js checkIfStudentHasSavedHistory()", res.message)
                         })
-                    })
                         break;
                     case 404:
                         this.setState({
@@ -340,16 +334,9 @@ class StudentInfo extends Component {
                         })
                         break;
                     case 400:
-                    res.json().then(res => {
-                        history.push({
-                            pathname: '/error',
-                            state: {
-                                context: '',
-                                location: "StudentInfo.js fetchAssignmentData() (error came from Canvas)",
-                                message: res.message,
-                            }
+                        res.json().then(res => {
+                            this.send400Error("This function is called when a specific student has been clicked on from the dropdown under the students tab. This function fetches the information for all of the assignments from Canvas.", res.error, "StudentInfo.js fetchAssignmentData()", res.message)
                         })
-                    })
                         break;
                     case 401:
                         res.json().then(res => {
@@ -363,7 +350,14 @@ class StudentInfo extends Component {
                         })
                         break;
                     case 404:
-                        console.log("no assignments created on canvas")
+                        history.push({
+                            pathname: '/notfound',
+                            state: {
+                                context: 'This function is called when a specific student has been clicked on from the dropdown under the students tab. This function fetches the information for all of the assignments from Canvas.',
+                                location: "StudentInfo.js fetchAssignmentData()",
+                                message: 'No assignments created on Canvas.',
+                            }
+                        })
                         break;
                 }
             })
@@ -386,6 +380,7 @@ class StudentInfo extends Component {
                 switch (res.status) {
                     case 200:
                         res.json().then(res => {
+                            console.log(res)
                             this.setState({
                                 peerReviewsCompletedByCurrentStudent: res
                             })
@@ -408,6 +403,7 @@ class StudentInfo extends Component {
         let data = {
             studentId: this.state.selectedStudentId,
         }
+        console.log(data)
 
         fetch('/api/pullStudentEvaluatingData', {
             method: 'POST',
@@ -427,16 +423,9 @@ class StudentInfo extends Component {
                         })
                         break;
                     case 400:
-                    res.json().then(res => {
-                        history.push({
-                            pathname: '/error',
-                            state: {
-                                context: '',
-                                error: res.error,
-                                location: "StudentInfo.js pullStudentEvaluatingData()",
-                            }
+                        res.json().then(res => {
+                            this.send400Error("This function is called after a student is confirmed to have saved evaluating data. This function pulls all the data from the SQL tables and assembles it to be displayed on graphs.", res.error, "StudentInfo.js pullStudentEvaluatingData()", res.message)
                         })
-                    })
                         break;
                 }
             })
@@ -486,32 +475,37 @@ class StudentInfo extends Component {
                         })
                         break;
                     case 400:
-                    res.json().then(res => {
-                        history.push({
-                            pathname: '/error',
-                            state: {
-                                context: '',
-                                error: res.error,
-                                location: "StudentInfo.js selectPeerReview()",
-                            }
+                        res.json().then(res => {
+                            this.send400Error("This function is called when a peer review has been selected for a specific student for a specific assignment. This function gathers from the SQL tables what grade was assigned by the reviewer for this submission, and what grade, the submission actually received.", res.error, "StudentInfo.js selectPeerReview()", res.message)
                         })
-                    })
                         break;
                 }
             })
     }
 
+    send400Error(context, error, location, message) {
+		history.push({
+			pathname: '/error',
+			state: {
+				context: context,
+				error: error,
+				location: location,
+				message: message,
+			}
+		})
+	}
+
     setMessage() {
         if (this.state.gradeGiven == null) {
             this.setState({
-                message: <div>{this.props.location.state.student.name} did not complete this peer review</div>
+                message: <div>{this.props.location.state.name} did not complete this peer review</div>
             })
         }
         else {
             this.setState({
                 message:
                     <div>
-                        <div>{this.props.location.state.student.name} gave {this.state.value2} a score of {this.state.gradeGiven}</div>
+                        <div>{this.props.location.state.name} gave {this.state.value2} a score of {this.state.gradeGiven}</div>
                         <div>{this.state.value2} received a final grade of {this.state.actualGrade}</div>
                     </div>
             })
@@ -531,6 +525,7 @@ class StudentInfo extends Component {
     }
     //everytime a new assignment is clicked on, component re-renders and new assignment is fetched
     componentDidMount() {
+        console.log(this.props)
         this.setState({
             errorMessage: ""
         })
@@ -547,7 +542,7 @@ class StudentInfo extends Component {
                 graphsLoaded: false,
                 message: '',
                 peerReviewsCompletedByCurrentStudent: [],
-                selectedStudentId: this.props.match.params.student_id,
+                selectedStudentId: this.props.location.state.student_id,
                 value: "Select an Assignment",
                 value2: "Select a Peer Review",
             }, () => {
@@ -563,7 +558,7 @@ class StudentInfo extends Component {
                 <h2 className="headertext">Peer Grading Details</h2>
                 <hr className="hr-2"></hr>
                 {/*THIS BELOW SHOULD BE THIS.STATE.STUDENT*/}
-                {/*<div className="studentinfo-name">{this.props.location.state.student.name}</div>*/}
+                {/*<div className="studentinfo-name">{this.props.location.state.name}</div>*/}
                 <Row>
                     <Col className="dropsouter">
                         <Dropdown className="dropdowns" isOpen={this.state.dropdownOpen} toggle={this.toggleAssignment} >

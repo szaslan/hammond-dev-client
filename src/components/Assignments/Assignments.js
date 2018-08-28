@@ -1,23 +1,15 @@
 import React, { Component } from 'react';
-import { Dropdown, DropdownItem, DropdownMenu, DropdownToggle } from 'reactstrap';
-import { Link } from "react-router-dom";
-import { Well } from 'react-bootstrap';
 import history from '../../history';
+import Loader from 'react-loader-spinner'
+import SelectSearch from 'react-select-search'
 
 import '../BreadcrumbComp/BreadcrumbComp.css';
-import SelectSearch from 'react-select-search'
 
 import './Assignments.css';
 
 const array = [];
-// var statusToClassName = null;
 
 const FilterAssignments = currAssignment => {
-    // const currAssignment = props.currAssignment;
-    // console.log(assignArr)
-
-    console.log("filtering assignments")
-
     if (currAssignment.peer_reviews) {
         array.push({
             name: currAssignment.name,
@@ -25,7 +17,7 @@ const FilterAssignments = currAssignment => {
         })
     }
     else {
-      array.push({
+        array.push({
             name: currAssignment.name,
             value: null,
         })
@@ -42,20 +34,14 @@ class Assignments extends Component {
             dropdownOpen: false,
             loaded: false,
             url: `/courses/${this.props.match.params.course_id}/assignments/`,
+            value: null,
 
             ...props,
         }
 
         this.pullAssignments = this.pullAssignments.bind(this);
-        this.toggle = this.toggle.bind(this);
         this.reDirect = this.reDirect.bind(this);
-    }
-
-    reDirect(event) {
-        const { match: { params } } = this.props;
-        console.log("redirecting")
-
-        history.push(`/courses/${params.course_id}/assignments/${event.value}`)
+        this.toggle = this.toggle.bind(this);
     }
 
     pullAssignments() {
@@ -86,8 +72,8 @@ class Assignments extends Component {
                             history.push({
                                 pathname: '/error',
                                 state: {
-                                    context: '',
-                                    location: "Assignments.js: pullAssignments() (error came from Canvas)",
+                                    context: 'This function is called whenever the assignments tab is clicked on from the course homepage. This function fetches the list of all assignments from Canvas',
+                                    location: "Assignments.js: pullAssignments()",
                                     message: res.message,
                                 }
                             })
@@ -105,10 +91,25 @@ class Assignments extends Component {
                         })
                         break;
                     case 404:
-                        console.log("no assignments created on canvas")
+                        history.push({
+                            pathname: '/notfound',
+                            state: {
+                                context: 'This function is called whenever the assignments tab is clicked on from the course homepage. This function fetches the list of all assignments from Canvas',
+                                location: "Assignments.js: pullAssignments()",
+                                message: 'No assignments created on Canvas.',
+                            }
+                        })
                         break;
                 }
             })
+    }
+
+    reDirect(event) {
+        this.setState({
+            value: event.value,
+        })
+
+        history.push(`/courses/${this.state.courseId}/assignments/${event.value}`)
     }
 
     toggle() {
@@ -121,43 +122,30 @@ class Assignments extends Component {
         this.pullAssignments()
     }
 
-
-
     render() {
         if (this.state.assignments && array.length != this.state.assignments.length) {
             this.state.assignments.map(assignments => {
-                console.log(assignments);
                 FilterAssignments(assignments);
             })
         }
 
-        if (this.state.loaded) {
+        if (this.state.loaded && array.length == this.state.assignments.length) {
             return (
                 <div className="assigndrop">
-
-                    {console.log(array)}
-                    {console.log(this.state.assignments.length)}
-                    {console.log(this.state.value)}
-                    {array.length == this.state.assignments.length ?
-                        <div>
-                            <SelectSearch
-                                className="select-search-box"
-                                options={array}
-                                search="true"
-                                placeholder="Select an Assignment"
-                                value={this.state.value}
-                                onChange={this.reDirect}
-                            />
-                        </div>
-                        :
-                        null
-                    }
+                    <SelectSearch
+                        className="select-search-box"
+                        options={array}
+                        search="true"
+                        placeholder="Select an Assignment"
+                        value={this.state.value}
+                        onChange={this.reDirect}
+                    />
                 </div>
             );
         }
 
         return (
-            <div></div >
+            <Loader type="TailSpin" color="black" height={80} width={80} />
         )
     }
 }

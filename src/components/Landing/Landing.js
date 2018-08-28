@@ -6,6 +6,24 @@ import PaperIcon from './PaperIcon';
 import './Landing.css';
 
 class Landing extends Component {
+    componentDidMount() {
+        fetch('/api/createBaseTables', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+        })
+            .then(res => {
+                switch (res.status) {
+                    case 201:
+                        break;
+                    case 400:
+                        console.log("error")
+                        break;
+                }
+            })
+    }
+
     render() {
         return (
 
