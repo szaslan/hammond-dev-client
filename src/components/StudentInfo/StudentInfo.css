@@ -34,7 +34,7 @@
 .errmessage{
   /* margin-left: 300px; */
   /* margin-top: 5px; */
-  background-color: white;
+  /* background-color: white; */
   border-radius: 10px;
   font-family: 'Open Sans';
   padding-left: 1%;
@@ -59,7 +59,7 @@
 .message{
   margin-left: 200px;
   margin-top: 5px;
-  background-color: white;
+  /* background-color: white; */
   border-radius: 10px;
   font-family: 'Open Sans';
   color: #626262;

@@ -4,6 +4,7 @@ import { Form, FormGroup, Input, Label } from 'reactstrap';
 import 'bootstrap/dist/css/bootstrap.css';
 
 import '../Assignments/Assignments.css';
+import '../DueDate/NewDueDate.css';
 
 const customizableOptions = ["sendIncompleteMessages", "customBenchmarks", "penalizingForIncompletes", "penalizingForReassigned"];
 
@@ -91,7 +92,7 @@ class CustomizableParameters extends Component {
                 <Form>
                     <FormGroup row>
                         <FormGroup check>
-                            <Label check>
+                            <Label className="pagetext" check>
                                 <Input name="sendIncompleteMessages" type="checkbox" checked={this.state.sendIncompleteMessages} onChange={this.handleInputChange} />
                                 Send Messages to All Students Who Have Incomplete Peer Reviews At Due Date 1?
                             </Label>
@@ -99,7 +100,7 @@ class CustomizableParameters extends Component {
                     </FormGroup>
                     <FormGroup row>
                         <FormGroup check>
-                            <Label check>
+                            <Label className="pagetext" check>
                                 <Input name="customBenchmarks" type="checkbox" checked={this.state.customBenchmarks} onChange={this.handleInputChange} />
                                 Custom Benchmarks For Grading Algorithm?
                             </Label>
@@ -113,7 +114,7 @@ class CustomizableParameters extends Component {
                     </FormGroup>
                     <FormGroup row>
                         <FormGroup check>
-                            <Label check>
+                            <Label className="pagetext" check>
                                 <Input name="penalizingForIncompletes" type="checkbox" checked={this.state.penalizingForIncompletes} onChange={this.handleInputChange} />
                                 Penalize Students Weights For Incomplete Peer Reviews?
                             </Label>
@@ -123,7 +124,7 @@ class CustomizableParameters extends Component {
                         this.state.penalizingForIncompletes ?
                             <FormGroup row>
                                 <FormGroup check>
-                                    <Label check>
+                                    <Label className="pagetext" check>
                                         <Input name="penalizingForReassigned" type="checkbox" checked={this.state.penalizingForReassigned} onChange={this.handleInputChange} />
                                         Penalize For Peer Reviews That Were Reassigned, But Not Completed?:
                                     </Label>

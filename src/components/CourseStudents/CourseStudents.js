@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
 import { Link } from "react-router-dom";
-import history from '../../history';
-import Loader from 'react-loader-spinner';
 import { Container, Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 import JumbotronComp from '../JumbotronComp/JumbotronComp';
 // import Select from 'react-select';
-import SelectSearch from 'react-select-search'
 // import linkState from 'react-link-state';
 import { Redirect } from 'react-router-dom'
+import history from '../../history';
+import Loader from 'react-loader-spinner';
+import SelectSearch from 'react-select-search'
 
 import './CourseStudents.css'
 import StudentInfo from '../StudentInfo/StudentInfo';
@@ -25,7 +25,6 @@ class CourseStudents extends Component {
             courseId: this.props.match.params.course_id,
             dropdownOpen: false,
             loaded: false,
-            check: false,
             students: [],
             loaded: false,
             dropdownOpen: false,
@@ -33,6 +32,9 @@ class CourseStudents extends Component {
             studentId: '',
             ...props,
             url: `/courses/${this.props.match.params.course_id}/students/`,
+            value: null,
+          
+          ...props,
 
         }
       this.fetchStudentsFromCanvas = this.fetchStudentsFromCanvas.bind(this);
@@ -78,16 +80,16 @@ class CourseStudents extends Component {
                         })
                         break;
                     case 400:
-                    res.json().then(res => {
-                        history.push({
-                            pathname: '/error',
-                            state: {
-                                context: '',
-                                location: "CourseStudents.js: fetchStudentsFromCanvas() (error came from Canvas)",
-                                message: res.message,
-                            }
+                        res.json().then(res => {
+                            history.push({
+                                pathname: '/error',
+                                state: {
+                                    context: 'This function is called when the students tab is clicked on from the course homepage. This function fetches the list of students currently enrolled in this course from Canvas.',
+                                    location: "CourseStudents.js: fetchStudentsFromCanvas()",
+                                    message: res.message,
+                                }
+                            })
                         })
-                    })
                         break;
                     case 401:
                         res.json().then(res => {
@@ -101,7 +103,14 @@ class CourseStudents extends Component {
                         })
                         break;
                     case 404:
-                        console.log("no students enrolled in the selected course on canvas")
+                        history.push({
+                            pathname: '/notfound',
+                            state: {
+                                context: 'This function is called when the students tab is clicked on from the course homepage. This function fetches the list of students currently enrolled in this course from Canvas.',
+                                location: "CourseStudents.js: fetchStudentsFromCanvas()",
+                                message: 'No students enrolled in this course on Canvas.',
+                            }
+                        })
                         break;
                 }
             })
@@ -160,6 +169,7 @@ class CourseStudents extends Component {
             );
         }
     }
+}
 
 
 export default CourseStudents;

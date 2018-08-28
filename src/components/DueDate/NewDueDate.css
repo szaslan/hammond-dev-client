@@ -1,16 +1,103 @@
-  
   .dateTime{
-    margin-right:10%!important;
-    margin-bottom:3%;
-    z-index:1;
+    margin-right: 11% !important;
+    margin-bottom: 3%;
+    z-index: 1;
+    margin-left: -5%;
   }
+
+.dateTimeForm{
+  margin-left: -15%;
+}
+
+.headertext{
+  font-family: 'Open Sans';
+  color: #626262;
+  font-size: 20px;
+  /* margin-left: -15%; */
+}
+
+.text{
+  font-family: 'Open Sans';
+  color: #626262;
+  margin-left: 0%;
+  font-size: 18px;
+}
+
+.analyze{
+  margin-left: 100%;
+}
+
+.analyzebutton{
+  border-radius: 3px;
+  margin-left: 50%;
+  margin-top: 20%;
+  margin-bottom: 20%;
+}
+
+.finalizebutton{
+  border-radius: 3px;
+  margin-top: 20%;
+  margin-left: 500%;
+  margin-bottom: 20%;
+}
+
+.flagbutton{
+	align-items: center;
+	margin-bottom: 5%;
+	margin-top: -.2%;
+	margin-left: 20%;
+	background-color: #FFEFE2;
+	border-radius: 3px;
+	font-size: 15px;
+	font-family: 'Open Sans';
+	color: #4B4A4A;
+	border: 2px solid #d6a0a0;
+}
+
+.flagbutton:hover{
+  align-items: center;
+	margin-bottom: 5%;
+	margin-top: -.2%;
+	margin-left: 20%;
+	background-color: #d6a0a0;
+	border-radius: 3px;
+	font-size: 15px;
+	font-family: 'Open Sans';
+	color: #4B4A4A;
+	border: 2px solid #d6a0a0;
+}
+
+.analyzeresult{
+  font-family: 'Open Sans';
+  color: #626262;
+  margin-left: 0%;
+  font-size: 18px;
+}
+
+.textmessage{
+  margin-top: 3%;
+  margin-left: -25%;
+  margin-bottom: -3%;
+}
+
+.parameter{
+  font-family: 'Open Sans';
+  color: #626262;
+  text-align: left;
+  font-size: 16px;
+}
+
+.column{
+  width: 200%;
+  height: 100%;
+}
 
   .rdt {
     position: relative;
     width:100%;
     margin-right:0px!important;
   }
-  
+
   .rdtPicker {
     display:inline-block;
     position: relative;
@@ -23,36 +110,35 @@
     /* box-shadow: 0 1px 3px rgba(0,0,0,.1); */
     box-shadow:none;
     border: none;
-  }
+}
   
-  .form-control:disabled{
+.form-control:disabled{
     height:10%!important;
     border-radius:0px!important;
     box-shadow:none !important;
-    border:none!important;
-    
-  }
+    border:none!important;    
+}
 
   .rdtStatic .rdtPicker {
     box-shadow: none;
     position: static;
   }
-  
+
  .rdtPicker .rdtTimeToggle {
     text-align: center;
   }
- 
+
   .rdtPicker table {
     width: 100%;
     margin: 0;
   }
-  
+
   .rdtPicker td,
   .rdtPicker th {
     text-align: center;
     height: 100%;
   }
-  
+
   .rdtPicker td {
     cursor: pointer;
   }
@@ -80,7 +166,7 @@
     position: absolute;
     bottom: 4px;
     right: 4px;
-    
+
   }
   .rdtPicker td.rdtActive,
   .rdtPicker td.rdtActive:hover {
@@ -97,7 +183,7 @@
     color: #999999;
     pointer-events:none;
   }
-  
+
   .rdtPicker td span.rdtOld {
     color: #999999;
   }
@@ -124,18 +210,18 @@
     font-size: 100%;
     vertical-align: top;
   }
-  
+
   .rdtPrev span,
   .rdtNext span {
     display: inline-block;
-    -webkit-touch-callout: none; 
-    -webkit-user-select: none;   
-    -khtml-user-select: none;    
-    -moz-user-select: none;      
-    -ms-user-select: none;       
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
     user-select: none;
   }
-  
+
   .rdtPicker th.rdtDisabled,
   .rdtPicker th.rdtDisabled:hover {
     background: none;
@@ -148,11 +234,11 @@
   .rdtPicker thead tr:first-child th:hover {
     background: #eeeeee;
   }
-  
+
   .rdtPicker tfoot {
     border-top: 1px solid #f9f9f9;
   }
-  
+
   .rdtPicker button {
     border: none;
     background: none;
@@ -161,12 +247,12 @@
   .rdtPicker button:hover {
     background-color: #eee;
   }
-  
+
   .rdtPicker thead button {
     width: 100%;
     height: 100%;
   }
-  
+
   td.rdtMonth,
   td.rdtYear {
     height: 100%;
@@ -177,37 +263,37 @@
   td.rdtYear:hover {
     background: #eee;
   }
-  
+
   .rdtCounters {
     display: inline-block;
   }
-  
+
   .rdtCounters > div {
     float: left;
   }
-  
+
   .rdtCounter {
     height: 100px;
   }
-  
+
   .rdtCounter {
     width: 40px;
   }
-  
+
   .rdtCounterSeparator {
     line-height: 125px;
   }
-  
+
   .rdtCounter .rdtBtn {
     height: 40%;
     line-height: 60px;
     cursor: pointer;
     display: inline-block;
-    -webkit-touch-callout: none; 
-    -webkit-user-select: none;   
-    -khtml-user-select: none;    
-    -moz-user-select: none;      
-    -ms-user-select: none;       
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
     user-select: none;
   }
   .rdtCounter .rdtBtn:hover {
@@ -217,33 +303,34 @@
     height: 20%;
     font-size: 1.2em;
   }
-  
+
   .rdtMilli {
     vertical-align: middle;
     padding-left: 8px;
     width: 48px;
   }
-  
+
   .rdtMilli input {
     width: 100%;
     font-size: 1.2em;
     margin-top: 37px;
   }
-  
+
   .rdtTime td {
     cursor: default;
-  } 
+  }
 
   .dateTimeSubmit{
     width:30%;
     font-size:80%;
     padding:0px;
     cursor:pointer;
+    border-radius: 3px;
   }
 
   .timePicker{
     width:50%;
-    
+
   }
 
   .rc-time-picker-input{
@@ -261,4 +348,11 @@
   }
 .invalidModal{
   z-index:3;
+}
+
+.color-border-red {
+  border: 3px solid red !important;
+}
+.color-border-green {
+	border: 3px solid green !important;
 }

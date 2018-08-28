@@ -3,7 +3,7 @@ import { UncontrolledTooltip } from 'reactstrap';
 import Flexbox from 'flexbox-react';
 import history from '../../history';
 import moment from 'moment';
-
+import { Row, Col } from 'react-bootstrap';
 import AlgorithmBenchmarks from '../AlgorithmBenchmarks/AlgorithmBenchmarks';
 import AnalyzeResults from '../AnalyzeResults/AnalyzeResults';
 import CustomizableParameters from '../CustomizableParameters/CustomizableParameters';
@@ -13,6 +13,7 @@ import NewDueDate from '../DueDate/NewDueDate';
 import 'bootstrap/dist/css/bootstrap.css';
 
 import '../Assignments/Assignments.css';
+import '../DueDate/NewDueDate.css'
 
 //have to match constants defined in GradingAlgorithm.js (back-end)
 const BENCHMARKS = {
@@ -61,6 +62,9 @@ class AnalyzeButton extends Component {
 		this.saveAllPeerReviews = this.saveAllPeerReviews.bind(this);
 		this.saveOriginallyAssignedNumbers = this.saveOriginallyAssignedNumbers.bind(this);
 		this.sendIncompleteMessages = this.sendIncompleteMessages.bind(this);
+		this.send400Error = this.send400Error.bind(this);
+		this.send401Error = this.send401Error.bind(this);
+		this.send404Error = this.send404Error.bind(this);
 
 		this.algorithmBenchmarks = {
 			WIDTH_OF_STD_DEV_RANGE: BENCHMARKS.WIDTH_OF_STD_DEV_RANGE,
@@ -104,25 +108,12 @@ class AnalyzeButton extends Component {
 						break;
 					case 400:
 						res.json().then(res => {
-							history.push({
-								pathname: '/error',
-								state: {
-									context: 'This function is called on Due Date 2. This function reassigns ',
-									error: res.error,
-									location: "AnalyzeButton.js: assignNewPeerReviews()",
-								}
-							})
+							this.send400Error("This function is called on Due Date 2. This function reassigns any incomplete peer reviews to students that have already completed all of them.", res.error, "AnalyzeButton.js: assignNewPeerReviews()", res.message)
 						})
 						break;
 					case 401:
 						res.json().then(res => {
-							history.push({
-								pathname: '/unauthorized',
-								state: {
-									location: res.location,
-									message: res.message,
-								}
-							})
+							this.send401Error(res)
 						})
 						break;
 					case 404:
@@ -158,6 +149,7 @@ class AnalyzeButton extends Component {
 		})
 			.then(res => {
 				res.json().then(res => {
+					console.log(res)
 					if (res.result == "not found") {
 						//column in gradebook not found, so assignment has not been finalized
 					}
@@ -217,14 +209,12 @@ class AnalyzeButton extends Component {
 						break;
 					case 400:
 						res.json().then(res => {
-							history.push({
-								pathname: '/error',
-								state: {
-									context: '',
-									error: res.error,
-									location: "AnalyzeButton.js: deleteIncompletePeerReviews()",
-								}
-							})
+							this.send400Error("This function is called on Due Date 2. This function deletes any incomplete peer reviews from Canvas.", res.error, "AnalyzeButton.js: deleteIncompletePeerReviews()", res.message)
+						})
+						break;
+					case 401:
+						res.json().then(res => {
+							this.send401Error(res)
 						})
 						break;
 					case 404:
@@ -294,10 +284,10 @@ class AnalyzeButton extends Component {
 					case 204:
 						switch (deadline) {
 							case 1:
-								this.saveOriginallyAssignedNumbers();
+								this.sendIncompleteMessages()
 								break;
 							case 2:
-								this.sendIncompleteMessages()
+								this.saveOriginallyAssignedNumbers();
 								break;
 							case 3:
 								break;
@@ -305,30 +295,16 @@ class AnalyzeButton extends Component {
 						break;
 					case 400:
 						res.json().then(res => {
-							history.push({
-								pathname: '/error',
-								state: {
-									context: '',
-									error: res.error,
-									location: "AnalyzeButton.js: saveAllPeerReviews() (error came from Canvas)",
-									message: res.message,
-								}
-							})
+							this.send400Error("This function is called on both Due Date 1 and Due Date 2. This function fetches all peer review objects from Canvas and saves them to the SQL database", res.error, "AnalyzeButton.js: saveAllPeerReviews()", res.message)
 						})
 						break;
 					case 401:
 						res.json().then(res => {
-							history.push({
-								pathname: '/unauthorized',
-								state: {
-									location: res.location,
-									message: res.message,
-								}
-							})
+							this.send401Error(res)
 						})
 						break;
 					case 404:
-						console.log("no peer reviews assigned for this assignment")
+						this.send404Error("This function is called on both Due Date 1 and Due Date 2. This function fetches all peer review objects from Canvas and saves them to the SQL database", "AnalyzeButton.js: saveAllPeerReviews()", "No peer reviews have been assigned for this assignment on Canvas.")
 						break;
 				}
 			})
@@ -353,18 +329,11 @@ class AnalyzeButton extends Component {
 						break;
 					case 400:
 						res.json().then(res => {
-							history.push({
-								pathname: '/error',
-								state: {
-									context: '',
-									error: res.error,
-									location: "AnalyzeButton.js: saveOriginallyAssignedNumbers()",
-								}
-							})
+							this.send400Error("This function is called on Due Date 2 if all peer reviews were fetched and saved correctly. This function records the number of peer reviews assigned and completed by Due Date 2. This information is used to then track stats about any reassigned peer reviews.", res.error, "AnalyzeButton.js: saveOriginallyAssignedNumbers()", res.message)
 						})
 						break;
 					case 404:
-						console.log("no peer reviews have been completed for this assignment")
+						this.send404Error("This function is called on Due Date 2 if all peer reviews were fetched and saved correctly. This function records the number of peer reviews assigned and completed by Due Date 2. This information is used to then track stats about any reassigned peer reviews.", "AnalyzeButton.js: saveOriginallyAssignedNumbers()", "No peer reviews have been assigned in this course on Canvas.")
 						break;
 				}
 			})
@@ -392,14 +361,12 @@ class AnalyzeButton extends Component {
 						break;
 					case 400:
 						res.json().then(res => {
-							history.push({
-								pathname: '/error',
-								state: {
-									context: '',
-									error: res.error,
-									location: "AnalyzeButton.js: sendIncompleteMessages()",
-								}
-							})
+							this.send400Error("This function is called on Due Date 1 if the option has been checked from the assignment home page and if all peer reviews were fetched and saved correctly. This function sends out a reminder email to each student with incomplete peer reviews.", res.error, "AnalyzeButton.js: sendIncompleteMessages()", res.message)
+						})
+						break;
+					case 401:
+						res.json().then(res => {
+							this.send401Error(res)
 						})
 						break;
 					case 404:
@@ -409,6 +376,39 @@ class AnalyzeButton extends Component {
 						break;
 				}
 			})
+	}
+
+	send400Error(context, error, location, message) {
+		history.push({
+			pathname: '/error',
+			state: {
+				context: context,
+				error: error,
+				location: location,
+				message: message,
+			}
+		})
+	}
+
+	send401Error(res) {
+		history.push({
+			pathname: '/unauthorized',
+			state: {
+				location: res.location,
+				message: res.message,
+			}
+		})
+	}
+
+	send404Error(context, location, message) {
+		history.push({
+			pathname: '/notfound',
+			state: {
+				context: context,
+				location: location,
+				message: message,
+			}
+		})
 	}
 
 	componentDidMount() {
@@ -462,19 +462,20 @@ class AnalyzeButton extends Component {
 										:
 										null
 								}
-								<span id="analyze-button-1">
-									<button onClick={this.handleAnalyzeClick} className="analyze" id="analyze">Analyze</button>
-								</span>
-								<UncontrolledTooltip delay={{ show: "1200" }} placement="top" target="analyze-button-1">
-									Click to view statistics for submitted peer reviews
-								</UncontrolledTooltip>
-
-								<span id="finalize-button-1">
-									<button className="analyze" id="finalize" onClick={this.handleFinalizeClick}>Finalize</button>
-								</span>
-								<UncontrolledTooltip delay={{ show: "1200" }} placement="top" target="finalize-button-1">
-									Click to calculate grades and send to the Canvas gradebook
-								</UncontrolledTooltip>
+								<Row className="analyze">
+									<span id="analyze-button-1">
+											<button onClick={this.handleAnalyzeClick} className="analyzebutton">Analyze</button>
+									</span>
+								 		<UncontrolledTooltip delay={{ show: "1200" }} placement="top" target="analyze-button-1">
+												Click to view statistics for submitted peer reviews
+										</UncontrolledTooltip>
+										<span id="finalize-button-1">
+												<button className="finalizebutton" onClick={this.handleFinalizeClick}>Finalize</button>
+										</span>
+										<UncontrolledTooltip delay={{ show: "1200" }} placement="top" target="finalize-button-1">
+												Click to calculate grades and send to the Canvas gradebook
+										</UncontrolledTooltip>
+									</Row>
 							</Flexbox>
 						</div>
 						:

@@ -57,8 +57,8 @@ class AssignmentInfo extends Component {
                             history.push({
                                 pathname: '/error',
                                 state: {
-                                    context: '',
-                                    location: "AssignmentInfo.js: fetchAssignmentData() (error came from Canvas)",
+                                    context: 'This function is called any time a new assignment is clicked on from the dropdown menu. This function fetches all of the information about this assignment from Canvas.',
+                                    location: "AssignmentInfo.js: fetchAssignmentData()",
                                     message: res.message,
                                 }
                             })
@@ -76,7 +76,14 @@ class AssignmentInfo extends Component {
                         })
                         break;
                     case 404:
-                        console.log("no assignments created on canvas")
+                        history.push({
+                            pathname: '/notfound',
+                            state: {
+                                context: 'This function is called any time a new assignment is clicked on from the dropdown menu. This function fetches all of the information about this assignment from Canvas.',
+                                location: "AssignmentInfo.js: fetchAssignmentData()",
+                                message: 'Assignment not found on Canvas.',
+                            }
+                        })
                         break;
                 }
             })
@@ -106,7 +113,7 @@ class AssignmentInfo extends Component {
         if (this.state.loaded) {
             return (
                 <div className="assignment-info">
-                      {/*<h2 className="headertext">Score Details
+                    {/*<h2 className="headertext">Score Details
                       <button className="clear-local-button" onClick={this.clearLocalStorage}> Clear Local Storage</button>
                       </h2>
                       <hr className="hr-2"></hr>
