@@ -35,8 +35,6 @@ class StudentInfoGraph extends Component {
                 let assignmentName = assignment.name
                 let columnName = "'" + assignmentId + "'";
 
-                console.log(this.props)
-
                 if (this.props.peerReviewData[this.props.category + "History"][columnName]) {
                     dataHistory.labels.push(assignmentName)
                     dataHistory.datasets[0].data.push(this.props.peerReviewData[this.props.category + "History"][columnName])

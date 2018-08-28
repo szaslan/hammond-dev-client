@@ -11,9 +11,7 @@ import './StudentInfo.css';
 //filter for only peer reviewable assignments
 function FilterAssignments(props) {
     const currAssignment = props.currAssigment;
-    console.log(props)
-
-    //only show assignments that are peer reviewable
+        //only show assignments that are peer reviewable
     if (currAssignment.peer_reviews) {
         return (
             <DropdownItem onClick={props.click} id={props.id}>{currAssignment.name}</DropdownItem>
@@ -30,7 +28,7 @@ class StudentInfo extends Component {
         this.state = {
             actualGrade: '',
             assignments: [],
-            courseId: this.props.match.params.course_id,
+            courseId: this.props.courseId,
             dropdownOpen: false,
             errorMessage: '',
             gradeGiven: '',
@@ -41,7 +39,7 @@ class StudentInfo extends Component {
             peerReviewsCompletedByCurrentStudent: [],
             studentEvaluatingData: null,
             selectedAssignment: '',
-            selectedStudentId: this.props.match.params.student_id,
+            selectedStudentId: this.props.studentId,
             studentHasSavedHistory: false,
             url: '',
             value: 'Select an Assignment',
@@ -318,6 +316,7 @@ class StudentInfo extends Component {
 
     //fetches assignment data
     fetchAssignmentData() {
+        console.log(this.state.courseId)
         let data = {
             courseId: this.state.courseId
         }
@@ -507,14 +506,14 @@ class StudentInfo extends Component {
     setMessage() {
         if (this.state.gradeGiven == null) {
             this.setState({
-                message: <div>{this.props.location.state.student_name} did not complete this peer review</div>
+                message: <div>{this.props.studentName} did not complete this peer review</div>
             })
         }
         else {
             this.setState({
                 message:
                     <div>
-                        <div>{this.props.location.state.student_name} gave {this.state.value2} a score of {this.state.gradeGiven}</div>
+                        <div>{this.props.studentName} gave {this.state.value2} a score of {this.state.gradeGiven}</div>
                         <div>{this.state.value2} received a final grade of {this.state.actualGrade}</div>
                     </div>
             })
@@ -543,7 +542,7 @@ class StudentInfo extends Component {
 
     //renders initially
     componentDidUpdate(prevProps) {
-        if (this.props.location.state.student_id !== prevProps.location.state.student_id) {
+        if (this.props.studentId !== prevProps.studentId) {
         // if (this.props.location.state.student.id !== prevProps.location.state.student.id) {
             this.setState({
                 actualGrade: "",
@@ -552,7 +551,7 @@ class StudentInfo extends Component {
                 graphsLoaded: false,
                 message: '',
                 peerReviewsCompletedByCurrentStudent: [],
-                selectedStudentId: this.props.location.state.student_id,
+                selectedStudentId: this.props.studentId,
                 value: "Select an Assignment",
                 value2: "Select a Peer Review",
             }, () => {

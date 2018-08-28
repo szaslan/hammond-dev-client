@@ -10,6 +10,7 @@ import SelectSearch from 'react-select-search'
 import { Redirect } from 'react-router-dom'
 
 import './CourseStudents.css'
+import StudentInfo from '../StudentInfo/StudentInfo';
 
 const array = [];
 
@@ -17,7 +18,7 @@ class CourseStudents extends Component {
     constructor(props) {
         super(props);
         this.toggle = this.toggle.bind(this);
-        this.reDirect = this.reDirect.bind(this);
+        this.select= this.select.bind(this);
         // this.handleChange = this.handleChange.bind(this)
         //URL is the current url while taking in the parameters from the props of the previous url
         this.state = {
@@ -28,7 +29,8 @@ class CourseStudents extends Component {
             students: [],
             loaded: false,
             dropdownOpen: false,
-            value: '',
+            studentName: '',
+            studentId: '',
             ...props,
             url: `/courses/${this.props.match.params.course_id}/students/`,
 
@@ -36,27 +38,17 @@ class CourseStudents extends Component {
       this.fetchStudentsFromCanvas = this.fetchStudentsFromCanvas.bind(this);
     }
 
-    reDirect(event) {
-      const { match: { params } } = this.props;
-      let id = event.value.toString();
-      this.setState({value: event.value})
-      console.log(this.state.url+id)
-      console.log(event);
-      console.log("redirecting");
-      <Redirect push to={{
-          pathname: this.state.url + id,
-          state: {student_id: event.value, student_name: event.name}}} />
-    // <Link className="student-link" to={{ pathname: this.state.url + student.id, state: { student: student, course_id: this.state.courseId } }} key={student.id}>
-
-      history.push({pathname:`/courses/${params.course_id}/students/${event.value}`,
-                    state: {student_id: event.value,
-                            student_name: event.name
-                        }})
+    select(event) {
+      this.setState({studentName: event.name})
+      this.setState({studentId: event.value})
+  
     }
+
 
     //fetch assignments for course with course_id passed down
     componentDidMount() {
         const { match: { params } } = this.props;
+        if (this.props.location.state.student_name.length > 0) console.log('name found')
         this.setState({
             url: `/courses/${params.course_id}/students/`
         })
@@ -131,50 +123,11 @@ class CourseStudents extends Component {
         })
     }
 
-    // handleChange(event) {
-    //   this.setState({value: event.target.value});
-    // }
-
-    // setRedirect = () => {
-    //     this.setState({
-    //         redirect: true
-    //     })
-    // }
-    //
-    // renderRedirect = () => {
-    //   if (this.state.redirect) {
-    //     return <Redirect to= {}/>
-    //   }
-    // }
-
     render(){
             return(
                 <div className="studentdrop">
-                    {/*console.log(this.state.students)*/}
-                    {/*<Dropdown direction="down" isOpen={this.state.dropdownOpen} toggle={this.toggle}>
-                        <DropdownToggle className="studenttog" caret>
-                            {
-                                this.props.location.state.student ?
-                                    this.props.location.state.student.name
-                                    :
-                                    "Students"
-                            }
-                        </DropdownToggle>
 
-                        <DropdownMenu className="studentmenu">
-                            {
-                                this.state.students.map(student =>
-                                    <Link className="student-link" to={{ pathname: this.state.url + student.id, state: { student: student, course_id: this.state.courseId } }} key={student.id}>
-                                        <li className="student-name" key={student.id}>
-                                            {student.name}
-                                        </li>
-                                    </Link>
-                                )
-                            }
-                        </DropdownMenu>
-                    </Dropdown>*/}
-
-                    {this.state.students ?
+                    {this.state.students.length !== array.length ?
                         this.state.students.map(students => {
                             array.push({
                               name: students.name,
@@ -184,31 +137,29 @@ class CourseStudents extends Component {
 
                             )
                       :
-                      <Loader type="TailSpin" color="black" height={80} width={80} />}
-
+                        null
+                    }
                     <div>
                   <SelectSearch
                     className="select-search-box"
                     options={array}
                     search = "true"
                     placeholder = "Select a Student"
-                    value={this.state.value}
-                    onChange={this.reDirect}
-                    // onChange={this.handleChange}
-                    // onChange={() => {if (this.value) window.location.href=this.value}}
-                    // onChange={() => {if (this.value) window.location.href=this.options[this.selectedIndex].value}}
-                    // onChange={() => {if (this.value) this.options[this.selectedIndex].value && (window.location.href = this.options[this.selectedIndex].value)}}
-                    // onChange={this.setRedirect}
+                    value={this.state.studentName}
+                    onChange={this.select}
                   />
                   </div>
                   <hr className="hr-3"></hr>
+
+                  {this.state.studentName ?
+                  <StudentInfo courseId={this.state.courseId} studentId={this.state.studentId} />
+                  :
+                  null
+                  }
               </div>
             );
         }
-
-        // return (
-        //     <Loader type="TailSpin" color="black" height={80} width={80} />
-        // )
     }
+
 
 export default CourseStudents;
