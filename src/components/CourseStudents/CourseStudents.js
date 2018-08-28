@@ -10,27 +10,51 @@ import Loader from 'react-loader-spinner';
 import SelectSearch from 'react-select-search'
 
 import './CourseStudents.css'
+import StudentInfo from '../StudentInfo/StudentInfo';
 
 const array = [];
 
 class CourseStudents extends Component {
     constructor(props) {
         super(props);
+        this.toggle = this.toggle.bind(this);
+        this.select= this.select.bind(this);
+        // this.handleChange = this.handleChange.bind(this)
+        //URL is the current url while taking in the parameters from the props of the previous url
         this.state = {
             courseId: this.props.match.params.course_id,
             dropdownOpen: false,
             loaded: false,
             students: [],
+            loaded: false,
+            dropdownOpen: false,
+            studentName: '',
+            studentId: '',
+            ...props,
             url: `/courses/${this.props.match.params.course_id}/students/`,
             value: null,
           
           ...props,
 
         }
-        this.fetchStudentsFromCanvas = this.fetchStudentsFromCanvas.bind(this);
-        this.reDirect = this.reDirect.bind(this);
-        this.toggle = this.toggle.bind(this);
+      this.fetchStudentsFromCanvas = this.fetchStudentsFromCanvas.bind(this);
     }
+
+    select(event) {
+      this.setState({studentName: event.name})
+      this.setState({studentId: event.value})
+  
+    }
+
+
+    //fetch assignments for course with course_id passed down
+    componentDidMount() {
+        const { match: { params } } = this.props;
+        if (this.props.location.state.student_name.length > 0) console.log('name found')
+        this.setState({
+            url: `/courses/${params.course_id}/students/`
+        })
+    };
 
     fetchStudentsFromCanvas() {
         let data = {
@@ -92,36 +116,6 @@ class CourseStudents extends Component {
             })
     }
 
-    reDirect(event) {
-      /*
-      const { match: { params } } = this.props;
-      let id = event.value.toString();
-      this.setState({value: event.value})
-      console.log(this.state.url+id)
-      console.log(event);
-      console.log("redirecting");
-      <Redirect push to={{
-          pathname: this.state.url + id,
-          state: {student_id: event.value, student_name: event.name}}} />
-    // <Link className="student-link" to={{ pathname: this.state.url + student.id, state: { student: student, course_id: this.state.courseId } }} key={student.id}>
-
-      history.push({pathname:`/courses/${params.course_id}/students/${event.value}`,
-                    state: {student_id: event.value,
-                            student_name: event.name
-                        }})*/
-      
-        this.setState({
-            value: event.value,
-        })
-
-        history.push({
-            pathname: `/courses/${this.state.courseId}/students/${event.value}`,
-            state: {
-                name: event.name
-            }
-        })
-    }
-
     toggle() {
         this.setState(prevState => ({
             dropdownOpen: !prevState.dropdownOpen
@@ -138,43 +132,44 @@ class CourseStudents extends Component {
         })
     }
 
-    render() {
-        if (this.state.students && array.length != this.state.students.length) {
-            this.state.students.map(students => {
-                array.push({
-                    name: students.name,
-                    value: students.id,
-                });
-            })
-        }
-
-        if (this.state.loaded) {
-            return (
+    render(){
+            return(
                 <div className="studentdrop">
-                    {
-                        array.length == this.state.students.length ?
-                            <div>
-                                <SelectSearch
-                                    className="select-search-box"
-                                    options={array}
-                                    search="true"
-                                    placeholder="Select a Student"
-                                    value={this.state.value}
-                                    onChange={this.reDirect}
-                                />
-                            </div>
-                            :
-                            null
+
+                    {this.state.students.length !== array.length ?
+                        this.state.students.map(students => {
+                            array.push({
+                              name: students.name,
+                              value: students.id,
+                            });
+                          }
+
+                            )
+                      :
+                        null
                     }
-                    <hr className="hr-3"></hr>
-                </div>
+                    <div>
+                  <SelectSearch
+                    className="select-search-box"
+                    options={array}
+                    search = "true"
+                    placeholder = "Select a Student"
+                    value={this.state.studentName}
+                    onChange={this.select}
+                  />
+                  </div>
+                  <hr className="hr-3"></hr>
+
+                  {this.state.studentName ?
+                  <StudentInfo courseId={this.state.courseId} studentId={this.state.studentId} />
+                  :
+                  null
+                  }
+              </div>
             );
         }
-
-        return (
-            <Loader type="TailSpin" color="black" height={80} width={80} />
-        )
     }
 }
+
 
 export default CourseStudents;
