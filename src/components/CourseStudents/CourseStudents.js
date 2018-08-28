@@ -38,7 +38,7 @@ class CourseStudents extends Component {
         const { match: { params } } = this.props;
         console.log("redirecting")
 
-        history.push(`/courses/${params.course_id}/${params.assignment_name}/students/${event.value}`)
+        history.push(`/courses/${params.course_id}/students/${event.value}`)
     }
 
     //fetch assignments for course with course_id passed down
@@ -162,13 +162,14 @@ class CourseStudents extends Component {
                         </DropdownMenu>
                     </Dropdown>*/}
 
-                    {this.state.students ?
+                    {this.state.students && array.length != this.state.students.length ?
                         this.state.students.map(students => {
                             array.push({
                                 name: students.name,
                                 value: students.id,
                             });
                         }
+
 
                         )
                         :
@@ -183,11 +184,6 @@ class CourseStudents extends Component {
                                 placeholder="Select a Student"
                                 value={this.state.value}
                                 onChange={this.reDirect}
-                            // onChange={this.handleChange}
-                            // onChange={() => {if (this.value) window.location.href=this.value}}
-                            // onChange={() => {if (this.value) window.location.href=this.options[this.selectedIndex].value}}
-                            // onChange={() => {if (this.value) this.options[this.selectedIndex].value && (window.location.href = this.options[this.selectedIndex].value)}}
-                            // onChange={this.setRedirect}
                             />
                         </div>
                         :

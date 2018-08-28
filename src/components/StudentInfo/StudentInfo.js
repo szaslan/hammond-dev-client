@@ -539,7 +539,7 @@ class StudentInfo extends Component {
 
     //renders initially
     componentDidUpdate(prevProps) {
-        if (this.props.location.state.student.id !== prevProps.location.state.student.id) {
+        if (this.props.match.params.student_id !== prevProps.match.params.student_id) {
             this.setState({
                 actualGrade: "",
                 errorMessage: "",

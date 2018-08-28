@@ -60,7 +60,7 @@ class TabsComp extends Component {
 
                     <TabPane tabId="1">
                       <div>
-                      <Iframe className="iframe" url="http://localhost:3000/courses/83831/sza4405%20Prep%20Site%20A/assignments"
+                      <Iframe className="iframe" url="http://localhost:3000/courses/83831/assignments"
                         width="85%"
                         height="70%"
                         />
@@ -69,8 +69,9 @@ class TabsComp extends Component {
 
                     <TabPane tabId="2">
                       <div>
-                      <Iframe url="http://localhost:3000/courses/83831/sza4405%20Prep%20Site%20A/students"
+                      <Iframe className="iframe" url="http://localhost:3000/courses/83831/students"
                         width="85%"
+                        height="70%"
                         />
                       </div>
                     </TabPane>

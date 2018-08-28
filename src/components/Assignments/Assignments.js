@@ -23,24 +23,12 @@ const FilterAssignments = currAssignment => {
             name: currAssignment.name,
             value: currAssignment.id,
         })
-        // statusToClassName = "select-search-box"
-        // if (array.length == props.length) {
-        //   return (
-        //     array
-        //   )}
-        // else{
-
-        // }
-
     }
-    else {      // return <li key={currAssignment.id} className="assignment-name not-pr">{currAssignment.name}</li>
-        // return <DropdownItem disabled className="assign-name not-pr" key={currAssignment.id} /*className="assignment-name not-pr"*/>{currAssignment.name}</DropdownItem>
-        array.push({
+    else {
+      array.push({
             name: currAssignment.name,
             value: null,
         })
-
-        // statusToClassName = "select-search-box-dis"
     }
 }
 
@@ -67,7 +55,7 @@ class Assignments extends Component {
         const { match: { params } } = this.props;
         console.log("redirecting")
 
-        history.push(`/courses/${params.course_id}/${params.assignment_name}/assignments/${event.value}`)
+        history.push(`/courses/${params.course_id}/assignments/${event.value}`)
     }
 
     pullAssignments() {
@@ -146,29 +134,6 @@ class Assignments extends Component {
         if (this.state.loaded) {
             return (
                 <div className="assigndrop">
-                    {/*<Dropdown direction="down" isOpen={this.state.dropdownOpen} toggle={this.toggle}>
-                            <DropdownToggle className="assigntog" caret>
-                                {this.props.location.state.assignment_name ?
-                                  this.props.location.state.assignment_name
-                                :
-                                "Assignment Title"}
-                            </DropdownToggle>
-                            <hr className="hr-2"></hr>
-                            <DropdownMenu className="dropdown-men">
-                                {
-                                    this.state.assignments.map(assignment =>
-                                        <FilterAssignments className="assign-name" link={this.state.url} courseId={this.state.courseId} currAssigment={assignment} />
-                                    )
-                                }
-                            </DropdownMenu>
-                        </Dropdown>*/}
-                    {/*this.state.assignments ?
-                            this.state.assignments.map(assignments =>
-                              <FilterAssignments className="assign-name" link={this.state.url + assignments.id} length={this.state.assignments.length} assignment_id={assignments.id} name={this.state.match.params.assignment_name} course_id={this.state.match.params.course_id} currAssigment={assignments} id={assignments.id} />
-
-                                )
-                          :
-                          <Loader type="TailSpin" color="black" height={80} width={80} />*/}
 
                     {console.log(array)}
                     {console.log(this.state.assignments.length)}
@@ -176,7 +141,6 @@ class Assignments extends Component {
                     {array.length == this.state.assignments.length ?
                         <div>
                             <SelectSearch
-                                // className={statusToClassName}
                                 className="select-search-box"
                                 options={array}
                                 search="true"
