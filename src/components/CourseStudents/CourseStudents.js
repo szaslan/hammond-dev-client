@@ -161,7 +161,7 @@ class CourseStudents extends Component {
                   <hr className="hr-3"></hr>
 
                   {this.state.studentName ?
-                  <StudentInfo courseId={this.state.courseId} studentId={this.state.studentId} />
+                  <StudentInfo courseId={this.state.courseId} studentId={this.state.studentId} studentName={this.state.studentName}/>
                   :
                   null
                   }
@@ -169,7 +169,7 @@ class CourseStudents extends Component {
             );
         }
     }
-}
+
 
 
 export default CourseStudents;
