@@ -93,7 +93,7 @@ class CourseStudents extends Component {
 
     select(event) {
         this.setState({
-            studentName: event.name,
+            studentName: event.label,
             studentId: event.value
         })
     }

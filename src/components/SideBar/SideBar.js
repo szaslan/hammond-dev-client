@@ -68,13 +68,13 @@ class SidebarComp extends React.Component {
 				}
 			})
 	}
-	
+
 	onSetSidebarOpen(open) {
 		this.setState({
 			sidebarOpen: open
 		});
 	}
-	
+
 	saveLocalStorage() {
 		let data = {
 			localStorage: {},
@@ -147,9 +147,9 @@ class SidebarComp extends React.Component {
 						<br />*/}
 						<a href="/courses" className="sidebarcontent">Courses</a>
 						<br />
-						<button className="local-storage-save-button" onClick={this.saveLocalStorage}>Save Local Storage</button>
+						<button className="local-storage-save-button" onClick={this.saveLocalStorage}>Save Data</button>
 						<br />
-						<button className="local-storage-pull-button" onClick={this.pullAllLocalStorageData}>Pull Saved Data From Local Storage</button>
+						<button className="local-storage-pull-button" onClick={this.pullAllLocalStorageData}>Refresh Data</button>
 						<br />
 						<Link to="/logout">
 							<button className="signoutbutton" onClick={this.signOut}>Sign Out</button>

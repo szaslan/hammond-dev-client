@@ -479,14 +479,14 @@ class AnalyzeButton extends Component {
 									<NewDueDate number="3" assignmentId={this.assignmentId} textDescription={message3} />
 								</Flexbox>
 								{/* <button
-									
+
 									onClick={this.nextClick}>
 									Next
 								</button> */}
 								{/* {localStorage.getItem("dueDate_" +this.assignmentID+ "_3") ?
 									<button onClick={this.nextClick}>Next</button>
 									: */}
-								<button disabled={!localStorage.getItem("dueDate_" + this.assignmentId + "_3")} onClick={this.nextClick}>
+								<button disabled={!localStorage.getItem("dueDate3_" + this.assignmentId)} onClick={this.nextClick}>
 									Next
 								</button>
 								{/* } */}

@@ -274,7 +274,7 @@ class AnalyzeResults extends Component {
         if (localStorage.getItem("analyzeDisplayTextNames_" + this.assignmentId)) {
             return (
                 <div>
-                    <hr className="hr-4" />hr>
+                    <hr className="hr-4"></hr>
                     <div className="textmessage">
                         {localStorage.getItem("analyzeDisplayTextMessage_" + this.assignmentId)}
                     </div>

@@ -55,22 +55,36 @@ dragHandle: {
 	left: 10px;
 }
 
-.local-storage-save-button, .local-storage-pull-button{
+.local-storage-save-button{
 	border:none;
 	border-radius: 3px;
-	/* box-shadow:2px 2px gray; */
-	/* padding:5px;
-	padding-left:7px;
-	padding-right:7px; */
 	background-color: white;
 	color:black;
-	font-size: 14px;
-	/* width:75px; */
+	font-size: 12px;
+	width:90%;
 	height: 30px;
+  margin-bottom: 10%;
+  margin-top: 10%;
 	font-family: 'Open Sans';
-	/* position: absolute; */
-	bottom: 10px;
-	left: 10px;
+	/* position: absolute;
+	bottom: 0%;
+	left: 5%; */
+}
+
+.local-storage-pull-button{
+  border:none;
+  border-radius: 3px;
+  background-color: white;
+  color:black;
+  font-size: 12px;
+  width:90%;
+  height: 30px;
+  margin-bottom: 4%;
+  margin-top: 4%;
+  font-family: 'Open Sans';
+  /* position: absolute;
+	bottom: 11.5%;
+	left: 5%; */
 }
 
 .logo {
