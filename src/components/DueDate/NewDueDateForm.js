@@ -138,7 +138,7 @@ class NewDueDateForm extends Component {
         return (
             <div className={"dateTime " + (this.props.isGray ? "grayOut" : "")}>
                 <Flexbox flexDirectionn="column" flexWrap="wrap" maxWidth="300px">
-                    <p className="headertext">Set Due Date:</p>
+                    
                     <form onSubmit={this.handleSubmit} className="dateTimeForm">
                         <div className={"color-border-" + (localStorage.getItem("dueDate_" + this.dueDateExtension) ? "green" : "red")}>
                             <Datetime dateFormat="MM/DD/YYYY" timeFormat={false} onChange={this.handleChange} isValidDate={this.checkDate}

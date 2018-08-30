@@ -460,6 +460,7 @@ class AnalyzeButton extends Component {
 									:
 									""
 								)}>
+								{/* <p className="headertext">Set Due Date:</p> */}
 								<Flexbox flexWrap="wrap">
 									<NewDueDate
 										number="1"
