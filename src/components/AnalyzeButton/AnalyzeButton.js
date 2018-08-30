@@ -47,7 +47,7 @@ class AnalyzeButton extends Component {
 			currMinute: null,
 			currSecond: null,
 			deletedIncompletePeerReviews: false,
-      nextClicked: false,
+			nextClicked: false,
 			finalizeDisplayText: false,
 			finalizePressed: false,
 			tooltipOpen1: false,
@@ -55,12 +55,12 @@ class AnalyzeButton extends Component {
 		};
 
 		this.assignNewPeerReviews = this.assignNewPeerReviews.bind(this);
-    this.backClick = this.backClick.bind(this);
+		this.backClick = this.backClick.bind(this);
 		this.checkForPreviousAnalyzeAndFinalizePresses = this.checkForPreviousAnalyzeAndFinalizePresses.bind(this);
 		this.deleteIncompletePeerReviews = this.deleteIncompletePeerReviews.bind(this);
 		this.handleAnalyzeClick = this.handleAnalyzeClick.bind(this);
 		this.handleFinalizeClick = this.handleFinalizeClick.bind(this);
-    this.nextClick = this.nextClick.bind(this);
+		this.nextClick = this.nextClick.bind(this);
 		this.pullDueDatesFromLocalStorage = this.pullDueDatesFromLocalStorage.bind(this);
 		this.pullSavedBenchmarksFromLocalStorage = this.pullSavedBenchmarksFromLocalStorage.bind(this);
 		this.saveAllPeerReviews = this.saveAllPeerReviews.bind(this);
@@ -133,9 +133,9 @@ class AnalyzeButton extends Component {
 	}
 
 	backClick() {
-		this.setState({ 
-      nextClicked: false
-    });
+		this.setState({
+			nextClicked: false
+		});
 	}
 
 	checkForPreviousAnalyzeAndFinalizePresses() {
@@ -236,9 +236,9 @@ class AnalyzeButton extends Component {
 	}
 
 	nextClick() {
-		this.setState({ 
-      nextClicked: true
-    });
+		this.setState({
+			nextClicked: true
+		});
 	}
 
 	pullDueDatesFromLocalStorage() {
@@ -471,29 +471,12 @@ class AnalyzeButton extends Component {
 					!this.state.finalizePressed ?
 						<div className="assignment-info-content">
 
-							<div className={"calendar-case" +
-								(this.state.nextClicked ?
-									"-hidden"
-									:
-									""
-								)}>
+							<div className={"calendar-case" + (this.state.nextClicked ? "-hidden" : "")}>
 								{/* <p className="headertext">Set Due Date:</p> */}
 								<Flexbox flexWrap="wrap">
-									<NewDueDate
-										number="1"
-										assignmentId={this.assignmentId}
-										textDescription={message1}
-									/>
-									<NewDueDate
-										number="2"
-										assignmentId={this.assignmentId}
-										textDescription={message2}
-									/>
-									<NewDueDate
-										number="3"
-										assignmentId={this.assignmentId}
-										textDescription={message3}
-									/>
+									<NewDueDate number="1" assignmentId={this.assignmentId} textDescription={message1} />
+									<NewDueDate number="2" assignmentId={this.assignmentId} textDescription={message2} />
+									<NewDueDate number="3" assignmentId={this.assignmentId} textDescription={message3} />
 								</Flexbox>
 								{/* <button
 									
@@ -503,38 +486,33 @@ class AnalyzeButton extends Component {
 								{/* {localStorage.getItem("dueDate_" +this.assignmentID+ "_3") ?
 									<button onClick={this.nextClick}>Next</button>
 									: */}
-									<button disabled={
-										!localStorage.getItem("dueDate_" +this.assignmentId+ "_3")
-									} 
-									onClick={this.nextClick}>Next</button>
+								<button disabled={!localStorage.getItem("dueDate_" + this.assignmentId + "_3")} onClick={this.nextClick}>
+									Next
+								</button>
 								{/* } */}
-								
+
 							</div>
 
-							<div className={"parameters-case" +
-								(this.state.nextClicked ?
-									""
-									:
-									"-hidden"
-								)}>
+							<div className={"parameters-case" + (this.state.nextClicked ? "" : "-hidden")}>
 								<CustomizableParameters assignmentId={this.assignmentId} />
 
-							<Flexbox className="flex-dropdown" width="100%" flexWrap="wrap" justify-content="space-around">
-								<Row className="analyze">
-									<span id="analyze-button-1">
-										<button onClick={this.handleAnalyzeClick} className="analyzebutton">Analyze</button>
-									</span>
-									<UncontrolledTooltip delay={{ show: "1200" }} placement="top" target="analyze-button-1">
-										Click to view statistics for submitted peer reviews
+								<Flexbox className="flex-dropdown" width="100%" flexWrap="wrap" justify-content="space-around">
+									<Row className="analyze">
+										<span id="analyze-button-1">
+											<button onClick={this.handleAnalyzeClick} className="analyzebutton">Analyze</button>
+										</span>
+										<UncontrolledTooltip delay={{ show: "1200" }} placement="top" target="analyze-button-1">
+											Click to view statistics for submitted peer reviews
 										</UncontrolledTooltip>
-									<span id="finalize-button-1">
-										<button className="finalizebutton" onClick={this.handleFinalizeClick}>Finalize</button>
-									</span>
-									<UncontrolledTooltip delay={{ show: "1200" }} placement="top" target="finalize-button-1">
-										Click to calculate grades and send to the Canvas gradebook
+										<span id="finalize-button-1">
+											<button className="finalizebutton" onClick={this.handleFinalizeClick}>Finalize</button>
+										</span>
+										<UncontrolledTooltip delay={{ show: "1200" }} placement="top" target="finalize-button-1">
+											Click to calculate grades and send to the Canvas gradebook
 										</UncontrolledTooltip>
-								</Row>
-							</Flexbox>
+									</Row>
+								</Flexbox>
+							</div>
 						</div>
 						:
 						null
@@ -633,4 +611,4 @@ class AnalyzeButton extends Component {
 }
 
 export default AnalyzeButton;
-export {benchmarkNames, defaultBenchmarks};
+export { benchmarkNames, defaultBenchmarks };
