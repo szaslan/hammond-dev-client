@@ -1,8 +1,9 @@
 .iframe{
   margin-left: 5%;
   margin-top: 4%;
-  min-width: 1100px;
-  background-color: #FFEFE2;
+  min-width: 1300px;
+  /* background-color: #FFEFE2; */
+  background-color: white;
   z-index: 1;
 }
 

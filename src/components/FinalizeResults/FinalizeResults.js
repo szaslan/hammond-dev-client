@@ -767,7 +767,7 @@ class FinalizeResults extends Component {
                     <hr className="hr-6"></hr>
                     <h2 className="headertext">Score Details</h2>
                     <hr className="hr-2"></hr>
-                    <p className="totalscore"> -/{localStorage.getItem("finalizeDisplayTextOutOf_" + this.assignmentId)}pts</p>
+                    <p className="totalscore"> -/{Number(localStorage.getItem("finalizeDisplayTextOutOf_" + this.assignmentId))}pts</p>
                     <Row className="scoredets">
                         <p className="stats"> Mean: {Number(localStorage.getItem("finalizeDisplayTextAverage_" + this.assignmentId)).toFixed(1)}</p>
                         <p className="stats"> High: {Number(localStorage.getItem("max_" + this.assignmentId)).toFixed(0)}</p>
@@ -830,5 +830,6 @@ class FinalizeResults extends Component {
     }
 
 }
+
 
 export default FinalizeResults;

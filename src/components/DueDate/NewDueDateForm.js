@@ -105,7 +105,7 @@ class NewDueDate extends Component {
                 this.isBeforeDates = chosenDueDate.isBefore(previousDueDate);
             }
         }
-        
+
         if (this.isValidTime) {
             this.checkOtherDueDates()
         }

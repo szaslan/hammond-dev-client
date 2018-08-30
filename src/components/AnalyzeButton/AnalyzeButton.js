@@ -452,12 +452,13 @@ class AnalyzeButton extends Component {
 
 							<CustomizableParameters assignmentId={this.assignmentId} />
 
-							<Flexbox className="flex-dropdown" width="300px" flexWrap="wrap" justify-content="space-around">
+							<Flexbox className="flex-dropdown" width="100%" flexWrap="wrap" justify-content="space-around">
 								{
 									localStorage.getItem("customBenchmarks_" + this.assignmentId) && !localStorage.getItem("customBenchmarksSaved_" + this.assignmentId) ?
 										<div>
 											<AlgorithmBenchmarks originalBenchmarks={BENCHMARKS} benchmarks={this.algorithmBenchmarks} assignmentId={this.assignmentId} />
-											<button className="clear-local-button" onClick={this.clearCustomBenchmarks}> Clear All</button>
+											<button className="clear-all" onClick={this.clearCustomBenchmarks}> Clear All</button>
+										
 										</div>
 										:
 										null

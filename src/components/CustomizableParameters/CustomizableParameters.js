@@ -92,7 +92,7 @@ class CustomizableParameters extends Component {
                 <Form>
                     <FormGroup row>
                         <FormGroup check>
-                            <Label className="pagetext" check>
+                            <Label className="checktext" check>
                                 <Input name="sendIncompleteMessages" type="checkbox" checked={this.state.sendIncompleteMessages} onChange={this.handleInputChange} />
                                 Send Messages to All Students Who Have Incomplete Peer Reviews At Due Date 1?
                             </Label>
@@ -100,7 +100,7 @@ class CustomizableParameters extends Component {
                     </FormGroup>
                     <FormGroup row>
                         <FormGroup check>
-                            <Label className="pagetext" check>
+                            <Label className="checktext" check>
                                 <Input name="customBenchmarks" type="checkbox" checked={this.state.customBenchmarks} onChange={this.handleInputChange} />
                                 Custom Benchmarks For Grading Algorithm?
                             </Label>
@@ -114,7 +114,7 @@ class CustomizableParameters extends Component {
                     </FormGroup>
                     <FormGroup row>
                         <FormGroup check>
-                            <Label className="pagetext" check>
+                            <Label className="checktext" check>
                                 <Input name="penalizingForIncompletes" type="checkbox" checked={this.state.penalizingForIncompletes} onChange={this.handleInputChange} />
                                 Penalize Students Weights For Incomplete Peer Reviews?
                             </Label>
@@ -124,7 +124,7 @@ class CustomizableParameters extends Component {
                         this.state.penalizingForIncompletes ?
                             <FormGroup row>
                                 <FormGroup check>
-                                    <Label className="pagetext" check>
+                                    <Label className="checktext" check>
                                         <Input name="penalizingForReassigned" type="checkbox" checked={this.state.penalizingForReassigned} onChange={this.handleInputChange} />
                                         Penalize For Peer Reviews That Were Reassigned, But Not Completed?:
                                     </Label>

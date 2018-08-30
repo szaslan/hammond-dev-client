@@ -99,9 +99,8 @@ class AlgorithmBenchmarks extends Component {
     render() {
         if (this.state.loaded) {
             return (
-                <form>
-                  <Row>
-                    <Col className="column">
+                <form className="parameters">
+                    <hr className="hr-4"></hr>
                     <label className="parameter" >
                         Width of Standard Deviation Range:
                         <input type="number" name="WIDTH_OF_STD_DEV_RANGE" id="WIDTH_OF_STD_DEV_RANGE" onChange={this.handleChange} value={this.state.WIDTH_OF_STD_DEV_RANGE} min={0} step={0.01} />
@@ -110,6 +109,7 @@ class AlgorithmBenchmarks extends Component {
                             {WIDTH_OF_STD_DEV_RANGE_message}
                         </Tooltip>
                     </label>
+                    <br></br>
                     <label className="parameter">
                         Threshold:
                         <input type="number" name="THRESHOLD" id="THRESHOLD" onChange={this.handleChange} value={this.state.THRESHOLD} min={0} step={.0001} />
@@ -118,6 +118,7 @@ class AlgorithmBenchmarks extends Component {
                             {THRESHOLD_message}
                         </Tooltip>
                     </label>
+                    <br></br>
                     <label className="parameter">
                         "Could Be" Lower Bound:
 						<input type="number" name="COULD_BE_LOWER_BOUND" id="COULD_BE_LOWER_BOUND" onChange={this.handleChange} value={this.state.COULD_BE_LOWER_BOUND} min={0} max={1} step={.01} />
@@ -126,6 +127,7 @@ class AlgorithmBenchmarks extends Component {
                             {COULD_BE_LOWER_BOUND_message}
                         </Tooltip>
                     </label>
+                    <br></br>
                     <label className="parameter">
                         "Could Be" Upper Bound:
 						<input type="number" name="COULD_BE_UPPER_BOUND" id="COULD_BE_UPPER_BOUND" onChange={this.handleChange} value={this.state.COULD_BE_UPPER_BOUND} min={1} max={5} step={.01} />
@@ -134,8 +136,7 @@ class AlgorithmBenchmarks extends Component {
                             {COULD_BE_UPPER_BOUND_message}
                         </Tooltip>
                     </label>
-                  </Col>
-                  <Col>
+                    <br></br>
                     <label className="parameter">
                         Minimum Number of Reviews (per student) for Classification:
 						<input type="number" name="MIN_NUMBER_OF_REVIEWS_PER_STUDENT_FOR_CLASSIFICATION" id="MIN_NUMBER_OF_REVIEWS_PER_STUDENT_FOR_CLASSIFICATION" onChange={this.handleChange} value={this.state.MIN_NUMBER_OF_REVIEWS_PER_STUDENT_FOR_CLASSIFICATION} min={0} step={1} />
@@ -144,6 +145,7 @@ class AlgorithmBenchmarks extends Component {
                             {MIN_NUMBER_OF_REVIEWS_PER_STUDENT_FOR_CLASSIFICATION_message}
                         </Tooltip>
                     </label>
+                    <br></br>
                     <label className="parameter">
                         Minimum Number of Assignments (per course) for Classification:
 						<input type="number" name="MIN_NUMBER_OF_ASSIGNMENTS_IN_COURSE_FOR_CLASSIFICATION" id="MIN_NUMBER_OF_ASSIGNMENTS_IN_COURSE_FOR_CLASSIFICATION" onChange={this.handleChange} value={this.state.MIN_NUMBER_OF_ASSIGNMENTS_IN_COURSE_FOR_CLASSIFICATION} min={0} step={1} />
@@ -152,6 +154,7 @@ class AlgorithmBenchmarks extends Component {
                             {MIN_NUMBER_OF_ASSIGNMENTS_IN_COURSE_FOR_CLASSIFICATION_message}
                         </Tooltip>
                     </label>
+                    <br></br>
                     <label className="parameter">
                         Minimum Number of Reviews (per submission) for Grading:
 						<input type="number" name="MIN_NUMBER_OF_REVIEWS_FOR_SINGLE_SUBMISSION_FOR_GRADING" id="MIN_NUMBER_OF_REVIEWS_FOR_SINGLE_SUBMISSION_FOR_GRADING" onChange={this.handleChange} value={this.state.MIN_NUMBER_OF_REVIEWS_FOR_SINGLE_SUBMISSION_FOR_GRADING} min={0} step={1} />
@@ -160,6 +163,7 @@ class AlgorithmBenchmarks extends Component {
                             {MIN_NUMBER_OF_REVIEWS_FOR_SINGLE_SUBMISSION_FOR_GRADING_message}
                         </Tooltip>
                     </label>
+                    <br></br>
                     <label className="parameter">
                         Minimum Ratio of Completed to Assigned Reviews (per submission) for Grading:
 						<input type="number" name="MIN_RATIO_OF_COMPLETED_TO_ASSIGNED_REVIEWS_FOR_SINGLE_SUBMISSION_FOR_GRADING" id="MIN_RATIO_OF_COMPLETED_TO_ASSIGNED_REVIEWS_FOR_SINGLE_SUBMISSION_FOR_GRADING" onChange={this.handleChange} value={this.state.MIN_RATIO_OF_COMPLETED_TO_ASSIGNED_REVIEWS_FOR_SINGLE_SUBMISSION_FOR_GRADING} min={0} max={1} step={.001} />
@@ -168,9 +172,8 @@ class AlgorithmBenchmarks extends Component {
                             {MIN_RATIO_OF_COMPLETED_TO_ASSIGNED_REVIEWS_FOR_SINGLE_SUBMISSION_FOR_GRADING_message}
                         </Tooltip>
                     </label>
-                  </Col>
-                </Row>
-                    <button className="save-all" onClick={this.handleSubmit}> Save All</button>
+                    <br></br>
+                    <button className="clear" onClick={this.handleSubmit}> Save All</button>
                     <br></br>
 
                 </form>

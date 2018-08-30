@@ -7,7 +7,8 @@ import JumbotronComp from '../JumbotronComp/JumbotronComp';
 import { Redirect } from 'react-router-dom'
 import history from '../../history';
 import Loader from 'react-loader-spinner';
-import SelectSearch from 'react-select-search'
+// import SelectSearch from 'react-select-search'
+import Select from 'react-select';
 
 import './CourseStudents.css'
 import StudentInfo from '../StudentInfo/StudentInfo';
@@ -17,23 +18,21 @@ const array = [];
 class CourseStudents extends Component {
     constructor(props) {
         super(props);
-        this.toggle = this.toggle.bind(this);
+        // this.toggle = this.toggle.bind(this);
         this.select= this.select.bind(this);
         // this.handleChange = this.handleChange.bind(this)
         //URL is the current url while taking in the parameters from the props of the previous url
         this.state = {
             courseId: this.props.match.params.course_id,
-            dropdownOpen: false,
+            // dropdownOpen: false,
             loaded: false,
             students: [],
-            loaded: false,
-            dropdownOpen: false,
             studentName: '',
             studentId: '',
             ...props,
             url: `/courses/${this.props.match.params.course_id}/students/`,
             value: null,
-          
+
           ...props,
 
         }
@@ -41,9 +40,9 @@ class CourseStudents extends Component {
     }
 
     select(event) {
-      this.setState({studentName: event.name})
-      this.setState({studentId: event.value})
-  
+      this.setState({
+          value: event.value,
+      })
     }
 
 
@@ -116,11 +115,11 @@ class CourseStudents extends Component {
             })
     }
 
-    toggle() {
-        this.setState(prevState => ({
-            dropdownOpen: !prevState.dropdownOpen
-        }));
-    }
+    // toggle() {
+    //     this.setState(prevState => ({
+    //         dropdownOpen: !prevState.dropdownOpen
+    //     }));
+    // }
 
     componentDidMount() {
         this.fetchStudentsFromCanvas()
@@ -133,33 +132,31 @@ class CourseStudents extends Component {
     }
 
     render(){
-            return(
+              if (this.state.students && array.length < this.state.students.length) {
+                this.state.students.map(students => {
+                    array.push({
+                      label: students.name,
+                      value: students.id,
+                    });
+                  }
+
+                    )
+                  }
+              {console.log(this.state.loaded)}
+              if (this.state.loaded && array.length == this.state.students.length) {
+               return (
+                <div>
+                {console.log(array)}
                 <div className="studentdrop">
-
-                    {this.state.students.length !== array.length ?
-                        this.state.students.map(students => {
-                            array.push({
-                              name: students.name,
-                              value: students.id,
-                            });
-                          }
-
-                            )
-                      :
-                        null
-                    }
-                    <div>
-                  <SelectSearch
+                  <Select
                     className="select-search-box"
                     options={array}
-                    search = "true"
+                    isSearchable="true"
                     placeholder = "Select a Student"
-                    value={this.state.studentName}
+                    // value={this.state.studentName}
                     onChange={this.select}
                   />
                   </div>
-                  <hr className="hr-3"></hr>
-
                   {this.state.studentName ?
                   <StudentInfo courseId={this.state.courseId} studentId={this.state.studentId} studentName={this.state.studentName}/>
                   :
@@ -168,7 +165,11 @@ class CourseStudents extends Component {
               </div>
             );
         }
+        return (
+            <Loader type="TailSpin" color="black" height={80} width={80} />
+        )
     }
+  }
 
 
 
