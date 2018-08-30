@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import history from '../../history';
-import SelectSearch from 'react-select-search'
+import Loader from 'react-loader-spinner';
+import Select from 'react-select';
 
 import StudentInfo from '../StudentInfo/StudentInfo';
 
@@ -11,10 +12,9 @@ const array = [];
 class CourseStudents extends Component {
     constructor(props) {
         super(props);
-
         this.state = {
             courseId: this.props.match.params.course_id,
-            dropdownOpen: false,
+            // dropdownOpen: false,
             loaded: false,
             studentId: '',
             studentName: '',
@@ -114,39 +114,42 @@ class CourseStudents extends Component {
         })
     }
 
-    render() {
-        if (this.state.students.length !== array.length) {
-            this.state.students.map(students => {
-                array.push({
-                    name: students.name,
-                    value: students.id,
-                });
-            })
-        }
+    render(){
+              if (this.state.students && array.length < this.state.students.length) {
+                this.state.students.map(students => {
+                    array.push({
+                      label: students.name,
+                      value: students.id,
+                    });
+                  }
 
-        return (
-            <div className="studentdrop">
+                    )
+                  }
+              if (this.state.loaded && array.length == this.state.students.length) {
+               return (
                 <div>
-                    <SelectSearch
-                        className="select-search-box"
-                        options={array}
-                        search="true"
-                        placeholder="Select a Student"
-                        value={this.state.studentName}
-                        onChange={this.select}
-                    />
-                </div>
-                <hr className="hr-3" />hr>
-
-                {
-                    this.state.studentName ?
-                        <StudentInfo courseId={this.state.courseId} studentId={this.state.studentId} studentName={this.state.studentName} />
-                        :
-                        null
-                }
-            </div>
-        );
+                <div className="studentdrop">
+                  <Select
+                    className="select-search-box"
+                    options={array}
+                    isSearchable="true"
+                    placeholder = "Select a Student"
+                    // value={this.state.studentName}
+                    onChange={this.select}
+                  />
+                  </div>
+                  {this.state.studentName ?
+                  <StudentInfo courseId={this.state.courseId} studentId={this.state.studentId} studentName={this.state.studentName}/>
+                  :
+                  null
+                  }
+              </div>
+            );
+        }
+        return (
+            <Loader type="TailSpin" color="black" height={80} width={80} />
+        )
     }
-}
+  }
 
 export default CourseStudents;

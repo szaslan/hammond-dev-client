@@ -64,7 +64,7 @@ class TabsComp extends Component {
                         width="85%"
                         height="70%"
                         /> */}
-                        <Assignments courseJSON={courseJSON} />
+                        <Assignments className="iframe" courseJSON={courseJSON} />
                       </div>
                     </TabPane>
 

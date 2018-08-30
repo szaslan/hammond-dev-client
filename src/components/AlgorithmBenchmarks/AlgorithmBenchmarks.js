@@ -110,7 +110,8 @@ class AlgorithmBenchmarks extends Component {
         if (this.state.loaded) {
             return (
                 <div>
-                    <Form className="algorithm-benchmarks">
+                    <Form className="parameters">
+                        <hr className="hr-4"></hr>
                         <FormGroup row>
                             <Col sm={8}>
                                 <Label className="parameter" >
