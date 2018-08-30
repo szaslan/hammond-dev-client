@@ -1,28 +1,31 @@
 import React, { Component } from 'react';
-import { Tooltip } from 'reactstrap';
+import { Form, FormGroup, Input, Label, Tooltip } from 'reactstrap';
+import { Col } from 'react-bootstrap';
 import Loader from 'react-loader-spinner'
-
-import { Row, Well, Col} from 'react-bootstrap';
 
 import 'bootstrap/dist/css/bootstrap.css';
 
 import '../Assignments/Assignments.css';
 import '../DueDate/NewDueDate.css'
 
-const WIDTH_OF_STD_DEV_RANGE_message = "";
+var downArrowIcon = require('../downArrowIcon.svg')
+var upArrowIcon = require('../upArrowIcon.svg')
+
+const SPAZZY_WIDTH_message = "";
 const THRESHOLD_message = "The maximum amount that the calculated grade on a submission can vary between two iterations of the grading algorithm without requiring another iteration. Recommended value: 0.001";
 const COULD_BE_LOWER_BOUND_message = "The minimum weight to not be classified into one of the three extreme buckets. Recommended value: 0.70";
 const COULD_BE_UPPER_BOUND_message = "The maximum weight to not be classified as Definitely Fair. Recommended value: 2.00";
-const MIN_NUMBER_OF_REVIEWS_PER_STUDENT_FOR_CLASSIFICATION_message = "";
-const MIN_NUMBER_OF_ASSIGNMENTS_IN_COURSE_FOR_CLASSIFICATION_message = "";
-const MIN_NUMBER_OF_REVIEWS_FOR_SINGLE_SUBMISSION_FOR_GRADING_message = "";
-const MIN_RATIO_OF_COMPLETED_TO_ASSIGNED_REVIEWS_FOR_SINGLE_SUBMISSION_FOR_GRADING_message = "";
+const MIN_NUMBER_OF_REVIEWS_PER_STUDENT_FOR_CLASSIFICATION_message = "The minimum number of reviews that a student must complete in this course before the student can be classified into a 'Definitive' category";
+const MIN_NUMBER_OF_ASSIGNMENTS_IN_COURSE_FOR_CLASSIFICATION_message = "The minimum number of assignments in a course before a student can be classified into a 'Definitive' category";
+const MIN_NUMBER_OF_REVIEWS_FOR_SINGLE_SUBMISSION_FOR_GRADING_message = "The minimum number of reviews completed for a submission to be graded accurately";
+const MIN_REVIEW_COMPLETION_PERCENTAGE_PER_SUBMISSION_message = "The minimum completion percentage of reviews for this submission to be graded accurately";
 
 class AlgorithmBenchmarks extends Component {
     constructor(props) {
         super(props);
 
         this.state = {
+            advancedOpen: false,
             COULD_BE_LOWER_BOUND: null,
             COULD_BE_LOWER_BOUND_tooltipOpen: false,
             COULD_BE_UPPER_BOUND: null,
@@ -34,22 +37,29 @@ class AlgorithmBenchmarks extends Component {
             MIN_NUMBER_OF_REVIEWS_FOR_SINGLE_SUBMISSION_FOR_GRADING_tooltipOpen: false,
             MIN_NUMBER_OF_REVIEWS_PER_STUDENT_FOR_CLASSIFICATION: null,
             MIN_NUMBER_OF_REVIEWS_PER_STUDENT_FOR_CLASSIFICATION_tooltipOpen: false,
-            MIN_RATIO_OF_COMPLETED_TO_ASSIGNED_REVIEWS_FOR_SINGLE_SUBMISSION_FOR_GRADING: null,
-            MIN_RATIO_OF_COMPLETED_TO_ASSIGNED_REVIEWS_FOR_SINGLE_SUBMISSION_FOR_GRADING_tooltipOpen: false,
+            MIN_REVIEW_COMPLETION_PERCENTAGE_PER_SUBMISSION: null,
+            MIN_REVIEW_COMPLETION_PERCENTAGE_PER_SUBMISSION_tooltipOpen: false,
             THRESHOLD: null,
             THRESHOLD_tooltipOpen: false,
-            WIDTH_OF_STD_DEV_RANGE: null,
-            WIDTH_OF_STD_DEV_RANGE_tooltipOpen: false,
+            SPAZZY_WIDTH: null,
+            SPAZZY_WIDTH_tooltipOpen: false,
         };
 
+        this.handleAdvancedClick = this.handleAdvancedClick.bind(this);
         this.handleChange = this.handleChange.bind(this);
-        this.handleClear = this.handleClear.bind(this);
+        this.handleReset = this.handleReset.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
         this.toggle = this.toggle.bind(this);
 
         this.assignmentId = this.props.assignmentId
         this.benchmarks = this.props.benchmarks
         this.originalBenchmarks = this.props.originalBenchmarks
+    }
+
+    handleAdvancedClick() {
+        this.setState({
+            advancedOpen: !this.state.advancedOpen
+        })
     }
 
     handleChange(event) {
@@ -59,7 +69,7 @@ class AlgorithmBenchmarks extends Component {
         });
     }
 
-    handleClear(event) {
+    handleReset(event) {
         event.preventDefault();
 
         //reset back to the original benchmark
@@ -99,81 +109,157 @@ class AlgorithmBenchmarks extends Component {
     render() {
         if (this.state.loaded) {
             return (
-                <form>
-                  <Row>
-                    <Col className="column">
-                    <label className="parameter" >
-                        Width of Standard Deviation Range:
-                        <input type="number" name="WIDTH_OF_STD_DEV_RANGE" id="WIDTH_OF_STD_DEV_RANGE" onChange={this.handleChange} value={this.state.WIDTH_OF_STD_DEV_RANGE} min={0} step={0.01} />
-                        <button className="clear" name="WIDTH_OF_STD_DEV_RANGE" onClick={this.handleClear}>Clear</button>
-                        <Tooltip placement="right" isOpen={this.state.WIDTH_OF_STD_DEV_RANGE_tooltipOpen} target={"WIDTH_OF_STD_DEV_RANGE"} toggle={this.toggle}>
-                            {WIDTH_OF_STD_DEV_RANGE_message}
-                        </Tooltip>
-                    </label>
-                    <label className="parameter">
-                        Threshold:
-                        <input type="number" name="THRESHOLD" id="THRESHOLD" onChange={this.handleChange} value={this.state.THRESHOLD} min={0} step={.0001} />
-                        <button className="clear" name="THRESHOLD" onClick={this.handleClear}>Clear</button>
-                        <Tooltip placement="right" isOpen={this.state.THRESHOLD_tooltipOpen} target={"THRESHOLD"} toggle={this.toggle}>
-                            {THRESHOLD_message}
-                        </Tooltip>
-                    </label>
-                    <label className="parameter">
-                        "Could Be" Lower Bound:
-						<input type="number" name="COULD_BE_LOWER_BOUND" id="COULD_BE_LOWER_BOUND" onChange={this.handleChange} value={this.state.COULD_BE_LOWER_BOUND} min={0} max={1} step={.01} />
-                        <button className="clear" name="COULD_BE_LOWER_BOUND" onClick={this.handleClear}>Clear</button>
-                        <Tooltip placement="right" isOpen={this.state.COULD_BE_LOWER_BOUND_tooltipOpen} target={"COULD_BE_LOWER_BOUND"} toggle={this.toggle}>
-                            {COULD_BE_LOWER_BOUND_message}
-                        </Tooltip>
-                    </label>
-                    <label className="parameter">
-                        "Could Be" Upper Bound:
-						<input type="number" name="COULD_BE_UPPER_BOUND" id="COULD_BE_UPPER_BOUND" onChange={this.handleChange} value={this.state.COULD_BE_UPPER_BOUND} min={1} max={5} step={.01} />
-                        <button className="clear" name="COULD_BE_UPPER_BOUND" onClick={this.handleClear}>Clear</button>
-                        <Tooltip placement="right" isOpen={this.state.COULD_BE_UPPER_BOUND_tooltipOpen} target={"COULD_BE_UPPER_BOUND"} toggle={this.toggle}>
-                            {COULD_BE_UPPER_BOUND_message}
-                        </Tooltip>
-                    </label>
-                  </Col>
-                  <Col>
-                    <label className="parameter">
-                        Minimum Number of Reviews (per student) for Classification:
-						<input type="number" name="MIN_NUMBER_OF_REVIEWS_PER_STUDENT_FOR_CLASSIFICATION" id="MIN_NUMBER_OF_REVIEWS_PER_STUDENT_FOR_CLASSIFICATION" onChange={this.handleChange} value={this.state.MIN_NUMBER_OF_REVIEWS_PER_STUDENT_FOR_CLASSIFICATION} min={0} step={1} />
-                        <button className="clear" name="MIN_NUMBER_OF_REVIEWS_PER_STUDENT_FOR_CLASSIFICATION" onClick={this.handleClear}>Clear</button>
-                        <Tooltip placement="right" isOpen={this.state.MIN_NUMBER_OF_REVIEWS_PER_STUDENT_FOR_CLASSIFICATION_tooltipOpen} target={"MIN_NUMBER_OF_REVIEWS_PER_STUDENT_FOR_CLASSIFICATION"} toggle={this.toggle}>
-                            {MIN_NUMBER_OF_REVIEWS_PER_STUDENT_FOR_CLASSIFICATION_message}
-                        </Tooltip>
-                    </label>
-                    <label className="parameter">
-                        Minimum Number of Assignments (per course) for Classification:
-						<input type="number" name="MIN_NUMBER_OF_ASSIGNMENTS_IN_COURSE_FOR_CLASSIFICATION" id="MIN_NUMBER_OF_ASSIGNMENTS_IN_COURSE_FOR_CLASSIFICATION" onChange={this.handleChange} value={this.state.MIN_NUMBER_OF_ASSIGNMENTS_IN_COURSE_FOR_CLASSIFICATION} min={0} step={1} />
-                        <button className="clear" name="MIN_NUMBER_OF_ASSIGNMENTS_IN_COURSE_FOR_CLASSIFICATION" onClick={this.handleClear}>Clear</button>
-                        <Tooltip placement="right" isOpen={this.state.MIN_NUMBER_OF_ASSIGNMENTS_IN_COURSE_FOR_CLASSIFICATION_tooltipOpen} target={"MIN_NUMBER_OF_ASSIGNMENTS_IN_COURSE_FOR_CLASSIFICATION"} toggle={this.toggle}>
-                            {MIN_NUMBER_OF_ASSIGNMENTS_IN_COURSE_FOR_CLASSIFICATION_message}
-                        </Tooltip>
-                    </label>
-                    <label className="parameter">
-                        Minimum Number of Reviews (per submission) for Grading:
-						<input type="number" name="MIN_NUMBER_OF_REVIEWS_FOR_SINGLE_SUBMISSION_FOR_GRADING" id="MIN_NUMBER_OF_REVIEWS_FOR_SINGLE_SUBMISSION_FOR_GRADING" onChange={this.handleChange} value={this.state.MIN_NUMBER_OF_REVIEWS_FOR_SINGLE_SUBMISSION_FOR_GRADING} min={0} step={1} />
-                        <button className="clear" name="MIN_NUMBER_OF_REVIEWS_FOR_SINGLE_SUBMISSION_FOR_GRADING" onClick={this.handleClear}>Clear</button>
-                        <Tooltip placement="right" isOpen={this.state.MIN_NUMBER_OF_REVIEWS_FOR_SINGLE_SUBMISSION_FOR_GRADING_tooltipOpen} target={"MIN_NUMBER_OF_REVIEWS_FOR_SINGLE_SUBMISSION_FOR_GRADING"} toggle={this.toggle}>
-                            {MIN_NUMBER_OF_REVIEWS_FOR_SINGLE_SUBMISSION_FOR_GRADING_message}
-                        </Tooltip>
-                    </label>
-                    <label className="parameter">
-                        Minimum Ratio of Completed to Assigned Reviews (per submission) for Grading:
-						<input type="number" name="MIN_RATIO_OF_COMPLETED_TO_ASSIGNED_REVIEWS_FOR_SINGLE_SUBMISSION_FOR_GRADING" id="MIN_RATIO_OF_COMPLETED_TO_ASSIGNED_REVIEWS_FOR_SINGLE_SUBMISSION_FOR_GRADING" onChange={this.handleChange} value={this.state.MIN_RATIO_OF_COMPLETED_TO_ASSIGNED_REVIEWS_FOR_SINGLE_SUBMISSION_FOR_GRADING} min={0} max={1} step={.001} />
-                        <button className="clear" name="MIN_RATIO_OF_COMPLETED_TO_ASSIGNED_REVIEWS_FOR_SINGLE_SUBMISSION_FOR_GRADING" onClick={this.handleClear}>Clear</button>
-                        <Tooltip placement="right" isOpen={this.state.MIN_RATIO_OF_COMPLETED_TO_ASSIGNED_REVIEWS_FOR_SINGLE_SUBMISSION_FOR_GRADING_tooltipOpen} target={"MIN_RATIO_OF_COMPLETED_TO_ASSIGNED_REVIEWS_FOR_SINGLE_SUBMISSION_FOR_GRADING"} toggle={this.toggle}>
-                            {MIN_RATIO_OF_COMPLETED_TO_ASSIGNED_REVIEWS_FOR_SINGLE_SUBMISSION_FOR_GRADING_message}
-                        </Tooltip>
-                    </label>
-                  </Col>
-                </Row>
-                    <button className="save-all" onClick={this.handleSubmit}> Save All</button>
-                    <br></br>
-
-                </form>
+                <div>
+                    <Form className="algorithm-benchmarks">
+                        <FormGroup row>
+                            <Col sm={8}>
+                                <Label className="parameter" >
+                                    Minimum Number of Reviews (per student) for Classification:
+                                </Label>
+                            </Col>
+                            <Col sm={3}>
+                                <Input type="number" name="MIN_NUMBER_OF_REVIEWS_PER_STUDENT_FOR_CLASSIFICATION" id="MIN_NUMBER_OF_REVIEWS_PER_STUDENT_FOR_CLASSIFICATION" onChange={this.handleChange} value={this.state.MIN_NUMBER_OF_REVIEWS_PER_STUDENT_FOR_CLASSIFICATION} min={0} step={1} />
+                            </Col>
+                            <Col sm={1}>
+                                <button className="clear" name="MIN_NUMBER_OF_REVIEWS_PER_STUDENT_FOR_CLASSIFICATION" onClick={this.handleReset}>Reset</button>
+                                <Tooltip placement="right" isOpen={this.state.MIN_NUMBER_OF_REVIEWS_PER_STUDENT_FOR_CLASSIFICATION_tooltipOpen} target={"MIN_NUMBER_OF_REVIEWS_PER_STUDENT_FOR_CLASSIFICATION"} toggle={this.toggle}>
+                                    {MIN_NUMBER_OF_REVIEWS_PER_STUDENT_FOR_CLASSIFICATION_message}
+                                </Tooltip>
+                            </Col>
+                        </FormGroup>
+                        <FormGroup row>
+                            <Col sm={8}>
+                                <Label className="parameter" >
+                                    Minimum Number of Assignments (per course) for Classification:
+                                </Label>
+                            </Col>
+                            <Col sm={3}>
+                                <Input type="number" name="MIN_NUMBER_OF_ASSIGNMENTS_IN_COURSE_FOR_CLASSIFICATION" id="MIN_NUMBER_OF_ASSIGNMENTS_IN_COURSE_FOR_CLASSIFICATION" onChange={this.handleChange} value={this.state.MIN_NUMBER_OF_ASSIGNMENTS_IN_COURSE_FOR_CLASSIFICATION} min={0} step={1} />
+                            </Col>
+                            <Col sm={1}>
+                                <button className="clear" name="MIN_NUMBER_OF_ASSIGNMENTS_IN_COURSE_FOR_CLASSIFICATION" onClick={this.handleReset}>Reset</button>
+                                <Tooltip placement="right" isOpen={this.state.MIN_NUMBER_OF_ASSIGNMENTS_IN_COURSE_FOR_CLASSIFICATION_tooltipOpen} target={"MIN_NUMBER_OF_ASSIGNMENTS_IN_COURSE_FOR_CLASSIFICATION"} toggle={this.toggle}>
+                                    {MIN_NUMBER_OF_ASSIGNMENTS_IN_COURSE_FOR_CLASSIFICATION_message}
+                                </Tooltip>
+                            </Col>
+                        </FormGroup>
+                        <FormGroup row>
+                            <Col sm={8}>
+                                <Label className="parameter" >
+                                    Minimum Number of Reviews (per submission) for Grading:
+                                </Label>
+                            </Col>
+                            <Col sm={3}>
+                                <Input type="number" name="MIN_NUMBER_OF_REVIEWS_FOR_SINGLE_SUBMISSION_FOR_GRADING" id="MIN_NUMBER_OF_REVIEWS_FOR_SINGLE_SUBMISSION_FOR_GRADING" onChange={this.handleChange} value={this.state.MIN_NUMBER_OF_REVIEWS_FOR_SINGLE_SUBMISSION_FOR_GRADING} min={0} step={1} />
+                            </Col>
+                            <Col sm={1}>
+                                <button className="clear" name="MIN_NUMBER_OF_REVIEWS_FOR_SINGLE_SUBMISSION_FOR_GRADING" onClick={this.handleReset}>Reset</button>
+                                <Tooltip placement="right" isOpen={this.state.MIN_NUMBER_OF_REVIEWS_FOR_SINGLE_SUBMISSION_FOR_GRADING_tooltipOpen} target={"MIN_NUMBER_OF_REVIEWS_FOR_SINGLE_SUBMISSION_FOR_GRADING"} toggle={this.toggle}>
+                                    {MIN_NUMBER_OF_REVIEWS_FOR_SINGLE_SUBMISSION_FOR_GRADING_message}
+                                </Tooltip>
+                            </Col>
+                        </FormGroup>
+                        <FormGroup row>
+                            <Col sm={8}>
+                                <Label className="parameter" >
+                                    Minimum Completion Percentage for Accurrate Grade Calculating:
+                                </Label>
+                            </Col>
+                            <Col sm={3}>
+                                <Input type="number" name="MIN_REVIEW_COMPLETION_PERCENTAGE_PER_SUBMISSION" id="MIN_REVIEW_COMPLETION_PERCENTAGE_PER_SUBMISSION" onChange={this.handleChange} value={this.state.MIN_REVIEW_COMPLETION_PERCENTAGE_PER_SUBMISSION} min={0} max={1} step={.001} />
+                            </Col>
+                            <Col sm={1}>
+                                <button className="clear" name="MIN_REVIEW_COMPLETION_PERCENTAGE_PER_SUBMISSION" onClick={this.handleReset}>Reset</button>
+                                <Tooltip placement="right" isOpen={this.state.MIN_REVIEW_COMPLETION_PERCENTAGE_PER_SUBMISSION_tooltipOpen} target={"MIN_REVIEW_COMPLETION_PERCENTAGE_PER_SUBMISSION"} toggle={this.toggle}>
+                                    {MIN_REVIEW_COMPLETION_PERCENTAGE_PER_SUBMISSION_message}
+                                </Tooltip>
+                            </Col>
+                        </FormGroup>
+                    </Form>
+                    {
+                        this.state.advancedOpen ?
+                            <div>
+                                <span className="advanced-button" onClick={this.handleAdvancedClick}>
+                                    Advanced
+                                <img src={upArrowIcon} width="20" alt="up arrow"/>
+                                </span>
+                                <Form>
+                                    <FormGroup row>
+                                        <Col sm={5}>
+                                            <Label className="parameter">
+                                                Width of Standard Deviation Range:
+                                            </Label>
+                                        </Col>
+                                        <Col sm={3}>
+                                            <Input type="number" name="SPAZZY_WIDTH" id="SPAZZY_WIDTH" onChange={this.handleChange} value={this.state.SPAZZY_WIDTH} min={0} step={0.01} />
+                                        </Col>
+                                        <Col sm={1}>
+                                            <button className="clear" name="SPAZZY_WIDTH" onClick={this.handleReset}>Reset</button>
+                                            <Tooltip placement="right" isOpen={this.state.SPAZZY_WIDTH_tooltipOpen} target={"SPAZZY_WIDTH"} toggle={this.toggle}>
+                                                {SPAZZY_WIDTH_message}
+                                            </Tooltip>
+                                        </Col>
+                                    </FormGroup>
+                                    <FormGroup row>
+                                        <Col sm={5}>
+                                            <Label className="parameter" >
+                                                Threshold:
+                                            </Label>
+                                        </Col>
+                                        <Col sm={3}>
+                                            <Input type="number" name="THRESHOLD" id="THRESHOLD" onChange={this.handleChange} value={this.state.THRESHOLD} min={0} step={.0001} />
+                                        </Col>
+                                        <Col sm={1}>
+                                            <button className="clear" name="THRESHOLD" onClick={this.handleReset}>Reset</button>
+                                            <Tooltip placement="right" isOpen={this.state.THRESHOLD_tooltipOpen} target={"THRESHOLD"} toggle={this.toggle}>
+                                                {THRESHOLD_message}
+                                            </Tooltip>
+                                        </Col>
+                                    </FormGroup>
+                                    <FormGroup row>
+                                        <Col sm={5}>
+                                            <Label className="parameter" >
+                                                "Could Be" Lower Bound:
+                                            </Label>
+                                        </Col>
+                                        <Col sm={3}>
+                                            <Input type="number" name="COULD_BE_LOWER_BOUND" id="COULD_BE_LOWER_BOUND" onChange={this.handleChange} value={this.state.COULD_BE_LOWER_BOUND} min={0} max={1} step={.01} />
+                                        </Col>
+                                        <Col sm={1}>
+                                            <button className="clear" name="COULD_BE_LOWER_BOUND" onClick={this.handleReset}>Reset</button>
+                                            <Tooltip placement="right" isOpen={this.state.COULD_BE_LOWER_BOUND_tooltipOpen} target={"COULD_BE_LOWER_BOUND"} toggle={this.toggle}>
+                                                {COULD_BE_LOWER_BOUND_message}
+                                            </Tooltip>
+                                        </Col>
+                                    </FormGroup>
+                                    <FormGroup row>
+                                        <Col sm={5}>
+                                            <Label className="parameter" >
+                                                "Could Be" Upper Bound:
+                                            </Label>
+                                        </Col>
+                                        <Col sm={3}>
+                                            <Input type="number" name="COULD_BE_UPPER_BOUND" id="COULD_BE_UPPER_BOUND" onChange={this.handleChange} value={this.state.COULD_BE_UPPER_BOUND} min={1} max={5} step={.01} />
+                                        </Col>
+                                        <Col sm={1}>
+                                            <button className="clear" name="COULD_BE_UPPER_BOUND" onClick={this.handleReset}>Reset</button>
+                                            <Tooltip placement="right" isOpen={this.state.COULD_BE_UPPER_BOUND_tooltipOpen} target={"COULD_BE_UPPER_BOUND"} toggle={this.toggle}>
+                                                {COULD_BE_UPPER_BOUND_message}
+                                            </Tooltip>
+                                        </Col>
+                                    </FormGroup>
+                                </Form>
+                            </div>
+                            :
+                            <span className="advanced-button" onClick={this.handleAdvancedClick}>
+                                Advanced
+                                <img src={downArrowIcon} width="20" alt="down arrow"/>
+                            </span>
+                    }
+                    <FormGroup row>
+                        <button className="save-all" onClick={this.handleSubmit}> Save All</button>
+                    </FormGroup>
+                </div>
             );
         }
 

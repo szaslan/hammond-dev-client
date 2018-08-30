@@ -38,9 +38,9 @@ class NotFound extends Component {
                     <Row>
                         {this.state.message}
                     </Row>
-                    <br></br>
-                    <br></br>
-                    <br></br>
+                    <br />
+                    <br />
+                    <br />
                     <Row className="error-message-body">
                         Location of the error: {this.state.location}
                     </Row>

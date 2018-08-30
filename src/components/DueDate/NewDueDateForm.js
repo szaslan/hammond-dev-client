@@ -16,16 +16,10 @@ class NewDueDate extends Component {
         super(props);
 
         this.state = {
-            dateValue: (localStorage.getItem("date" + this.props.assignmentId + "_" + this.props.number) ?
-                localStorage.getItem("date" + this.props.assignmentId + "_" + this.props.number)
-                :
-                moment()),
+            dateValue: moment().startOf('minute'),
             modal: false,
             number: Number(this.props.number),
-            timeValue: (localStorage.getItem("time" + this.props.assignmentId + "_" + this.props.number) ?
-                localStorage.getItem("time" + this.props.assignmentId + "_" + this.props.number)
-                :
-                moment()),
+            timeValue: moment().startOf('minute'),
         };
 
         this.checkDate = this.checkDate.bind(this);
@@ -35,35 +29,36 @@ class NewDueDate extends Component {
         this.onChange = this.onChange.bind(this);
         this.toggle = this.toggle.bind(this);
 
-        this.dueDateExtension = this.props.assignmentId + "_" + this.state.number;
+        this.dueDateExtension = this.state.number + "_" + this.props.assignmentId;
         this.isBeforeDates = false;
         this.isInPast = false;
         this.isValidTime = true;
-        this.previousDueDateExtension = this.props.assignmentId + "_" + (this.state.number - 1);
+        this.previousDueDateExtension = (this.state.number - 1) + "_" + this.props.assignmentId;
         this.previousDueDateNumber = this.state.number - 1;
     }
 
     checkDate(current) {
-        if (this.state.number == 1) {
-            //Make sure date selected is after yesterday (in t`he present)
+        if (this.state.number === 1) {
+            //Make sure date selected is after yesterday (in the present)
             var yesterday = Datetime.moment().subtract(1, 'day');
             return current.isAfter(yesterday);
         }
         else {
             //Make sure date selected is either on or after the previous due date day
 
-            var lowerBoundDate = Datetime.moment(localStorage.getItem("dueDate_" + this.previousDueDateExtension)).subtract(1, 'day');
+            var lowerBoundDate = Datetime.moment(localStorage.getItem("dueDate" + this.previousDueDateExtension)).subtract(1, 'day');
             return current.isAfter(lowerBoundDate);
         }
     }
 
     checkOtherDueDates() {
-        let currentDueDate = Datetime.moment(localStorage.getItem("dueDate_" + this.dueDateExtension))
-        for (var number = this.state.number + 1; number <= 3; number++) {
-            let laterDueDate = Datetime.moment(localStorage.getItem("dueDate_" + this.props.assignmentId + "_" + number))
+        let currentDueDate = Datetime.moment(localStorage.getItem("dueDate" + this.dueDateExtension))
+        for (var i = this.state.number + 1; i <= 3; i++) {
+            let laterDueDate = Datetime.moment(localStorage.getItem("dueDate" + i + "_" + this.props.assignmentId))
             if (laterDueDate) {
-                if (currentDueDate.isAfter(laterDueDate)) {
-                    localStorage.removeItem("dueDate_" + this.props.assignmentId + "_" + number)
+                //if the current due date is at the same time or after the later one, delete the later one
+                if (currentDueDate.isAfter(laterDueDate) || (!currentDueDate.isBefore(laterDueDate) && !laterDueDate.isBefore(currentDueDate))) {
+                    localStorage.removeItem("dueDate" + i + "_" + this.props.assignmentId)
                 }
             }
         }
@@ -82,11 +77,8 @@ class NewDueDate extends Component {
         this.isInPast = false;
         this.isValidTime = true;
 
-
-
-
         var concatDateTime = (this.state.dateValue).format('ddd MMM DD YYYY') + " " + (this.state.timeValue).format('HH:mm:ss') + " GMT-0500";
-        localStorage.setItem("dueDate_" + this.dueDateExtension, concatDateTime);
+        localStorage.setItem("dueDate" + this.dueDateExtension, concatDateTime);
 
         var currentTime = Datetime.moment();
         var chosenDueDate = Datetime.moment(concatDateTime);
@@ -96,16 +88,16 @@ class NewDueDate extends Component {
             this.isValidTime = false;
         }
         else {
-            if (this.state.number == 1) {
+            if (this.state.number === 1) {
                 this.isValidTime = true;
             }
             else {
-                var previousDueDate = Datetime.moment(localStorage.getItem("dueDate_" + this.previousDueDateExtension));
+                var previousDueDate = Datetime.moment(localStorage.getItem("dueDate" + this.previousDueDateExtension));
                 this.isValidTime = previousDueDate.isBefore(chosenDueDate);
                 this.isBeforeDates = chosenDueDate.isBefore(previousDueDate);
             }
         }
-        
+
         if (this.isValidTime) {
             this.checkOtherDueDates()
         }
@@ -117,21 +109,17 @@ class NewDueDate extends Component {
     onChange(value) {
         if (value) {
             this.setState({
-                timeValue: value
+                timeValue: value.startOf('minute')
             });
         }
     }
 
     toggle() {
-        localStorage.removeItem("dueDate_" + this.dueDateExtension);
+        localStorage.removeItem("dueDate" + this.dueDateExtension);
 
         this.setState({
             modal: !this.state.modal,
         });
-    }
-
-    componentDidMount() {
-        // console.log(moment())
     }
 
     render() {
@@ -139,12 +127,12 @@ class NewDueDate extends Component {
             <div className={"dateTime " + (this.props.isGray ? "grayOut" : null)}>
                 <p className="headertext">Set Due Date:</p>
                 <form onSubmit={this.handleSubmit} className="dateTimeForm">
-                    <div className={"color-border-" + (localStorage.getItem("dueDate_" + this.dueDateExtension) ? "green" : "red")}>
+                    <div className={"color-border-" + (localStorage.getItem("dueDate" + this.dueDateExtension) ? "green" : "red")}>
                         <Datetime dateFormat="MM/DD/YYYY" timeFormat={false} onChange={this.handleChange} isValidDate={this.checkDate}
                             inputProps={{
                                 disabled: true,
-                                placeholder: (localStorage.getItem("dueDate_" + this.dueDateExtension) ?
-                                    (moment(localStorage.getItem("dueDate_" + this.dueDateExtension))).format('MM/DD/YYYY')
+                                placeholder: (localStorage.getItem("dueDate" + this.dueDateExtension) ?
+                                    (moment(localStorage.getItem("dueDate" + this.dueDateExtension))).format('MM/DD/YYYY')
                                     :
                                     "Select a Date")
                             }}
@@ -158,8 +146,8 @@ class NewDueDate extends Component {
                                 onChange={this.onChange}
                                 showSecond={false}
                                 use12Hours
-                                placeholder={(localStorage.getItem("dueDate_" + this.dueDateExtension) ?
-                                    (moment(localStorage.getItem("dueDate_" + this.dueDateExtension))).format('h:mm a')
+                                placeholder={(localStorage.getItem("dueDate" + this.dueDateExtension) ?
+                                    (moment(localStorage.getItem("dueDate" + this.dueDateExtension))).format('h:mm a')
                                     :
                                     "Select a Time")}
                             />
@@ -173,8 +161,8 @@ class NewDueDate extends Component {
                             this.isInPast ?
                                 <ModalBody>
                                     Looks like you chose a date and time that has already occured. Please choose one that has not.
-                                    <br></br>
-                                    <br></br>
+                                    <br />
+                                    <br />
                                     Due Date Selected: {this.state.dateValue.format('MM/DD/YYYY')} {this.state.timeValue.format('h:mm a')}
                                 </ModalBody>
                                 :
@@ -184,18 +172,18 @@ class NewDueDate extends Component {
                                             <ModalBody>
                                                 Looks like you chose a date and time that occurs before Due Date {this.previousDueDateNumber} for this assignment.
                                                 Please choose one that does not.
-                                                <br></br>
-                                                <br></br>
-                                                Due Date {this.previousDueDateNumber}: {moment(localStorage.getItem("dueDate_" + this.previousDueDateExtension)).format('MM/DD/YYYY')} {moment(localStorage.getItem("dueDate_" + this.previousDueDateExtension)).format('h:mm a')}
-                                                <br></br>
+                                                <br />
+                                                <br />
+                                                Due Date {this.previousDueDateNumber}: {moment(localStorage.getItem("dueDate" + this.previousDueDateExtension)).format('MM/DD/YYYY')} {moment(localStorage.getItem("dueDate" + this.previousDueDateExtension)).format('h:mm a')}
+                                                <br />
                                                 Due Date Selected: {this.state.dateValue.format('MM/DD/YYYY')} {this.state.timeValue.format('h:mm a')}
                                             </ModalBody>
                                             :
                                             <ModalBody>
                                                 Looks like you chose a date and time that occurs at the same time as Due Date {this.previousDueDateNumber} for this assignment.
                                                 Unfortunately, due dates must be separated by at least one minute. Please choose a new due date.
-                                                <br></br>
-                                                <br></br>
+                                                <br />
+                                                <br />
                                                 Due Date Selected: {this.state.dateValue.format('MM/DD/YYYY')} {this.state.timeValue.format('h:mm a')}
                                             </ModalBody>
                                     }

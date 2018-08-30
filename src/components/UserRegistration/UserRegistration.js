@@ -71,6 +71,7 @@ class UserRegistration extends Component {
 							})
 						})
 						break;
+					default:
 				}
 			})
 	}

@@ -2,8 +2,6 @@ import React, { Component } from 'react';
 import { Router, Route } from "react-router-dom";
 import history from './history'
 
-import Assignments from './components/Assignments/Assignments';
-import AssignmentInfo from './components/AssignmentInfo/AssignmentInfo';
 import Courses from './components/Courses/Courses';
 import CourseInfo from './components/CourseInfo/CourseInfo';
 import CourseStudents from './components/CourseStudents/CourseStudents';
@@ -41,8 +39,8 @@ class App extends Component {
 					<Route path="/courses/:course_id" exact component={CourseInfo} />
 
 					{/*Show assignments and students*/}
-					{/* <Route path="/courses/:course_id/assignments" component={Assignments} />
-					<Route path="/courses/:course_id/assignments/:assignment_id" exact component={AssignmentInfo} /> */}
+					{/* <Route path="/courses/:course_id/assignments" component={Assignments} /> */}
+					{/* <Route path="/courses/:course_id/assignments/:assignment_id" exact component={AssignmentInfo} /> */}
 
 					{/* <Route path="/courses/:course_id/:course_name/students" component={CourseStudents} /> */}
 					<Route path="/courses/:course_id/students" component={CourseStudents} />
