@@ -128,12 +128,12 @@ class NewDueDateForm extends Component {
                 <Flexbox flexDirectionn="column" flexWrap="wrap" maxWidth="300px">
                     
                     <form onSubmit={this.handleSubmit} className="dateTimeForm">
-                        <div className={"color-border-" + (localStorage.getItem("dueDate_" + this.dueDateExtension) ? "green" : "red")}>
+                        <div className={"color-border-" + (localStorage.getItem("dueDate" + this.dueDateExtension) ? "green" : "red")}>
                             <Datetime dateFormat="MM/DD/YYYY" timeFormat={false} onChange={this.handleChange} isValidDate={this.checkDate}
                                 inputProps={{
                                     disabled: true,
-                                    placeholder: (localStorage.getItem("dueDate_" + this.dueDateExtension) ?
-                                        (moment(localStorage.getItem("dueDate_" + this.dueDateExtension))).format('MM/DD/YYYY')
+                                    placeholder: (localStorage.getItem("dueDate" + this.dueDateExtension) ?
+                                        (moment(localStorage.getItem("dueDate" + this.dueDateExtension))).format('MM/DD/YYYY')
                                         :
                                         "Select a Date")
                                 }}
@@ -147,8 +147,8 @@ class NewDueDateForm extends Component {
                                     onChange={this.onChange}
                                     showSecond={false}
                                     use12Hours
-                                    placeholder={(localStorage.getItem("dueDate_" + this.dueDateExtension) ?
-                                        (moment(localStorage.getItem("dueDate_" + this.dueDateExtension))).format('h:mm a')
+                                    placeholder={(localStorage.getItem("dueDate" + this.dueDateExtension) ?
+                                        (moment(localStorage.getItem("dueDate" + this.dueDateExtension))).format('h:mm a')
                                         :
                                         "Select a Time")}
                                 />
@@ -176,7 +176,7 @@ class NewDueDateForm extends Component {
                                                     Please choose one that does not.
                                                 <br></br>
                                                     <br></br>
-                                                    Due Date {this.previousDueDateNumber}: {moment(localStorage.getItem("dueDate_" + this.previousDueDateExtension)).format('MM/DD/YYYY')} {moment(localStorage.getItem("dueDate_" + this.previousDueDateExtension)).format('h:mm a')}
+                                                    Due Date {this.previousDueDateNumber}: {moment(localStorage.getItem("dueDate" + this.previousDueDateExtension)).format('MM/DD/YYYY')} {moment(localStorage.getItem("dueDate" + this.previousDueDateExtension)).format('h:mm a')}
                                                     <br></br>
                                                     Due Date Selected: {this.state.dateValue.format('MM/DD/YYYY')} {this.state.timeValue.format('h:mm a')}
                                                 </ModalBody>
