@@ -89,7 +89,7 @@ class CustomizableParameters extends Component {
     render() {
         if (this.state.loaded) {
             return (
-                <Form>
+                <Form className = "parametersForm">
                     <FormGroup row>
                         <FormGroup check>
                             <Label className="pagetext" check>
