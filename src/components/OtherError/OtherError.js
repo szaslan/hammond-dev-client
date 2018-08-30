@@ -62,9 +62,9 @@ class OtherError extends Component {
                             </Row>
 
                     }
-                    <br></br>
-                    <br></br>
-                    <br></br>
+                    <br />
+                    <br />
+                    <br />
                     <Row className="error-message-body">
                         Location of the error: {this.state.location}
                     </Row>

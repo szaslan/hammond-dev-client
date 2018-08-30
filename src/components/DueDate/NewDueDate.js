@@ -21,26 +21,28 @@ class NewDueDate extends Component {
         switch (this.state.number) {
             case 1:
                 return (
-                    <NewDueDateForm assignmentId={this.assignmentId} number={this.state.number} />
+                    <NewDueDateForm assignmentId={this.assignmentId} number={this.state.number} textDescription={this.props.textDescription}/>
                 );
             case 2:
                 return (
-                    (localStorage.getItem("dueDate_" + this.assignmentId + "_1") ?
-                        <NewDueDateForm assignmentId={this.assignmentId} number={this.state.number} />
+                    (localStorage.getItem("dueDate1_" + this.assignmentId) ?
+                        <NewDueDateForm assignmentId={this.assignmentId} number={this.state.number} textDescription={this.props.textDescription}/>
                         :
-                        <NewDueDateForm isGray assignmentId={this.assignmentId} number={this.state.number} />
+                        <NewDueDateForm isGray assignmentId={this.assignmentId} number={this.state.number} textDescription={this.props.textDescription}/>
                     )
                 )
             case 3:
                 return (
-                    ((localStorage.getItem("dueDate_" + this.assignmentId + "_1") &&
-                        localStorage.getItem("dueDate_" + this.assignmentId + "_2")) ?
-                        <NewDueDateForm assignmentId={this.assignmentId} number={this.state.number} />
+                   ((localStorage.getItem("dueDate1_" + this.assignmentId) &&
+                        localStorage.getItem("dueDate2_" + this.assignmentId)) ?
+                        <NewDueDateForm assignmentId={this.assignmentId} number={this.state.number} textDescription={this.props.textDescription}/>
                         :
-                        <NewDueDateForm isGray assignmentId={this.assignmentId} number={this.state.number} />
+                        <NewDueDateForm isGray assignmentId={this.assignmentId} number={this.state.number} textDescription={this.props.textDescription}/>
                     )
                 )
+            default:
         }
+        
     }
 };
 

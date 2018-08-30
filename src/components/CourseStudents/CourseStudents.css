@@ -5,7 +5,8 @@
   float: left;
   position: block;
   margin-top: 5%;
-  background-color:#FFEFE2;
+  /* background-color:#FFEFE2; */
+  background-color: white;
   margin-left: 15%;
 }
 
@@ -68,18 +69,18 @@
         overflow: hidden;
     }
 
-    .select-search-box::after {
+    /* .select-search-box::after {
         font-family: 'fontawesome';
         content:"\f078";
         position: absolute;
-        margin-left: 63%;
+        margin-left: 70%;
         margin-top: -11%;
         width: 20%;
-        text-align: center;
+        text-align: left;
         color: #222f3e;
-        z-index: 1;
+        z-index: 2;
         font-size: 15px;
-    }
+    } */
 
     .select-search-box--multiple::after {
         content:"\f002";

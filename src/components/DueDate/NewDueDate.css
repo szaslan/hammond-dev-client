@@ -1,12 +1,13 @@
   .dateTime{
     margin-right: 11% !important;
     margin-bottom: 3%;
-    z-index: 1;
+    /* z-index: 1; */
     margin-left: -5%;
   }
 
 .dateTimeForm{
-  margin-left: -15%;
+  
+  width:100%;
 }
 
 .headertext{
@@ -37,7 +38,7 @@
 .finalizebutton{
   border-radius: 3px;
   margin-top: 20%;
-  margin-left: 500%;
+  margin-left: 50%;
   margin-bottom: 20%;
 }
 
@@ -46,7 +47,8 @@
 	margin-bottom: 5%;
 	margin-top: -.2%;
 	margin-left: 20%;
-	background-color: #FFEFE2;
+	/* background-color: #FFEFE2; */
+  background-color: white;
 	border-radius: 3px;
 	font-size: 15px;
 	font-family: 'Open Sans';
@@ -80,6 +82,12 @@
   margin-bottom: -3%;
 }
 
+.parameters{
+  width: 300%;
+  text-align: left;
+  margin-top: 10%;
+}
+
 .parameter{
   font-family: 'Open Sans';
   color: #626262;
@@ -87,9 +95,42 @@
   font-size: 16px;
 }
 
-.column{
-  width: 200%;
-  height: 100%;
+.checktext{
+  font-family: 'Open Sans';
+  color: #4B4A4A;
+  font-size: 15px;
+}
+
+.clear{
+  font-family: 'Open Sans';
+  color: #626262;
+  border-radius: 3px;
+  background-color: white;
+}
+
+.clear:hover{
+  font-family: 'Open Sans';
+  color: #626262;
+  border-radius: 3px;
+  background-color:	#F8F8F8;
+}
+
+.clear-all{
+  font-family: 'Open Sans';
+  color: #626262;
+  border-radius: 3px;
+  background-color: white;
+  margin-top: -4.5%;
+  float: right;
+}
+
+.clear-all:hover{
+  font-family: 'Open Sans';
+  color: #626262;
+  border-radius: 3px;
+  background-color:	#F8F8F8;
+  margin-top: -4.5%;
+  float: right;
 }
 
   .rdt {
@@ -105,18 +146,18 @@
     height:100%;
     padding: 2%;
     margin-top: 0%;
-    z-index: 99999 !important;
+    /* z-index: 99999 !important; */
     background: #fff;
     /* box-shadow: 0 1px 3px rgba(0,0,0,.1); */
     box-shadow:none;
     border: none;
 }
-  
+
 .form-control:disabled{
     height:10%!important;
     border-radius:0px!important;
     box-shadow:none !important;
-    border:none!important;    
+    border:none!important;
 }
 
   .rdtStatic .rdtPicker {
@@ -346,13 +387,17 @@
     left:0;
     z-index:2;
   }
+
 .invalidModal{
   z-index:3;
 }
 
 .color-border-red {
-  border: 3px solid red !important;
+  border: 3px solid #e86d6d !important;
+  border-radius: 3px;
 }
+
 .color-border-green {
-	border: 3px solid green !important;
+	border: 3px solid #85c464 !important;
+  border-radius: 3px;
 }

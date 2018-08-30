@@ -11,7 +11,7 @@ import './StudentInfo.css';
 //filter for only peer reviewable assignments
 function FilterAssignments(props) {
     const currAssignment = props.currAssigment;
-        //only show assignments that are peer reviewable
+    //only show assignments that are peer reviewable
     if (currAssignment.peer_reviews) {
         return (
             <DropdownItem onClick={props.click} id={props.id}>{currAssignment.name}</DropdownItem>
@@ -93,13 +93,13 @@ class StudentInfo extends Component {
         })
             .then(res => {
                 res.json().then(res => {
-                    if (res.result == "not found") {
+                    if (res.result === "not found") {
                         this.setState({
                             peerReviewsCompletedByCurrentStudent: [],
                             errorMessage: "Assignment hasn't been finalized!"
                         })
                     }
-                    else if (res.result == "found") {
+                    else if (res.result === "found") {
                         //assignment has been finalized so issue with searching for peer reviews
                         this.setState({
                             peerReviewsCompletedByCurrentStudent: [],
@@ -123,7 +123,6 @@ class StudentInfo extends Component {
             body: JSON.stringify(data),
         })
             .then(res => {
-                console.log(res)
                 switch (res.status) {
                     case 204:
                         this.setState({
@@ -142,6 +141,7 @@ class StudentInfo extends Component {
                         })
                         console.log("the student does not exist in the database")
                         break;
+                    default:
                 }
             })
     }
@@ -175,25 +175,25 @@ class StudentInfo extends Component {
                             max: 5,
                             stepSize: 1,
                             callback: function (value) {
-                                if (value == -1) {
+                                if (value === -1) {
                                     return "-1: Spazzy"
                                 }
-                                else if (value == 0) {
+                                else if (value === 0) {
                                     return "0: definitely harsh"
                                 }
-                                else if (value == 1) {
+                                else if (value === 1) {
                                     return "1: could be harsh"
                                 }
-                                else if (value == 2) {
+                                else if (value === 2) {
                                     return "2: could be lenient"
                                 }
-                                else if (value == 3) {
+                                else if (value === 3) {
                                     return "3: definitely lenient"
                                 }
-                                else if (value == 4) {
+                                else if (value === 4) {
                                     return "4: could be fair"
                                 }
-                                else if (value == 5) {
+                                else if (value === 5) {
                                     return "5: definitely fair"
                                 }
                             }
@@ -236,13 +236,13 @@ class StudentInfo extends Component {
                             suggestedMax: 3,
                             stepSize: .2,
                             callback: function (value) {
-                                if (value == 1) {
+                                if (value === 1) {
                                     return "Neutral <---------> 1.00"
                                 }
-                                else if (value.toFixed(2) == 2.00) {
+                                else if (value.toFixed(2) === 2.00) {
                                     return "Fair          ≈        2.00"
                                 }
-                                else if (value.toFixed(2) == 0.40) {
+                                else if (value.toFixed(2) === 0.40) {
                                     return "Harsh/Lenient         ≈        0.40"
                                 }
                                 else {
@@ -310,7 +310,6 @@ class StudentInfo extends Component {
 
     //fetches assignment data
     fetchAssignmentData() {
-        console.log(this.state.courseId)
         let data = {
             courseId: this.state.courseId
         }
@@ -330,6 +329,7 @@ class StudentInfo extends Component {
                             this.setState({
                                 assignments: data,
                             })
+                            console.log(this.state)
                             this.checkIfStudentHasSavedHistory()
                         })
                         break;
@@ -359,6 +359,7 @@ class StudentInfo extends Component {
                             }
                         })
                         break;
+                    default:
                 }
             })
     }
@@ -380,7 +381,6 @@ class StudentInfo extends Component {
                 switch (res.status) {
                     case 200:
                         res.json().then(res => {
-                            console.log(res)
                             this.setState({
                                 peerReviewsCompletedByCurrentStudent: res
                             })
@@ -395,6 +395,7 @@ class StudentInfo extends Component {
                             errorMessage: "No peer reviews for this student!"
                         })
                         break;
+                    default:
                 }
             })
     }
@@ -403,7 +404,6 @@ class StudentInfo extends Component {
         let data = {
             studentId: this.state.selectedStudentId,
         }
-        console.log(data)
 
         fetch('/api/pullStudentEvaluatingData', {
             method: 'POST',
@@ -427,6 +427,7 @@ class StudentInfo extends Component {
                             this.send400Error("This function is called after a student is confirmed to have saved evaluating data. This function pulls all the data from the SQL tables and assembles it to be displayed on graphs.", res.error, "StudentInfo.js pullStudentEvaluatingData()", res.message)
                         })
                         break;
+                    default:
                 }
             })
     }
@@ -479,21 +480,22 @@ class StudentInfo extends Component {
                             this.send400Error("This function is called when a peer review has been selected for a specific student for a specific assignment. This function gathers from the SQL tables what grade was assigned by the reviewer for this submission, and what grade, the submission actually received.", res.error, "StudentInfo.js selectPeerReview()", res.message)
                         })
                         break;
+                    default:
                 }
             })
     }
 
     send400Error(context, error, location, message) {
-		history.push({
-			pathname: '/error',
-			state: {
-				context: context,
-				error: error,
-				location: location,
-				message: message,
-			}
-		})
-	}
+        history.push({
+            pathname: '/error',
+            state: {
+                context: context,
+                error: error,
+                location: location,
+                message: message,
+            }
+        })
+    }
 
     setMessage() {
         if (this.state.gradeGiven == null) {
@@ -525,7 +527,6 @@ class StudentInfo extends Component {
     }
     //everytime a new assignment is clicked on, component re-renders and new assignment is fetched
     componentDidMount() {
-        console.log(this.props)
         this.setState({
             errorMessage: ""
         })
@@ -535,7 +536,6 @@ class StudentInfo extends Component {
     //renders initially
     componentDidUpdate(prevProps) {
         if (this.props.studentId !== prevProps.studentId) {
-        // if (this.props.location.state.student.id !== prevProps.location.state.student.id) {
             this.setState({
                 actualGrade: "",
                 errorMessage: "",
@@ -546,10 +546,12 @@ class StudentInfo extends Component {
                 selectedStudentId: this.props.studentId,
                 value: "Select an Assignment",
                 value2: "Select a Peer Review",
-            }, () => {
-                this.checkIfStudentHasSavedHistory();
             })
-            // this.fetchAssignmentData();
+
+            //only check if student has saved history if fetch assignment data has already been run at least once
+            if (this.state.assignments.length !== 0) {
+                this.checkIfStudentHasSavedHistory();
+            }
         }
     }
 

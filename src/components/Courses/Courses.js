@@ -80,6 +80,7 @@ class Courses extends Component {
                             }
                         })
                         break;
+                    default:
                 }
             })
     }

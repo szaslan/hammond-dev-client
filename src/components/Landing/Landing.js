@@ -6,7 +6,13 @@ import PaperIcon from './PaperIcon';
 import './Landing.css';
 
 class Landing extends Component {
-    componentDidMount() {
+    constructor() {
+        super();
+
+        this.createBaseTables = this.createBaseTables.bind(this);
+    }
+
+    createBaseTables() {
         fetch('/api/createBaseTables', {
             method: 'POST',
             headers: {
@@ -20,8 +26,13 @@ class Landing extends Component {
                     case 400:
                         console.log("error")
                         break;
+                    default:
                 }
             })
+    }
+
+    componentDidMount() {
+        this.createBaseTables()
     }
 
     render() {

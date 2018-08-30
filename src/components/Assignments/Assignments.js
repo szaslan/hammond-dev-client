@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import history from '../../history';
-import Loader from 'react-loader-spinner'
-import SelectSearch from 'react-select-search'
+import Loader from 'react-loader-spinner';
+// import SelectSearch from 'react-select-search';
+import Select from 'react-select';
+
 
 import '../BreadcrumbComp/BreadcrumbComp.css';
 
@@ -10,17 +12,19 @@ import AssignmentInfo from '../AssignmentInfo/AssignmentInfo';
 
 const array = [];
 
+
 const FilterAssignments = currAssignment => {
     if (currAssignment.peer_reviews) {
         array.push({
-            name: currAssignment.name,
+            label: currAssignment.name,
             value: currAssignment.id,
         })
     }
     else {
         array.push({
-            name: currAssignment.name,
+            label: currAssignment.name,
             value: null,
+            isDisabled: true,
         })
     }
 }
@@ -32,17 +36,17 @@ class Assignments extends Component {
         this.state = {
             assignments: [],
             courseId: this.props.courseJSON.id,
-            dropdownOpen: false,
+            // dropdownOpen: false,
             loaded: false,
             url: `/courses/${this.props.courseJSON.id}/assignments/`,
             value: null,
-
             ...props,
         }
 
         this.pullAssignments = this.pullAssignments.bind(this);
         this.select = this.select.bind(this);
-        this.toggle = this.toggle.bind(this);
+        // this.toggle = this.toggle.bind(this);
+        // this.onFocus = this.toggle.bind(this);
     }
 
     pullAssignments() {
@@ -100,6 +104,7 @@ class Assignments extends Component {
                             }
                         })
                         break;
+                    default:
                 }
             })
     }
@@ -108,45 +113,44 @@ class Assignments extends Component {
         this.setState({
             value: event.value,
         })
-
-        // history.push(`/courses/${this.state.courseId}/assignments/${event.value}`)
     }
 
-    toggle() {
-        this.setState(prevState => ({
-            dropdownOpen: !prevState.dropdownOpen
-        }));
-    }
+    // toggle() {
+    //   console.log("click")
+        // this.setState(prevState => ({
+        //     multiple: !prevState.multiple
+        // }));
+    // }
+
 
     componentDidMount() {
         this.pullAssignments()
     }
 
     render() {
-        if (this.state.assignments && array.length != this.state.assignments.length) {
+        if (this.state.assignments && array.length < this.state.assignments.length) {
             this.state.assignments.map(assignments => {
                 FilterAssignments(assignments);
             })
         }
 
-        if (this.state.loaded && array.length == this.state.assignments.length) {
+        if (this.state.loaded && array.length === this.state.assignments.length) {
             return (
                 <div>
-                    <div className="assigndrop">
-                        <SelectSearch
-                            className="select-search-box"
-                            options={array}
-                            search="true"
-                            placeholder="Select an Assignment"
-                            value={this.state.value}
-                            onChange={this.select}
-                        />
-                    </div>
+                      <div className="assigndrop">
 
-                    {console.log(this.state.value)}
-                    {this.state.value ? <AssignmentInfo courseJSON={this.props.courseJSON} assignmentId={this.state.value}/>
-                    :
-                    null}
+                      <Select
+                        // value={selectedOption}
+                        className="select-search-box"
+                        onChange={this.select}
+                        options={array}
+                        placeholder="Select an Assignment"
+                        isSearchable="true"
+                      />
+                    </div>
+                    {this.state.value ? <AssignmentInfo courseJSON={this.props.courseJSON} assignmentId={this.state.value} />
+                        :
+                        null}
                 </div>
             );
         }
