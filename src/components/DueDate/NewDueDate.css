@@ -2,11 +2,11 @@
     margin-right: 11% !important;
     margin-bottom: 3%;
     z-index: 1;
-    margin-left: -5%;
   }
 
 .dateTimeForm{
-  margin-left: -15%;
+  
+  width:100%;
 }
 
 .headertext{
@@ -355,4 +355,12 @@
 }
 .color-border-green {
 	border: 3px solid green !important;
+}
+
+/* @media only screen and (max-width:480px){
+  
+} */
+
+@media only screen and (max-width: 320px) and (min-height: 320px){
+
 }

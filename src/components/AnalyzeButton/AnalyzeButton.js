@@ -47,6 +47,7 @@ class AnalyzeButton extends Component {
 			currMinute: null,
 			currSecond: null,
 			deletedIncompletePeerReviews: false,
+      nextClicked: false,
 			finalizeDisplayText: false,
 			finalizePressed: false,
 			tooltipOpen1: false,
@@ -54,10 +55,12 @@ class AnalyzeButton extends Component {
 		};
 
 		this.assignNewPeerReviews = this.assignNewPeerReviews.bind(this);
+    this.backClick = this.backClick.bind(this);
 		this.checkForPreviousAnalyzeAndFinalizePresses = this.checkForPreviousAnalyzeAndFinalizePresses.bind(this);
 		this.deleteIncompletePeerReviews = this.deleteIncompletePeerReviews.bind(this);
 		this.handleAnalyzeClick = this.handleAnalyzeClick.bind(this);
 		this.handleFinalizeClick = this.handleFinalizeClick.bind(this);
+    this.nextClick = this.nextClick.bind(this);
 		this.pullDueDatesFromLocalStorage = this.pullDueDatesFromLocalStorage.bind(this);
 		this.pullSavedBenchmarksFromLocalStorage = this.pullSavedBenchmarksFromLocalStorage.bind(this);
 		this.saveAllPeerReviews = this.saveAllPeerReviews.bind(this);
@@ -127,6 +130,12 @@ class AnalyzeButton extends Component {
 					default:
 				}
 			})
+	}
+
+	backClick() {
+		this.setState({ 
+      nextClicked: false
+    });
 	}
 
 	checkForPreviousAnalyzeAndFinalizePresses() {
@@ -224,6 +233,12 @@ class AnalyzeButton extends Component {
 		this.setState({
 			finalizePressed: true,
 		})
+	}
+
+	nextClick() {
+		this.setState({ 
+      nextClicked: true
+    });
 	}
 
 	pullDueDatesFromLocalStorage() {
@@ -455,15 +470,54 @@ class AnalyzeButton extends Component {
 				{
 					!this.state.finalizePressed ?
 						<div className="assignment-info-content">
-							<div className="calendar-case">
+
+							<div className={"calendar-case" +
+								(this.state.nextClicked ?
+									"-hidden"
+									:
+									""
+								)}>
+								{/* <p className="headertext">Set Due Date:</p> */}
 								<Flexbox flexWrap="wrap">
-									<NewDueDate number="1" assignmentId={this.assignmentId} />
-									<NewDueDate number="2" assignmentId={this.assignmentId} />
-									<NewDueDate number="3" assignmentId={this.assignmentId} />
+									<NewDueDate
+										number="1"
+										assignmentId={this.assignmentId}
+										textDescription={message1}
+									/>
+									<NewDueDate
+										number="2"
+										assignmentId={this.assignmentId}
+										textDescription={message2}
+									/>
+									<NewDueDate
+										number="3"
+										assignmentId={this.assignmentId}
+										textDescription={message3}
+									/>
 								</Flexbox>
+								{/* <button
+									
+									onClick={this.nextClick}>
+									Next
+								</button> */}
+								{/* {localStorage.getItem("dueDate_" +this.assignmentID+ "_3") ?
+									<button onClick={this.nextClick}>Next</button>
+									: */}
+									<button disabled={
+										!localStorage.getItem("dueDate_" +this.assignmentId+ "_3")
+									} 
+									onClick={this.nextClick}>Next</button>
+								{/* } */}
+								
 							</div>
 
-							<CustomizableParameters assignmentId={this.assignmentId} defaultBenchmarks={defaultBenchmarks}/>
+							<div className={"parameters-case" +
+								(this.state.nextClicked ?
+									""
+									:
+									"-hidden"
+								)}>
+								<CustomizableParameters assignmentId={this.assignmentId} />
 
 							<Flexbox className="flex-dropdown" width="100%" flexWrap="wrap" justify-content="space-around">
 								<Row className="analyze">
