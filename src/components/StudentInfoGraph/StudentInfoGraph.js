@@ -29,11 +29,11 @@ class StudentInfoGraph extends Component {
             options: this.props.data.options,
         };
 
-        this.props.assignments.forEach(assignment => {
+        this.props.assignments.forEach((assignment, index) => {
             if (assignment.peer_reviews) {
                 let assignmentId = assignment.id;
                 let assignmentName = assignment.name
-                let columnName = "'" + assignmentId + "'";
+                let columnName = assignmentId;
 
                 if (this.props.peerReviewData[this.props.category + "History"][columnName]) {
                     dataHistory.labels.push(assignmentName)
@@ -41,11 +41,13 @@ class StudentInfoGraph extends Component {
                 }
                
             }
-        })
 
-        this.setState({
-            data: dataHistory,
-            graphLoaded: true,
+            if (index === this.props.assignments.length - 1) {
+                this.setState({
+                    data: dataHistory,
+                    graphLoaded: true,
+                })
+            }
         })
     }
 

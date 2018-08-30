@@ -34,7 +34,6 @@ class AssignmentInfo extends Component {
             assignmentId: this.state.assignmentId,
             courseId: this.state.courseId,
         }
-        console.log(data)
 
         fetch('/api/assignmentInfo', {
             method: 'POST',
@@ -86,6 +85,7 @@ class AssignmentInfo extends Component {
                             }
                         })
                         break;
+                    default:
                 }
             })
     }
@@ -117,9 +117,9 @@ class AssignmentInfo extends Component {
                     {/*<h2 className="headertext">Score Details
                       <button className="clear-local-button" onClick={this.clearLocalStorage}> Clear Local Storage</button>
                       </h2>
-                      <hr className="hr-2"></hr>
+                      <hr className="hr-2" />hr>
                         <p><strong>Title: </strong>{this.state.assignment.name}</p>
-                        <br></br>*/}
+                        <br />*/}
 
                     <AnalyzeButton assignmentId={this.state.assignmentId} assignmentInfo={this.state.assignmentJSON} courseId={this.state.courseId} />
 

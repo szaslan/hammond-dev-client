@@ -19,12 +19,10 @@ class PieCharts extends Component {
             sectorValue1: '',
             sectorTitle2: '',
             sectorValue2: '',
-            tooltipOpen: false,
         };
 
         this.clearPieChart1 = this.clearPieChart1.bind(this);
         this.clearPieChart2 = this.clearPieChart2.bind(this);
-        this.toggle = this.toggle.bind(this);
 
         this.assignmentId = this.props.assignmentId;
     }
@@ -42,12 +40,6 @@ class PieCharts extends Component {
             hoveringOverPieChart2: false,
             sectorTitle2: '',
             sectorValue2: '',
-        })
-    }
-
-    toggle() {
-        this.setState({
-            tooltipOpen: !this.state.tooltipOpen
         })
     }
 
@@ -84,7 +76,7 @@ class PieCharts extends Component {
                         </Flexbox>
                         <Well className="pieinfo">
                             {this.state.hoveringOverPieChart1 ?
-                                this.state.sectorTitle1 + ": " + this.state.sectorValue1 + " student" + (this.state.sectorValue1 != 1 ? "s" : "")
+                                this.state.sectorTitle1 + ": " + this.state.sectorValue1 + " student" + (this.state.sectorValue1 !== 1 ? "s" : "")
                                 :
                                 "Hover over a sector to display completion data. There may be a slight delay."}
                         </Well>
@@ -92,15 +84,15 @@ class PieCharts extends Component {
                         <div className="legend">
                             <Row>
                                 <Ellipse className="keycolor" rx={7} ry={4} fill={{ color: '#063D11' }} strokeWidth={5} />
-                                <p className="compkey" style={this.state.sectorTitle1 == "Completed all reviews" ? { fontWeight: 'bold' } : null}>Completed all reviews</p>
+                                <p className="compkey" style={this.state.sectorTitle1 === "Completed all reviews" ? { fontWeight: 'bold' } : null}>Completed all reviews</p>
                             </Row>
                             <Row>
                                 <Ellipse className="keycolor" rx={7} ry={4} fill={{ color: '#C68100' }} strokeWidth={5} />
-                                <p className="compkey" style={this.state.sectorTitle1 == "Completed some reviews" ? { fontWeight: 'bold' } : null}>Completed some reviews</p>
+                                <p className="compkey" style={this.state.sectorTitle1 === "Completed some reviews" ? { fontWeight: 'bold' } : null}>Completed some reviews</p>
                             </Row>
                             <Row>
                                 <Ellipse className="keycolor" rx={7} ry={4} fill={{ color: '#AD1F1F' }} strokeWidth={5} />
-                                <p className="compkey" style={this.state.sectorTitle1 == "Completed no reviews" ? { fontWeight: 'bold' } : null}>Completed no reviews</p>
+                                <p className="compkey" style={this.state.sectorTitle1 === "Completed no reviews" ? { fontWeight: 'bold' } : null}>Completed no reviews</p>
                             </Row>
                         </div>
                     </Col>
@@ -144,7 +136,7 @@ class PieCharts extends Component {
                         </Flexbox>
                         <Well className="pieinfo">
                             {this.state.hoveringOverPieChart2 ?
-                                this.state.sectorTitle2 + ": " + this.state.sectorValue2 + " student" + (this.state.sectorValue2 != 1 ? "s" : "")
+                                this.state.sectorTitle2 + ": " + this.state.sectorValue2 + " student" + (this.state.sectorValue2 !== 1 ? "s" : "")
                                 :
                                 "Hover over a sector to display grading classification data. There may be a slight delay."}
                         </Well>
@@ -154,33 +146,33 @@ class PieCharts extends Component {
                                 <Col>
                                     <Row>
                                         <Ellipse rx={7} ry={4} fill={{ color: '#C68100' }} strokeWidth={5} />
-                                        <p className="graphKey" style={this.state.sectorTitle2 == "Spazzy" ? { fontWeight: 'bold' } : null}>Spazzy</p>
+                                        <p className="graphKey" style={this.state.sectorTitle2 === "Spazzy" ? { fontWeight: 'bold' } : null}>Spazzy</p>
                                     </Row>
                                     <Row>
                                         <Ellipse rx={7} ry={4} fill={{ color: '#AD1F1F' }} strokeWidth={5} />
-                                        <p className="graphKey" style={this.state.sectorTitle2 == "Definitely Harsh" ? { fontWeight: 'bold' } : null}>Definitely Harsh</p>
+                                        <p className="graphKey" style={this.state.sectorTitle2 === "Definitely Harsh" ? { fontWeight: 'bold' } : null}>Definitely Harsh</p>
                                     </Row>
                                     <Row>
                                         <Ellipse rx={7} ry={4} fill={{ color: '#D6A0A0' }} strokeWidth={5} />
-                                        <p className="graphKey" style={this.state.sectorTitle2 == "Could be Harsh" ? { fontWeight: 'bold' } : null}>Could be Harsh</p>
+                                        <p className="graphKey" style={this.state.sectorTitle2 === "Could be Harsh" ? { fontWeight: 'bold' } : null}>Could be Harsh</p>
                                     </Row>
                                     <Row>
                                         <Ellipse rx={7} ry={4} fill={{ color: '#B3BBDD' }} strokeWidth={5} />
-                                        <p className="graphKey" style={this.state.sectorTitle2 == "Could be Lenient" ? { fontWeight: 'bold' } : null}>Could be Lenient</p>
+                                        <p className="graphKey" style={this.state.sectorTitle2 === "Could be Lenient" ? { fontWeight: 'bold' } : null}>Could be Lenient</p>
                                     </Row>
                                 </Col>
                                 <Col>
                                     <Row>
                                         <Ellipse rx={7} ry={4} fill={{ color: '#001887' }} strokeWidth={5} />
-                                        <p className="graphKey" style={this.state.sectorTitle2 == "Definitely Lenient" ? { fontWeight: 'bold' } : null}>Definitely Lenient</p>
+                                        <p className="graphKey" style={this.state.sectorTitle2 === "Definitely Lenient" ? { fontWeight: 'bold' } : null}>Definitely Lenient</p>
                                     </Row>
                                     <Row>
                                         <Ellipse rx={7} ry={4} fill={{ color: '#94B29A' }} strokeWidth={5} />
-                                        <p className="graphKey" style={this.state.sectorTitle2 == "Could be Fair" ? { fontWeight: 'bold' } : null}>Could be Fair</p>
+                                        <p className="graphKey" style={this.state.sectorTitle2 === "Could be Fair" ? { fontWeight: 'bold' } : null}>Could be Fair</p>
                                     </Row>
                                     <Row>
                                         <Ellipse rx={7} ry={4} fill={{ color: '#063D11' }} strokeWidth={5} />
-                                        <p className="graphKey" style={this.state.sectorTitle2 == "Definitely Fair" ? { fontWeight: 'bold' } : null}>Definitely Fair</p>
+                                        <p className="graphKey" style={this.state.sectorTitle2 === "Definitely Fair" ? { fontWeight: 'bold' } : null}>Definitely Fair</p>
                                     </Row>
                                 </Col>
                             </Row>

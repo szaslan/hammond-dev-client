@@ -1,60 +1,34 @@
 import React, { Component } from 'react';
-import { Link } from "react-router-dom";
-import { Container, Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
-import JumbotronComp from '../JumbotronComp/JumbotronComp';
-// import Select from 'react-select';
-// import linkState from 'react-link-state';
-import { Redirect } from 'react-router-dom'
 import history from '../../history';
-import Loader from 'react-loader-spinner';
 import SelectSearch from 'react-select-search'
 
-import './CourseStudents.css'
 import StudentInfo from '../StudentInfo/StudentInfo';
+
+import './CourseStudents.css'
 
 const array = [];
 
 class CourseStudents extends Component {
     constructor(props) {
         super(props);
-        this.toggle = this.toggle.bind(this);
-        this.select= this.select.bind(this);
-        // this.handleChange = this.handleChange.bind(this)
-        //URL is the current url while taking in the parameters from the props of the previous url
+
         this.state = {
             courseId: this.props.match.params.course_id,
             dropdownOpen: false,
             loaded: false,
-            students: [],
-            loaded: false,
-            dropdownOpen: false,
-            studentName: '',
             studentId: '',
-            ...props,
+            studentName: '',
+            students: [],
             url: `/courses/${this.props.match.params.course_id}/students/`,
             value: null,
-          
-          ...props,
 
+            ...props,
         }
-      this.fetchStudentsFromCanvas = this.fetchStudentsFromCanvas.bind(this);
+
+        this.fetchStudentsFromCanvas = this.fetchStudentsFromCanvas.bind(this);
+        this.select = this.select.bind(this);
+        this.toggle = this.toggle.bind(this);
     }
-
-    select(event) {
-      this.setState({studentName: event.name})
-      this.setState({studentId: event.value})
-  
-    }
-
-
-    //fetch assignments for course with course_id passed down
-    componentDidMount() {
-        const { match: { params } } = this.props;
-        if (this.props.location.state.student_name.length > 0) console.log('name found')
-        this.setState({
-            url: `/courses/${params.course_id}/students/`
-        })
-    };
 
     fetchStudentsFromCanvas() {
         let data = {
@@ -112,8 +86,16 @@ class CourseStudents extends Component {
                             }
                         })
                         break;
+                    default:
                 }
             })
+    }
+
+    select(event) {
+        this.setState({
+            studentName: event.name,
+            studentId: event.value
+        })
     }
 
     toggle() {
@@ -132,44 +114,39 @@ class CourseStudents extends Component {
         })
     }
 
-    render(){
-            return(
-                <div className="studentdrop">
-
-                    {this.state.students.length !== array.length ?
-                        this.state.students.map(students => {
-                            array.push({
-                              name: students.name,
-                              value: students.id,
-                            });
-                          }
-
-                            )
-                      :
-                        null
-                    }
-                    <div>
-                  <SelectSearch
-                    className="select-search-box"
-                    options={array}
-                    search = "true"
-                    placeholder = "Select a Student"
-                    value={this.state.studentName}
-                    onChange={this.select}
-                  />
-                  </div>
-                  <hr className="hr-3"></hr>
-
-                  {this.state.studentName ?
-                  <StudentInfo courseId={this.state.courseId} studentId={this.state.studentId} studentName={this.state.studentName}/>
-                  :
-                  null
-                  }
-              </div>
-            );
+    render() {
+        if (this.state.students.length !== array.length) {
+            this.state.students.map(students => {
+                array.push({
+                    name: students.name,
+                    value: students.id,
+                });
+            })
         }
+
+        return (
+            <div className="studentdrop">
+                <div>
+                    <SelectSearch
+                        className="select-search-box"
+                        options={array}
+                        search="true"
+                        placeholder="Select a Student"
+                        value={this.state.studentName}
+                        onChange={this.select}
+                    />
+                </div>
+                <hr className="hr-3" />hr>
+
+                {
+                    this.state.studentName ?
+                        <StudentInfo courseId={this.state.courseId} studentId={this.state.studentId} studentName={this.state.studentName} />
+                        :
+                        null
+                }
+            </div>
+        );
     }
-
-
+}
 
 export default CourseStudents;
