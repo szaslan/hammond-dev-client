@@ -48,7 +48,7 @@ class UnauthorizedError extends Component {
             return (
                 <div className="error-message">
                     {
-                        this.state.timeUntilRedirect == 0 ?
+                        this.state.timeUntilRedirect === 0 ?
                             this.redirectToHomePage()
                             :
                             null
@@ -61,7 +61,7 @@ class UnauthorizedError extends Component {
                         Message received from {this.state.location}: {this.state.message}
                     </Row>
                     <Row className="redirect-message">
-                        You will be redirected to the login page in {this.state.timeUntilRedirect} second{this.state.timeUntilRedirect == 1 ? "" : "s"} or
+                        You will be redirected to the login page in {this.state.timeUntilRedirect} second{this.state.timeUntilRedirect === 1 ? "" : "s"} or
                         <Link className="immediate-redirection" to={{ pathname: "/login" }}>
                             click here
                         </Link>

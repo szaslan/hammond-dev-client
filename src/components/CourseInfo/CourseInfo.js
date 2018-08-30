@@ -43,6 +43,7 @@ class CourseInfo extends Component {
                             this.send400Error("This function is called anytime a course is selected from the general homepage. This function ensures that every SQL table exists and has the necessary formatting.", res.error, "CourseInfo.js: createTables()", res.message)
                         })
                         break;
+                    default:
                 }
             })
     }
@@ -96,12 +97,12 @@ class CourseInfo extends Component {
                             }
                         })
                         break;
+                    default:
                 }
             })
     }
 
     resetTables() {
-      console.log("resetting tables")
         fetch('/api/resetTables', {
             method: 'POST',
             headers: {
@@ -118,21 +119,22 @@ class CourseInfo extends Component {
                             this.send400Error("", res.error, "CourseInfo.js: resetTables()", res.message)
                         })
                         break;
+                    default:
                 }
             })
     }
 
     send400Error(context, error, location, message) {
-		history.push({
-			pathname: '/error',
-			state: {
-				context: context,
-				error: error,
-				location: location,
-				message: message,
-			}
-		})
-	}
+        history.push({
+            pathname: '/error',
+            state: {
+                context: context,
+                error: error,
+                location: location,
+                message: message,
+            }
+        })
+    }
 
     componentDidMount() {
         this.fetchCourseInfo();
@@ -140,8 +142,6 @@ class CourseInfo extends Component {
     }
 
     render() {
-        console.log(this.state.courseJSON)
-
         if (this.state.loaded) {
             return (
                 <div>
@@ -149,20 +149,20 @@ class CourseInfo extends Component {
                         content={
                             <div>
                                 <JumbotronComp mainTitle={this.state.courseJSON.name}
-                                    tabs courseJSON={this.state.courseJSON}/>
-  
+                                    tabs courseJSON={this.state.courseJSON} />
 
-                <button onClick={this.resetTables}>Reset Database Tables</button>
+
+                                <button onClick={this.resetTables}>Reset Database Tables</button>
+                            </div>
+                        }
+                    />
+
+                    <div> test</div>
                 </div>
-              }
-              />
-
-              <div> test</div>
-            </div>
             )
         }
         else return (<Loader type="TailSpin" color="black" height={80} width={80} />)
-        }
+    }
 }
 
 export default CourseInfo;

@@ -37,8 +37,8 @@ class AnalyzeResults extends Component {
         this.pullNamesOfFlaggedStudents = this.pullNamesOfFlaggedStudents.bind(this);
         this.savePeerReviewsFromCanvasToDatabase = this.savePeerReviewsFromCanvasToDatabase.bind(this);
         this.send400Error = this.send400Error.bind(this);
-		this.send401Error = this.send401Error.bind(this);
-		this.send404Error = this.send404Error.bind(this);
+        this.send401Error = this.send401Error.bind(this);
+        this.send404Error = this.send404Error.bind(this);
         this.setProgress = this.setProgress.bind(this);
 
         this.assignmentId = this.props.assignmentId;
@@ -85,8 +85,9 @@ class AnalyzeResults extends Component {
                         })
                         break;
                     case 404:
-                    this.send404Error("This function is called when the Analyze button is pressed after all peer reviews have been successfully fetched from Canvas and saved. This function checks if there are enough peer reviews completed for each student to accurrately calculate everyone's grade according to the either the default or customized parameters set.", "AnalyzeResults.js: analyze()", "No peer reviews have been assigned for this assignment on Canvas.")
+                        this.send404Error("This function is called when the Analyze button is pressed after all peer reviews have been successfully fetched from Canvas and saved. This function checks if there are enough peer reviews completed for each student to accurrately calculate everyone's grade according to the either the default or customized parameters set.", "AnalyzeResults.js: analyze()", "No peer reviews have been assigned for this assignment on Canvas.")
                         break;
+                    default:
                 }
             })
     }
@@ -121,8 +122,9 @@ class AnalyzeResults extends Component {
                         })
                         break;
                     case 404:
-                    this.send404Error("This function is called after checking if there are enough peer reviews completed for each student. This function syncs syncs each student's actual name with all of their entries in the SQL tables", "AnalyzeResults.js: attachNamesToDatabase()", "There are no students enrolled in this course on Canvas.")
+                        this.send404Error("This function is called after checking if there are enough peer reviews completed for each student. This function syncs syncs each student's actual name with all of their entries in the SQL tables", "AnalyzeResults.js: attachNamesToDatabase()", "There are no students enrolled in this course on Canvas.")
                         break;
+                    default:
                 }
             })
     }
@@ -157,8 +159,9 @@ class AnalyzeResults extends Component {
                         })
                         break;
                     case 404:
-                    this.send404Error("This function is called after successfully attaching each student's name to their entry in the databse. This function gathers the name of every student who does not have enough data to accurately calculate grades for them.", "AnalyzeResults.js: pullNamesOfFlaggedStudents()", "Could not find a name for a student.")
+                        this.send404Error("This function is called after successfully attaching each student's name to their entry in the databse. This function gathers the name of every student who does not have enough data to accurately calculate grades for them.", "AnalyzeResults.js: pullNamesOfFlaggedStudents()", "Could not find a name for a student.")
                         break;
+                    default:
                 }
             })
     }
@@ -195,44 +198,45 @@ class AnalyzeResults extends Component {
                         })
                         break;
                     case 404:
-                    this.send404Error("This function is called when the Analyze button is pressed. This function fetches all peer review objects from Canvas and saves them to the SQL database", "AnalyzeResults.js: savePeerReviewsFromCanvasToDatabase()", "No peer reviews assigned for this assignment on Canvas.")
+                        this.send404Error("This function is called when the Analyze button is pressed. This function fetches all peer review objects from Canvas and saves them to the SQL database", "AnalyzeResults.js: savePeerReviewsFromCanvasToDatabase()", "No peer reviews assigned for this assignment on Canvas.")
                         break;
+                    default:
                 }
             })
     }
 
     send400Error(context, error, location, message) {
-		history.push({
-			pathname: '/error',
-			state: {
-				context: context,
-				error: error,
-				location: location,
-				message: message,
-			}
-		})
-	}
+        history.push({
+            pathname: '/error',
+            state: {
+                context: context,
+                error: error,
+                location: location,
+                message: message,
+            }
+        })
+    }
 
-	send401Error(res) {
-		history.push({
-			pathname: '/unauthorized',
-			state: {
-				location: res.location,
-				message: res.message,
-			}
-		})
-	}
+    send401Error(res) {
+        history.push({
+            pathname: '/unauthorized',
+            state: {
+                location: res.location,
+                message: res.message,
+            }
+        })
+    }
 
-	send404Error(context, location, message) {
-		history.push({
-			pathname: '/notfound',
-			state: {
-				context: context,
-				location: location,
-				message: message,
-			}
-		})
-	}
+    send404Error(context, location, message) {
+        history.push({
+            pathname: '/notfound',
+            state: {
+                context: context,
+                location: location,
+                message: message,
+            }
+        })
+    }
 
     setProgress(step) {
         progress = (step / progressNumSteps) * 100;
@@ -270,24 +274,24 @@ class AnalyzeResults extends Component {
         if (localStorage.getItem("analyzeDisplayTextNames_" + this.assignmentId)) {
             return (
                 <div>
-                <hr className="hr-4"></hr>
-                  <div className="textmessage">
-                    {localStorage.getItem("analyzeDisplayTextMessage_" + this.assignmentId)}
-                  </div>
-                    <br></br>
-                    <br></br>
+                    <hr className="hr-4" />hr>
+                    <div className="textmessage">
+                        {localStorage.getItem("analyzeDisplayTextMessage_" + this.assignmentId)}
+                    </div>
+                    <br />
+                    <br />
                     <Row>
                         <Well className="text">
                             <strong>Completed Peer Reviews:</strong> {localStorage.getItem("analyzeDisplayTextNumCompleted_" + this.assignmentId)} / {localStorage.getItem("analyzeDisplayTextNumAssigned_" + this.assignmentId)}
                         </Well>
-                    <Popup className="pop-up" trigger={<button className="flagbutton"> View Flagged Grades ({JSON.parse(localStorage.getItem("analyzeDisplayTextNames_" + this.assignmentId)).length})</button>} modal closeOnDocumentClick >
-                        <span><h5>Flagged Grades</h5></span>
-                        <hr />
-                        <span className="studentlist">
-                            {JSON.parse(localStorage.getItem("analyzeDisplayTextNames_" + this.assignmentId))}
-                        </span>
-                    </Popup>
-                  </Row>
+                        <Popup className="pop-up" trigger={<button className="flagbutton"> View Flagged Grades ({JSON.parse(localStorage.getItem("analyzeDisplayTextNames_" + this.assignmentId)).length})</button>} modal closeOnDocumentClick >
+                            <span><h5>Flagged Grades</h5></span>
+                            <hr />
+                            <span className="studentlist">
+                                {JSON.parse(localStorage.getItem("analyzeDisplayTextNames_" + this.assignmentId))}
+                            </span>
+                        </Popup>
+                    </Row>
                 </div>
             )
         }

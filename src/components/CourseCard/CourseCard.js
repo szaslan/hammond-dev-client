@@ -6,15 +6,11 @@ import './CourseCard.css'
 var colors = ['#FFEFE2', '#FC7753', '#66D7D1', '#9B1D20', '#3D2B3D', '#ECDCB0', '#C1D7AE', '#4C5454']
 
 function randomColor() {
-	var i = parseInt(Math.random() * colors.length);
+	var i = parseInt(Math.random() * colors.length, 10);
 	return colors[i];
 }
 
 class CardComp extends Component {
-	constructor(props) {
-		super(props);
-	}
-
 	render() {
 		return (
 			<div>

@@ -104,6 +104,7 @@ class Assignments extends Component {
                             }
                         })
                         break;
+                    default:
                 }
             })
     }
@@ -112,8 +113,6 @@ class Assignments extends Component {
         this.setState({
             value: event.value,
         })
-
-        // history.push(`/courses/${this.state.courseId}/assignments/${event.value}`)
     }
 
     // toggle() {
@@ -130,14 +129,12 @@ class Assignments extends Component {
 
     render() {
         if (this.state.assignments && array.length < this.state.assignments.length) {
-            console.log(this.state.assignments.length)
-            {console.log(array)}
             this.state.assignments.map(assignments => {
                 FilterAssignments(assignments);
             })
         }
 
-        if (this.state.loaded && array.length == this.state.assignments.length) {
+        if (this.state.loaded && array.length === this.state.assignments.length) {
             return (
                 <div>
                       <div className="assigndrop">
@@ -151,10 +148,9 @@ class Assignments extends Component {
                         isSearchable="true"
                       />
                     </div>
-                    {console.log(this.state.value)}
-                    {this.state.value ? <AssignmentInfo courseJSON={this.props.courseJSON} assignmentId={this.state.value}/>
-                    :
-                    null}
+                    {this.state.value ? <AssignmentInfo courseJSON={this.props.courseJSON} assignmentId={this.state.value} />
+                        :
+                        null}
                 </div>
             );
         }

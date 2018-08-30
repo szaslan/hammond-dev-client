@@ -1,6 +1,5 @@
 .assignment-info{
   padding-top: 10%;
-  padding-left: 20%;
   width: 100%;
   /* display: flex; */
   flex-direction: column;
@@ -20,6 +19,7 @@
     font-size: 20px;
     margin-top: -1%;
     font-family: "Open Sans";
+    text-align:left;
 }
 
 .assignment-info-title{
@@ -33,3 +33,20 @@
   width: 90% !important;
   margin-left: -7% !important;
 }
+
+.calendar-case{
+    display:inline-block;
+    width:100%;
+}
+.calendar-case-hidden{
+    display:none;
+    
+}
+.parameters-case{
+    display:inline-block;
+    width:100%;
+}
+.parameters-case-hidden{
+    display:none;
+}
+
