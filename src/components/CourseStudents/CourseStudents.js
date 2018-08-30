@@ -13,13 +13,13 @@ class CourseStudents extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            courseId: this.props.match.params.course_id,
-            // dropdownOpen: false,
+            courseId: this.props.courseId,
+            dropdownOpen: false,
             loaded: false,
             studentId: '',
             studentName: '',
             students: [],
-            url: `/courses/${this.props.match.params.course_id}/students/`,
+            url: `/courses/${this.props.courseId}/students/`,
             value: null,
 
             ...props,
