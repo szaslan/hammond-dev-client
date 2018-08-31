@@ -1,6 +1,6 @@
-import React, { Component } from 'react';
-import Loader from 'react-loader-spinner'
 import ChartJS from 'react-chartjs-wrapper';
+import Loader from 'react-loader-spinner'
+import React, { Component } from 'react';
 
 import './StudentInfoGraph.css';
 
@@ -39,7 +39,7 @@ class StudentInfoGraph extends Component {
                     dataHistory.labels.push(assignmentName)
                     dataHistory.datasets[0].data.push(this.props.peerReviewData[this.props.category + "History"][columnName])
                 }
-               
+
             }
 
             if (index === this.props.assignments.length - 1) {

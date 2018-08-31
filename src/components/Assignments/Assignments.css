@@ -1,38 +1,34 @@
-/*
-@import 'http://weloveiconfonts.com/api/?family=fontawesome';
-/* ------------Analyze Button settings------------ */
-
-/* input[type=checkbox] {
-	width: 17px !important;
-} */
-
-/* ------------Assignments settings------------ */
-.assigndrop{
+.assign-drop{
 		float: left;
 		position: block;
-		/* margin-top: 1%; */
-		/* background-color:#FFEFE2;*/
+		margin-top: 1%;
 		background-color: white;
-		/* margin-left: 15%; */
+		margin-left: 15%;
+	}
 
+	.hr-5{
+	  border-top: 1px solid #a0a0a0 !important;
+	  width: 90% !important;
+	  margin-left: -8% !important;
+	}
+
+	.hr-6{
+	  border-top: 1px solid #a0a0a0 !important;
+	  width: 100% !important;
+	  margin-left: -12% !important;
+		margin-top: -3% !important;
 	}
 
 .select-search-box{
 	background-color: white !important;
 }
 
+/* ---------react select styling for dropdown--------- */
+/*searchbar*/
 .css-1aya2g8, .css-2o5izw, .css-15k3avv{
 	background-color: white !important;
 	/* margin-left: -15% !important; */
 	border: none !important;
-}
-
-/* .Select-value{
-  border: 1px solid darkgray !important;
-} */
-
-.disabledlist:active{
-	background-color: white !important;
 }
 
 .css-d8oujb{
@@ -52,93 +48,33 @@
 	color: #626262;
 }
 
-.assign-name{
-	font-family: 'Open Sans' !important;
-  font-size: 20px !important;
-  color: #626262 !important;
-  font-weight: 100 !important;
-	}
-
-.assign-name:hover{
-	font-family: 'Open Sans';
-	font-size: 20px !important;
-	color: #626262;
-	font-weight: 100;
-	align-items: center;
-	background-color: #f8f9fa;
-}
-
-.assigntog{
-	font-family: 'Open Sans' !important;
-  font-size: 28px !important;
-  /* background-color: #ffffff !important; */
-  color: #626262 !important;
-  font-weight: 100 !important;
-  border-radius: 10px !important;
-  margin-left: -60%;
-  /* background-color:#FFEFE2 !important;*/
-	background-color: white;
-  border: none !important;
-}
-
-.dropdown-men{
-  height:auto;
-  max-height:40vh;
-  overflow-x:hidden;
-}
-
-.hr-2{
-	border-top: 1px solid black;
-	margin-top:.5%;
-	width: 85% !important;
-  margin-left: -6% !important;
-	/* margin-bottom: -3%; */
-}
-/*
-.hr-4{
-		margin-top: -.5%;
-		border-top: 2px solid #a0a0a0 !important;
-	  width: 100% !important;
-	  margin-left: -12% !important;
-} */
-
-.hr-5{
-  border-top: 2px solid #a0a0a0 !important;
-  width: 90% !important;
-  margin-left: -8% !important;
-}
-
-.hr-6{
-  border-top: 2px solid #a0a0a0 !important;
-  width: 100% !important;
-  margin-left: -12% !important;
-	margin-top: -3% !important;
-}
-
-.title{
-	font-size:30px;
-	padding-top:1%;
-	margin-bottom:0%;
-}
-
 /* ------------Finalize Results settings------------ */
+.advanced-button {
+	cursor: pointer;
+}
+
 .boxplot{
   	margin-left: -1%;
 }
 
-.totalscore{
-	font-family: 'Open Sans';
-	font-size: 15px;
-	color: #4B4A4A;
-	margin-bottom: 4%;
-	margin-left: 45%;
-	font-weight: 100;
-	margin-top: -3.5%;
+.button-student{
+	background-color: #f9f7f7;
+	border-radius: 3px;
+	margin-top: 1%;
+	box-shadow: 0px 10px 5px -8px rgba(0,0,0,0.1);
+	border: 2px solid #e2c6c5;
+	margin-bottom: 1%;
+	align-items: center;
 }
 
-.scoredets{
-	margin-left: -10%;
-	margin-top: 5% !important;
+.chartbox{
+  margin-top: -6%;
+	margin-left: 40%;
+	width: 50%;
+}
+
+.col-sm-1, .col-sm-3, .col-sm-5, .col-sm-8 {
+	padding: 0px !important;
 }
 
 .headertext{
@@ -153,51 +89,31 @@
 	/* padding-top: 2%; */
   }
 
-.stats{
-	font-family: 'Open Sans';
-	font-size: 15px;
-	font-weight: 100;
-	color: #4B4A4A;
-	margin-right: 10%;
+.col-sm-5, .col-sm-8 {
+	padding-right: 2vw !important;
 }
 
-.pagetext{
+.graph1-key{
+  margin-top: -2%;
 	font-family: 'Open Sans';
-	/* font-weight: 300; */
+	font-weight: 100;
 	color: #4B4A4A;
-	float: left;
-	margin-bottom: -2%;
-	margin-top: 1%;
-  margin-left: 0%;
-	font-size: 15px;
 }
 
 .date{
 	margin-left: 9%;
 	font-family: 'Open Sans';
-	/* font-weight: 300; */
 	color: #4B4A4A;
 	margin-bottom: -1%;
 	margin-top: 1%;
 	font-size: 15px;
 }
 
-.button-student{
-	background-color: #f9f7f7;
-	border-radius: 3px;
-	margin-top: 1%;
-	box-shadow: 0px 10px 5px -8px rgba(0,0,0,0.1);
-	border: 2px solid #e2c6c5;
-	margin-bottom: 1%;
-	align-items: center;
-}
-
-.flaggedbutton{
+.flagged-button{
 	align-items: center;
 	margin-bottom: -2%;
 	margin-top: .75%;
 	margin-left: 9%;
-	/* background-color: #FFEFE2; */
 	background-color: white;
 	border-radius: 3px;
 	font-size: 15px;
@@ -207,7 +123,7 @@
 	height: 1%;
 }
 
-.flaggedbutton:hover{
+.flagged-button:hover{
 	align-items: center;
 	margin-bottom: -2%;
 	margin-top: .75%;
@@ -220,11 +136,7 @@
 	border: 2px solid #d6a0a0;
 }
 
-.well2{
-  	margin-left: 3%;
-}
-
-.pop-up{
+.flagged-grades-modal{
 	border-radius: 3px;
 	text-align: center;
 }
@@ -239,7 +151,15 @@
 	width: 30%;
 }
 
-.graphTitle{
+.graph-key{
+	margin-top: -2%;
+	margin-right: 5vw;
+	font-family: 'Open Sans';
+	font-weight: 100;
+	color: #4B4A4A;
+}
+
+.graph-title{
 	font-family: 'Open Sans';
   color: #4B4A4A;
 	font-size: 16px;
@@ -248,7 +168,7 @@
 	margin-left: 30%;
 }
 
-.graphsub{
+.graph-sub{
 	font-family: 'Open Sans';
 	color: #4B4A4A;
 	font-size: 12px;
@@ -258,10 +178,14 @@
 	margin-left: 30%;
 }
 
-.chartbox{
-  margin-top: -6%;
-	margin-left: 40%;
-	width: 50%;
+.header-text{
+  font-family: 'Open Sans';
+  color: #626262;
+  font-weight: 100;
+  font-size: 20px;
+  text-align: left;
+  margin-left: 0% !important;
+	margin-top: -1% !important;
 }
 
 .legend{
@@ -270,23 +194,23 @@
 	font-size: 13px;
 }
 
-.compkey{
-  margin-top: -2%;
+.modal-text{
 	font-family: 'Open Sans';
-	font-weight: 100;
 	color: #4B4A4A;
+	padding-top: 3%;
 }
 
-.graphKey{
-	margin-top: -2%;
-	margin-right: 5vw;
+.page-text{
 	font-family: 'Open Sans';
-	font-weight: 100;
 	color: #4B4A4A;
+	float: left;
+	margin-bottom: -2%;
+	margin-top: 1%;
+  margin-left: 0%;
+	font-size: 15px;
 }
 
-
-.pieinfo{
+.pie-info{
 	width: 300px;
 	margin-left: 20%;
 	margin-top: 6%;
@@ -296,30 +220,39 @@
 	text-align: center;
 }
 
-.modaltext{
-	font-family: 'Open Sans';
-	color: #4B4A4A;
-	padding-top: 3%;
-}
-
-.studentlist{
-	font-family: 'Open Sans';
-	color: #4B4A4A;
-}
-
-.progressbar{
+.progress-bar{
 	width: 80%;
 	margin-left: -2%;
 }
 
-.col-sm-1, .col-sm-3, .col-sm-5, .col-sm-8 {
-	padding: 0px !important;
+.score-dets{
+	margin-left: -10%;
+	margin-top: 5% !important;
 }
 
-.col-sm-5, .col-sm-8 {
-	padding-right: 2vw !important;
+.stats{
+	font-family: 'Open Sans';
+	font-size: 15px;
+	font-weight: 100;
+	color: #4B4A4A;
+	margin-right: 10%;
 }
 
-.advanced-button {
-	cursor: pointer;
+.student-list{
+	font-family: 'Open Sans';
+	color: #4B4A4A;
+}
+
+.total-score{
+	font-family: 'Open Sans';
+	font-size: 15px;
+	color: #4B4A4A;
+	margin-bottom: 4%;
+	margin-left: 45%;
+	font-weight: 100;
+	margin-top: -3.5%;
+}
+
+.well2{
+  	margin-left: 3%;
 }

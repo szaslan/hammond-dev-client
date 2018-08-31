@@ -1,8 +1,8 @@
-import React, { Component } from 'react';
-import { Link } from "react-router-dom";
-import { Row } from 'react-bootstrap';
 import history from '../../history'
+import { Link } from "react-router-dom";
 import Loader from 'react-loader-spinner';
+import React, { Component } from 'react';
+import { Row } from 'react-bootstrap';
 
 import './UnauthorizedError.css';
 

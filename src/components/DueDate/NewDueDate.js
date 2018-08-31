@@ -3,7 +3,6 @@ import React, { Component } from 'react';
 import NewDueDateForm from './NewDueDateForm';
 
 import 'rc-time-picker/assets/index.css';
-
 import './NewDueDate.css';
 
 class NewDueDate extends Component {
@@ -42,7 +41,7 @@ class NewDueDate extends Component {
                 )
             default:
         }
-        
+
     }
 };
 

@@ -1,15 +1,14 @@
-import React, { Component } from 'react';
-import { Progress } from 'reactstrap';
-import { Row, Well } from 'react-bootstrap';
 import history from '../../history';
 import Popup from 'reactjs-popup';
+import { Progress } from 'reactstrap';
+import React, { Component } from 'react';
+import { Row, Well } from 'react-bootstrap';
 
 import 'bootstrap/dist/css/bootstrap.css';
-
 import '../Assignments/Assignments.css';
 import '../DueDate/NewDueDate.css'
 
-
+//progress bar benchmarks
 var progress = 0;
 var progressNumSteps = 6;
 var progressBarMessage = "";
@@ -274,19 +273,20 @@ class AnalyzeResults extends Component {
             return (
                 <div>
                     <hr className="hr-4"></hr>
-                    <div className="textmessage">
+                    <div className="text-message">
                         {localStorage.getItem("analyzeDisplayTextMessage_" + this.assignmentId)}
                     </div>
                     <br />
                     <br />
                     <Row>
-                        <Well className="text">
+                        //results from analyze button
+                        <Well className="analyze-text">
                             <strong>Completed Peer Reviews:</strong> {localStorage.getItem("analyzeDisplayTextNumCompleted_" + this.assignmentId)} / {localStorage.getItem("analyzeDisplayTextNumAssigned_" + this.assignmentId)}
                         </Well>
-                        <Popup className="pop-up" trigger={<button className="flagbutton"> View Flagged Grades ({JSON.parse(localStorage.getItem("analyzeDisplayTextNames_" + this.assignmentId)).length})</button>} modal closeOnDocumentClick >
+                        <Popup className="flagged-grades-modal" trigger={<button className="flag-button"> View Flagged Grades ({JSON.parse(localStorage.getItem("analyzeDisplayTextNames_" + this.assignmentId)).length})</button>} modal closeOnDocumentClick >
                             <span><h5>Flagged Grades</h5></span>
                             <hr />
-                            <span className="studentlist">
+                            <span className="student-list">
                             {JSON.parse(localStorage.getItem("analyzeDisplayTextNames_" + this.assignmentId)).length == 0 ? "No flagged grades" : (JSON.parse(localStorage.getItem("analyzeDisplayTextNames_" + this.assignmentId))).join(", ")}
                             </span>
                         </Popup>
@@ -296,7 +296,7 @@ class AnalyzeResults extends Component {
         }
 
         return (
-            <Progress value={progress}> {progressBarMessage} </Progress>
+            <Progress className="progress-bar" value={progress}> {progressBarMessage} </Progress>
         )
     }
 }

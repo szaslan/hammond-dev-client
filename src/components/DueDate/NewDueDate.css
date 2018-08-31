@@ -1,3 +1,6 @@
+.analyze{
+  margin-left: 100%;
+}
   .dateTime{
     margin-right:7% !important;
     margin-bottom: 3%;
@@ -5,107 +8,24 @@
     /* margin-left: -5%; */
   }
 
-.dateTimeForm{
-
-  width:100%;
-}
-
-.text{
-  font-family: 'Open Sans';
-  color: #626262;
-  margin-left: 0%;
-  font-size: 18px;
-}
-
-.analyze{
-  margin-left: 100%;
-}
-
-.analyzebutton{
+.analyze-button{
   border-radius: 3px;
   margin-left: 50%;
   margin-top: 20%;
   margin-bottom: 20%;
 }
 
-.finalizebutton{
-  border-radius: 3px;
-  margin-top: 20%;
-  margin-left: 50%;
-  margin-bottom: 20%;
-}
-
-.flagbutton{
-	align-items: center;
-	margin-bottom: 5%;
-	margin-top: -.2%;
-	margin-left: 20%;
-	/* background-color: #FFEFE2; */
-  background-color: white;
-	border-radius: 3px;
-	font-size: 15px;
-	font-family: 'Open Sans';
-	color: #4B4A4A;
-	border: 2px solid #d6a0a0;
-}
-
-.flagbutton:hover{
-  align-items: center;
-	margin-bottom: 5%;
-	margin-top: -.2%;
-	margin-left: 20%;
-	background-color: #d6a0a0;
-	border-radius: 3px;
-	font-size: 15px;
-	font-family: 'Open Sans';
-	color: #4B4A4A;
-	border: 2px solid #d6a0a0;
-}
-
-.analyzeresult{
+.analyze-text{
   font-family: 'Open Sans';
   color: #626262;
   margin-left: 0%;
   font-size: 18px;
 }
 
-.textmessage{
-  margin-top: 3%;
-  margin-left: -25%;
-  margin-bottom: -3%;
-}
-
-.parameters{
-  width: 300%;
-  text-align: left;
-  margin-top: 10%;
-}
-
-.parameter{
-  font-family: 'Open Sans';
-  color: #626262;
-  text-align: left;
-  font-size: 16px;
-}
-
-.checktext{
+.check-text{
   font-family: 'Open Sans';
   color: #4B4A4A;
   font-size: 15px;
-}
-
-.clear{
-  font-family: 'Open Sans';
-  color: #626262;
-  border-radius: 3px;
-  background-color: white;
-}
-
-.clear:hover{
-  font-family: 'Open Sans';
-  color: #626262;
-  border-radius: 3px;
-  background-color:	#F8F8F8;
 }
 
 .clear-all{
@@ -126,6 +46,105 @@
   float: right;
 }
 
+/* -------changing border around calendars------ */
+.color-border-green {
+	border: 3px solid #85c464 !important;
+  border-radius: 3px;
+}
+
+.color-border-red {
+  border: 3px solid #e86d6d !important;
+  border-radius: 3px;
+}
+/* --------------------------------------------- */
+
+/* -------calendar component styling------ */
+.dateTime{
+    margin-right: 11% !important;
+    margin-bottom: 3%;
+    margin-left: -5%;
+}
+
+.dateTimeForm{
+  width:100%;
+}
+/* --------------------------------------- */
+
+.finalize-button{
+  border-radius: 3px;
+  margin-top: 20%;
+  margin-left: 50%;
+  margin-bottom: 20%;
+}
+
+.flag-button{
+	align-items: center;
+	margin-bottom: 5%;
+	margin-top: -.2%;
+	margin-left: 20%;
+  background-color: white;
+	border-radius: 3px;
+	font-size: 15px;
+	font-family: 'Open Sans';
+	color: #4B4A4A;
+	border: 2px solid #d6a0a0;
+}
+
+.flag-button:hover{
+  align-items: center;
+	margin-bottom: 5%;
+	margin-top: -.2%;
+	margin-left: 20%;
+	background-color: #d6a0a0;
+	border-radius: 3px;
+	font-size: 15px;
+	font-family: 'Open Sans';
+	color: #4B4A4A;
+	border: 2px solid #d6a0a0;
+}
+
+.header-text{
+  font-family: 'Open Sans';
+  color: #626262;
+  font-size: 20px;
+}
+
+/* --------customizable parameters-------- */
+.parameter{
+  font-family: 'Open Sans';
+  color: #626262;
+  text-align: left;
+  font-size: 16px;
+}
+
+.parameters{
+  width: 300%;
+  text-align: left;
+  margin-top: 10%;
+}
+/* --------------------------------------- */
+
+.reset-button{
+  font-family: 'Open Sans';
+  color: #626262;
+  border-radius: 3px;
+  background-color: white;
+}
+
+.reset-button:hover{
+  font-family: 'Open Sans';
+  color: #626262;
+  border-radius: 3px;
+  background-color:	#F8F8F8;
+}
+
+.text-message{
+  margin-top: 3%;
+  margin-left: -25%;
+  margin-bottom: -3%;
+}
+
+/* -------------styling for due date component--------------- */
   .rdt {
     position: relative;
     width:100%;
@@ -139,9 +158,7 @@
     height:100%;
     padding: 2%;
     margin-top: 0%;
-    /* z-index: 99999 !important; */
     background: #fff;
-    /* box-shadow: 0 1px 3px rgba(0,0,0,.1); */
     box-shadow:none;
     border: none;
 }
@@ -379,19 +396,8 @@
     position:relative;
     top:0;
     left:0;
-    /* z-index:2; */
   }
 
 .invalidModal{
   z-index:3;
-}
-
-.color-border-red {
-  border: 3px solid #e86d6d !important;
-  border-radius: 3px;
-}
-
-.color-border-green {
-	border: 3px solid #85c464 !important;
-  border-radius: 3px;
 }

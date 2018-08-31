@@ -1,8 +1,8 @@
-import React, { Component } from 'react';
 import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
-import { Row, Col } from 'react-bootstrap';
 import history from '../../history';
 import Loader from 'react-loader-spinner'
+import React, { Component } from 'react';
+import { Row, Col } from 'react-bootstrap';
 
 import StudentInfoGraph from '../StudentInfoGraph/StudentInfoGraph'
 
@@ -570,14 +570,13 @@ class StudentInfo extends Component {
         return (
             <div className="student-info">
                 <hr className="hr-6"></hr>
-                <h2 className="headertext">Peer Grading Details</h2>
+                <h2 className="header-text">Peer Grading Details</h2>
                 <hr className="hr-2"></hr>
-                {/*THIS BELOW SHOULD BE THIS.STATE.STUDENT*/}
-                {/*<div className="studentinfo-name">{this.props.location.state.name}</div>*/}
                 <Row>
-                    <Col className="dropsouter">
-                        <Dropdown className={"dropdowns" + (!this.state.studentHasSavedHistory ? " disabled" : "")} isOpen={this.state.dropdownOpen} toggle={this.toggleAssignment} >
-                            <DropdownToggle disabled={!this.state.studentHasSavedHistory} className="dropbutton" caret>
+                    <Col className="drops-outer">
+                        //first dropdown for choosing an assignment
+                        <Dropdown className={"drop-downs" + (!this.state.studentHasSavedHistory ? " disabled" : "")} isOpen={this.state.dropdownOpen} toggle={this.toggleAssignment} >
+                            <DropdownToggle disabled={!this.state.studentHasSavedHistory} className="drop-button" caret>
                                 {this.state.value}
                             </DropdownToggle>
                             <DropdownMenu >
@@ -593,9 +592,9 @@ class StudentInfo extends Component {
 
                         {
                             this.state.peerReviewsCompletedByCurrentStudent.length > 0 ?
-
-                                <Dropdown className="dropdowns" isOpen={this.state.peerReviewOpen} toggle={this.toggleReview} >
-                                    <DropdownToggle className="dropbutton" caret>
+                                //second dropdown to choose peer review
+                                <Dropdown className="drop-downs" isOpen={this.state.peerReviewOpen} toggle={this.toggleReview} >
+                                    <DropdownToggle className="drop-button" caret>
                                         {this.state.value2}
                                     </DropdownToggle>
                                     <DropdownMenu >
@@ -609,7 +608,7 @@ class StudentInfo extends Component {
                                     </DropdownMenu>
                                 </Dropdown>
                                 :
-                                <div className="errmessage">{this.state.errorMessage}</div>
+                                <div className="err-message">{this.state.errorMessage}</div>
                         }
                     </Col>
                     <Col className="message">
@@ -617,7 +616,7 @@ class StudentInfo extends Component {
                     </Col>
                 </Row>
                 <hr className="hr-4"></hr>
-                <h2 className="headertext">Grading History</h2>
+                <h2 className="header-text">Grading History</h2>
                 <hr className="hr-2"></hr>
                 {
                     this.state.graphsLoaded ?

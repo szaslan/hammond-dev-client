@@ -1,9 +1,9 @@
-import React, { Component } from 'react';
 import { Container } from 'reactstrap';
-import { Link } from "react-router-dom";
 import Flexbox from 'flexbox-react';
 import history from '../../history';
+import { Link } from "react-router-dom";
 import Loader from 'react-loader-spinner';
+import React, { Component } from 'react';
 
 import CardComp from '../CourseCard/CourseCard';
 import JumbotronComp from '../JumbotronComp/JumbotronComp';
@@ -103,11 +103,13 @@ class Courses extends Component {
                         <SidebarComp
                             content={
                                 <div>
+                                  //course cards for dashboard
                                     <JumbotronComp mainTitle={this.state.user} />
                                     <Container className="well1-container" fluid>
-                                        <Flexbox className="well1-flexbox" minWidth="700px" width="90vw" flexWrap="wrap" inline="true">
-                                            {/*<h1 className="pagetitle">Courses</h1>*/}
-                                            <Flexbox className="well1-flexbox" minWidth="700px" width="90vw" flexWrap="wrap" inline="true">
+                                        <Flexbox className="well1-flexbox" minWidth="700px" width="90vw"
+                                            flexWrap="wrap" inline="true">
+                                            <Flexbox className="well1-flexbox" minWidth="700px" width="90vw"
+                                                flexWrap="wrap" inline="true">
                                                 {
                                                     this.state.courses.length > 0 ?
                                                         this.state.courses.map(course =>
@@ -123,42 +125,7 @@ class Courses extends Component {
                                 </div>
                             } />
                     </Container>
-
-                    {/* <JumbotronComp mainTitle={this.state.user} />
-
-                        <Container className="well1-container" fluid>
-                            <Flexbox className="well1-flexbox" minWidth="700px" width="90vw"
-                                flexWrap="wrap" inline="true">
-
-                                <Flexbox className="well1-flexbox" minWidth="700px" width="90vw"
-                                    flexWrap="wrap" inline="true">
-                                    {this.state.courses.length > 0
-                                        ?
-                                        this.state.courses ?
-                                            this.state.courses.map(courses =>
-                                                <Link to={`/courses/${courses.id}`}>
-                                                    <Example name={courses.name} />
-                                                </Link>)
-                                            :
-                                            null
-
-                                        :
-                                        <h1>No classes as a teacher</h1>
-                                    }
-                                </Flexbox>
-                            </Flexbox>
-                        </Container> */}
-
-
-
-                    {/*<Well className="bottom" fluid>
-                    <Container className="bottom-container" fluid>
-                        <button className="about-button" >About Us</button>
-                        <button className="about-button">About untitled</button>
-                    </Container>
-                </Well>*/}
                 </div>
-
             );
         }
         return (

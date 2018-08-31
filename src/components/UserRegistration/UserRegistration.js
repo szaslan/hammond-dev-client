@@ -1,5 +1,5 @@
-import React, { Component } from 'react';
 import { Form, FormGroup, Input } from 'reactstrap';
+import React, { Component } from 'react';
 import { Redirect } from 'react-router-dom';
 import { Well } from 'react-bootstrap';
 

@@ -1,11 +1,10 @@
-import React, { Component } from 'react';
 import { Ellipse } from 'react-shapes';
-import { Well, Row, Col } from 'react-bootstrap';
 import Flexbox from 'flexbox-react';
 import ReactSvgPieChart from "react-svg-piechart";
+import React, { Component } from 'react';
+import { Well, Row, Col } from 'react-bootstrap';
 
 import 'bootstrap/dist/css/bootstrap.css';
-
 import '../Assignments/Assignments.css'
 
 class PieCharts extends Component {
@@ -48,10 +47,11 @@ class PieCharts extends Component {
             <div>
                 <Row>
                     <Col className="graph1">
-                        <h5 className="graphTitle">Completion</h5>
-                        <p className="graphsub">Total: {Number(localStorage.getItem("completedAllReviews_" + this.assignmentId)) + Number(localStorage.getItem("completedSomeReviews_" + this.assignmentId)) + Number(localStorage.getItem("completedNoReviews_" + this.assignmentId))}</p>
-
+                        //title and total
+                        <h5 className="graph-title">Completion</h5>
+                        <p className="graph-sub">Total: {Number(localStorage.getItem("completedAllReviews_" + this.assignmentId)) + Number(localStorage.getItem("completedSomeReviews_" + this.assignmentId)) + Number(localStorage.getItem("completedNoReviews_" + this.assignmentId))}</p>
                         <Flexbox className="chartbox" flexDirection="column" flexWrap="wrap">
+                            //react piechart to display finalized details
                             <ReactSvgPieChart className="piechart"
                                 expandSize={3}
                                 expandOnHover="false"
@@ -60,6 +60,7 @@ class PieCharts extends Component {
                                     { title: "Completed some reviews", value: Number(localStorage.getItem("completedSomeReviews_" + this.assignmentId)), color: '#C68100' },
                                     { title: "Completed no reviews", value: Number(localStorage.getItem("completedNoReviews_" + this.assignmentId)), color: '#AD1F1F' },
                                 ]}
+                                //on hover, expand sector and bold corresponding label
                                 onSectorHover={(d) => {
                                     if (d) {
                                         this.setState({
@@ -74,31 +75,33 @@ class PieCharts extends Component {
                                 }}
                             />
                         </Flexbox>
-                        <Well className="pieinfo">
+                        <Well className="pie-info">
                             {this.state.hoveringOverPieChart1 ?
                                 this.state.sectorTitle1 + ": " + this.state.sectorValue1 + " student" + (this.state.sectorValue1 !== 1 ? "s" : "")
                                 :
                                 "Hover over a sector to display completion data."}
                         </Well>
                         <br />
+                        //color legend for pie chart
                         <div className="legend">
                             <Row>
                                 <Ellipse className="keycolor" rx={7} ry={4} fill={{ color: '#063D11' }} strokeWidth={5} />
-                                <p className="compkey" style={this.state.sectorTitle1 === "Completed all reviews" ? { fontWeight: 'bold' } : null}>Completed all reviews</p>
+                                <p className="graph1-key" style={this.state.sectorTitle1 === "Completed all reviews" ? { fontWeight: 'bold' } : null}>Completed all reviews</p>
                             </Row>
                             <Row>
                                 <Ellipse className="keycolor" rx={7} ry={4} fill={{ color: '#C68100' }} strokeWidth={5} />
-                                <p className="compkey" style={this.state.sectorTitle1 === "Completed some reviews" ? { fontWeight: 'bold' } : null}>Completed some reviews</p>
+                                <p className="graph1-key" style={this.state.sectorTitle1 === "Completed some reviews" ? { fontWeight: 'bold' } : null}>Completed some reviews</p>
                             </Row>
                             <Row>
                                 <Ellipse className="keycolor" rx={7} ry={4} fill={{ color: '#AD1F1F' }} strokeWidth={5} />
-                                <p className="compkey" style={this.state.sectorTitle1 === "Completed no reviews" ? { fontWeight: 'bold' } : null}>Completed no reviews</p>
+                                <p className="graph1-key" style={this.state.sectorTitle1 === "Completed no reviews" ? { fontWeight: 'bold' } : null}>Completed no reviews</p>
                             </Row>
                         </div>
                     </Col>
+                    //second piechart for grading classification
                     <Col className="graph2">
-                        <h5 className="graphTitle">Grading Classification</h5>
-                        <p className="graphsub">Total: {Number(localStorage.getItem("definitelyHarsh_" + this.assignmentId)) +
+                        <h5 className="graph-title">Grading Classification</h5>
+                        <p className="graph-sub">Total: {Number(localStorage.getItem("definitelyHarsh_" + this.assignmentId)) +
                             Number(localStorage.getItem("couldBeHarsh_" + this.assignmentId)) +
                             Number(localStorage.getItem("definitelyLenient_" + this.assignmentId)) +
                             Number(localStorage.getItem("couldBeLenient_" + this.assignmentId)) +
@@ -134,7 +137,7 @@ class PieCharts extends Component {
                                 }
                             />
                         </Flexbox>
-                        <Well className="pieinfo">
+                        <Well className="pie-info">
                             {this.state.hoveringOverPieChart2 ?
                                 this.state.sectorTitle2 + ": " + this.state.sectorValue2 + " student" + (this.state.sectorValue2 !== 1 ? "s" : "")
                                 :
@@ -146,33 +149,33 @@ class PieCharts extends Component {
                                 <Col>
                                     <Row>
                                         <Ellipse rx={7} ry={4} fill={{ color: '#C68100' }} strokeWidth={5} />
-                                        <p className="graphKey" style={this.state.sectorTitle2 === "Spazzy" ? { fontWeight: 'bold' } : null}>Spazzy</p>
+                                        <p className="graph-key" style={this.state.sectorTitle2 === "Spazzy" ? { fontWeight: 'bold' } : null}>Spazzy</p>
                                     </Row>
                                     <Row>
                                         <Ellipse rx={7} ry={4} fill={{ color: '#AD1F1F' }} strokeWidth={5} />
-                                        <p className="graphKey" style={this.state.sectorTitle2 === "Definitely Harsh" ? { fontWeight: 'bold' } : null}>Definitely Harsh</p>
+                                        <p className="graph-key" style={this.state.sectorTitle2 === "Definitely Harsh" ? { fontWeight: 'bold' } : null}>Definitely Harsh</p>
                                     </Row>
                                     <Row>
                                         <Ellipse rx={7} ry={4} fill={{ color: '#D6A0A0' }} strokeWidth={5} />
-                                        <p className="graphKey" style={this.state.sectorTitle2 === "Could be Harsh" ? { fontWeight: 'bold' } : null}>Could be Harsh</p>
+                                        <p className="graph-key" style={this.state.sectorTitle2 === "Could be Harsh" ? { fontWeight: 'bold' } : null}>Could be Harsh</p>
                                     </Row>
                                     <Row>
                                         <Ellipse rx={7} ry={4} fill={{ color: '#B3BBDD' }} strokeWidth={5} />
-                                        <p className="graphKey" style={this.state.sectorTitle2 === "Could be Lenient" ? { fontWeight: 'bold' } : null}>Could be Lenient</p>
+                                        <p className="graph-key" style={this.state.sectorTitle2 === "Could be Lenient" ? { fontWeight: 'bold' } : null}>Could be Lenient</p>
                                     </Row>
                                 </Col>
                                 <Col>
                                     <Row>
                                         <Ellipse rx={7} ry={4} fill={{ color: '#001887' }} strokeWidth={5} />
-                                        <p className="graphKey" style={this.state.sectorTitle2 === "Definitely Lenient" ? { fontWeight: 'bold' } : null}>Definitely Lenient</p>
+                                        <p className="graph-key" style={this.state.sectorTitle2 === "Definitely Lenient" ? { fontWeight: 'bold' } : null}>Definitely Lenient</p>
                                     </Row>
                                     <Row>
                                         <Ellipse rx={7} ry={4} fill={{ color: '#94B29A' }} strokeWidth={5} />
-                                        <p className="graphKey" style={this.state.sectorTitle2 === "Could be Fair" ? { fontWeight: 'bold' } : null}>Could be Fair</p>
+                                        <p className="graph-key" style={this.state.sectorTitle2 === "Could be Fair" ? { fontWeight: 'bold' } : null}>Could be Fair</p>
                                     </Row>
                                     <Row>
                                         <Ellipse rx={7} ry={4} fill={{ color: '#063D11' }} strokeWidth={5} />
-                                        <p className="graphKey" style={this.state.sectorTitle2 === "Definitely Fair" ? { fontWeight: 'bold' } : null}>Definitely Fair</p>
+                                        <p className="graph-key" style={this.state.sectorTitle2 === "Definitely Fair" ? { fontWeight: 'bold' } : null}>Definitely Fair</p>
                                     </Row>
                                 </Col>
                             </Row>

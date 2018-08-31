@@ -1,5 +1,4 @@
 .error-message {
-    /* text-align: center; */
     margin-left: 1vw;
 }
 
@@ -11,14 +10,6 @@
 .error-message-title {
     font-weight: bold;
     font-size:3vw
-}
-
-.error-message-body {
-
-}
-
-.redirect-message {
-
 }
 
 .immediate-redirection {

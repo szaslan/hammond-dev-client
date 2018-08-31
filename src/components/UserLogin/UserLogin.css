@@ -8,92 +8,29 @@
     --light-lavendar:#a37494;
   }
 
-  /* body {
-    margin: 0;
-    padding: 0;
-    font-family: sans-serif;
-  }
-
-  .login-group{
-    width:280px;
-    margin-left:10px;
-    margin-top: 30vh;
-    text-align:left;
-    padding-right:5px;
-  }
-  .screen{
-    width:100vw;
-    padding-left:15px;
-  }
-
-  .right-side-col{
-
-    background-color:var(--light-lavendar);
+.entire-screen-login{
     height:100vh;
-    width:300px;
-  }
+    background-color: #efd9ce;;
+    min-width: 500px;
+}
 
-  .submit-button{
-    border:none;
-
-    padding:5px;
-    padding-left:7px;
-    padding-right:7px;
-    background-color:var(--navy-plum);
-
-    color:var(--light-peach);
-    font-size:15px;
-  }
-  .create-account{
-    border:none;
-
-    padding:5px;
-    padding-left:7px;
-    padding-right:7px;
-    background-color:var(--navy-plum);
-
-    color:var(--light-peach);
-    margin-left:10px;
-    font-size:15px;
-  }
-  .please-signin{
-    color:var(--navy-plum);
-    font-size:30px;
-  }*/
-
-  .welcome-message-login{
-      color: black;
-      font-size:90px;
-      margin-bottom: 20px;
-      font-family: 'Playfair Display';
+.flexbox-login{
+    margin:auto;
+    justify-content:space-around;
 }
 
 .form-control{
-  border: 1px solid #efd9ce !important;
+    border: 1px solid #efd9ce !important;
 }
 
-  .entire-screen-login{
-      height:100vh;
-      /*background-image: url('../deering-interior-square3.jpg');
-      background-size: cover;
-      background-repeat: no-repeat;
-      background-attachment: fixed;
-      background-position: 50% 30%;*/
-      background-color: #efd9ce;;
-      min-width: 500px;
-  }
-
-
-  .login-group{
+.login-group{
     width:500px;
     padding-top:30vh;
     height:80vh;
     margin:auto;
-  }
+}
 
-  .new-button{
-    /* margin-left:5vw;
-    margin-right:5vw; */
+.new-button{
     padding-left:10px;
     padding-right:10px;
     font-size:20px;
@@ -101,12 +38,11 @@
     border:none;
     color: black;
     font-family: 'Open Sans';
-    /*background-color:var(--violet);
-    white-space:nowrap;*/
-
 }
-.flexbox-login{
-  margin:auto;
-  /* width:20vw; */
-  justify-content:space-around;
+
+.welcome-message-login{
+    color: black;
+    font-size:90px;
+    margin-bottom: 20px;
+    font-family: 'Playfair Display';
 }
