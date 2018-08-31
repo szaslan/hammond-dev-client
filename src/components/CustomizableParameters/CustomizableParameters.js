@@ -9,7 +9,7 @@ import 'bootstrap/dist/css/bootstrap.css';
 import '../Assignments/Assignments.css';
 import '../DueDate/NewDueDate.css';
 
-const customizableOptions = ["sendIncompleteMessages", "customBenchmarks", "penalizingForOriginalIncompletes", "penalizingForReassignedIncompletes"];
+const customizableOptions = ["automaticallyFinalize", "customBenchmarks", "penalizingForOriginalIncompletes", "penalizingForReassignedIncompletes", "sendIncompleteMessages"];
 
 class CustomizableParameters extends Component {
     constructor(props) {
@@ -17,7 +17,9 @@ class CustomizableParameters extends Component {
 
         this.state = {
             assignmentId: this.props.assignmentId,
+            automaticallyFinalize: false,
             customBenchmarks: false,
+            customBenchmarksSaved: false,
             loaded: false,
             penalizingForOriginalIncompletes: false,
             penalizingForReassignedIncompletes: false,
@@ -32,25 +34,24 @@ class CustomizableParameters extends Component {
         this.toggle = this.toggle.bind(this);
 
         // defaultBenchmarks = defaultBenchmarks;
-        this.userInputBenchmarks = {
-            SPAZZY_WIDTH: defaultBenchmarks.SPAZZY_WIDTH,
-            THRESHOLD: defaultBenchmarks.THRESHOLD,
-            COULD_BE_LOWER_BOUND: defaultBenchmarks.COULD_BE_LOWER_BOUND,
-            COULD_BE_UPPER_BOUND: defaultBenchmarks.COULD_BE_UPPER_BOUND,
-            MIN_NUMBER_OF_REVIEWS_PER_STUDENT_FOR_CLASSIFICATION: defaultBenchmarks.MIN_NUMBER_OF_REVIEWS_PER_STUDENT_FOR_CLASSIFICATION,
-            MIN_NUMBER_OF_ASSIGNMENTS_IN_COURSE_FOR_CLASSIFICATION: defaultBenchmarks.MIN_NUMBER_OF_ASSIGNMENTS_IN_COURSE_FOR_CLASSIFICATION,
-            MIN_NUMBER_OF_REVIEWS_FOR_SINGLE_SUBMISSION_FOR_GRADING: defaultBenchmarks.MIN_NUMBER_OF_REVIEWS_FOR_SINGLE_SUBMISSION_FOR_GRADING,
-            MIN_REVIEW_COMPLETION_PERCENTAGE_PER_SUBMISSION: defaultBenchmarks.MIN_REVIEW_COMPLETION_PERCENTAGE_PER_SUBMISSION,
-        }
+        // this.userInputBenchmarks = {
+        //     SPAZZY_WIDTH: defaultBenchmarks.SPAZZY_WIDTH,
+        //     THRESHOLD: defaultBenchmarks.THRESHOLD,
+        //     COULD_BE_LOWER_BOUND: defaultBenchmarks.COULD_BE_LOWER_BOUND,
+        //     COULD_BE_UPPER_BOUND: defaultBenchmarks.COULD_BE_UPPER_BOUND,
+        //     MIN_NUMBER_OF_REVIEWS_PER_STUDENT_FOR_CLASSIFICATION: defaultBenchmarks.MIN_NUMBER_OF_REVIEWS_PER_STUDENT_FOR_CLASSIFICATION,
+        //     MIN_NUMBER_OF_ASSIGNMENTS_IN_COURSE_FOR_CLASSIFICATION: defaultBenchmarks.MIN_NUMBER_OF_ASSIGNMENTS_IN_COURSE_FOR_CLASSIFICATION,
+        //     MIN_NUMBER_OF_REVIEWS_FOR_SINGLE_SUBMISSION_FOR_GRADING: defaultBenchmarks.MIN_NUMBER_OF_REVIEWS_FOR_SINGLE_SUBMISSION_FOR_GRADING,
+        //     MIN_REVIEW_COMPLETION_PERCENTAGE_PER_SUBMISSION: defaultBenchmarks.MIN_REVIEW_COMPLETION_PERCENTAGE_PER_SUBMISSION,
+        // }
+        this.userInputBenchmarks = this.props.userInputBenchmarks;
     }
 
     clearCustomBenchmarks() {
-        localStorage.removeItem("customBenchmarks_" + this.state.assignmentId)
+        localStorage.setItem("customBenchmarks_" + this.state.assignmentId, "N/A")
 
         benchmarkNames.forEach(benchmark => {
-            if (localStorage.getItem(benchmark + "_" + this.state.assignmentId)) {
-                localStorage.removeItem(benchmark + "_" + this.state.assignmentId);
-            }
+            localStorage.setItem(benchmark + "_" + this.state.assignmentId, "N/A");
         })
 
         this.userInputBenchmarks = {
@@ -67,19 +68,22 @@ class CustomizableParameters extends Component {
 
     editingBenchmarks(event) {
         event.preventDefault();
-        localStorage.removeItem("customBenchmarksSaved_" + this.state.assignmentId)
+        localStorage.setItem("customBenchmarksSaved_" + this.state.assignmentId, "N/A")
+        this.setState({
+            customBenchmarksSaved: false
+        })
     }
 
     handleInputChange(event) {
         const target = event.target;
-        const value = target.type === 'checkbox' ? target.checked : target.value;
+        const value = target.checked;
         const name = target.name;
 
         if (value) {
             localStorage.setItem(name + "_" + this.state.assignmentId, value)
         }
         else {
-            localStorage.removeItem(name + "_" + this.state.assignmentId)
+            localStorage.setItem(name + "_" + this.state.assignmentId, "N/A")
         }
 
         this.setState({
@@ -88,8 +92,9 @@ class CustomizableParameters extends Component {
     }
 
     readInFromLocalStorage() {
-        customizableOptions.forEach(variable => {
-            if (localStorage.getItem(variable + "_" + this.state.assignmentId)) {
+        customizableOptions.forEach((variable, index, array) => {
+            let value = localStorage.getItem(variable + "_" + this.state.assignmentId);
+            if (value === "true") {
                 if (!this.state[variable]) {
                     this.setState({
                         [variable]: true,
@@ -103,6 +108,13 @@ class CustomizableParameters extends Component {
                     })
                 }
             }
+
+            //to re render the page
+            if (index == array.length - 1) {
+                this.setState({
+                    loaded: true
+                })
+            }
         })
     }
 
@@ -114,20 +126,25 @@ class CustomizableParameters extends Component {
 
     componentDidMount() {
         this.readInFromLocalStorage();
+
+        setInterval(this.readInFromLocalStorage, 1000)
         this.setState({
-            assignmentId: this.props.assignmentId,
             loaded: true,
         })
-    }
-
-    componentDidUpdate() {
-        this.readInFromLocalStorage();
     }
 
     render() {
         if (this.state.loaded) {
             return (
-                <Form className = "parametersForm">
+                <Form className="parametersForm">
+                    <FormGroup row>
+                        <FormGroup check>
+                            <Label className="checktext" check>
+                                <Input name="automaticallyFinalize" type="checkbox" checked={this.state.automaticallyFinalize} onChange={this.handleInputChange} />
+                                Automatically Finalize Before Due Date 3 If All Peer Reviews Are Completed?
+                            </Label>
+                        </FormGroup>
+                    </FormGroup>
                     <FormGroup row>
                         <FormGroup check>
                             <Label className="checktext" check>
@@ -161,7 +178,7 @@ class CustomizableParameters extends Component {
                         </FormGroup>
                         {
                             this.state.customBenchmarks ?
-                                localStorage.getItem("customBenchmarksSaved_" + this.state.assignmentId) ?
+                                localStorage.getItem("customBenchmarksSaved_" + this.state.assignmentId) === "true" ?
                                     <button onClick={this.editingBenchmarks}>Edit</button>
                                     :
                                     <div>

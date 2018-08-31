@@ -25,7 +25,7 @@ class NewDueDate extends Component {
                 );
             case 2:
                 return (
-                    (localStorage.getItem("dueDate1_" + this.assignmentId) ?
+                    (localStorage.getItem("dueDate1_" + this.assignmentId) && localStorage.getItem("dueDate1_" + this.assignmentId) !== "N/A" ?
                         <NewDueDateForm assignmentId={this.assignmentId} number={this.state.number} textDescription={this.props.textDescription}/>
                         :
                         <NewDueDateForm isGray assignmentId={this.assignmentId} number={this.state.number} textDescription={this.props.textDescription}/>
@@ -33,8 +33,8 @@ class NewDueDate extends Component {
                 )
             case 3:
                 return (
-                   ((localStorage.getItem("dueDate1_" + this.assignmentId) &&
-                        localStorage.getItem("dueDate2_" + this.assignmentId)) ?
+                   ((localStorage.getItem("dueDate1_" + this.assignmentId) && localStorage.getItem("dueDate1_" + this.assignmentId) !== "N/A" &&
+                        localStorage.getItem("dueDate2_" + this.assignmentId)) && localStorage.getItem("dueDate2_" + this.assignmentId) !== "N/A" ?
                         <NewDueDateForm assignmentId={this.assignmentId} number={this.state.number} textDescription={this.props.textDescription}/>
                         :
                         <NewDueDateForm isGray assignmentId={this.assignmentId} number={this.state.number} textDescription={this.props.textDescription}/>

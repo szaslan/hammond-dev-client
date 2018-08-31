@@ -41,6 +41,7 @@ class AlgorithmBenchmarks extends Component {
             MIN_REVIEW_COMPLETION_PERCENTAGE_PER_SUBMISSION_tooltipOpen: false,
             THRESHOLD: null,
             THRESHOLD_tooltipOpen: false,
+            saved: false,
             SPAZZY_WIDTH: null,
             SPAZZY_WIDTH_tooltipOpen: false,
         };
@@ -85,6 +86,9 @@ class AlgorithmBenchmarks extends Component {
             localStorage.setItem(benchmark + "_" + this.assignmentId, value)
         });
         localStorage.setItem("customBenchmarksSaved_" + this.assignmentId, true)
+        this.setState({
+            saved: true
+        })
     }
 
     toggle(event) {
@@ -94,19 +98,23 @@ class AlgorithmBenchmarks extends Component {
     }
 
     componentDidMount() {
-        Object.keys(this.benchmarks).forEach(benchmark => {
+        console.log(this.benchmarks)
+        Object.keys(this.benchmarks).forEach((benchmark, index, array) => {
             var value = this.benchmarks[benchmark];
             this.setState({
                 [benchmark]: value,
             })
-        });
 
-        this.setState({
-            loaded: true,
-        })
+            if (index == array.length - 1) {
+                this.setState({
+                    loaded: true,
+                })
+            }
+        });
     }
 
     render() {
+        // if (this.state.loaded && (!localStorage.getItem("customBenchmarksSaved_" + this.assignmentId) || localStorage.getItem("customBenchmarksSaved_" + this.assignmentId) !== "true") ) {
         if (this.state.loaded) {
             return (
                 <div>
@@ -182,7 +190,7 @@ class AlgorithmBenchmarks extends Component {
                             <div>
                                 <span className="advanced-button" onClick={this.handleAdvancedClick}>
                                     Advanced
-                                <img src={upArrowIcon} width="20" alt="up arrow"/>
+                                <img src={upArrowIcon} width="20" alt="up arrow" />
                                 </span>
                                 <Form>
                                     <FormGroup row>
@@ -254,7 +262,7 @@ class AlgorithmBenchmarks extends Component {
                             :
                             <span className="advanced-button" onClick={this.handleAdvancedClick}>
                                 Advanced
-                                <img src={downArrowIcon} width="20" alt="down arrow"/>
+                                <img src={downArrowIcon} width="20" alt="down arrow" />
                             </span>
                     }
                     <FormGroup row>
@@ -265,7 +273,7 @@ class AlgorithmBenchmarks extends Component {
         }
 
         return (
-            <Loader type="TailSpin" color="black" height={80} width={80} />
+            <div></div>
         )
     }
 }

@@ -34,14 +34,12 @@ class StudentInfo extends Component {
             gradeGiven: '',
             graphsLoaded: false,
             message: '',
-            noPeerReview: false,
             peerReviewOpen: false,
             peerReviewsCompletedByCurrentStudent: [],
-            studentEvaluatingData: null,
             selectedAssignment: '',
             selectedStudentId: this.props.studentId,
+            studentEvaluatingData: null,
             studentHasSavedHistory: false,
-            url: '',
             value: 'Select an Assignment',
             value2: 'Select a Peer Review',
 
@@ -54,6 +52,7 @@ class StudentInfo extends Component {
         this.fetchAssignmentData = this.fetchAssignmentData.bind(this);
         this.getPeerReviews = this.getPeerReviews.bind(this);
         this.pullStudentEvaluatingData = this.pullStudentEvaluatingData.bind(this);
+        this.resetFieldsForNewStudent = this.resetFieldsForNewStudent.bind(this);
         this.select = this.select.bind(this);
         this.selectPeerReview = this.selectPeerReview.bind(this);
         this.send400Error = this.send400Error.bind(this);
@@ -202,7 +201,7 @@ class StudentInfo extends Component {
                     xAxes: [{
                         scaleLabel: {
                             display: true,
-                            labelString: 'Assignments:'
+                            labelString: 'Assignments'
                         },
                     }],
                 }
@@ -432,6 +431,32 @@ class StudentInfo extends Component {
             })
     }
 
+    resetFieldsForNewStudent() {
+        this.bucketData = {labels: [],datasets: [],options: {}};
+        this.peerReviewCompletionData = {labels: [],datasets: [],options: {},}
+        this.weightData = {labels: [],datasets: [],options: {},}
+
+        this.setState({
+            actualGrade: '',
+            errorMessage: '',
+            gradeGiven: '',
+            graphsLoaded: false,
+            message: '',
+            peerReviewsCompletedByCurrentStudent: [],
+            selectedAssignment: '',
+            selectedStudentId: this.props.studentId,
+            studentEvaluatingData: null,
+            studentHasSavedHistory: false,
+            value: "Select an Assignment",
+            value2: "Select a Peer Review",
+        }, () => {
+            //only check if student has saved history if fetch assignment data has already been run at least once
+            if (this.state.assignments.length !== 0) {
+                this.checkIfStudentHasSavedHistory();
+            }
+        })
+    }
+
     select(event) {
         this.setState({
             value: event.target.innerText,
@@ -535,23 +560,9 @@ class StudentInfo extends Component {
 
     //renders initially
     componentDidUpdate(prevProps) {
+        console.log(this.props, prevProps)
         if (this.props.studentId !== prevProps.studentId) {
-            this.setState({
-                actualGrade: "",
-                errorMessage: "",
-                gradeGiven: "",
-                graphsLoaded: false,
-                message: '',
-                peerReviewsCompletedByCurrentStudent: [],
-                selectedStudentId: this.props.studentId,
-                value: "Select an Assignment",
-                value2: "Select a Peer Review",
-            })
-
-            //only check if student has saved history if fetch assignment data has already been run at least once
-            if (this.state.assignments.length !== 0) {
-                this.checkIfStudentHasSavedHistory();
-            }
+            this.resetFieldsForNewStudent()
         }
     }
 
@@ -565,8 +576,8 @@ class StudentInfo extends Component {
                 {/*<div className="studentinfo-name">{this.props.location.state.name}</div>*/}
                 <Row>
                     <Col className="dropsouter">
-                        <Dropdown className="dropdowns" isOpen={this.state.dropdownOpen} toggle={this.toggleAssignment} >
-                            <DropdownToggle className="dropbutton" caret>
+                        <Dropdown className={"dropdowns" + (!this.state.studentHasSavedHistory ? " disabled" : "")} isOpen={this.state.dropdownOpen} toggle={this.toggleAssignment} >
+                            <DropdownToggle disabled={!this.state.studentHasSavedHistory} className="dropbutton" caret>
                                 {this.state.value}
                             </DropdownToggle>
                             <DropdownMenu >
