@@ -1,12 +1,13 @@
-import React, { Component } from 'react';
 import history from '../../history';
 import Loader from 'react-loader-spinner';
+import React, { Component } from 'react';
 import Select from 'react-select';
-
-import StudentInfo from '../StudentInfo/StudentInfo';
 
 import './CourseStudents.css'
 
+import StudentInfo from '../StudentInfo/StudentInfo';
+
+//array of options for student dropdown
 const array = [];
 
 class CourseStudents extends Component {
@@ -98,12 +99,6 @@ class CourseStudents extends Component {
         })
     }
 
-    toggle() {
-        this.setState(prevState => ({
-            dropdownOpen: !prevState.dropdownOpen
-        }));
-    }
-
     componentDidMount() {
         this.fetchStudentsFromCanvas()
     }
@@ -117,24 +112,24 @@ class CourseStudents extends Component {
     render(){
               if (this.state.students && array.length < this.state.students.length) {
                 this.state.students.map(students => {
+                    //create array of students for dropdown
                     array.push({
                       label: students.name,
                       value: students.id,
                     });
                   }
-
-                    )
-                  }
+                )
+              }
               if (this.state.loaded && array.length == this.state.students.length) {
                return (
                 <div>
-                <div className="studentdrop">
+                <div className="student-drop">
+                  //react select properties
                   <Select
                     className="select-search-box"
                     options={array}
                     isSearchable="true"
                     placeholder = "Select a Student"
-                    // value={this.state.studentName}
                     onChange={this.select}
                   />
                   </div>

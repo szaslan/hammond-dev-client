@@ -1,9 +1,9 @@
-import React, { Component } from 'react';
-import { UncontrolledTooltip } from 'reactstrap';
 import Flexbox from 'flexbox-react';
 import history from '../../history';
 import moment from 'moment';
+import React, { Component } from 'react';
 import { Row } from 'react-bootstrap';
+import { UncontrolledTooltip } from 'reactstrap';
 
 import AnalyzeResults from '../AnalyzeResults/AnalyzeResults';
 import CustomizableParameters from '../CustomizableParameters/CustomizableParameters';
@@ -11,8 +11,8 @@ import FinalizeResults from '../FinalizeResults/FinalizeResults';
 import NewDueDate from '../DueDate/NewDueDate';
 
 import 'bootstrap/dist/css/bootstrap.css';
-
 import '../Assignments/Assignments.css';
+import '../AssignmentInfo/AssignmentInfo.css';
 import '../DueDate/NewDueDate.css'
 
 //have to match constants defined in GradingAlgorithm.js (back-end)
@@ -27,9 +27,11 @@ const defaultBenchmarks = {
 	"MIN_NUMBER_OF_REVIEWS_FOR_SINGLE_SUBMISSION_FOR_GRADING": 5,
 	"MIN_REVIEW_COMPLETION_PERCENTAGE_PER_SUBMISSION": 1 / 2,
 }
-const message1 = "Peer reviews submitted after this date will be considered late. Any student who has not submitted reviews by this date will receive a notification message from Canvas.";
-const message2 = "Late peer reviews submitted after this date will be reassigned to students who have completed all of their reviews for this assignment.";
-const message3 = "Reassigned peer reviews must be submitted by this deadline. After this date, any unsubmitted peer reviews will be deleted from Canvas.";
+
+//explanations underneath set due date calendars
+const message1 = "Peer reviews submitted after this date are considered late. Automatic notification messages from Canvas can be set for any student who has not submitted reviews by this date.";
+const message2 = "Peer reviews that are still incomplete after this date will be reassigned to students who have completed all of their reviews for this assignment.";
+const message3 = "Reassigned peer reviews must be submitted by this date. After this date, any unsubmitted peer reviews will be deleted from Canvas.";
 
 class AnalyzeButton extends Component {
 	constructor(props) {
@@ -470,42 +472,29 @@ class AnalyzeButton extends Component {
 				{
 					!this.state.finalizePressed ?
 						<div className="assignment-info-content">
-
 							<div className={"calendar-case" + (this.state.nextClicked ? "-hidden" : "")}>
-								{/* <p className="headertext">Set Due Date:</p> */}
+								<p className="header-text">Set Due Date:</p>
 								<Flexbox flexWrap="wrap">
 									<NewDueDate number="1" assignmentId={this.assignmentId} textDescription={message1} />
 									<NewDueDate number="2" assignmentId={this.assignmentId} textDescription={message2} />
 									<NewDueDate number="3" assignmentId={this.assignmentId} textDescription={message3} />
 								</Flexbox>
-								{/* <button
-
-									onClick={this.nextClick}>
-									Next
-								</button> */}
-								{/* {localStorage.getItem("dueDate_" +this.assignmentID+ "_3") ?
-									<button onClick={this.nextClick}>Next</button>
-									: */}
 								<button disabled={!localStorage.getItem("dueDate3_" + this.assignmentId)} onClick={this.nextClick}>
 									Next
 								</button>
-								{/* } */}
-
 							</div>
-
 							<div className={"parameters-case" + (this.state.nextClicked ? "" : "-hidden")}>
 								<CustomizableParameters assignmentId={this.assignmentId} />
-
 								<Flexbox className="flex-dropdown" width="100%" flexWrap="wrap" justify-content="space-around">
 									<Row className="analyze">
 										<span id="analyze-button-1">
-											<button onClick={this.handleAnalyzeClick} className="analyzebutton">Analyze</button>
+											<button onClick={this.handleAnalyzeClick} className="analyze-button">Analyze</button>
 										</span>
 										<UncontrolledTooltip delay={{ show: "1200" }} placement="top" target="analyze-button-1">
 											Click to view statistics for submitted peer reviews
 										</UncontrolledTooltip>
 										<span id="finalize-button-1">
-											<button className="finalizebutton" onClick={this.handleFinalizeClick}>Finalize</button>
+											<button className="finalize-button" onClick={this.handleFinalizeClick}>Finalize</button>
 										</span>
 										<UncontrolledTooltip delay={{ show: "1200" }} placement="top" target="finalize-button-1">
 											Click to calculate grades and send to the Canvas gradebook
@@ -586,7 +575,7 @@ class AnalyzeButton extends Component {
 						</div>
 				}
 
-				{/* Due Date Functionality */}
+				//Due Date Functionality
 				{
 					this.deadline_1 != null && this.deadline_1 === this.state.currTime && localStorage.getItem("sendIncompleteMessages_" + this.assignmentId) ?
 						this.saveAllPeerReviews(1)

@@ -1,3 +1,13 @@
+.errors{
+    background:#efd9ce;
+    list-style-type: none;
+    text-align: center;
+    padding:10px;
+    color:#f2928e;
+    margin-top:10px;
+    font-family: 'Open Sans';
+}
+
 .register-group{
     width:500px;
     padding-top:18vh;
@@ -10,16 +20,4 @@
     margin-top: 3.5px;
     display: flex;
     border:none;
-
-}
-.errors{
-    background:#efd9ce;
-    list-style-type: none;
-    text-align: center;
-    padding:10px;
-    /*padding-left:25px;
-    border-radius:5px;*/
-    color:#f2928e;
-    margin-top:10px;
-    font-family: 'Open Sans';
 }

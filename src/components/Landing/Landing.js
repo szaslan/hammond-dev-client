@@ -72,7 +72,7 @@ class Landing extends Component {
                         <PaperIcon />
                     </div>
                     <div className="description-small">
-                        <p>Peerify is the easiest way to have peer reviews graded automatically, while accounting for students' tendencies to grade harsh or lenient.</p>
+                        <p>Peerify is the easiest way to have peer reviews graded automatically, while accounting for students tendencies to grade harsh or lenient.</p>
                     </div>
                 </div>
 

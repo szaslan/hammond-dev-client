@@ -16,7 +16,6 @@ class OtherError extends Component {
             message: null,
         }
 
-
         this.errorMessageTitle = "400 - Bad Request: An Error Occurred"
     }
 

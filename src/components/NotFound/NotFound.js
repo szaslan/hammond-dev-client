@@ -14,8 +14,6 @@ class NotFound extends Component {
             location: null,
             message: null,
         }
-
-
         this.errorMessageTitle = "404 - Not Found: Oops, it looks like something went wrong"
     }
 

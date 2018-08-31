@@ -1,11 +1,9 @@
-import React, { Component } from 'react';
 import history from '../../history';
 import Loader from 'react-loader-spinner';
+import React, { Component } from 'react';
 
 import JumbotronComp from '../JumbotronComp/JumbotronComp'
 import SidebarComp from '../SideBar/SideBar';
-
-import './CourseInfo.css';
 
 class CourseInfo extends Component {
     constructor(props) {
@@ -145,18 +143,16 @@ class CourseInfo extends Component {
         if (this.state.loaded) {
             return (
                 <div>
+                  //sidebar holds headers and tabs, containing main assignment and student pages
                     <SidebarComp
                         content={
                             <div>
                                 <JumbotronComp mainTitle={this.state.courseJSON.name}
                                     tabs courseJSON={this.state.courseJSON} />
-
-
                                 <button onClick={this.resetTables}>Reset Database Tables</button>
                             </div>
                         }
                     />
-
                     <div> test</div>
                 </div>
             )

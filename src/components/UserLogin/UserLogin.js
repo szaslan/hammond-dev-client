@@ -1,9 +1,9 @@
-import React, { Component } from 'react';
-import { Form, FormGroup, Input } from 'reactstrap';
-import { Link } from "react-router-dom";
 import Flexbox from 'flexbox-react';
+import { Form, FormGroup, Input } from 'reactstrap';
 import history from '../../history'
+import { Link } from "react-router-dom";
 import moment from 'moment';
+import React, { Component } from 'react';
 
 import './UserLogin.css';
 
@@ -128,7 +128,7 @@ class UserLogin extends Component {
 							<Input type="password" name="password" id="examplePassword" placeholder="Password" onChange={this.handleChange} />
 						</FormGroup>
 						<Flexbox className="flexbox-login">
-							<button type="submit" value="Submit" className="new-button" onClick={this.handleSubmit} >Submit</button>
+							<button type="submit" value="Submit" className="new-button" onClick={this.handleSubmit}>Submit</button>
 							<Link to="/register">
 								<button className="new-button">Register</button>
 							</Link>

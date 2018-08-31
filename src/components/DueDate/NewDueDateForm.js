@@ -126,9 +126,10 @@ class NewDueDateForm extends Component {
         return (
             <div className={"dateTime " + (this.props.isGray ? "grayOut" : "")}>
                 <Flexbox flexDirectionn="column" flexWrap="wrap" maxWidth="300px">
-                    
                     <form onSubmit={this.handleSubmit} className="dateTimeForm">
+                        //changing border color for calendars
                         <div className={"color-border-" + (localStorage.getItem("dueDate" + this.dueDateExtension) ? "green" : "red")}>
+                            //calendar component
                             <Datetime dateFormat="MM/DD/YYYY" timeFormat={false} onChange={this.handleChange} isValidDate={this.checkDate}
                                 inputProps={{
                                     disabled: true,
@@ -138,7 +139,6 @@ class NewDueDateForm extends Component {
                                         "Select a Date")
                                 }}
                             />
-
                             <Flexbox justifyContent="space-between">
                                 <TimePicker
                                     className="timePicker"
@@ -162,7 +162,7 @@ class NewDueDateForm extends Component {
                             {
                                 this.isInPast ?
                                     <ModalBody>
-                                        Looks like you chose a date and time that has already occured. Please choose one that has not.
+                                        You have chosen a date and time that has already occured. Please choose one that has not yet passed.
                                     <br></br>
                                         <br></br>
                                         Due Date Selected: {this.state.dateValue.format('MM/DD/YYYY')} {this.state.timeValue.format('h:mm a')}
@@ -172,7 +172,7 @@ class NewDueDateForm extends Component {
                                         {
                                             this.isBeforeDates ?
                                                 <ModalBody>
-                                                    Looks like you chose a date and time that occurs before Due Date {this.previousDueDateNumber} for this assignment.
+                                                    You have chosen a date and time that occurs before Due Date {this.previousDueDateNumber} for this assignment.
                                                     Please choose one that does not.
                                                 <br></br>
                                                     <br></br>
@@ -182,7 +182,7 @@ class NewDueDateForm extends Component {
                                                 </ModalBody>
                                                 :
                                                 <ModalBody>
-                                                    Looks like you chose a date and time that occurs at the same time as Due Date {this.previousDueDateNumber} for this assignment.
+                                                    You have chosen a date and time that occurs at the same time as Due Date {this.previousDueDateNumber} for this assignment.
                                                     Unfortunately, due dates must be separated by at least one minute. Please choose a new due date.
                                                 <br></br>
                                                     <br></br>

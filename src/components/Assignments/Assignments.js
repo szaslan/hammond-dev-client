@@ -1,18 +1,16 @@
-import React, { Component } from 'react';
 import history from '../../history';
 import Loader from 'react-loader-spinner';
-// import SelectSearch from 'react-select-search';
+import React, { Component } from 'react';
 import Select from 'react-select';
 
-
-import '../BreadcrumbComp/BreadcrumbComp.css';
-
 import './Assignments.css';
+
 import AssignmentInfo from '../AssignmentInfo/AssignmentInfo';
 
+//array of options for dropdown menu
 const array = [];
 
-
+//disable assignments with no peer reviews
 const FilterAssignments = currAssignment => {
     if (currAssignment.peer_reviews) {
         array.push({
@@ -36,17 +34,14 @@ class Assignments extends Component {
         this.state = {
             assignments: [],
             courseId: this.props.courseJSON.id,
-            // dropdownOpen: false,
             loaded: false,
             url: `/courses/${this.props.courseJSON.id}/assignments/`,
-            value: null,
+            value: array[0],
             ...props,
         }
 
         this.pullAssignments = this.pullAssignments.bind(this);
         this.select = this.select.bind(this);
-        // this.toggle = this.toggle.bind(this);
-        // this.onFocus = this.toggle.bind(this);
     }
 
     pullAssignments() {
@@ -115,19 +110,12 @@ class Assignments extends Component {
         })
     }
 
-    // toggle() {
-    //   console.log("click")
-        // this.setState(prevState => ({
-        //     multiple: !prevState.multiple
-        // }));
-    // }
-
-
     componentDidMount() {
         this.pullAssignments()
     }
 
     render() {
+        //push assignments to array of options for dropdown
         if (this.state.assignments && array.length < this.state.assignments.length) {
             this.state.assignments.map(assignments => {
                 FilterAssignments(assignments);
@@ -137,10 +125,9 @@ class Assignments extends Component {
         if (this.state.loaded && array.length === this.state.assignments.length) {
             return (
                 <div>
-                      <div className="assigndrop">
-
+                      //dropdown properties
+                      <div className="assign-drop">
                       <Select
-                        // value={selectedOption}
                         className="select-search-box"
                         onChange={this.select}
                         options={array}

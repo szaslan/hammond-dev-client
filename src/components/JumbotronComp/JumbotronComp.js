@@ -1,5 +1,5 @@
-import React, { Component } from 'react';
 import { Container, Jumbotron } from 'reactstrap';
+import React, { Component } from 'react';
 import TabsComp from '../TabsComp/TabsComp';
 
 import './JumbotronComp.css'

@@ -1,16 +1,16 @@
-import React, { Component } from 'react';
 import { Boxplot } from 'react-boxplot';
-import { Progress, Tooltip } from 'reactstrap';
-import { Row } from 'react-bootstrap';
 import history from '../../history';
 import Popup from 'reactjs-popup';
+import { Progress, Tooltip } from 'reactstrap';
+import React, { Component } from 'react';
+import { Row } from 'react-bootstrap';
 
 import PieCharts from '../PieCharts/PieCharts';
 
 import 'bootstrap/dist/css/bootstrap.css';
-
 import '../Assignments/Assignments.css'
 
+//progress bar
 var progress = 0;
 var progressNumSteps = 15;
 var progressBarMessage = "";
@@ -512,11 +512,12 @@ class FinalizeResults extends Component {
         if (localStorage.getItem("completedAllReviews_" + this.assignmentId)) {
             return (
                 <div>
+                    //results and data after finalizing an assignment
                     <hr className="hr-6"></hr>
-                    <h2 className="headertext">Score Details</h2>
+                    <h2 className="header-text">Score Details</h2>
                     <hr className="hr-2"></hr>
-                    <p className="totalscore"> -/{Number(localStorage.getItem("finalizeDisplayTextOutOf_" + this.assignmentId))}pts</p>
-                    <Row className="scoredets">
+                    <p className="total-score"> -/{Number(localStorage.getItem("finalizeDisplayTextOutOf_" + this.assignmentId))}pts</p>
+                    <Row className="score-dets">
                         <p className="stats"> Mean: {Number(localStorage.getItem("finalizeDisplayTextAverage_" + this.assignmentId)).toFixed(1)}</p>
                         <p className="stats"> High: {Number(localStorage.getItem("max_" + this.assignmentId)).toFixed(0)}</p>
                         <p className="stats"> Low: {Number(localStorage.getItem("min_" + this.assignmentId)).toFixed(0)}</p>
@@ -536,22 +537,24 @@ class FinalizeResults extends Component {
                     </Row>
                     <hr className="hr-5"></hr>
                     <Row>
-                        <p className="pagetext">Completed Peer Reviews: {localStorage.getItem("finalizeDisplayTextNumCompleted_" + this.assignmentId)} / {localStorage.getItem("finalizeDisplayTextNumAssigned_" + this.assignmentId)}</p>
+                        <p className="page-text">Completed Peer Reviews: {localStorage.getItem("finalizeDisplayTextNumCompleted_" + this.assignmentId)} / {localStorage.getItem("finalizeDisplayTextNumAssigned_" + this.assignmentId)}</p>
                         <p className="date">Date Finalized: {localStorage.getItem("finalized_" + this.assignmentId)}</p>
-                        <Popup className="pop-up"
-                            trigger={<button className="flaggedbutton"> View Flagged Grades ({JSON.parse(localStorage.getItem("flaggedStudents_" + this.assignmentId)).length})</button>}
+                        //flagged grades button to modal
+                        <Popup className="flagged-grades-modal"
+                            trigger={<button className="flagged-button"> View Flagged Grades ({JSON.parse(localStorage.getItem("flaggedStudents_" + this.assignmentId)).length})</button>}
                             modal
                             closeOnDocumentClick
                         >
-                            <span><h5 className="modaltext">Flagged Grades</h5></span>
+                            <span><h5 className="modal-text">Flagged Grades</h5></span>
                             <hr />
-                            <span className="studentlist">
+                            <span className="student-list">
                                 {JSON.parse(localStorage.getItem("flaggedStudents_" + this.assignmentId))}
                             </span>
                         </Popup>
                     </Row>
                     <br />
                     <hr className="hr-5"></hr>
+                    //boxplot from Canvas data
                     <Tooltip placement="right" isOpen={this.state.tooltipOpen} target={"TooltipBoxplot"} toggle={this.toggle}>
                         <strong>Min Score:</strong> {localStorage.getItem("min_" + this.assignmentId)}
                         <br />
@@ -563,17 +566,15 @@ class FinalizeResults extends Component {
                         <br />
                         <strong>Max Score:</strong> {localStorage.getItem("max_" + this.assignmentId)}
                     </Tooltip>
-
                     <br />
                     <br />
                     <PieCharts assignmentId={this.assignmentId} />
-
                 </div>
             )
         }
 
         return (
-            <Progress className="progressbar" value={progress}> {progressBarMessage} </Progress>
+            <Progress className="progress-bar" value={progress}> {progressBarMessage} </Progress>
         )
     }
 

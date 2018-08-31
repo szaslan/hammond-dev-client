@@ -1,10 +1,9 @@
+import history from '../../history';
+import Loader from 'react-loader-spinner';
 import React, { Component } from 'react';
 import { Well } from 'react-bootstrap';
-import history from '../../history';
-import Loader from 'react-loader-spinner'
 
 import AnalyzeButton from '../AnalyzeButton/AnalyzeButton';
-
 import './AssignmentInfo.css';
 
 class AssignmentInfo extends Component {
@@ -114,15 +113,7 @@ class AssignmentInfo extends Component {
         if (this.state.loaded) {
             return (
                 <div className="assignment-info">
-                    {/*<h2 className="headertext">Score Details
-                      <button className="clear-local-button" onClick={this.clearLocalStorage}> Clear Local Storage</button>
-                      </h2>
-                      <hr className="hr-2" />hr>
-                        <p><strong>Title: </strong>{this.state.assignment.name}</p>
-                        <br />*/}
-
                     <AnalyzeButton assignmentId={this.state.assignmentId} assignmentInfo={this.state.assignmentJSON} courseId={this.state.courseId} />
-
                 </div>
             )
         }

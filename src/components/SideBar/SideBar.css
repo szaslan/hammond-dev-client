@@ -37,22 +37,17 @@ dragHandle: {
     bottom: 0;
 }
 
-.signoutbutton{
-	border:none;
-	border-radius: 3px;
-	/*box-shadow:2px 2px gray;*/
-	/* padding:5px;
-	padding-left:7px;
-	padding-right:7px; */
-	background-color: white;
-	color:black;
-	font-size: 14px;
-	width:75px;
-	height: 30px;
-	font-family: 'Open Sans';
-	position: absolute;
-	bottom: 10px;
-	left: 10px;
+.local-storage-pull-button{
+  border:none;
+  border-radius: 3px;
+  background-color: white;
+  color:black;
+  font-size: 12px;
+  width:90%;
+  height: 30px;
+  margin-bottom: 4%;
+  margin-top: 4%;
+  font-family: 'Open Sans';
 }
 
 .local-storage-save-button{
@@ -66,34 +61,29 @@ dragHandle: {
   margin-bottom: 10%;
   margin-top: 10%;
 	font-family: 'Open Sans';
-	/* position: absolute;
-	bottom: 0%;
-	left: 5%; */
-}
-
-.local-storage-pull-button{
-  border:none;
-  border-radius: 3px;
-  background-color: white;
-  color:black;
-  font-size: 12px;
-  width:90%;
-  height: 30px;
-  margin-bottom: 4%;
-  margin-top: 4%;
-  font-family: 'Open Sans';
-  /* position: absolute;
-	bottom: 11.5%;
-	left: 5%; */
 }
 
 .logo {
   	margin: 20px;
 }
 
-.sidebarcontent{
+.side-bar-content{
 	font-family:'Open Sans';
 	font-weight: 100;
 	color: #8B8B8B;
 	padding: 20px;
+}
+
+.sign-out-button{
+	border:none;
+	border-radius: 3px;
+	background-color: white;
+	color:black;
+	font-size: 14px;
+	width:75px;
+	height: 30px;
+	font-family: 'Open Sans';
+	position: absolute;
+	bottom: 10px;
+	left: 10px;
 }

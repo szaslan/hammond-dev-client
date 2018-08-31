@@ -14,10 +14,11 @@ class CardComp extends Component {
 	render() {
 		return (
 			<div>
+			//course cards and assigning colors to courses
 				<Card outline="false" className="card">
-					<CardImg tag="div" className="classcolor" style={{ backgroundColor: randomColor() }} />
+					<CardImg tag="div" className="class-color" style={{ backgroundColor: randomColor() }} />
 					<CardBody>
-						<CardTitle className="cardtitle">
+						<CardTitle className="card-title">
 							{this.props.name}
 						</CardTitle>
 					</CardBody>

@@ -1,7 +1,7 @@
-import React from "react";
-import { Link } from "react-router-dom";
 import history from '../../history';
 import moment from 'moment';
+import { Link } from "react-router-dom";
+import React from "react";
 import Sidebar from "react-sidebar";
 
 import { localStorageFields, localStorageRemoveFields } from '../UserLogin/UserLogin';
@@ -139,20 +139,18 @@ class SidebarComp extends React.Component {
 				sidebar={
 					<b>
 						<a href="">
+							//sidebar contents
 							<img className="logo" src={logo} width={"60px"} alt="Peerify logo" />
 						</a>
 						<br />
-						{/*<a href="" className="sidebarcontent">Account</a>
-						<br />
-						<br />*/}
-						<a href="/courses" className="sidebarcontent">Courses</a>
+						<a href="/courses" className="side-bar-content">Courses</a>
 						<br />
 						<button className="local-storage-save-button" onClick={this.saveLocalStorage}>Save Data</button>
 						<br />
 						<button className="local-storage-pull-button" onClick={this.pullAllLocalStorageData}>Refresh Data</button>
 						<br />
 						<Link to="/logout">
-							<button className="signoutbutton" onClick={this.signOut}>Sign Out</button>
+							<button className="sign-out-button" onClick={this.signOut}>Sign Out</button>
 						</Link>
 					</b>
 				}

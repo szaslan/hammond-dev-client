@@ -1,8 +1,8 @@
+import classnames from 'classnames';
+import Iframe from 'react-iframe';
 import React, { Component } from 'react';
 import { Row } from 'react-bootstrap';
 import { TabContent, TabPane, Nav, NavItem, NavLink, } from 'reactstrap';
-import classnames from 'classnames';
-import Iframe from 'react-iframe';
 
 import '../TabsComp/TabsComp.css'
 import Assignments from '../Assignments/Assignments';
@@ -16,7 +16,6 @@ class TabsComp extends Component {
             activeTab: '1'
         };
 
-        // this.signOut = this.signOut.bind(this);
         this.toggle = this.toggle.bind(this);
     }
 
@@ -32,9 +31,7 @@ class TabsComp extends Component {
         return (
             <div>
                 <Nav tabs className="tabs-nav">
-                    {/* <div className = "tabs-div"> */}
                     <Row className="tabs">
-                        {/* <Link to={this.props.tab1link}> */}
                         <NavItem className={"nav-item-1 " + (this.state.activeTab === '1' ? "active" : "not-active")}>
                             <NavLink
                                 className={"tab-link " + classnames({ active: this.state.activeTab === '1' })}
@@ -43,8 +40,6 @@ class TabsComp extends Component {
                                 Assignments
                             </NavLink>
                         </NavItem>
-                        {/* </Link> */}
-                        {/* <Link to={this.props.tab2link}> */}
                         <NavItem className={"nav-item-2 " + (this.state.activeTab === '2' ? "active" : "not-active")}>
                             <NavLink
                                 className={"tab-link " + classnames({ active: this.state.activeTab === '2' })}
@@ -53,12 +48,11 @@ class TabsComp extends Component {
                                 Students
                             </NavLink>
                         </NavItem>
-                        {/* </Link> */}
                     </Row>
                 </Nav>
 
                 <TabContent activeTab={this.state.activeTab}>
-
+                  //render pages within tabs
                     <TabPane tabId="1">
                       <div>
                         <Assignments courseJSON={courseJSON} />
@@ -68,10 +62,6 @@ class TabsComp extends Component {
                     <TabPane tabId="2">
                       <div>
                         <CourseStudents courseId={courseJSON.id}/>
-                      {/* <Iframe className="iframe" url="http://localhost:3000/courses/83831/students"
-                        width="85%"
-                        height="70%"
-                        /> */}
                       </div>
                     </TabPane>
                 </TabContent>

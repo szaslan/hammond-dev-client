@@ -130,7 +130,8 @@ class CustomizableParameters extends Component {
                 <Form className = "parametersForm">
                     <FormGroup row>
                         <FormGroup check>
-                            <Label className="checktext" check>
+                            //checkbox parameters for assignments
+                            <Label className="check-text" check>
                                 <Input name="sendIncompleteMessages" type="checkbox" checked={this.state.sendIncompleteMessages} onChange={this.handleInputChange} />
                                 Send Messages to All Students Who Have Incomplete Peer Reviews At Due Date 1?
                             </Label>
@@ -138,7 +139,7 @@ class CustomizableParameters extends Component {
                     </FormGroup>
                     <FormGroup row>
                         <FormGroup check>
-                            <Label className="checktext" check>
+                            <Label className="check-text" check>
                                 <Input name="penalizingForOriginalIncompletes" type="checkbox" checked={this.state.penalizingForOriginalIncompletes} onChange={this.handleInputChange} />
                                 Penalize Students Weights For Incomplete Peer Reviews?
                             </Label>
@@ -146,7 +147,7 @@ class CustomizableParameters extends Component {
                     </FormGroup>
                     <FormGroup row>
                         <FormGroup check>
-                            <Label className="checktext" check>
+                            <Label className="check-text" check>
                                 <Input name="penalizingForReassignedIncompletes" type="checkbox" checked={this.state.penalizingForReassignedIncompletes} onChange={this.handleInputChange} />
                                 Penalize For Peer Reviews That Were Reassigned, But Not Completed?:
                             </Label>
@@ -154,7 +155,7 @@ class CustomizableParameters extends Component {
                     </FormGroup>
                     <FormGroup row>
                         <FormGroup check>
-                            <Label className="checktext" check>
+                            <Label className="check-text" check>
                                 <Input name="customBenchmarks" type="checkbox" checked={this.state.customBenchmarks} onChange={this.handleInputChange} />
                                 Custom Benchmarks For Grading Algorithm?
                             </Label>
@@ -166,7 +167,7 @@ class CustomizableParameters extends Component {
                                     :
                                     <div>
                                         <AlgorithmBenchmarks originalBenchmarks={defaultBenchmarks} benchmarks={this.userInputBenchmarks} assignmentId={this.state.assignmentId} />
-                                        <button className="clear-local-button" onClick={this.clearCustomBenchmarks}> Clear All</button>
+                                        <button className="clear-all" onClick={this.clearCustomBenchmarks}> Clear All</button>
                                     </div>
                                 :
                                 null
