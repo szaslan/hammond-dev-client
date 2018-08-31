@@ -78,7 +78,7 @@ class PieCharts extends Component {
                             {this.state.hoveringOverPieChart1 ?
                                 this.state.sectorTitle1 + ": " + this.state.sectorValue1 + " student" + (this.state.sectorValue1 !== 1 ? "s" : "")
                                 :
-                                "Hover over a sector to display completion data. There may be a slight delay."}
+                                "Hover over a sector to display completion data."}
                         </Well>
                         <br />
                         <div className="legend">
@@ -138,7 +138,7 @@ class PieCharts extends Component {
                             {this.state.hoveringOverPieChart2 ?
                                 this.state.sectorTitle2 + ": " + this.state.sectorValue2 + " student" + (this.state.sectorValue2 !== 1 ? "s" : "")
                                 :
-                                "Hover over a sector to display grading classification data. There may be a slight delay."}
+                                "Hover over a sector to display grading classification data."}
                         </Well>
                         <br />
                         <div className="legend">

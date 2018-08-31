@@ -7,8 +7,8 @@ import moment from 'moment';
 
 import './UserLogin.css';
 
-let localStorageFields = ['assignment_id', 'COULD_BE_LOWER_BOUND', 'COULD_BE_UPPER_BOUND', 'MIN_NUMBER_OF_ASSIGNMENTS_IN_COURSE_FOR_CLASSIFICATION', 'MIN_NUMBER_OF_REVIEWS_FOR_SINGLE_SUBMISSION_FOR_GRADING', 'MIN_NUMBER_OF_REVIEWS_PER_STUDENT_FOR_CLASSIFICATION', 'MIN_REVIEW_COMPLETION_PERCENTAGE_PER_SUBMISSION', 'SPAZZY_WIDTH', 'THRESHOLD', 'analyzeDisplayTextNumCompleted', 'analyzeDisplayTextNumAssigned', 'analyzeDisplayTextMessage', 'analyzeDisplayTextNames', 'analyzePressed', 'sendIncompleteMessages', 'customBenchmarks', 'customBenchmarksSaved', 'penalizingForOriginalIncompletes', 'penalizingForReassignedIncompletes', 'dueDate1', 'dueDate2', 'dueDate3', 'spazzy', 'definitelyHarsh', 'couldBeHarsh', 'couldBeLenient', 'definitelyLenient', 'couldBeFair', 'definitelyFair', 'finalized', 'finalizeDisplayTextNumCompleted', 'finalizeDisplayTextNumAssigned', 'finalizeDisplayTextAverage', 'finalizeDisplayTextOutOf', 'completedAllReviews', 'completedSomeReviews', 'completedNoReviews', 'flaggedStudents', 'min', 'q1', 'median', 'q3', 'max']
-let localStorageRemoveFields = ['analyzeDisplayTextNames', 'analyzeDisplayTextNumCompleted', 'analyzeDisplayTextNumAssigned', 'analyzeDisplayTextMessage', 'customBenchmarks', 'SPAZZY_WIDTH', 'THRESHOLD', 'COULD_BE_LOWER_BOUND', 'COULD_BE_UPPER_BOUND', 'MIN_NUMBER_OF_REVIEWS_PER_STUDENT_FOR_CLASSIFICATION', 'MIN_NUMBER_OF_ASSIGNMENTS_IN_COURSE_FOR_CLASSIFICATION', 'MIN_NUMBER_OF_REVIEWS_FOR_SINGLE_SUBMISSION_FOR_GRADING', 'MIN_REVIEW_COMPLETION_PERCENTAGE_PER_SUBMISSION', 'customBenchmarksSaved', 'sendIncompleteMessages', 'penalizingForOriginalIncompletes', 'penalizingForReassignedIncompletes', 'customBenchmarks', 'dueDate1', 'dueDate2', 'dueDate3']
+let localStorageFields = ['assignment_id', 'COULD_BE_LOWER_BOUND', 'COULD_BE_UPPER_BOUND', 'MIN_NUMBER_OF_ASSIGNMENTS_IN_COURSE_FOR_CLASSIFICATION', 'MIN_NUMBER_OF_REVIEWS_FOR_SINGLE_SUBMISSION_FOR_GRADING', 'MIN_NUMBER_OF_REVIEWS_PER_STUDENT_FOR_CLASSIFICATION', 'MIN_REVIEW_COMPLETION_PERCENTAGE_PER_SUBMISSION', 'SPAZZY_WIDTH', 'THRESHOLD', 'analyzeDisplayTextNumCompleted', 'analyzeDisplayTextNumAssigned', 'analyzeDisplayTextMessage', 'analyzeDisplayTextNames', 'analyzePressed', 'sendIncompleteMessages', 'customBenchmarks', 'customBenchmarksSaved', 'penalizingForOriginalIncompletes', 'penalizingForReassignedIncompletes', 'dueDate1', 'dueDate2', 'dueDate3', 'spazzy', 'definitelyHarsh', 'couldBeHarsh', 'couldBeLenient', 'definitelyLenient', 'couldBeFair', 'definitelyFair', 'finalized', 'finalizeDisplayTextNumCompleted', 'finalizeDisplayTextNumAssigned', 'finalizeDisplayTextAverage', 'finalizeDisplayTextOutOf', 'completedAllReviews', 'completedSomeReviews', 'completedNoReviews', 'flaggedStudents', 'min', 'q1', 'median', 'q3', 'max', 'automaticallyFinalize']
+let localStorageBooleanFields = ['automaticallyFinalize', 'customBenchmarks', 'customBenchmarksSaved', 'sendIncompleteMessages', 'penalizingForOriginalIncompletes', 'penalizingForReassignedIncompletes']
 
 class UserLogin extends Component {
 	constructor(props, context) {
@@ -42,13 +42,18 @@ class UserLogin extends Component {
 				if (field !== "assignment_id") {
 					let value = assignmentLevelData[field];
 					if (value != null) {
-						if (field.match(dueDateRegex)) {
-							let newDate = new Date(value)
-							value = moment(newDate).format('ddd MMM DD YYYY') + " " + moment(newDate).format('HH:mm:ss') + " GMT-0500";
-						}
-						else if (field === "finalized") {
-							let newDate = new Date(value)
-							value = moment(newDate).format('l') + ", " + moment(newDate).format('LTS')
+						if (value != "N/A") {
+							if (field.match(dueDateRegex)) {
+								let newDate = new Date(value)
+								value = moment(newDate).format('ddd MMM DD YYYY') + " " + moment(newDate).format('HH:mm:ss') + " GMT-0500";
+							}
+							else if (field === "finalized") {
+								let newDate = new Date(value)
+								value = moment(newDate).format('l') + ", " + moment(newDate).format('LTS')
+							}
+							else if (localStorageBooleanFields.includes(field)) {
+								value = true;
+							}
 						}
 						localStorage.setItem(field + "_" + assignmentId, value)
 					}
@@ -109,6 +114,17 @@ class UserLogin extends Component {
 						})
 						break;
 					case 400:
+					res.json().then(res => {
+						history.push({
+							pathname: '/error',
+							state: {
+								context: "This function is called whenever a user successfully logs in. This function takes all of the local storage data saved to the SQL table and saves it in local storage.",
+								error: res.error,
+								location: "UserLogin.js: pullAllLocalStorageData()",
+								message: res.message,
+							}
+						})
+					})
 						break;
 					default:
 				}
@@ -148,4 +164,4 @@ class UserLogin extends Component {
 }
 
 export default UserLogin;
-export { localStorageFields, localStorageRemoveFields };
+export { localStorageFields, localStorageBooleanFields };

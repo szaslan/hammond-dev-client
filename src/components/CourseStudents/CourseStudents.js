@@ -93,7 +93,7 @@ class CourseStudents extends Component {
 
     select(event) {
         this.setState({
-            studentName: event.name,
+            studentName: event.label,
             studentId: event.value
         })
     }
@@ -114,42 +114,42 @@ class CourseStudents extends Component {
         })
     }
 
-    render(){
-              if (this.state.students && array.length < this.state.students.length) {
-                this.state.students.map(students => {
-                    array.push({
-                      label: students.name,
-                      value: students.id,
-                    });
-                  }
+    render() {
+        if (this.state.students && array.length < this.state.students.length) {
+            this.state.students.map(students => {
+                array.push({
+                    label: students.name,
+                    value: students.id,
+                });
+            }
 
-                    )
-                  }
-              if (this.state.loaded && array.length == this.state.students.length) {
-               return (
+            )
+        }
+        if (this.state.loaded && array.length === this.state.students.length) {
+            return (
                 <div>
-                <div className="studentdrop">
-                  <Select
-                    className="select-search-box"
-                    options={array}
-                    isSearchable="true"
-                    placeholder = "Select a Student"
-                    // value={this.state.studentName}
-                    onChange={this.select}
-                  />
-                  </div>
-                  {this.state.studentName ?
-                  <StudentInfo courseId={this.state.courseId} studentId={this.state.studentId} studentName={this.state.studentName}/>
-                  :
-                  null
-                  }
-              </div>
+                    <div className="studentdrop">
+                        <Select
+                            className="select-search-box"
+                            options={array}
+                            isSearchable="true"
+                            placeholder="Select a Student"
+                            value={this.state.studentName}
+                            onChange={this.select}
+                        />
+                    </div>
+                    {this.state.studentName ?
+                        <StudentInfo courseId={this.state.courseId} studentId={this.state.studentId} studentName={this.state.studentName} />
+                        :
+                        null
+                    }
+                </div>
             );
         }
         return (
             <Loader type="TailSpin" color="black" height={80} width={80} />
         )
     }
-  }
+}
 
 export default CourseStudents;

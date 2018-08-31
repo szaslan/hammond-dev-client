@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { Row } from 'react-bootstrap';
 import { TabContent, TabPane, Nav, NavItem, NavLink, } from 'reactstrap';
 import classnames from 'classnames';
-import Iframe from 'react-iframe';
 
 import '../TabsComp/TabsComp.css'
 import Assignments from '../Assignments/Assignments';
@@ -68,10 +67,6 @@ class TabsComp extends Component {
                     <TabPane tabId="2">
                       <div>
                         <CourseStudents courseId={courseJSON.id}/>
-                      {/* <Iframe className="iframe" url="http://localhost:3000/courses/83831/students"
-                        width="85%"
-                        height="70%"
-                        /> */}
                       </div>
                     </TabPane>
                 </TabContent>

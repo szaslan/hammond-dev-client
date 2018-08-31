@@ -14,43 +14,43 @@ const PaperIcon = () => {
                     </feMerge>
                 </filter>
                 <linearGradient x1="0%" y1="50%" x2="100%" y2="50%" id="linearGradient-2">
-                    <stop stop-color="#808080" stop-opacity="0.25" offset="0%"></stop>
-                    <stop stop-color="#808080" stop-opacity="0.12" offset="54%"></stop>
-                    <stop stop-color="#808080" stop-opacity="0.1" offset="100%"></stop>
+                    <stop stopColor="#808080" stopOpacity="0.25" offset="0%"></stop>
+                    <stop stopColor="#808080" stopOpacity="0.12" offset="54%"></stop>
+                    <stop stopColor="#808080" stopOpacity="0.1" offset="100%"></stop>
                 </linearGradient>
                 <linearGradient x1="68395%" y1="63926%" x2="68395%" y2="52620%" id="linearGradient-3">
-                    <stop stop-color="#808080" stop-opacity="0.25" offset="0%"></stop>
-                    <stop stop-color="#808080" stop-opacity="0.12" offset="54%"></stop>
-                    <stop stop-color="#808080" stop-opacity="0.1" offset="100%"></stop>
+                    <stop stopColor="#808080" stopOpacity="0.25" offset="0%"></stop>
+                    <stop stopColor="#808080" stopOpacity="0.12" offset="54%"></stop>
+                    <stop stopColor="#808080" stopOpacity="0.1" offset="100%"></stop>
                 </linearGradient>
                 <linearGradient x1="47523%" y1="38444%" x2="47523%" y2="-16293%" id="linearGradient-4">
-                    <stop stop-color="#808080" stop-opacity="0.25" offset="0%"></stop>
-                    <stop stop-color="#808080" stop-opacity="0.12" offset="54%"></stop>
-                    <stop stop-color="#808080" stop-opacity="0.1" offset="100%"></stop>
+                    <stop stopColor="#808080" stopOpacity="0.25" offset="0%"></stop>
+                    <stop stopColor="#808080" stopOpacity="0.12" offset="54%"></stop>
+                    <stop stopColor="#808080" stopOpacity="0.1" offset="100%"></stop>
                 </linearGradient>
                 <linearGradient x1="39332%" y1="2038%" x2="39332%" y2="-9586%" id="linearGradient-5">
-                    <stop stop-color="#808080" stop-opacity="0.25" offset="0%"></stop>
-                    <stop stop-color="#808080" stop-opacity="0.12" offset="54%"></stop>
-                    <stop stop-color="#808080" stop-opacity="0.1" offset="100%"></stop>
+                    <stop stopColor="#808080" stopOpacity="0.25" offset="0%"></stop>
+                    <stop stopColor="#808080" stopOpacity="0.12" offset="54%"></stop>
+                    <stop stopColor="#808080" stopOpacity="0.1" offset="100%"></stop>
                 </linearGradient>
                 <linearGradient x1="48071%" y1="71284%" x2="48071%" y2="16547%" id="linearGradient-6">
-                    <stop stop-color="#808080" stop-opacity="0.25" offset="0%"></stop>
-                    <stop stop-color="#808080" stop-opacity="0.12" offset="54%"></stop>
-                    <stop stop-color="#808080" stop-opacity="0.1" offset="100%"></stop>
+                    <stop stopColor="#808080" stopOpacity="0.25" offset="0%"></stop>
+                    <stop stopColor="#808080" stopOpacity="0.12" offset="54%"></stop>
+                    <stop stopColor="#808080" stopOpacity="0.1" offset="100%"></stop>
                 </linearGradient>
                 <linearGradient x1="-51322%" y1="42760%" x2="-51322%" y2="30875%" id="linearGradient-7">
-                    <stop stop-color="#808080" stop-opacity="0.25" offset="0%"></stop>
-                    <stop stop-color="#808080" stop-opacity="0.12" offset="54%"></stop>
-                    <stop stop-color="#808080" stop-opacity="0.1" offset="100%"></stop>
+                    <stop stopColor="#808080" stopOpacity="0.25" offset="0%"></stop>
+                    <stop stopColor="#808080" stopOpacity="0.12" offset="54%"></stop>
+                    <stop stopColor="#808080" stopOpacity="0.1" offset="100%"></stop>
                 </linearGradient>
                 <linearGradient x1="65207%" y1="74794%" x2="65207%" y2="57917%" id="linearGradient-8">
-                    <stop stop-color="#808080" stop-opacity="0.25" offset="0%"></stop>
-                    <stop stop-color="#808080" stop-opacity="0.12" offset="54%"></stop>
-                    <stop stop-color="#808080" stop-opacity="0.1" offset="100%"></stop>
+                    <stop stopColor="#808080" stopOpacity="0.25" offset="0%"></stop>
+                    <stop stopColor="#808080" stopOpacity="0.12" offset="54%"></stop>
+                    <stop stopColor="#808080" stopOpacity="0.1" offset="100%"></stop>
                 </linearGradient>
             </defs>
-            <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-                <g id="v3" transform="translate(-685.000000, -83.000000)" fill-rule="nonzero">
+            <g id="Page-1" stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">
+                <g id="v3" transform="translate(-685.000000, -83.000000)" fillRule="nonzero">
                     <g id="undraw_hiring_cyhs" filter="url(#filter-1)" transform="translate(687.000000, 83.000000)">
                         <g id="Group" opacity="0.5" transform="translate(108.000000, 0.000000)" fill="url(#linearGradient-2)">
                             <rect id="Rectangle-path" transform="translate(64.322931, 79.918404) rotate(-81.420000) translate(-64.322931, -79.918404) " x="-7.91053584" y="26.3545114" width="144.466933" height="107.127784"></rect>

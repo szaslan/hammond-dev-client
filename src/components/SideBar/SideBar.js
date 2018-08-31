@@ -4,7 +4,7 @@ import history from '../../history';
 import moment from 'moment';
 import Sidebar from "react-sidebar";
 
-import { localStorageFields, localStorageRemoveFields } from '../UserLogin/UserLogin';
+import { localStorageFields, localStorageBooleanFields } from '../UserLogin/UserLogin';
 
 import logo from '../logo.png'
 
@@ -33,13 +33,18 @@ class SidebarComp extends React.Component {
 				if (field !== "assignment_id") {
 					let value = assignmentLevelData[field];
 					if (value != null) {
-						if (field.match(dueDateRegex)) {
-							let newDate = new Date(value)
-							value = moment(newDate).format('ddd MMM DD YYYY') + " " + moment(newDate).format('HH:mm:ss') + " GMT-0500";
-						}
-						else if (field === "finalized") {
-							let newDate = new Date(value)
-							value = moment(newDate).format('l') + ", " + moment(newDate).format('LTS')
+						if (value != "N/A") {
+							if (field.match(dueDateRegex)) {
+								let newDate = new Date(value)
+								value = moment(newDate).format('ddd MMM DD YYYY') + " " + moment(newDate).format('HH:mm:ss') + " GMT-0500";
+							}
+							else if (field === "finalized") {
+								let newDate = new Date(value)
+								value = moment(newDate).format('l') + ", " + moment(newDate).format('LTS')
+							}
+							else if (localStorageBooleanFields.includes(field)) {
+								value = true;
+							}
 						}
 						localStorage.setItem(field + "_" + assignmentId, value)
 					}
@@ -63,22 +68,32 @@ class SidebarComp extends React.Component {
 						})
 						break;
 					case 400:
+						res.json().then(res => {
+							history.push({
+								pathname: '/error',
+								state: {
+									context: "This function is called when the Pull Saved Data From Local Storage button is clicked from the side bar. This function takes all of the local storage data saved to the SQL table and saves it in local storage.",
+									error: res.error,
+									location: "SideBar.js: pullAllLocalStorageData()",
+									message: res.message,
+								}
+							})
+						})
 						break;
 					default:
 				}
 			})
 	}
-	
+
 	onSetSidebarOpen(open) {
 		this.setState({
 			sidebarOpen: open
 		});
 	}
-	
+
 	saveLocalStorage() {
 		let data = {
 			localStorage: {},
-			removeFields: localStorageRemoveFields,
 		};
 
 		let finalizedRegex = /finalized_/
@@ -90,10 +105,10 @@ class SidebarComp extends React.Component {
 			let newDate = new Date(value)
 
 			if (field.match(finalizedRegex)) {
-				value = moment(newDate).format('YYYY[-]MM[-]DD h:mm:ss');
+				value = moment(newDate).format('YYYY[-]MM[-]DD HH:mm:ss');
 			}
-			else if (field.match(dueDateRegex)) {
-				value = moment(newDate).format('YYYY[-]MM[-]DD h:mm:ss');
+			else if (field.match(dueDateRegex) && value !== "N/A") {
+				value = moment(newDate).format('YYYY[-]MM[-]DD HH:mm:ss');
 			}
 			data.localStorage[field] = value
 		}

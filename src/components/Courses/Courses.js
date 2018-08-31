@@ -105,11 +105,9 @@ class Courses extends Component {
                                 <div>
                                     <JumbotronComp mainTitle={this.state.user} />
                                     <Container className="well1-container" fluid>
-                                        <Flexbox className="well1-flexbox" minWidth="700px" width="90vw"
-                                            flexWrap="wrap" inline="true">
+                                        <Flexbox className="well1-flexbox" minWidth="700px" width="90vw" flexWrap="wrap" inline="true">
                                             {/*<h1 className="pagetitle">Courses</h1>*/}
-                                            <Flexbox className="well1-flexbox" minWidth="700px" width="90vw"
-                                                flexWrap="wrap" inline="true">
+                                            <Flexbox className="well1-flexbox" minWidth="700px" width="90vw" flexWrap="wrap" inline="true">
                                                 {
                                                     this.state.courses.length > 0 ?
                                                         this.state.courses.map(course =>
