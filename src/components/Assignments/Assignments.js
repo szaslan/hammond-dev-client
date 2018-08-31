@@ -125,15 +125,15 @@ class Assignments extends Component {
         if (this.state.loaded && array.length === this.state.assignments.length) {
             return (
                 <div>
-                      //dropdown properties
-                      <div className="assign-drop">
-                      <Select
-                        className="select-search-box"
-                        onChange={this.select}
-                        options={array}
-                        placeholder="Select an Assignment"
-                        isSearchable="true"
-                      />
+                    {/* dropdown properties */}
+                    <div className="assign-drop">
+                        <Select
+                            className="select-search-box"
+                            onChange={this.select}
+                            options={array}
+                            placeholder="Select an Assignment"
+                            isSearchable="true"
+                        />
                     </div>
                     {this.state.value ? <AssignmentInfo courseJSON={this.props.courseJSON} assignmentId={this.state.value} />
                         :

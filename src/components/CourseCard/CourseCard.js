@@ -14,7 +14,7 @@ class CardComp extends Component {
 	render() {
 		return (
 			<div>
-			//course cards and assigning colors to courses
+				{/* course cards and assigning colors to courses */}
 				<Card outline="false" className="card">
 					<CardImg tag="div" className="class-color" style={{ backgroundColor: randomColor() }} />
 					<CardBody>

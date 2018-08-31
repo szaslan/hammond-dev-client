@@ -47,11 +47,11 @@ class PieCharts extends Component {
             <div>
                 <Row>
                     <Col className="graph1">
-                        //title and total
+                        {/* title and total */}
                         <h5 className="graph-title">Completion</h5>
                         <p className="graph-sub">Total: {Number(localStorage.getItem("completedAllReviews_" + this.assignmentId)) + Number(localStorage.getItem("completedSomeReviews_" + this.assignmentId)) + Number(localStorage.getItem("completedNoReviews_" + this.assignmentId))}</p>
                         <Flexbox className="chartbox" flexDirection="column" flexWrap="wrap">
-                            //react piechart to display finalized details
+                            {/* react piechart to display finalized details */}
                             <ReactSvgPieChart className="piechart"
                                 expandSize={3}
                                 expandOnHover="false"
@@ -82,7 +82,7 @@ class PieCharts extends Component {
                                 "Hover over a sector to display completion data."}
                         </Well>
                         <br />
-                        //color legend for pie chart
+                        {/* color legend for pie chart */}
                         <div className="legend">
                             <Row>
                                 <Ellipse className="keycolor" rx={7} ry={4} fill={{ color: '#063D11' }} strokeWidth={5} />
@@ -98,7 +98,7 @@ class PieCharts extends Component {
                             </Row>
                         </div>
                     </Col>
-                    //second piechart for grading classification
+                    {/* second piechart for grading classification */}
                     <Col className="graph2">
                         <h5 className="graph-title">Grading Classification</h5>
                         <p className="graph-sub">Total: {Number(localStorage.getItem("definitelyHarsh_" + this.assignmentId)) +

@@ -432,9 +432,9 @@ class StudentInfo extends Component {
     }
 
     resetFieldsForNewStudent() {
-        this.bucketData = {labels: [],datasets: [],options: {}};
-        this.peerReviewCompletionData = {labels: [],datasets: [],options: {},}
-        this.weightData = {labels: [],datasets: [],options: {},}
+        this.bucketData = { labels: [], datasets: [], options: {} };
+        this.peerReviewCompletionData = { labels: [], datasets: [], options: {}, }
+        this.weightData = { labels: [], datasets: [], options: {}, }
 
         this.setState({
             actualGrade: '',
@@ -574,7 +574,7 @@ class StudentInfo extends Component {
                 <hr className="hr-2"></hr>
                 <Row>
                     <Col className="drops-outer">
-                        //first dropdown for choosing an assignment
+                        {/* first dropdown for choosing an assignment */}
                         <Dropdown className={"drop-downs" + (!this.state.studentHasSavedHistory ? " disabled" : "")} isOpen={this.state.dropdownOpen} toggle={this.toggleAssignment} >
                             <DropdownToggle disabled={!this.state.studentHasSavedHistory} className="drop-button" caret>
                                 {this.state.value}

@@ -143,7 +143,7 @@ class CourseInfo extends Component {
         if (this.state.loaded) {
             return (
                 <div>
-                  //sidebar holds headers and tabs, containing main assignment and student pages
+                    {/* sidebar holds headers and tabs, containing main assignment and student pages */}
                     <SidebarComp
                         content={
                             <div>

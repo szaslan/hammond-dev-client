@@ -159,13 +159,13 @@ class SidebarComp extends React.Component {
 				sidebar={
 					<b>
 						<a href="">
-							//sidebar contents
+							{/* sidebar contents */}
 							<img className="logo" src={logo} width={"60px"} alt="Peerify logo" />
 						</a>
 						<br />
-						//<a href="/courses" className="side-bar-content">Courses</a>
-						//<br />
-						//<button className="local-storage-save-button" onClick={this.saveLocalStorage}>Save Data</button>
+						{/* <a href="/courses" className="side-bar-content">Courses</a> */}
+						{/* <br /> */}
+						{/* <button className="local-storage-save-button" onClick={this.saveLocalStorage}>Save Data</button> */}
 						{/*<a href="" className="sidebarcontent">Account</a>
 						<br />
 						<br />*/}

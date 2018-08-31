@@ -147,7 +147,7 @@ class CustomizableParameters extends Component {
                     </FormGroup>
                     <FormGroup row>
                         <FormGroup check>
-                            //checkbox parameters for assignments
+                            {/* checkbox parameters for assignments */}
                             <Label className="check-text" check>
                                 <Input name="sendIncompleteMessages" type="checkbox" checked={this.state.sendIncompleteMessages} onChange={this.handleInputChange} />
                                 Send Messages to All Students Who Have Incomplete Peer Reviews At Due Date 1?

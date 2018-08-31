@@ -103,7 +103,7 @@ class Courses extends Component {
                         <SidebarComp
                             content={
                                 <div>
-                                  //course cards for dashboard
+                                    {/* course cards for dashboard */}
                                     <JumbotronComp mainTitle={this.state.user} />
                                     <Container className="well1-container" fluid>
                                         <Flexbox className="well1-flexbox" minWidth="700px" width="90vw"

@@ -3,7 +3,6 @@ import Iframe from 'react-iframe';
 import React, { Component } from 'react';
 import { Row } from 'react-bootstrap';
 import { TabContent, TabPane, Nav, NavItem, NavLink, } from 'reactstrap';
-import classnames from 'classnames';
 
 import '../TabsComp/TabsComp.css'
 import Assignments from '../Assignments/Assignments';
@@ -53,17 +52,17 @@ class TabsComp extends Component {
                 </Nav>
 
                 <TabContent activeTab={this.state.activeTab}>
-                  //render pages within tabs
+                    {/* render pages within tabs */}
                     <TabPane tabId="1">
-                      <div>
-                        <Assignments courseJSON={courseJSON} />
-                      </div>
+                        <div>
+                            <Assignments courseJSON={courseJSON} />
+                        </div>
                     </TabPane>
 
                     <TabPane tabId="2">
-                      <div>
-                        <CourseStudents courseId={courseJSON.id}/>
-                      </div>
+                        <div>
+                            <CourseStudents courseId={courseJSON.id} />
+                        </div>
                     </TabPane>
                 </TabContent>
             </div>

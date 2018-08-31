@@ -117,7 +117,7 @@ class AlgorithmBenchmarks extends Component {
         if (this.state.loaded) {
             return (
                 <div>
-                  //list of basic benchmarks to be set by user
+                    {/* list of basic benchmarks to be set by user */}
                     <Form className="parameters">
                         <hr className="hr-4"></hr>
                         <FormGroup row>
@@ -186,7 +186,7 @@ class AlgorithmBenchmarks extends Component {
                         </FormGroup>
                     </Form>
                     {
-                      //advanced settings, to be opened by user with dropdown
+                        //advanced settings, to be opened by user with dropdown
                         this.state.advancedOpen ?
                             <div>
                                 <span className="advanced-button" onClick={this.handleAdvancedClick}>

@@ -127,9 +127,9 @@ class NewDueDateForm extends Component {
             <div className={"dateTime " + (this.props.isGray ? "grayOut" : "")}>
                 <Flexbox flexDirectionn="column" flexWrap="wrap" maxWidth="300px">
                     <form onSubmit={this.handleSubmit} className="dateTimeForm">
-                        //changing border color for calendars
+                        {/* changing border color for calendars */}
                         <div className={"color-border-" + (localStorage.getItem("dueDate" + this.dueDateExtension) && localStorage.getItem("dueDate" + this.dueDateExtension) !== "N/A" ? "green" : "red")}>
-                            //calendar component
+                            {/* calendar component */}
                             <Datetime dateFormat="MM/DD/YYYY" timeFormat={false} onChange={this.handleChange} isValidDate={this.checkDate}
                                 inputProps={{
                                     disabled: true,
@@ -138,12 +138,12 @@ class NewDueDateForm extends Component {
                                         :
                                         "Select a Date")
                                 }}
-                                // viewDate={
-                                //     this.number == 2 || this.number == 3 ?
-                                //         moment(localStorage.getItem("dueDate" + this.dueDateExtension))
-                                //         :
-                                //         moment()
-                                // }
+                            // viewDate={
+                            //     this.number == 2 || this.number == 3 ?
+                            //         moment(localStorage.getItem("dueDate" + this.dueDateExtension))
+                            //         :
+                            //         moment()
+                            // }
                             />
                             <Flexbox justifyContent="space-between">
                                 <TimePicker

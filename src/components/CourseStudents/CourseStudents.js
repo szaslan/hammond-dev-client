@@ -28,7 +28,6 @@ class CourseStudents extends Component {
 
         this.fetchStudentsFromCanvas = this.fetchStudentsFromCanvas.bind(this);
         this.select = this.select.bind(this);
-        this.toggle = this.toggle.bind(this);
     }
 
     fetchStudentsFromCanvas() {
@@ -112,7 +111,7 @@ class CourseStudents extends Component {
     render() {
         if (this.state.students && array.length < this.state.students.length) {
             this.state.students.map(students => {
-                    //create array of students for dropdown
+                //create array of students for dropdown
                 array.push({
                     label: students.name,
                     value: students.id,
@@ -125,8 +124,8 @@ class CourseStudents extends Component {
             return (
                 <div>
                     <div className="student-drop">
-                                          //react select properties
-<Select
+                        {/* react select properties */}
+                        <Select
                             className="select-search-box"
                             options={array}
                             isSearchable="true"

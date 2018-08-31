@@ -512,7 +512,7 @@ class FinalizeResults extends Component {
         if (localStorage.getItem("completedAllReviews_" + this.assignmentId)) {
             return (
                 <div>
-                    //results and data after finalizing an assignment
+                    {/* results and data after finalizing an assignment */}
                     <hr className="hr-6"></hr>
                     <h2 className="header-text">Score Details</h2>
                     <hr className="hr-2"></hr>
@@ -539,7 +539,7 @@ class FinalizeResults extends Component {
                     <Row>
                         <p className="page-text">Completed Peer Reviews: {localStorage.getItem("finalizeDisplayTextNumCompleted_" + this.assignmentId)} / {localStorage.getItem("finalizeDisplayTextNumAssigned_" + this.assignmentId)}</p>
                         <p className="date">Date Finalized: {localStorage.getItem("finalized_" + this.assignmentId)}</p>
-                        //flagged grades button to modal
+                        {/* flagged grades button to modal */}
                         <Popup className="flagged-grades-modal"
                             trigger={<button className="flagged-button"> View Flagged Grades ({JSON.parse(localStorage.getItem("flaggedStudents_" + this.assignmentId)).length})</button>}
                             modal
@@ -554,7 +554,7 @@ class FinalizeResults extends Component {
                     </Row>
                     <br />
                     <hr className="hr-5"></hr>
-                    //boxplot from Canvas data
+                    {/* boxplot from Canvas data */}
                     <Tooltip placement="right" isOpen={this.state.tooltipOpen} target={"TooltipBoxplot"} toggle={this.toggle}>
                         <strong>Min Score:</strong> {localStorage.getItem("min_" + this.assignmentId)}
                         <br />

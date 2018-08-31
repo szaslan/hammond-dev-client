@@ -279,7 +279,7 @@ class AnalyzeResults extends Component {
                     <br />
                     <br />
                     <Row>
-                        //results from analyze button
+                        {/* results from analyze button */}
                         <Well className="analyze-text">
                             <strong>Completed Peer Reviews:</strong> {localStorage.getItem("analyzeDisplayTextNumCompleted_" + this.assignmentId)} / {localStorage.getItem("analyzeDisplayTextNumAssigned_" + this.assignmentId)}
                         </Well>
@@ -287,7 +287,7 @@ class AnalyzeResults extends Component {
                             <span><h5>Flagged Grades</h5></span>
                             <hr />
                             <span className="student-list">
-                            {JSON.parse(localStorage.getItem("analyzeDisplayTextNames_" + this.assignmentId)).length == 0 ? "No flagged grades" : (JSON.parse(localStorage.getItem("analyzeDisplayTextNames_" + this.assignmentId))).join(", ")}
+                                {JSON.parse(localStorage.getItem("analyzeDisplayTextNames_" + this.assignmentId)).length == 0 ? "No flagged grades" : (JSON.parse(localStorage.getItem("analyzeDisplayTextNames_" + this.assignmentId))).join(", ")}
                             </span>
                         </Popup>
                     </Row>
