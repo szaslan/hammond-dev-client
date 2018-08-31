@@ -126,7 +126,7 @@ class NewDueDateForm extends Component {
         return (
             <div className={"dateTime " + (this.props.isGray ? "grayOut" : "")}>
                 <Flexbox flexDirectionn="column" flexWrap="wrap" maxWidth="300px">
-                    
+
                     <form onSubmit={this.handleSubmit} className="dateTimeForm">
                         <div className={"color-border-" + (localStorage.getItem("dueDate" + this.dueDateExtension) ? "green" : "red")}>
                             <Datetime dateFormat="MM/DD/YYYY" timeFormat={false} onChange={this.handleChange} isValidDate={this.checkDate}
@@ -137,6 +137,12 @@ class NewDueDateForm extends Component {
                                         :
                                         "Select a Date")
                                 }}
+                                // viewDate={
+                                //     this.number == 2 || this.number == 3 ?
+                                //         moment(localStorage.getItem("dueDate" + this.dueDateExtension))
+                                //         :
+                                //         moment()
+                                // }
                             />
 
                             <Flexbox justifyContent="space-between">

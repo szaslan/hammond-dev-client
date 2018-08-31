@@ -88,17 +88,6 @@
     font-family: 'Open Sans';
 }
 
-.headertext{
-  font-family: 'Open Sans';
-  color: #626262;
-  font-weight: 100;
-  font-size: 20px;
-  text-align: left;
-  margin-left: 1%;
-  margin-top: 2%;
-  padding-top: 2%;
-}
-
 .graph{
   width: 75%;
   padding-bottom: 5%;

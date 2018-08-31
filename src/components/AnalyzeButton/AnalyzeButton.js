@@ -472,24 +472,17 @@ class AnalyzeButton extends Component {
 						<div className="assignment-info-content">
 
 							<div className={"calendar-case" + (this.state.nextClicked ? "-hidden" : "")}>
-								{/* <p className="headertext">Set Due Date:</p> */}
-								<Flexbox flexWrap="wrap">
+								<h1 className="headertext">Set Your Due Dates for this Assignment</h1>
+
+								<Flexbox flexWrap="wrap" maxWidth="100vw">
 									<NewDueDate number="1" assignmentId={this.assignmentId} textDescription={message1} />
 									<NewDueDate number="2" assignmentId={this.assignmentId} textDescription={message2} />
 									<NewDueDate number="3" assignmentId={this.assignmentId} textDescription={message3} />
 								</Flexbox>
-								{/* <button
-
-									onClick={this.nextClick}>
-									Next
-								</button> */}
-								{/* {localStorage.getItem("dueDate_" +this.assignmentID+ "_3") ?
-									<button onClick={this.nextClick}>Next</button>
-									: */}
-								<button disabled={!localStorage.getItem("dueDate3_" + this.assignmentId)} onClick={this.nextClick}>
+								
+								<button className="switch-button next-button" disabled={!localStorage.getItem("dueDate3_" + this.assignmentId)} onClick={this.nextClick}>
 									Next
 								</button>
-								{/* } */}
 
 							</div>
 
@@ -512,7 +505,12 @@ class AnalyzeButton extends Component {
 										</UncontrolledTooltip>
 									</Row>
 								</Flexbox>
+
+								<button className="switch-button back-button"onClick={this.backClick}>
+									Back
+								</button>
 							</div>
+
 						</div>
 						:
 						null

@@ -10,10 +10,10 @@
 .assigndrop{
 		float: left;
 		position: block;
-		margin-top: 1%;
+		/* margin-top: 1%; */
 		/* background-color:#FFEFE2;*/
 		background-color: white;
-		margin-left: 15%;
+		/* margin-left: 15%; */
 
 	}
 
@@ -23,7 +23,7 @@
 
 .css-1aya2g8, .css-2o5izw, .css-15k3avv{
 	background-color: white !important;
-	margin-left: -15% !important;
+	/* margin-left: -15% !important; */
 	border: none !important;
 }
 
@@ -142,14 +142,16 @@
 }
 
 .headertext{
-  font-family: 'Open Sans';
-  color: #626262;
-  font-weight: 100;
-  font-size: 20px;
-  text-align: left;
-  margin-left: 0% !important;
-	margin-top: -1% !important;
-}
+	font-family: 'Open Sans';
+	color: #626262;
+	font-weight: normal;
+	font-size: 20px;
+	text-align: left;
+	margin-top:10px;
+	/* margin-left: 1%;
+	margin-top: 2%; */
+	/* padding-top: 2%; */
+  }
 
 .stats{
 	font-family: 'Open Sans';
