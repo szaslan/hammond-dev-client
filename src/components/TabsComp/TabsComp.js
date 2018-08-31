@@ -3,6 +3,7 @@ import Iframe from 'react-iframe';
 import React, { Component } from 'react';
 import { Row } from 'react-bootstrap';
 import { TabContent, TabPane, Nav, NavItem, NavLink, } from 'reactstrap';
+import classnames from 'classnames';
 
 import '../TabsComp/TabsComp.css'
 import Assignments from '../Assignments/Assignments';

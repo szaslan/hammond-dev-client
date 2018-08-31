@@ -55,10 +55,10 @@ class NewDueDateForm extends Component {
         let currentDueDate = Datetime.moment(localStorage.getItem("dueDate" + this.dueDateExtension))
         for (var i = this.state.number + 1; i <= 3; i++) {
             let laterDueDate = Datetime.moment(localStorage.getItem("dueDate" + i + "_" + this.props.assignmentId))
-            if (laterDueDate) {
+            if (laterDueDate && laterDueDate !== "N/A") {
                 //if the current due date is at the same time or after the later one, delete the later one
                 if (currentDueDate.isAfter(laterDueDate) || (!currentDueDate.isBefore(laterDueDate) && !laterDueDate.isBefore(currentDueDate))) {
-                    localStorage.removeItem("dueDate" + i + "_" + this.props.assignmentId)
+                    localStorage.setItem("dueDate" + i + "_" + this.props.assignmentId, "N/A")
                 }
             }
         }
@@ -115,7 +115,7 @@ class NewDueDateForm extends Component {
     }
 
     toggle() {
-        localStorage.removeItem("dueDate" + this.dueDateExtension);
+        localStorage.setItem("dueDate" + this.dueDateExtension, "N/A");
 
         this.setState({
             modal: !this.state.modal,
@@ -128,16 +128,22 @@ class NewDueDateForm extends Component {
                 <Flexbox flexDirectionn="column" flexWrap="wrap" maxWidth="300px">
                     <form onSubmit={this.handleSubmit} className="dateTimeForm">
                         //changing border color for calendars
-                        <div className={"color-border-" + (localStorage.getItem("dueDate" + this.dueDateExtension) ? "green" : "red")}>
+                        <div className={"color-border-" + (localStorage.getItem("dueDate" + this.dueDateExtension) && localStorage.getItem("dueDate" + this.dueDateExtension) !== "N/A" ? "green" : "red")}>
                             //calendar component
                             <Datetime dateFormat="MM/DD/YYYY" timeFormat={false} onChange={this.handleChange} isValidDate={this.checkDate}
                                 inputProps={{
                                     disabled: true,
-                                    placeholder: (localStorage.getItem("dueDate" + this.dueDateExtension) ?
+                                    placeholder: (localStorage.getItem("dueDate" + this.dueDateExtension) && localStorage.getItem("dueDate" + this.dueDateExtension) !== "N/A" ?
                                         (moment(localStorage.getItem("dueDate" + this.dueDateExtension))).format('MM/DD/YYYY')
                                         :
                                         "Select a Date")
                                 }}
+                                // viewDate={
+                                //     this.number == 2 || this.number == 3 ?
+                                //         moment(localStorage.getItem("dueDate" + this.dueDateExtension))
+                                //         :
+                                //         moment()
+                                // }
                             />
                             <Flexbox justifyContent="space-between">
                                 <TimePicker
@@ -147,7 +153,7 @@ class NewDueDateForm extends Component {
                                     onChange={this.onChange}
                                     showSecond={false}
                                     use12Hours
-                                    placeholder={(localStorage.getItem("dueDate" + this.dueDateExtension) ?
+                                    placeholder={(localStorage.getItem("dueDate" + this.dueDateExtension) && localStorage.getItem("dueDate" + this.dueDateExtension) !== "N/A" ?
                                         (moment(localStorage.getItem("dueDate" + this.dueDateExtension))).format('h:mm a')
                                         :
                                         "Select a Time")}

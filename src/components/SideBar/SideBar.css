@@ -1,4 +1,4 @@
-root: {
+:root {
     position: absolute;
     top: 0;
     left: 0;
@@ -7,13 +7,13 @@ root: {
     overflow: hidden;
 }
 
-sidebar: {
+/* :sidebar {
     position: fixed;
     top: 0;
     bottom: 0;
 }
 
-content: {
+:content {
     position: absolute;
     top: 0;
     left: 0;
@@ -21,7 +21,7 @@ content: {
     bottom: 0;
 }
 
-overlay: {
+:overlay {
     position: fixed;
     top: 0;
     left: 0;
@@ -31,11 +31,12 @@ overlay: {
     visibility: hidden;
 }
 
-dragHandle: {
+.dragHandle {
     position: fixed;
     top: 0;
     bottom: 0;
-}
+    display:none;
+} */
 
 .local-storage-pull-button{
   border:none;
@@ -61,6 +62,29 @@ dragHandle: {
   margin-bottom: 10%;
   margin-top: 10%;
 	font-family: 'Open Sans';
+	/* position: absolute;
+	bottom: 16%;
+    left: 5%; 
+     */
+}
+
+.local-storage-pull-button{
+  /* border:none;
+  border-radius: 3px;
+  background-color: white;
+  color:black;
+  font-size: 12px;
+  width:90%;
+  height: 30px;
+  margin-bottom: 4%;
+  margin-top: 4%;
+  font-family: 'Open Sans';
+  /* position: absolute;
+	bottom: 11.5%;
+    left: 5%; */
+    /* position: absolute;
+	bottom: 7%;
+	left: 5%;   */
 }
 
 .logo {
@@ -86,4 +110,47 @@ dragHandle: {
 	position: absolute;
 	bottom: 10px;
 	left: 10px;
+}
+a:hover, a:visited, a:link, a:active{
+	/* font-family:'Open Sans'; */
+    /* font-size:12px;
+    font-weight:normal;
+    color: black; */
+    text-decoration: none!important;
+    
+}
+.material-icons{
+    font-family: 'Material Icons';
+  font-weight: normal;
+  font-style: normal;
+  font-size: 40px;  /* Preferred icon size */
+  display: inline-block;
+  line-height: 1;
+  text-transform: none;
+  letter-spacing: normal;
+  word-wrap: normal;
+  white-space: nowrap;
+  direction: ltr;
+}
+
+.icon-button{
+    border:none;
+  border-radius: 3px;
+  background-color: rgb(255, 239, 226);
+  color:black;
+  font-size: 12px;
+  width:90%;
+  /* margin-bottom:4%; */
+  margin-top: 15%;
+  font-family: 'Open Sans';
+  
+}
+.icon-cloud{
+    width:40px;
+}
+.icon-text{
+    font-size:15px;
+    font-weight:normal;
+    color: black;
+    margin-bottom:0px;
 }

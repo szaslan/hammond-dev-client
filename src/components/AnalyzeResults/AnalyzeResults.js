@@ -14,7 +14,7 @@ var progressNumSteps = 6;
 var progressBarMessage = "";
 
 // Steps When Analyze Is Clicked Assuming Everything Works Correctly:
-// 1 - progress bar reset (from componentDidMount)
+// 1 - progress bar reset (from render)
 // 2 - Remove all of the messages from local storage (would only exist if analyze has previously been clicked)
 // 3 - call to back-end to fetch peer reviews from canvas and save to SQL tables (from savePeerReviewsFromCanvasToDatabase)
 // 4 - call to back-end to run the algorithm and determine if there is enough data (from analyze)
@@ -42,6 +42,7 @@ class AnalyzeResults extends Component {
 
         this.assignmentId = this.props.assignmentId;
         this.assignmentInfo = this.props.assignmentInfo;
+        this.benchmarks = this.props.benchmarks;
         this.courseId = this.props.courseId;
         this.missingDataIds = [];
         this.pressed = this.props.pressed;
@@ -52,6 +53,7 @@ class AnalyzeResults extends Component {
     analyze() {
         var data = {
             assignmentId: this.assignmentId,
+            benchmarks: this.benchmarks,
         }
 
         //Step 4
@@ -242,11 +244,6 @@ class AnalyzeResults extends Component {
         progressBarMessage = [progress.toFixed(0) + "%"]
     }
 
-    componentDidMount() {
-        //Step 1
-        this.setProgress(0)
-    }
-
     render() {
         if (this.state.error) {
             return (
@@ -257,11 +254,13 @@ class AnalyzeResults extends Component {
         }
 
         if (this.pressed) {
+            //Step 1
+            this.setProgress(0)
             //Step 2
-            localStorage.removeItem("analyzeDisplayTextNames_" + this.assignmentId)
-            localStorage.removeItem("analyzeDisplayTextNumCompleted_" + this.assignmentId)
-            localStorage.removeItem("analyzeDisplayTextNumAssigned_" + this.assignmentId)
-            localStorage.removeItem("analyzeDisplayTextMessage_" + this.assignmentId)
+            localStorage.setItem("analyzeDisplayTextNames_" + this.assignmentId, "N/A")
+            localStorage.setItem("analyzeDisplayTextNumCompleted_" + this.assignmentId, "N/A")
+            localStorage.setItem("analyzeDisplayTextNumAssigned_" + this.assignmentId, "N/A")
+            localStorage.setItem("analyzeDisplayTextMessage_" + this.assignmentId, "N/A")
             this.setProgress(1)
             return (
                 <div>
@@ -270,7 +269,7 @@ class AnalyzeResults extends Component {
             )
         }
 
-        if (localStorage.getItem("analyzeDisplayTextNames_" + this.assignmentId)) {
+        if (localStorage.getItem("analyzeDisplayTextNames_" + this.assignmentId) && localStorage.getItem("analyzeDisplayTextNames_" + this.assignmentId) !== "N/A") {
             return (
                 <div>
                     <hr className="hr-4"></hr>
@@ -288,7 +287,7 @@ class AnalyzeResults extends Component {
                             <span><h5>Flagged Grades</h5></span>
                             <hr />
                             <span className="student-list">
-                                {JSON.parse(localStorage.getItem("analyzeDisplayTextNames_" + this.assignmentId))}
+                            {JSON.parse(localStorage.getItem("analyzeDisplayTextNames_" + this.assignmentId)).length == 0 ? "No flagged grades" : (JSON.parse(localStorage.getItem("analyzeDisplayTextNames_" + this.assignmentId))).join(", ")}
                             </span>
                         </Popup>
                     </Row>

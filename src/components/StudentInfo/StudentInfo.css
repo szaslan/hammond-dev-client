@@ -1,5 +1,23 @@
+.colorbody{
+  /* background-color:#FFEFE2; */
+  background-color: white;
+  width: 100%;
+}
 
-.drop-button{
+.disabled {
+  cursor: default;
+}
+
+.dropsouter{
+  margin-left: 5%;
+}
+
+.dropdowns {
+    margin: 5% 0;
+    font-family: 'Open Sans';
+}
+
+.dropbutton{
   background-color: #A8DBFF !important;
   color: #626262 !important;
   font-family: 'Open Sans' !important;
@@ -55,6 +73,11 @@
   margin-left: 1%;
   margin-top: 2%;
   padding-top: 2%;
+}
+.studentinfo-name {
+    font-size: 50px;
+    width: 100%;
+    font-family: 'Open Sans';
 }
 
 .graph{

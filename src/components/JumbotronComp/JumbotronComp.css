@@ -41,10 +41,25 @@
 
 .nav-tabs{
   border-bottom: 1px solid black !important;
+  
 }
 
 .tabs{
   position:absolute;
+  top:61px;
   right:47px;
   top:60px;
+  /*flex-wrap:nowrap !important;*/
 }
+
+/*@media only screen and (max-width: 850px){
+  .tabs{
+    right:normal;
+    left:420px;
+  }
+}
+@media (min-width: 576px){
+  .jumbotron {
+    padding:2rem 1rem!important;
+  }
+}*/

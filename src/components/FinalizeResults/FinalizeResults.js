@@ -548,7 +548,7 @@ class FinalizeResults extends Component {
                             <span><h5 className="modal-text">Flagged Grades</h5></span>
                             <hr />
                             <span className="student-list">
-                                {JSON.parse(localStorage.getItem("flaggedStudents_" + this.assignmentId))}
+                                {JSON.parse(localStorage.getItem("flaggedStudents_" + this.assignmentId)).length == 0 ? "No flagged grades" : (JSON.parse(localStorage.getItem("flaggedStudents_" + this.assignmentId))).join(", ")}
                             </span>
                         </Popup>
                     </Row>
