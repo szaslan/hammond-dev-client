@@ -457,24 +457,25 @@ class AnalyzeButton extends Component {
 	}
 
 	render() {
-		if (this.state.loaded) {
-			return (
-				<div>
-					{
-						!this.state.finalizePressed ?
-							<div className="assignment-info-content">
+    if (this.state.loaded) {
+		return (
+			<div>
+				{
+					!this.state.finalizePressed ?
+						<div className="assignment-info-content">
 
-								<div className={"calendar-case" + (this.state.nextClicked ? "-hidden" : "")}>
-									{/* <p className="headertext">Set Due Date:</p> */}
-									<Flexbox flexWrap="wrap">
-										<NewDueDate number="1" assignmentId={this.assignmentId} textDescription={message1} />
-										<NewDueDate number="2" assignmentId={this.assignmentId} textDescription={message2} />
-										<NewDueDate number="3" assignmentId={this.assignmentId} textDescription={message3} />
-									</Flexbox>
-									<button disabled={!localStorage.getItem("dueDate3_" + this.assignmentId) || localStorage.getItem("dueDate3_" + this.assignmentId) === "N/A"} onClick={this.nextClick}>
-										Next
+							<div className={"calendar-case" + (this.state.nextClicked ? "-hidden" : "")}>
+								<h1 className="headertext">Set Your Due Dates for this Assignment</h1>
+
+								<Flexbox flexWrap="wrap" maxWidth="100vw">
+									<NewDueDate number="1" assignmentId={this.assignmentId} textDescription={message1} />
+									<NewDueDate number="2" assignmentId={this.assignmentId} textDescription={message2} />
+									<NewDueDate number="3" assignmentId={this.assignmentId} textDescription={message3} />
+								</Flexbox>
+								
+								<button className="switch-button next-button" disabled={!localStorage.getItem("dueDate3_" + this.assignmentId)} onClick={this.nextClick}>
+									Next
 								</button>
-									{/* } */}
 
 								</div>
 
@@ -495,13 +496,18 @@ class AnalyzeButton extends Component {
 											<UncontrolledTooltip delay={{ show: "1200" }} placement="top" target="finalize-button-1">
 												Click to calculate grades and send to the Canvas gradebook
 										</UncontrolledTooltip>
-										</Row>
-									</Flexbox>
-								</div>
+									</Row>
+								</Flexbox>
+
+								<button className="switch-button back-button"onClick={this.backClick}>
+									Back
+								</button>
 							</div>
-							:
-							null
-					}
+
+						</div>
+						:
+						null
+				}
 
 					{
 						// Displaying results or running either analyze or finalize

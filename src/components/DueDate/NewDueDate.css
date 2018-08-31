@@ -1,20 +1,13 @@
   .dateTime{
-    margin-right: 11% !important;
+    margin-right:7% !important;
     margin-bottom: 3%;
     /* z-index: 1; */
-    margin-left: -5%;
+    /* margin-left: -5%; */
   }
 
 .dateTimeForm{
-  
-  width:100%;
-}
 
-.headertext{
-  font-family: 'Open Sans';
-  color: #626262;
-  font-size: 20px;
-  /* margin-left: -15%; */
+  width:100%;
 }
 
 .text{
@@ -366,7 +359,8 @@
     font-size:80%;
     padding:0px;
     cursor:pointer;
-    border-radius: 3px;
+    border:none;
+    border-radius:3px;
   }
 
   .timePicker{
@@ -385,7 +379,7 @@
     position:relative;
     top:0;
     left:0;
-    z-index:2;
+    /* z-index:2; */
   }
 
 .invalidModal{

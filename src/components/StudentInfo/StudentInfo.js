@@ -569,6 +569,7 @@ class StudentInfo extends Component {
     render() {
         return (
             <div className="student-info">
+                <hr className="hr-6"></hr>
                 <h2 className="headertext">Peer Grading Details</h2>
                 <hr className="hr-2"></hr>
                 {/*THIS BELOW SHOULD BE THIS.STATE.STUDENT*/}
@@ -629,7 +630,7 @@ class StudentInfo extends Component {
                                         <StudentInfoGraph className="graph" assignments={this.state.assignments} peerReviewData={this.state.studentEvaluatingData} category="completion" data={this.peerReviewCompletionData} />
                                     </div>
                                     :
-                                    <div className="message">
+                                    <div className="message1">
                                         This student does not have any data saved at this point. To save data, you must finalize an assignment.
                                 </div>
                             }
