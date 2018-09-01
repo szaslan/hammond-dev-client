@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from "react-router-dom";
+import history from '../../history';
 
 import PaperIcon from './PaperIcon';
 
@@ -24,7 +25,17 @@ class Landing extends Component {
                     case 201:
                         break;
                     case 400:
-                        console.log("error")
+                        res.json().then(res => {
+                            history.push({
+                                pathname: '/error',
+                                state: {
+                                    context: 'This function is called when the students tab is clicked on from the course homepage. This function fetches the list of students currently enrolled in this course from Canvas.',
+                                    error: res.error,
+                                    location: "CourseStudents.js: fetchStudentsFromCanvas()",
+                                    message: res.message,
+                                }
+                            })
+                        })
                         break;
                     default:
                 }
