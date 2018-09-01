@@ -113,6 +113,9 @@ class UserLogin extends Component {
 							this.handleLocalStorageData(data);
 						})
 						break;
+					case 204:
+						history.push("/courses");
+						break;
 					case 400:
 						res.json().then(res => {
 							history.push({

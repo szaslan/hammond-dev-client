@@ -70,6 +70,8 @@ class SidebarComp extends React.Component {
 						})
 						// this.setState({downloadSuccessful:true});
 						break;
+					case 204: 
+						break;
 					case 400:
 						res.json().then(res => {
 							history.push({
