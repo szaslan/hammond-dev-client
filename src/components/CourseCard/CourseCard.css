@@ -1,11 +1,18 @@
 .card{
-  margin-left: 20px;
-  margin-right: 20px;
-  margin-top: 20px;
-  width: 250px;
+  margin-left: 50px;
+  margin-right: 50px;
+  margin-top: -20%;
+  margin-bottom: 20%;
+  width: 300px;
+  height: 300px;
   box-shadow: 1px 1px 3px 1px rgba(0, 0, 0, 0.1);
   border-radius: 10px !important;
   border: none !important;
+}
+
+.card-body{
+  height: 47%;
+  overflow:hidden;
 }
 
 .card-title{
@@ -14,6 +21,14 @@
   color: black;
   font-size: 22px;
   font-weight: 100;
+  display: block;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  text-overflow: ellipsis;
+  line-height: 30px;
+  /* white-space: nowrap; */
 }
 
 .class-color{

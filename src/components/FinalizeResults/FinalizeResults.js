@@ -555,7 +555,7 @@ class FinalizeResults extends Component {
                             modal
                             closeOnDocumentClick
                         >
-                            <span><h5 className="modal-text">Flagged Grades</h5></span>
+                            <h5 className="modal-text">Flagged Grades</h5>
                             <hr />
                             <span className="student-list">
                                 {JSON.parse(localStorage.getItem("flaggedStudents" + this.localStorageExtension)).length == 0 ? "No flagged grades" : (JSON.parse(localStorage.getItem("flaggedStudents" + this.localStorageExtension))).join(", ")}

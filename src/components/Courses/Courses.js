@@ -17,6 +17,7 @@ class Courses extends Component {
 
         this.state = {
             courses: [],
+            coursecount: -1,
             loaded: false,
             url: '/courses',
             user: [],
@@ -112,7 +113,7 @@ class Courses extends Component {
             }
         })
     }
-    
+
     signOut() {
         fetch('/logout', {
             credentials: 'include'
@@ -143,7 +144,9 @@ class Courses extends Component {
                                                     this.state.courses.length > 0 ?
                                                         this.state.courses.map(course =>
                                                             <Link to={`/courses/${course.id}`}>
-                                                                <CardComp name={course.name} />
+                                                                {console.log(this.state.coursecount++)}
+                                                                this.state.coursecount++
+                                                                <CardComp name={course.name} coursecount={this.state.coursecount} />
                                                             </Link>)
                                                         :
                                                         <h1>No classes as a teacher</h1>
