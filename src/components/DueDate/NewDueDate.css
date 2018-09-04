@@ -1,12 +1,6 @@
 .analyze{
   margin-left: 100%;
 }
-  .dateTime{
-    margin-right:7% !important;
-    margin-bottom: 3%;
-    /* z-index: 1; */
-    /* margin-left: -5%; */
-  }
 
 .analyze-button{
   border-radius: 3px;
@@ -60,9 +54,9 @@
 
 /* -------calendar component styling------ */
 .dateTime{
-    margin-right: 11% !important;
+    margin-right: 7% !important;
     margin-bottom: 3%;
-    margin-left: -5%;
+    
 }
 
 .dateTimeForm{

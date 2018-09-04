@@ -8,7 +8,7 @@ import './Assignments.css';
 import AssignmentInfo from '../AssignmentInfo/AssignmentInfo';
 
 //array of options for dropdown menu
-const array = [];
+let array = [];
 
 //disable assignments with no peer reviews
 const FilterAssignments = currAssignment => {
@@ -111,7 +111,8 @@ class Assignments extends Component {
     }
 
     componentDidMount() {
-        this.pullAssignments()
+        array = [];
+        this.pullAssignments();
     }
 
     render() {
@@ -135,9 +136,13 @@ class Assignments extends Component {
                             isSearchable="true"
                         />
                     </div>
-                    {this.state.value ? <AssignmentInfo courseJSON={this.props.courseJSON} assignmentId={this.state.value} />
+                    {this.state.value ?
+                        <AssignmentInfo courseJSON={this.props.courseJSON} assignmentId={this.state.value} />
                         :
-                        null}
+                        <div className="assignment-default">
+                            <img src={"/arrow.png"}></img>
+                            Please Select an Assignment
+                        </div>}
                 </div>
             );
         }

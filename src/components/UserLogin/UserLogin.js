@@ -114,18 +114,21 @@ class UserLogin extends Component {
 						})
 						break;
 					case 400:
-					res.json().then(res => {
-						history.push({
-							pathname: '/error',
-							state: {
-								context: "This function is called whenever a user successfully logs in. This function takes all of the local storage data saved to the SQL table and saves it in local storage.",
-								error: res.error,
-								location: "UserLogin.js: pullAllLocalStorageData()",
-								message: res.message,
-							}
+						res.json().then(res => {
+							history.push({
+								pathname: '/error',
+								state: {
+									context: "This function is called whenever a user successfully logs in. This function takes all of the local storage data saved to the SQL table and saves it in local storage.",
+									error: res.error,
+									location: "UserLogin.js: pullAllLocalStorageData()",
+									message: res.message,
+								}
+							})
 						})
-					})
 						break;
+					case 204:
+						history.push("/courses");
+                        break;
 					default:
 				}
 			})

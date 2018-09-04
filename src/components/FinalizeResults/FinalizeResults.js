@@ -511,7 +511,7 @@ class FinalizeResults extends Component {
 
         if (localStorage.getItem("completedAllReviews_" + this.assignmentId)) {
             return (
-                <div>
+                <div className="finalized-results-case">
                     {/* results and data after finalizing an assignment */}
                     <hr className="hr-6"></hr>
                     <h2 className="header-text">Score Details</h2>
