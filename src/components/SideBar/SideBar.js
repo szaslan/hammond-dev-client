@@ -145,6 +145,7 @@ class SidebarComp extends React.Component {
 			.then(res => {
 				switch (res.status) {
 					case 204: /*everything worked*/
+						console.log("balhhhh");
 						this.onDismiss();
 						this.setState({ uploadSuccessful: true });
 						setTimeout(() => {
