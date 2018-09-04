@@ -7,6 +7,8 @@ import './Assignments.css';
 
 import AssignmentInfo from '../AssignmentInfo/AssignmentInfo';
 
+const arrow = require('./arrow.png')
+
 //array of options for dropdown menu
 let array = [];
 
@@ -142,7 +144,7 @@ class Assignments extends Component {
                         <AssignmentInfo courseJSON={this.props.courseJSON} assignmentId={this.state.value} />
                         :
                         <div className="assignment-default">
-                            <img src={"/arrow.png"}></img>
+                            <img src={arrow}></img>
                             Please Select an Assignment
                         </div>}
                 </div>
