@@ -44,11 +44,18 @@
 	padding-top:15vh;
 	font-size: 25px;
 	color:#a0a0a0;
-	
+
 }
 /* ---------react select styling for dropdown--------- */
 /*searchbar*/
-.css-1aya2g8, .css-2o5izw, .css-15k3avv{
+.css-1aya2g8, .css-2o5izw{
+	background-color: white !important;
+	/* margin-left: -15% !important; */
+	/* border: none !important; */
+	border: 1px solid grey !important;
+}
+
+.css-15k3avv{
 	background-color: white !important;
 	/* margin-left: -15% !important; */
 	border: none !important;
@@ -241,7 +248,7 @@
 	float: left;
 	margin-bottom: -2%;
 	margin-top: 1%;
-	margin-left: 0%;
+	margin-left: -5%;
 	font-size: 15px;
 }
 

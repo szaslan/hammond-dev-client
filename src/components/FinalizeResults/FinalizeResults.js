@@ -523,7 +523,6 @@ class FinalizeResults extends Component {
             return (
                 <div className="finalized-results-case">
                     {/* results and data after finalizing an assignment */}
-                    <hr className="hr-6"></hr>
                     <h2 className="header-text">Score Details</h2>
                     <hr className="hr-2"></hr>
                     <p className="total-score"> -/{Number(localStorage.getItem("finalizeDisplayTextOutOf" + this.localStorageExtension))}pts</p>

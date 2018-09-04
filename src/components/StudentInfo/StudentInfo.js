@@ -576,7 +576,6 @@ class StudentInfo extends Component {
     render() {
         return (
             <div className="student-info">
-                <hr className="hr-6"></hr>
                 <h2 className="header-text">Peer Grading Details</h2>
                 <hr className="hr-2"></hr>
                 <Row>
