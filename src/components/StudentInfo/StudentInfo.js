@@ -38,6 +38,7 @@ class StudentInfo extends Component {
             peerReviewsCompletedByCurrentStudent: [],
             selectedAssignment: '',
             selectedStudentId: this.props.studentId,
+            sortedAssignments: [],
             studentEvaluatingData: null,
             studentHasSavedHistory: false,
             value: 'Select an Assignment',
@@ -57,6 +58,7 @@ class StudentInfo extends Component {
         this.selectPeerReview = this.selectPeerReview.bind(this);
         this.send400Error = this.send400Error.bind(this);
         this.setMessage = this.setMessage.bind(this);
+        this.sortAssignmentsByFinalizedDate = this.sortAssignmentsByFinalizedDate.bind(this);
         this.toggleAssignment = this.toggleAssignment.bind(this);
         this.toggleReview = this.toggleReview.bind(this);
 
@@ -220,7 +222,7 @@ class StudentInfo extends Component {
                     fill: false,
                     data: [],
                     lineTension: 0,
-                    pointBackgroundColor: "#black",
+                    pointBackgroundColor: [],
                     pointRadius: 5,
                 }
             ],
@@ -332,9 +334,10 @@ class StudentInfo extends Component {
                         res.json().then(data => {
                             this.setState({
                                 assignments: data,
+                            }, () => {
+                                this.sortAssignmentsByFinalizedDate();
+                                this.checkIfStudentHasSavedHistory();
                             })
-                            console.log(this.state)
-                            this.checkIfStudentHasSavedHistory()
                         })
                         break;
                     case 400:
@@ -547,6 +550,47 @@ class StudentInfo extends Component {
         }
     }
 
+    sortAssignmentsByFinalizedDate() {
+        let sortedArray = [];
+
+        this.state.assignments.forEach((assignment, index) => {
+            let assignmentId = assignment["id"];
+            let finalizedDate = new Date(localStorage.getItem("finalized_" + assignmentId + "_" + this.state.courseId));
+            let seconds = finalizedDate.getTime();
+
+            if (index === 0) {
+                sortedArray.push(assignment);
+            }
+            else {
+                sortedArray.splice(locationOf(this.state.courseId, seconds, sortedArray) + 1, 0, assignment);
+            }
+
+            if (index === this.state.assignments.length - 1) {
+                this.setState({
+                    sortedAssignments: sortedArray,
+                })
+            }
+
+            function locationOf(courseId, element, array, start, end) {
+                start = start || 0;
+                end = end || array.length;
+
+                var pivot = parseInt(start + (end - start) / 2, 10);
+
+                let newAssignmentId = array[pivot]["id"];
+                let newFinalizedDate = new Date(localStorage.getItem("finalized_" + newAssignmentId + "_" + courseId));
+                let newSeconds = newFinalizedDate.getTime();
+
+                if (end-start <= 1 || newSeconds === element) return pivot;
+                if (newSeconds < element) {
+                  return locationOf(courseId, element, array, pivot, end);
+                } else {
+                  return locationOf(courseId, element, array, start, pivot);
+                }
+              }
+        })
+    }
+
     toggleAssignment() {
         this.setState(prevState => ({
             dropdownOpen: !prevState.dropdownOpen,
@@ -631,9 +675,9 @@ class StudentInfo extends Component {
                             {
                                 this.state.studentHasSavedHistory ?
                                     <div>
-                                        <StudentInfoGraph className="graph" assignments={this.state.assignments} peerReviewData={this.state.studentEvaluatingData} category="bucket" data={this.bucketData} />
-                                        <StudentInfoGraph className="graph" assignments={this.state.assignments} peerReviewData={this.state.studentEvaluatingData} category="weight" data={this.weightData} />
-                                        <StudentInfoGraph className="graph" assignments={this.state.assignments} peerReviewData={this.state.studentEvaluatingData} category="completion" data={this.peerReviewCompletionData} />
+                                        <StudentInfoGraph className="graph" assignments={this.state.sortedAssignments} peerReviewData={this.state.studentEvaluatingData} category="bucket" data={this.bucketData} />
+                                        <StudentInfoGraph className="graph" assignments={this.state.sortedAssignments} peerReviewData={this.state.studentEvaluatingData} category="weight" data={this.weightData} />
+                                        <StudentInfoGraph className="graph" assignments={this.state.sortedAssignments} peerReviewData={this.state.studentEvaluatingData} category="completion" data={this.peerReviewCompletionData} />
                                     </div>
                                     :
                                     <div className="message1">

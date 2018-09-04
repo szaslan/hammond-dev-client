@@ -129,11 +129,11 @@ class CourseInfo extends Component {
                             </div>
                         }
                     />
-                    <div> test</div>
                 </div>
             )
         }
-        else return (<Loader type="TailSpin" color="black" height={80} width={80} />)
+        
+        return (<Loader type="TailSpin" color="black" height={80} width={80} />)
     }
 }
 
