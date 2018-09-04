@@ -130,7 +130,6 @@ class CourseStudents extends Component {
                             options={array}
                             isSearchable="true"
                             placeholder="Select a Student"
-                            value={this.state.studentName}
                             onChange={this.select}
                         />
                     </div>
