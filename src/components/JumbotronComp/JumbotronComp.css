@@ -4,24 +4,29 @@
 
 .jumbo{
   background-color:white!important;
-  padding-bottom:0px!important;
   margin-bottom:0px!important;
-  padding-top:30px!important;
   min-width:750px;
   margin:auto;
 }
-
+.jumbotron{
+  padding:3rem 2rem!important;
+}
 .jumbo-container{
   text-align:left;
   font-size:40px;
   color:#757373;
   min-width: 50vh;
+  padding-left:5px!important;
 }
 
 .main-title{
   font-family: 'Open Sans';
   color: #757373;
   font-weight: 100;
+  width:375px;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
 }
 
 .nav-link{
@@ -38,6 +43,10 @@
   border-color:#757373 #757373 black!important;
   color:#757373 !important;
 }
+.nav-link.active:hover{
+  border-color: black black #fff !important;
+  color:black !important;
+}
 
 .nav-tabs{
   border-bottom: 1px solid black !important;
@@ -46,20 +55,20 @@
 
 .tabs{
   position:absolute;
-  top:61px;
+  top:77px;
   right:47px;
-  top:60px;
-  /*flex-wrap:nowrap !important;*/
+  flex-wrap:nowrap !important;
 }
 
-/*@media only screen and (max-width: 850px){
+@media only screen and (max-width: 850px){
   .tabs{
     right:normal;
     left:420px;
+    top:77px;
   }
 }
-@media (min-width: 576px){
+@media (max-width: 576px){
   .jumbotron {
-    padding:2rem 1rem!important;
+    padding:3rem 1rem!important;
   }
-}*/
+}

@@ -35,6 +35,11 @@
     display:none;
 }
 
+.finalized-results-case{
+    display:inline-block;
+    padding-top:20px;
+}
+
 .parameters-case{
     display:inline-block;
     width:100%;

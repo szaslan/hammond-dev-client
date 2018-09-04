@@ -138,12 +138,13 @@ class Assignments extends Component {
                             isSearchable="true"
                         />
                     </div>
-                    {
-                        this.state.value ?
-                            <AssignmentInfo courseJSON={this.props.courseJSON} assignmentId={this.state.value} />
-                            :
-                            null
-                    }
+                    {this.state.value ?
+                        <AssignmentInfo courseJSON={this.props.courseJSON} assignmentId={this.state.value} />
+                        :
+                        <div className="assignment-default">
+                            <img src={"/arrow.png"}></img>
+                            Please Select an Assignment
+                        </div>}
                 </div>
             );
         }

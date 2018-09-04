@@ -529,7 +529,7 @@ class AnalyzeButton extends Component {
 								</div>
 								:
 								//running algorithm
-								<div>
+								<div >
 									<FinalizeResults
 										assignmentId={this.assignmentId}
 										assignmentInfo={this.assignmentInfo}

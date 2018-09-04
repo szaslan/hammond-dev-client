@@ -1,28 +1,35 @@
 .assign-drop{
-		float: left;
-		position: block;
-		margin-top: 1%;
-		background-color: white;
-		margin-left: 15%;
-	}
+	float: left;
+	position: block;
+	margin-top: 1%;
+	background-color: white;
+	/* margin-left: 15%; */
+}
 
-	.hr-5{
-	  border-top: 1px solid #a0a0a0 !important;
-	  width: 90% !important;
-	  margin-left: -8% !important;
-	}
+.hr-5{
+  border-top: 1px solid #a0a0a0 !important;
+  width: 90% !important;
+  margin-left: -8% !important;
+}
 
-	.hr-6{
-	  border-top: 1px solid #a0a0a0 !important;
-	  width: 100% !important;
-	  margin-left: -12% !important;
-		margin-top: -3% !important;
-	}
-
+.hr-6{
+  border-top: 1px solid #a0a0a0 !important;
+  width: 100% !important;
+  margin-left: -12% !important;
+  margin-top: -3% !important;
+}
 .select-search-box{
 	background-color: white !important;
 }
-
+.assignment-default{
+	display:inline-block;
+	width:100%;
+	height:50vh;
+	padding-top:10vh;
+	font-size: 30px;
+	color:#a0a0a0;
+	
+}
 /* ---------react select styling for dropdown--------- */
 /*searchbar*/
 .css-1aya2g8, .css-2o5izw, .css-15k3avv{

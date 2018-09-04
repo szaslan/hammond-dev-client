@@ -131,6 +131,9 @@ class UserLogin extends Component {
 							})
 						})
 						break;
+					case 204:
+						history.push("/courses");
+                        break;
 					default:
 				}
 			})
