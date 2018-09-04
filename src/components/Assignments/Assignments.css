@@ -220,7 +220,7 @@
 	font-size: 20px;
 	text-align: left;
 	margin-left: 0% !important;
-	margin-top: -1% !important;
+	/* margin-top: -1% !important; */
 }
 
 .legend{
