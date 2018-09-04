@@ -9,6 +9,7 @@ import StudentInfo from '../StudentInfo/StudentInfo';
 
 //array of options for student dropdown
 const array = [];
+const arrow = require('../../img/arrow3.png');
 
 class CourseStudents extends Component {
     constructor(props) {
@@ -136,7 +137,10 @@ class CourseStudents extends Component {
                     {this.state.studentName ?
                         <StudentInfo courseId={this.state.courseId} studentId={this.state.studentId} studentName={this.state.studentName} />
                         :
-                        null
+                        <div className="assignment-default">
+                            <img className="arrow-img" src={arrow}></img>
+                            Please select a student from the dropdown.
+                        </div>
                     }
                 </div>
             );

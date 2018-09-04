@@ -13,13 +13,13 @@ a:hover, a:visited, a:link, a:active{
 }
 .icon-button{
     border:none;
-  border-radius: 3px;
-  background-color: rgb(255, 239, 226);
-  color:black;
-  font-size: 12px;
-  width:90%;
-  margin-top: 10%;
-  font-family: 'Open Sans';
+    border-radius: 3px;
+    background-color: rgb(255, 239, 226);
+    color:black;
+    font-size: 12px;
+    width:90%;
+    margin-top: 10%;
+    font-family: 'Open Sans';
 }
 .icon-cloud{
     width:40px;
@@ -37,16 +37,16 @@ a:hover, a:visited, a:link, a:active{
 
 .material-icons{
     font-family: 'Material Icons';
-  font-weight: normal;
-  font-style: normal;
-  font-size: 40px;  
-  display: inline-block;
-  line-height: 1;
-  text-transform: none;
-  letter-spacing: normal;
-  word-wrap: normal;
-  white-space: nowrap;
-  direction: ltr;
+    font-weight: normal;
+    font-style: normal;
+    font-size: 40px;  
+    display: inline-block;
+    line-height: 1;
+    text-transform: none;
+    letter-spacing: normal;
+    word-wrap: normal;
+    white-space: nowrap;
+    direction: ltr;
 }
 
 .side-bar-content{
@@ -68,6 +68,13 @@ a:hover, a:visited, a:link, a:active{
 	position: absolute;
 	bottom: 10px;
 	left: 10px;
+}
+@media only screen and (max-height: 420px){
+    .sign-out-button{
+        position:relative;
+        margin-top:20px;
+        margin-left:-27px;
+    }
 }
 .success-alert{
     position:relative!important;

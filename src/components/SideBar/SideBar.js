@@ -73,10 +73,14 @@ class SidebarComp extends React.Component {
 						})
 						this.onDismiss();
 						this.setState({ downloadSuccessful: true });
+						setTimeout(() => {
+							this.setState({ downloadSuccessful: false })
+						}, 5000)
 						break;
 					case 204:
 						// no data in database
-						// this.setState({downloadSuccessful:true});
+						this.onDismiss();
+						this.setState({downloadSuccessful:true});
 						break;
 					case 400:
 						res.json().then(res => {
@@ -143,6 +147,9 @@ class SidebarComp extends React.Component {
 					case 204: /*everything worked*/
 						this.onDismiss();
 						this.setState({ uploadSuccessful: true });
+						setTimeout(() => {
+							this.setState({ uploadSuccessful: false })
+						}, 5000)
 						break;
 					case 400: /*something went wrong*/
 						res.json().then(res => {

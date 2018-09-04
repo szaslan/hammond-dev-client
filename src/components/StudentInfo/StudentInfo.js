@@ -177,68 +177,31 @@ class StudentInfo extends Component {
                             min: -1,
                             max: 5,
                             stepSize: 1,
-                            // callback: function (value) {
-                            //     if (value === -1) {
-                            //         return "-1: Spazzy"
-                            //     }
-                            //     else if (value === 0) {
-                            //         return "0: definitely harsh"
-                            //     }
-                            //     else if (value === 1) {
-                            //         return "1: could be harsh"
-                            //     }
-                            //     else if (value === 2) {
-                            //         return "2: could be lenient"
-                            //     }
-                            //     else if (value === 3) {
-                            //         return "3: definitely lenient"
-                            //     }
-                            //     else if (value === 4) {
-                            //         return "4: could be fair"
-                            //     }
-                            //     else if (value === 5) {
-                            //         return "5: definitely fair"
-                            //     }
-                            // }
+                            callback: function (value) {
+                                if (value === -1) {
+                                    return "-1: Spazzy"
+                                }
+                                else if (value === 0) {
+                                    return "0: definitely harsh"
+                                }
+                                else if (value === 1) {
+                                    return "1: could be harsh"
+                                }
+                                else if (value === 2) {
+                                    return "2: could be lenient"
+                                }
+                                else if (value === 3) {
+                                    return "3: definitely lenient"
+                                }
+                                else if (value === 4) {
+                                    return "4: could be fair"
+                                }
+                                else if (value === 5) {
+                                    return "5: definitely fair"
+                                }
+                            }
                         },
-                        id: 'left-y-axis',
-                        type: 'linear',
-                        position: 'left',
-                    },
-                    // {
-                    //     ticks: {
-                    //         min: -1,
-                    //         max: 5,
-                    //         stepSize: 1,
-                    //         callback: function (value) {
-                    //             if (value === -1) {
-                    //                 return "Spazzy"
-                    //             }
-                    //             else if (value === 0) {
-                    //                 return "Definitely Harsh"
-                    //             }
-                    //             else if (value === 1) {
-                    //                 return "Could Be Harsh"
-                    //             }
-                    //             else if (value === 2) {
-                    //                 return "Could Be Lenient"
-                    //             }
-                    //             else if (value === 3) {
-                    //                 return "Definitely Lenient"
-                    //             }
-                    //             else if (value === 4) {
-                    //                 return "Could Be Fair"
-                    //             }
-                    //             else if (value === 5) {
-                    //                 return "Definitely Fair"
-                    //             }
-                    //         }
-                    //     },
-                    //     id: 'right-y-axis',
-                    //     type: 'linear',
-                    //     position: 'right'
-                    // }
-                    ],
+                    }],
                     xAxes: [{
                         scaleLabel: {
                             display: true,

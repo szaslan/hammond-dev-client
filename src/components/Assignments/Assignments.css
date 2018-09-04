@@ -16,9 +16,9 @@
 }
 
 .hr-5{
-  border-top: 1px solid #a0a0a0 !important;
-  width: 90% !important;
-  margin-left: -8% !important;
+	border-top: 1px solid #a0a0a0 !important;
+	width: 90% !important;
+	margin-left: -8% !important;
 }
 
 .hr-6{
@@ -32,6 +32,22 @@
 	background-color: white !important;
 }
 
+.arrow-img{
+	position:absolute;
+	width:150px;
+	top:140px;
+	left:350px;
+}
+.assignment-default{
+	display:inline-block;
+	font-weight:100;
+	width:100%;
+	height:50vh;
+	padding-top:15vh;
+	font-size: 25px;
+	color:#a0a0a0;
+	
+}
 /* ---------react select styling for dropdown--------- */
 /*searchbar*/
 .css-1aya2g8, .css-2o5izw, .css-15k3avv{
@@ -100,6 +116,13 @@
 
 .col-sm-5, .col-sm-8 {
 	padding-right: 2vw !important;
+}
+
+.graph1-key{
+	margin-top: -2%;
+	font-family: 'Open Sans';
+	font-weight: 100;
+	color: #4B4A4A;
 }
 
 .date{
@@ -193,12 +216,12 @@
 }
 
 .header-text{
-  font-family: 'Open Sans';
-  color: #626262;
-  font-weight: 100;
-  font-size: 20px;
-  text-align: left;
-  margin-left: 0% !important;
+	font-family: 'Open Sans';
+	color: #626262;
+	font-weight: 100;
+	font-size: 20px;
+	text-align: left;
+	margin-left: 0% !important;
 	margin-top: -1% !important;
 }
 
@@ -220,7 +243,7 @@
 	float: left;
 	margin-bottom: -2%;
 	margin-top: 1%;
-  margin-left: 0%;
+	margin-left: 0%;
 	font-size: 15px;
 }
 
