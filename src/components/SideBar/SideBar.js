@@ -79,7 +79,8 @@ class SidebarComp extends React.Component {
 						break;
 					case 204:
 						// no data in database
-						// this.setState({downloadSuccessful:true});
+						this.onDismiss();
+						this.setState({downloadSuccessful:true});
 						break;
 					case 400:
 						res.json().then(res => {
