@@ -7,9 +7,9 @@
 }
 
 .hr-5{
-  border-top: 1px solid #a0a0a0 !important;
-  width: 90% !important;
-  margin-left: -8% !important;
+	border-top: 1px solid #a0a0a0 !important;
+	width: 90% !important;
+	margin-left: -8% !important;
 }
 
 .hr-6{
@@ -21,12 +21,19 @@
 .select-search-box{
 	background-color: white !important;
 }
+.arrow-img{
+	position:absolute;
+	width:150px;
+	top:140px;
+	left:350px;
+}
 .assignment-default{
 	display:inline-block;
+	font-weight:100;
 	width:100%;
 	height:50vh;
-	padding-top:10vh;
-	font-size: 30px;
+	padding-top:15vh;
+	font-size: 25px;
 	color:#a0a0a0;
 	
 }
@@ -75,7 +82,7 @@
 }
 
 .chartbox{
-  margin-top: -6%;
+	margin-top: -6%;
 	margin-left: 40%;
 	width: 50%;
 }
@@ -101,7 +108,7 @@
 }
 
 .graph1-key{
-  margin-top: -2%;
+	margin-top: -2%;
 	font-family: 'Open Sans';
 	font-weight: 100;
 	color: #4B4A4A;
@@ -186,12 +193,12 @@
 }
 
 .header-text{
-  font-family: 'Open Sans';
-  color: #626262;
-  font-weight: 100;
-  font-size: 20px;
-  text-align: left;
-  margin-left: 0% !important;
+	font-family: 'Open Sans';
+	color: #626262;
+	font-weight: 100;
+	font-size: 20px;
+	text-align: left;
+	margin-left: 0% !important;
 	margin-top: -1% !important;
 }
 
@@ -213,7 +220,7 @@
 	float: left;
 	margin-bottom: -2%;
 	margin-top: 1%;
-  margin-left: 0%;
+	margin-left: 0%;
 	font-size: 15px;
 }
 
