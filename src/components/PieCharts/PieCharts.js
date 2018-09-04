@@ -23,7 +23,7 @@ class PieCharts extends Component {
         this.clearPieChart1 = this.clearPieChart1.bind(this);
         this.clearPieChart2 = this.clearPieChart2.bind(this);
 
-        this.assignmentId = this.props.assignmentId;
+        this.localStorageExtension = "_" + this.props.assignmentId + "_" + this.props.courseId;
     }
 
     clearPieChart1() {
@@ -49,16 +49,16 @@ class PieCharts extends Component {
                     <Col className="graph1">
                         {/* title and total */}
                         <h5 className="graph-title">Completion</h5>
-                        <p className="graph-sub">Total: {Number(localStorage.getItem("completedAllReviews_" + this.assignmentId)) + Number(localStorage.getItem("completedSomeReviews_" + this.assignmentId)) + Number(localStorage.getItem("completedNoReviews_" + this.assignmentId))}</p>
+                        <p className="graph-sub">Total: {Number(localStorage.getItem("completedAllReviews" + this.localStorageExtension)) + Number(localStorage.getItem("completedSomeReviews" + this.localStorageExtension)) + Number(localStorage.getItem("completedNoReviews" + this.localStorageExtension))} students</p>
                         <Flexbox className="chartbox" flexDirection="column" flexWrap="wrap">
                             {/* react piechart to display finalized details */}
                             <ReactSvgPieChart className="piechart"
                                 expandSize={3}
                                 expandOnHover="false"
                                 data={[
-                                    { title: "Completed all reviews", value: Number(localStorage.getItem("completedAllReviews_" + this.assignmentId)), color: '#063D11' },
-                                    { title: "Completed some reviews", value: Number(localStorage.getItem("completedSomeReviews_" + this.assignmentId)), color: '#C68100' },
-                                    { title: "Completed no reviews", value: Number(localStorage.getItem("completedNoReviews_" + this.assignmentId)), color: '#AD1F1F' },
+                                    { title: "Completed all reviews", value: Number(localStorage.getItem("completedAllReviews" + this.localStorageExtension)), color: '#063D11' },
+                                    { title: "Completed some reviews", value: Number(localStorage.getItem("completedSomeReviews" + this.localStorageExtension)), color: '#C68100' },
+                                    { title: "Completed no reviews", value: Number(localStorage.getItem("completedNoReviews" + this.localStorageExtension)), color: '#AD1F1F' },
                                 ]}
                                 //on hover, expand sector and bold corresponding label
                                 onSectorHover={(d) => {
@@ -101,26 +101,26 @@ class PieCharts extends Component {
                     {/* second piechart for grading classification */}
                     <Col className="graph2">
                         <h5 className="graph-title">Grading Classification</h5>
-                        <p className="graph-sub">Total: {Number(localStorage.getItem("definitelyHarsh_" + this.assignmentId)) +
-                            Number(localStorage.getItem("couldBeHarsh_" + this.assignmentId)) +
-                            Number(localStorage.getItem("definitelyLenient_" + this.assignmentId)) +
-                            Number(localStorage.getItem("couldBeLenient_" + this.assignmentId)) +
-                            Number(localStorage.getItem("definitelyFair_" + this.assignmentId)) +
-                            Number(localStorage.getItem("couldBeFair_" + this.assignmentId)) +
-                            Number(localStorage.getItem("spazzy_" + this.assignmentId))}</p>
+                        <p className="graph-sub">Total: {Number(localStorage.getItem("definitelyHarsh" + this.localStorageExtension)) +
+                            Number(localStorage.getItem("couldBeHarsh" + this.localStorageExtension)) +
+                            Number(localStorage.getItem("definitelyLenient" + this.localStorageExtension)) +
+                            Number(localStorage.getItem("couldBeLenient" + this.localStorageExtension)) +
+                            Number(localStorage.getItem("definitelyFair" + this.localStorageExtension)) +
+                            Number(localStorage.getItem("couldBeFair" + this.localStorageExtension)) +
+                            Number(localStorage.getItem("spazzy" + this.localStorageExtension))} students</p>
 
                         <Flexbox className="chartbox" flexDirection="column" flexWrap="wrap">
                             <ReactSvgPieChart className="piechart"
                                 expandSize={3}
                                 expandOnHover="false"
                                 data={[
-                                    { title: "Definitely Harsh", value: Number(localStorage.getItem("definitelyHarsh_" + this.assignmentId)), color: '#AD1F1F' },
-                                    { title: "Could be Harsh", value: Number(localStorage.getItem("couldBeHarsh_" + this.assignmentId)), color: '#D6A0A0' },
-                                    { title: "Definitely Lenient", value: Number(localStorage.getItem("definitelyLenient_" + this.assignmentId)), color: '#001887' },
-                                    { title: "Could be Lenient", value: Number(localStorage.getItem("couldBeLenient_" + this.assignmentId)), color: '#B3BBDD' },
-                                    { title: "Definitely Fair", value: Number(localStorage.getItem("definitelyFair_" + this.assignmentId)), color: '#063D11' },
-                                    { title: "Could be Fair", value: Number(localStorage.getItem("couldBeFair_" + this.assignmentId)), color: '#94B29A' },
-                                    { title: "Spazzy", value: Number(localStorage.getItem("spazzy_" + this.assignmentId)), color: '#C68100' }
+                                    { title: "Definitely Harsh", value: Number(localStorage.getItem("definitelyHarsh" + this.localStorageExtension)), color: '#AD1F1F' },
+                                    { title: "Could be Harsh", value: Number(localStorage.getItem("couldBeHarsh" + this.localStorageExtension)), color: '#D6A0A0' },
+                                    { title: "Definitely Lenient", value: Number(localStorage.getItem("definitelyLenient" + this.localStorageExtension)), color: '#001887' },
+                                    { title: "Could be Lenient", value: Number(localStorage.getItem("couldBeLenient" + this.localStorageExtension)), color: '#B3BBDD' },
+                                    { title: "Definitely Fair", value: Number(localStorage.getItem("definitelyFair" + this.localStorageExtension)), color: '#063D11' },
+                                    { title: "Could be Fair", value: Number(localStorage.getItem("couldBeFair" + this.localStorageExtension)), color: '#94B29A' },
+                                    { title: "Spazzy", value: Number(localStorage.getItem("spazzy" + this.localStorageExtension)), color: '#C68100' }
                                 ]}
                                 onSectorHover={(d) => {
                                     if (d) {

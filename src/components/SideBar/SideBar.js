@@ -29,6 +29,7 @@ class SidebarComp extends React.Component {
 	handleLocalStorageData(data) {
 		data.forEach(assignmentLevelData => {
 			let assignmentId = assignmentLevelData["assignment_id"];
+			let courseId = assignmentLevelData["course_id"];
 			let dueDateRegex = /dueDate[0-9]+/
 
 			localStorageFields.forEach(field => {
@@ -48,7 +49,7 @@ class SidebarComp extends React.Component {
 								value = true;
 							}
 						}
-						localStorage.setItem(field + "_" + assignmentId, value)
+						localStorage.setItem(field + "_" + assignmentId + "_" + courseId, value)
 					}
 				}
 			})
@@ -70,7 +71,9 @@ class SidebarComp extends React.Component {
 						})
 						// this.setState({downloadSuccessful:true});
 						break;
-					case 204: 
+					case 204:
+						// no data in database
+						// this.setState({downloadSuccessful:true});
 						break;
 					case 400:
 						res.json().then(res => {
@@ -130,7 +133,6 @@ class SidebarComp extends React.Component {
 					case 204: /*everything worked*/
 						// this.setState({uploadSuccessful:true});
 						break;
-
 					case 400: /*something went wrong*/
 						res.json().then(res => {
 							history.push({

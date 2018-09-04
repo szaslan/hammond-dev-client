@@ -22,7 +22,7 @@ class Landing extends Component {
         })
             .then(res => {
                 switch (res.status) {
-                    case 201:
+                    case 204:
                         break;
                     case 400:
                         res.json().then(res => {

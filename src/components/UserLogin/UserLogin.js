@@ -36,10 +36,11 @@ class UserLogin extends Component {
 	handleLocalStorageData(data) {
 		data.forEach(assignmentLevelData => {
 			let assignmentId = assignmentLevelData["assignment_id"];
+			let courseId = assignmentLevelData["course_id"];
 			let dueDateRegex = /dueDate[0-9]+/
 
 			localStorageFields.forEach(field => {
-				if (field !== "assignment_id") {
+				if (field !== "assignment_id" && field !== "course_id") {
 					let value = assignmentLevelData[field];
 					if (value != null) {
 						if (value != "N/A") {
@@ -55,7 +56,7 @@ class UserLogin extends Component {
 								value = true;
 							}
 						}
-						localStorage.setItem(field + "_" + assignmentId, value)
+						localStorage.setItem(field + "_" + assignmentId + "_" + courseId, value)
 					}
 				}
 			})
@@ -114,6 +115,7 @@ class UserLogin extends Component {
 						})
 						break;
 					case 204:
+						// no data in database so just send to courses page
 						history.push("/courses");
 						break;
 					case 400:
