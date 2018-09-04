@@ -22,8 +22,32 @@ class Courses extends Component {
             user: [],
         }
 
+        this.createTables = this.createTables.bind(this);
         this.fetchCourses = this.fetchCourses.bind(this);
+        this.send400Error = this.send400Error.bind(this);
         this.signOut = this.signOut.bind(this);
+    }
+
+    createTables() {
+        fetch('/api/createTables', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+        })
+            .then(res => {
+                switch (res.status) {
+                    case 204:
+                        //no issues
+                        break;
+                    case 400:
+                        res.json().then(res => {
+                            this.send400Error("This function is called whenever a user navigates to the dashboard (including after logging in / registering). This function ensures that every SQL table exists and has the necessary formatting.", res.error, "Courses.js: createTables()", res.message)
+                        })
+                        break;
+                    default:
+                }
+            })
     }
 
     fetchCourses() {
@@ -48,15 +72,7 @@ class Courses extends Component {
                         break;
                     case 400:
                         res.json().then(res => {
-                            history.push({
-                                pathname: '/error',
-                                state: {
-                                    context: 'This function is called after a user logs in or registers for a new account. This function fetches the list of courses that the current user is enrolled in as a teacher from Canvas.',
-                                    error: res.error,
-                                    location: "Courses.js: fetchCourses()",
-                                    message: res.message,
-                                }
-                            })
+                            this.send400Error('This function is called after a user logs in or registers for a new account. This function fetches the list of courses that the current user is enrolled in as a teacher from Canvas.', res.error, "Courses.js: fetchCourses()", res.message)
                         })
                         break;
                     case 401:
@@ -85,6 +101,18 @@ class Courses extends Component {
             })
     }
 
+    send400Error(context, error, location, message) {
+        history.push({
+            pathname: '/error',
+            state: {
+                context: context,
+                error: error,
+                location: location,
+                message: message,
+            }
+        })
+    }
+    
     signOut() {
         fetch('/logout', {
             credentials: 'include'
@@ -93,6 +121,7 @@ class Courses extends Component {
 
     componentDidMount() {
         this.fetchCourses();
+        this.createTables();
     }
 
     render() {

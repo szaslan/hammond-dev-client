@@ -1,6 +1,7 @@
 import ChartJS from 'react-chartjs-wrapper';
 import Loader from 'react-loader-spinner'
 import React, { Component } from 'react';
+import { Tooltip } from 'reactstrap';
 
 import './StudentInfoGraph.css';
 
@@ -13,6 +14,7 @@ class StudentInfoGraph extends Component {
                 labels: [],
                 datasets: [],
                 options: {},
+                tooltipOpen: false,
             },
             graphLoaded: false,
 
@@ -20,6 +22,7 @@ class StudentInfoGraph extends Component {
         }
 
         this.pullStudentEvaluatingData = this.pullStudentEvaluatingData.bind(this);
+        this.toggle = this.toggle.bind(this);
     }
 
     pullStudentEvaluatingData() {
@@ -51,6 +54,12 @@ class StudentInfoGraph extends Component {
         })
     }
 
+    toggle() {
+        this.setState({
+            tooltipOpen: !this.state.tooltipOpen
+        })
+    }
+
     componentDidMount() {
         console.log(this.props.peerReviewData)
         this.pullStudentEvaluatingData();
@@ -59,8 +68,25 @@ class StudentInfoGraph extends Component {
     render() {
         if (this.state.graphLoaded) {
             return (
-                <div className="graph">
+                <div>
+                <div className="graph" id={"graphtooltip"}>
                     <ChartJS type='line' data={this.state.data} options={this.state.data.options} width="600" height="300" />
+                </div>
+                <Tooltip placement="right" isOpen={this.state.tooltipOpen} target={"graphtooltip"} toggle={this.toggle}>
+                    -1: spazzy
+                <br />
+                    0: definitely harsh
+                <br />
+                    1: could be harsh
+                <br />
+                    2: could be lenient
+                <br />
+                    3: definitely lenient
+                <br />
+                    4: could be fair
+                <br />
+                    5: definitely fair
+                </Tooltip>
                 </div>
             )
         }

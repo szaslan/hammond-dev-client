@@ -79,7 +79,8 @@ class StudentInfo extends Component {
 
     checkIfFinalizeHasBeenPressed() {
         let finalizeId = {
-            assignmentId: this.state.selectedAssignment
+            assignmentId: this.state.selectedAssignment,
+            courseId: this.state.courseId,
         }
 
         //if error, check if assignment has been finalized (error inevitable if assignment hasn't been finalized)
@@ -111,6 +112,7 @@ class StudentInfo extends Component {
 
     checkIfStudentHasSavedHistory() {
         let data = {
+            courseId: this.state.courseId,
             studentId: this.state.selectedStudentId,
         }
 
@@ -161,47 +163,87 @@ class StudentInfo extends Component {
             options: {
                 title: {
                     display: true,
-                    text: 'Bucket Data:',
+                    text: 'Bucket History',
+                    fontSize: 16,
                 },
                 scales: {
                     yAxes: [{
                         scaleLabel: {
                             display: true,
-                            labelString: 'Bucket Classifications:'
+                            labelString: 'Bucket Classifications',
+                            fontSize: 14,
                         },
                         ticks: {
                             min: -1,
                             max: 5,
                             stepSize: 1,
-                            callback: function (value) {
-                                if (value === -1) {
-                                    return "-1: Spazzy"
-                                }
-                                else if (value === 0) {
-                                    return "0: definitely harsh"
-                                }
-                                else if (value === 1) {
-                                    return "1: could be harsh"
-                                }
-                                else if (value === 2) {
-                                    return "2: could be lenient"
-                                }
-                                else if (value === 3) {
-                                    return "3: definitely lenient"
-                                }
-                                else if (value === 4) {
-                                    return "4: could be fair"
-                                }
-                                else if (value === 5) {
-                                    return "5: definitely fair"
-                                }
-                            }
-                        }
-                    }],
+                            // callback: function (value) {
+                            //     if (value === -1) {
+                            //         return "-1: Spazzy"
+                            //     }
+                            //     else if (value === 0) {
+                            //         return "0: definitely harsh"
+                            //     }
+                            //     else if (value === 1) {
+                            //         return "1: could be harsh"
+                            //     }
+                            //     else if (value === 2) {
+                            //         return "2: could be lenient"
+                            //     }
+                            //     else if (value === 3) {
+                            //         return "3: definitely lenient"
+                            //     }
+                            //     else if (value === 4) {
+                            //         return "4: could be fair"
+                            //     }
+                            //     else if (value === 5) {
+                            //         return "5: definitely fair"
+                            //     }
+                            // }
+                        },
+                        id: 'left-y-axis',
+                        type: 'linear',
+                        position: 'left',
+                    },
+                    // {
+                    //     ticks: {
+                    //         min: -1,
+                    //         max: 5,
+                    //         stepSize: 1,
+                    //         callback: function (value) {
+                    //             if (value === -1) {
+                    //                 return "Spazzy"
+                    //             }
+                    //             else if (value === 0) {
+                    //                 return "Definitely Harsh"
+                    //             }
+                    //             else if (value === 1) {
+                    //                 return "Could Be Harsh"
+                    //             }
+                    //             else if (value === 2) {
+                    //                 return "Could Be Lenient"
+                    //             }
+                    //             else if (value === 3) {
+                    //                 return "Definitely Lenient"
+                    //             }
+                    //             else if (value === 4) {
+                    //                 return "Could Be Fair"
+                    //             }
+                    //             else if (value === 5) {
+                    //                 return "Definitely Fair"
+                    //             }
+                    //         }
+                    //     },
+                    //     id: 'right-y-axis',
+                    //     type: 'linear',
+                    //     position: 'right'
+                    // }
+                    ],
                     xAxes: [{
                         scaleLabel: {
                             display: true,
-                            labelString: 'Assignments'
+                            labelString: 'Assignments',
+                            fontSize: 14,
                         },
                     }],
                 }
@@ -222,38 +264,38 @@ class StudentInfo extends Component {
             options: {
                 title: {
                     display: true,
-                    text: 'Weight History:',
+                    text: 'Weight History',
                 },
                 scales: {
                     yAxes: [{
                         scaleLabel: {
                             display: true,
-                            labelString: 'Weight:'
+                            labelString: 'Weight'
                         },
                         ticks: {
                             suggestedMin: 0,
                             suggestedMax: 3,
                             stepSize: .2,
-                            callback: function (value) {
-                                if (value === 1) {
-                                    return "Neutral <---------> 1.00"
-                                }
-                                else if (value.toFixed(2) === 2.00) {
-                                    return "Fair          ≈        2.00"
-                                }
-                                else if (value.toFixed(2) === 0.40) {
-                                    return "Harsh/Lenient         ≈        0.40"
-                                }
-                                else {
-                                    return value.toFixed(2)
-                                }
-                            }
+                            // callback: function (value) {
+                            //     if (value.toFixed(2) === "1.00") {
+                            //         return "Neutral <---------> 1.00"
+                            //     }
+                            //     else if (value.toFixed(2) === "2.00") {
+                            //         return "Fair          ≈        2.00"
+                            //     }
+                            //     else if (value.toFixed(2) === "0.40") {
+                            //         return "Harsh/Lenient         ≈        0.40"
+                            //     }
+                            //     else {
+                            //         return value.toFixed(2)
+                            //     }
+                            // }
                         }
                     }],
                     xAxes: [{
                         scaleLabel: {
                             display: true,
-                            labelString: 'Assignments:'
+                            labelString: 'Assignments'
                         },
                     }],
                 },
@@ -274,13 +316,13 @@ class StudentInfo extends Component {
             options: {
                 title: {
                     display: true,
-                    text: 'Peer Reviews Completed History:',
+                    text: 'Peer Reviews Completed History',
                 },
                 scales: {
                     yAxes: [{
                         scaleLabel: {
                             display: true,
-                            labelString: 'Number of Peer Reviews Completed:'
+                            labelString: 'Number of Peer Reviews Completed'
                         },
                         ticks: {
                             min: 0,
@@ -292,7 +334,7 @@ class StudentInfo extends Component {
                     xAxes: [{
                         scaleLabel: {
                             display: true,
-                            labelString: 'Assignments:'
+                            labelString: 'Assignments'
                         },
                     }],
                 }
@@ -365,8 +407,9 @@ class StudentInfo extends Component {
 
     getPeerReviews() {
         let data = {
-            studentId: this.state.selectedStudentId,
             assignmentId: this.state.selectedAssignment,
+            courseId: this.state.courseId,
+            studentId: this.state.selectedStudentId,
         }
 
         fetch('/api/getPeerReviewsForStudent', {
@@ -401,6 +444,7 @@ class StudentInfo extends Component {
 
     pullStudentEvaluatingData() {
         let data = {
+            courseId: this.state.courseId,
             studentId: this.state.selectedStudentId,
         }
 
@@ -460,7 +504,7 @@ class StudentInfo extends Component {
     select(event) {
         this.setState({
             value: event.target.innerText,
-            selectedAssignment: Number(event.target.id),
+            selectedAssignment: event.target.id,
             value2: 'Select a Peer Review',
             peerReviewsCompletedByCurrentStudent: [],
             message: '',
@@ -479,7 +523,8 @@ class StudentInfo extends Component {
         let data = {
             assignmentId: this.state.selectedAssignment,
             assessorId: this.state.selectedStudentId,
-            userId: Number(event.target.id)
+            courseId: this.state.courseId,
+            userId: (event.target.id)
         }
 
         fetch('/api/peerReviewGrade', {
@@ -560,7 +605,6 @@ class StudentInfo extends Component {
 
     //renders initially
     componentDidUpdate(prevProps) {
-        console.log(this.props, prevProps)
         if (this.props.studentId !== prevProps.studentId) {
             this.resetFieldsForNewStudent()
         }

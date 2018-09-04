@@ -51,9 +51,11 @@ class AlgorithmBenchmarks extends Component {
         this.handleSubmit = this.handleSubmit.bind(this);
         this.toggle = this.toggle.bind(this);
 
-        this.assignmentId = this.props.assignmentId
-        this.benchmarks = this.props.benchmarks
-        this.originalBenchmarks = this.props.originalBenchmarks
+        this.assignmentId = this.props.assignmentId;
+        this.benchmarks = this.props.benchmarks;
+        this.courseId = this.props.courseId;
+        this.localStorageExtension = "_" + this.props.assignmentId + "_" + this.props.courseId;
+        this.originalBenchmarks = this.props.originalBenchmarks;
     }
 
     handleAdvancedClick() {
@@ -82,9 +84,9 @@ class AlgorithmBenchmarks extends Component {
         event.preventDefault();
         Object.keys(this.benchmarks).forEach(benchmark => {
             var value = this.state[benchmark];
-            localStorage.setItem(benchmark + "_" + this.assignmentId, value)
+            localStorage.setItem(benchmark + this.localStorageExtension, value)
         });
-        localStorage.setItem("customBenchmarksSaved_" + this.assignmentId, true)
+        localStorage.setItem("customBenchmarksSaved" + this.localStorageExtension, true)
         this.setState({
             saved: true
         })
@@ -113,7 +115,6 @@ class AlgorithmBenchmarks extends Component {
     }
 
     render() {
-        // if (this.state.loaded && (!localStorage.getItem("customBenchmarksSaved_" + this.assignmentId) || localStorage.getItem("customBenchmarksSaved_" + this.assignmentId) !== "true") ) {
         if (this.state.loaded) {
             return (
                 <div>
@@ -278,4 +279,5 @@ class AlgorithmBenchmarks extends Component {
         )
     }
 }
+
 export default AlgorithmBenchmarks;

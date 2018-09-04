@@ -13,30 +13,32 @@ class NewDueDate extends Component {
             number: Number(this.props.number),
         }
 
-        this.assignmentId = this.props.assignmentId
+        this.assignmentId = this.props.assignmentId;
+        this.courseId = this.props.courseId;
+        this.localStorageExtension = "_" + this.props.assignmentId + "_" + this.props.courseId;
     }
 
     render() {
         switch (this.state.number) {
             case 1:
                 return (
-                    <NewDueDateForm assignmentId={this.assignmentId} number={this.state.number} textDescription={this.props.textDescription}/>
+                    <NewDueDateForm assignmentId={this.assignmentId} courseId={this.courseId} number={this.state.number} textDescription={this.props.textDescription}/>
                 );
             case 2:
                 return (
-                    (localStorage.getItem("dueDate1_" + this.assignmentId) && localStorage.getItem("dueDate1_" + this.assignmentId) !== "N/A" ?
-                        <NewDueDateForm assignmentId={this.assignmentId} number={this.state.number} textDescription={this.props.textDescription}/>
+                    (localStorage.getItem("dueDate1" + this.localStorageExtension) && localStorage.getItem("dueDate1" + this.localStorageExtension) !== "N/A" ?
+                        <NewDueDateForm assignmentId={this.assignmentId} courseId={this.courseId} number={this.state.number} textDescription={this.props.textDescription}/>
                         :
-                        <NewDueDateForm isGray assignmentId={this.assignmentId} number={this.state.number} textDescription={this.props.textDescription}/>
+                        <NewDueDateForm isGray assignmentId={this.assignmentId} courseId={this.courseId} number={this.state.number} textDescription={this.props.textDescription}/>
                     )
                 )
             case 3:
                 return (
-                   ((localStorage.getItem("dueDate1_" + this.assignmentId) && localStorage.getItem("dueDate1_" + this.assignmentId) !== "N/A" &&
-                        localStorage.getItem("dueDate2_" + this.assignmentId)) && localStorage.getItem("dueDate2_" + this.assignmentId) !== "N/A" ?
-                        <NewDueDateForm assignmentId={this.assignmentId} number={this.state.number} textDescription={this.props.textDescription}/>
+                   ((localStorage.getItem("dueDate1" + this.localStorageExtension) && localStorage.getItem("dueDate1" + this.localStorageExtension) !== "N/A" &&
+                        localStorage.getItem("dueDate2" + this.localStorageExtension)) && localStorage.getItem("dueDate2" + this.localStorageExtension) !== "N/A" ?
+                        <NewDueDateForm assignmentId={this.assignmentId} courseId={this.courseId} number={this.state.number} textDescription={this.props.textDescription}/>
                         :
-                        <NewDueDateForm isGray assignmentId={this.assignmentId} number={this.state.number} textDescription={this.props.textDescription}/>
+                        <NewDueDateForm isGray assignmentId={this.assignmentId} courseId={this.courseId} number={this.state.number} textDescription={this.props.textDescription}/>
                     )
                 )
             default:

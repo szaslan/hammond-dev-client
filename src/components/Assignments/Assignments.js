@@ -36,7 +36,8 @@ class Assignments extends Component {
             courseId: this.props.courseJSON.id,
             loaded: false,
             url: `/courses/${this.props.courseJSON.id}/assignments/`,
-            value: array[0],
+            value: null,
+
             ...props,
         }
 
@@ -48,6 +49,7 @@ class Assignments extends Component {
         let data = {
             courseId: this.state.courseId,
         }
+
         fetch('/api/assignments', {
             method: 'POST',
             headers: {

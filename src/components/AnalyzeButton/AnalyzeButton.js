@@ -79,6 +79,7 @@ class AnalyzeButton extends Component {
 		this.deadline_1 = null;
 		this.deadline_2 = null;
 		this.deadline_3 = null;
+		this.localStorageExtension = "_" + this.props.assignmentId + "_" + this.props.courseId;
 		this.minutesInterval = null;
 		this.secondsInterval = null;
 		this.userInputBenchmarks = {
@@ -141,7 +142,8 @@ class AnalyzeButton extends Component {
 
 	checkForPreviousAnalyzeAndFinalizePresses() {
 		let data = {
-			assignmentId: this.assignmentId
+			assignmentId: this.assignmentId,
+			courseId: this.courseId,
 		}
 
 		fetch('/api/hasFinalizeBeenPressed', {
@@ -155,13 +157,13 @@ class AnalyzeButton extends Component {
 				res.json().then(res => {
 					if (res.result === "not found") {
 						//column in gradebook not found, so assignment has not been finalized
-						if (localStorage.getItem("analyzePressed_" + this.assignmentId) == "true") {
+						if (localStorage.getItem("analyzePressed" + this.localStorageExtension) === "true") {
 							this.setState({
 								analyzeDisplayText: true,
 							})
 
 							//To automatically finalize if all peer reviews are in
-							if (localStorage.getItem("analyzeDisplayTextMessage_" + this.assignmentId) === "All reviews accounted for" && localStorage.getItem("automaticallyFinalize_" + this.assignmentId) === "true") {
+							if (localStorage.getItem("analyzeDisplayTextMessage" + this.localStorageExtension) === "All reviews accounted for" && localStorage.getItem("automaticallyFinalize" + this.localStorageExtension) === "true") {
 								console.log("all peer reviews are in, so we can finalize this assignment")
 								this.handleFinalizeClick()
 							}
@@ -217,7 +219,7 @@ class AnalyzeButton extends Component {
 							deletedIncompletePeerReviews: true,
 						})
 
-						if (localStorage.getItem("automaticallyFinalize_" + this.assignmentId) === "true") {
+						if (localStorage.getItem("automaticallyFinalize" + this.localStorageExtension) === "true") {
 							this.handleFinalizeClick()
 						}
 						break;
@@ -233,7 +235,7 @@ class AnalyzeButton extends Component {
 	}
 
 	handleFinalizeClick() {
-		localStorage.setItem("finalized_" + this.assignmentId, this.state.currTime)
+		localStorage.setItem("finalized" + this.localStorageExtension, this.state.currTime)
 		this.setState({
 			finalizePressed: true,
 		})
@@ -247,7 +249,7 @@ class AnalyzeButton extends Component {
 
 	pullDueDatesFromLocalStorage() {
 		for (var i = 1; i <= 3; i++) {
-			let dueDate = localStorage.getItem("dueDate" + i + "_" + this.assignmentId);
+			let dueDate = localStorage.getItem("dueDate" + i + this.localStorageExtension);
 			if (dueDate && dueDate !== "N/A") {
 				var newDate = new Date(dueDate)
 				this["deadline_" + i] = moment(newDate).format('l') + ", " + moment(newDate).format('LTS')
@@ -261,7 +263,7 @@ class AnalyzeButton extends Component {
 
 	pullSavedBenchmarksFromLocalStorage() {
 		benchmarkNames.forEach((benchmark, index, array) => {
-			let value = localStorage.getItem(benchmark + "_" + this.assignmentId);
+			let value = localStorage.getItem(benchmark + this.localStorageExtension);
 			//If the benchmark has been locally stored
 			if (value && value !== "N/A") {
 				//If the locally stored benchmark is different from what's currently saved in the object
@@ -330,6 +332,7 @@ class AnalyzeButton extends Component {
 	saveOriginallyAssignedNumbers() {
 		let data = {
 			assignmentId: this.assignmentId,
+			courseId: this.courseId,
 		}
 
 		fetch('/api/savePeerReviewNumbers', {
@@ -362,7 +365,7 @@ class AnalyzeButton extends Component {
 			assignmentId: this.assignmentId,
 			assignmentName: this.assignmentInfo.name,
 			courseId: this.courseId,
-			dueDate: localStorage.getItem("dueDate2_" + this.assignmentId),
+			dueDate: localStorage.getItem("dueDate2" + this.localStorageExtension),
 		}
 
 		fetch('/api/sendIncompleteMessages', {
@@ -390,7 +393,7 @@ class AnalyzeButton extends Component {
 					case 404:
 						//no peer reviews need to be reassigned so there are no messages to be sent
 						console.log("there are no peer reviews that need to be reassigned, so there are no messages to send")
-						if (localStorage.getItem("automaticallyFinalize_" + this.assignmentId) === "true") {
+						if (localStorage.getItem("automaticallyFinalize" + this.localStorageExtension) === "true") {
 							this.handleFinalizeClick()
 						}
 						break;
@@ -452,7 +455,7 @@ class AnalyzeButton extends Component {
 		this.pullDueDatesFromLocalStorage();
 
 		//To automatically finalize if all peer reviews are in
-		if (localStorage.getItem("analyzeDisplayTextMessage_" + this.assignmentId) === "All reviews accounted for" && !this.state.finalizePressed && localStorage.getItem("automaticallyFinalize_" + this.assignmentId) === "true") {
+		if (localStorage.getItem("analyzeDisplayTextMessage" + this.localStorageExtension) === "All reviews accounted for" && !this.state.finalizePressed && localStorage.getItem("automaticallyFinalize" + this.localStorageExtension) === "true") {
 			console.log("all peer reviews are in, so we can finalize this assignment")
 			this.handleFinalizeClick()
 		}
@@ -468,18 +471,18 @@ class AnalyzeButton extends Component {
 							<div className={"calendar-case" + (this.state.nextClicked ? "-hidden" : "")}>
 								<p className="header-text">Set Due Date:</p>
 								<Flexbox flexWrap="wrap">
-									<NewDueDate number="1" assignmentId={this.assignmentId} textDescription={message1} />
-									<NewDueDate number="2" assignmentId={this.assignmentId} textDescription={message2} />
-									<NewDueDate number="3" assignmentId={this.assignmentId} textDescription={message3} />
+									<NewDueDate number="1" assignmentId={this.assignmentId} courseId={this.courseId} textDescription={message1} />
+									<NewDueDate number="2" assignmentId={this.assignmentId} courseId={this.courseId} textDescription={message2} />
+									<NewDueDate number="3" assignmentId={this.assignmentId} courseId={this.courseId} textDescription={message3} />
 								</Flexbox>
-								<button className="switch-button next-button" disabled={!localStorage.getItem("dueDate3_" + this.assignmentId)} onClick={this.nextClick}>
+								<button className="switch-button next-button" disabled={!localStorage.getItem("dueDate3" + this.localStorageExtension) || localStorage.getItem("dueDate3" + this.localStorageExtension) == "N/A"} onClick={this.nextClick}>
 									Next
 								</button>
 
 								</div>
 
 								<div className={"parameters-case" + (this.state.nextClicked ? "" : "-hidden")}>
-									<CustomizableParameters assignmentId={this.assignmentId} userInputBenchmarks={this.userInputBenchmarks} />
+									<CustomizableParameters assignmentId={this.assignmentId} courseId={this.courseId} userInputBenchmarks={this.userInputBenchmarks} />
 
 									<Flexbox className="flex-dropdown" width="100%" flexWrap="wrap" justify-content="space-around">
 										<Row className="analyze">
@@ -518,10 +521,10 @@ class AnalyzeButton extends Component {
 									<FinalizeResults
 										assignmentId={this.assignmentId}
 										assignmentInfo={this.assignmentInfo}
-										benchmarks={localStorage.getItem("customBenchmarks_" + this.assignmentId) === "true" ? this.userInputBenchmarks : defaultBenchmarks}
+										benchmarks={localStorage.getItem("customBenchmarks" + this.localStorageExtension) === "true" ? this.userInputBenchmarks : defaultBenchmarks}
 										courseId={this.courseId}
-										penalizingForOriginalIncompletes={localStorage.getItem("penalizingForOriginalIncompletes_" + this.assignmentId) === "true" ? true : false}
-										penalizingForReassignedIncompletes={localStorage.getItem("penalizingForReassignedIncompletes_" + this.assignmentId) === "true" ? true : false}
+										penalizingForOriginalIncompletes={localStorage.getItem("penalizingForOriginalIncompletes" + this.localStorageExtension) === "true" ? true : false}
+										penalizingForReassignedIncompletes={localStorage.getItem("penalizingForReassignedIncompletes" + this.localStorageExtension) === "true" ? true : false}
 									/>
 								</div>
 								:
@@ -530,10 +533,10 @@ class AnalyzeButton extends Component {
 									<FinalizeResults
 										assignmentId={this.assignmentId}
 										assignmentInfo={this.assignmentInfo}
-										benchmarks={localStorage.getItem("customBenchmarks_" + this.assignmentId) === "true" ? this.userInputBenchmarks : defaultBenchmarks}
+										benchmarks={localStorage.getItem("customBenchmarks" + this.localStorageExtension) === "true" ? this.userInputBenchmarks : defaultBenchmarks}
 										courseId={this.courseId}
-										penalizingForOriginalIncompletes={localStorage.getItem("penalizingForOriginalIncompletes_" + this.assignmentId) === "true" ? true : false}
-										penalizingForReassignedIncompletes={localStorage.getItem("penalizingForReassignedIncompletes_" + this.assignmentId) === "true" ? true : false}
+										penalizingForOriginalIncompletes={localStorage.getItem("penalizingForOriginalIncompletes" + this.localStorageExtension) === "true" ? true : false}
+										penalizingForReassignedIncompletes={localStorage.getItem("penalizingForReassignedIncompletes" + this.localStorageExtension) === "true" ? true : false}
 										pressed
 									/>
 									{
@@ -552,9 +555,9 @@ class AnalyzeButton extends Component {
 											<AnalyzeResults
 												assignmentId={this.assignmentId}
 												assignmentInfo={this.assignmentInfo}
-												benchmarks={localStorage.getItem("customBenchmarks_" + this.assignmentId) === "true" ? this.userInputBenchmarks : defaultBenchmarks}
+												benchmarks={localStorage.getItem("customBenchmarks" + this.localStorageExtension) === "true" ? this.userInputBenchmarks : defaultBenchmarks}
 												courseId={this.courseId}
-												pressed
+												pressed={true}
 											/>
 											{
 												this.setState({
@@ -569,8 +572,11 @@ class AnalyzeButton extends Component {
 								{
 									this.state.analyzeDisplayText ?
 										<AnalyzeResults
-											assignmentId={this.assignmentId}
-											benchmarks={localStorage.getItem("customBenchmarks_" + this.assignmentId) === "true" ? this.userInputBenchmarks : defaultBenchmarks}
+										assignmentId={this.assignmentId}
+										assignmentInfo={this.assignmentInfo}
+										benchmarks={localStorage.getItem("customBenchmarks" + this.localStorageExtension) === "true" ? this.userInputBenchmarks : defaultBenchmarks}
+										courseId={this.courseId}
+										pressed={false}
 										/>
 										:
 										null
@@ -580,7 +586,7 @@ class AnalyzeButton extends Component {
 
 					{/* Due Date Functionality */}
 					{
-						this.deadline_1 != null && this.deadline_1 === this.state.currTime && localStorage.getItem("sendIncompleteMessages_" + this.assignmentId) === "true" ?
+						this.deadline_1 != null && this.deadline_1 === this.state.currTime && localStorage.getItem("sendIncompleteMessages" + this.localStorageExtension) === "true" ?
 							this.saveAllPeerReviews(1)
 							:
 							null
