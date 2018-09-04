@@ -149,11 +149,11 @@ class FinalizeResults extends Component {
     finalizePeerReviewGrades() {
         let data = {
             assignmentId: this.assignmentId,
-            pointsPossible: this.assignmentInfo.points_possible,
             benchmarks: this.state.benchmarks,
             courseId: this.courseId,
             penalizingForOriginalIncompletes: this.props.penalizingForOriginalIncompletes,
             penalizingForReassignedIncompletes: this.props.penalizingForReassignedIncompletes,
+            pointsPossible: this.assignmentInfo.points_possible,
         }
 
         //Step 5

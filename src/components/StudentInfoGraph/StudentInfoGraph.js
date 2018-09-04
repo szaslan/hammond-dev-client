@@ -1,7 +1,6 @@
 import ChartJS from 'react-chartjs-wrapper';
 import Loader from 'react-loader-spinner'
 import React, { Component } from 'react';
-import { Tooltip } from 'reactstrap';
 
 import './StudentInfoGraph.css';
 
@@ -68,25 +67,8 @@ class StudentInfoGraph extends Component {
     render() {
         if (this.state.graphLoaded) {
             return (
-                <div>
-                <div className="graph" id={"graphtooltip"}>
+                <div className="graph" >
                     <ChartJS type='line' data={this.state.data} options={this.state.data.options} width="600" height="300" />
-                </div>
-                <Tooltip placement="right" isOpen={this.state.tooltipOpen} target={"graphtooltip"} toggle={this.toggle}>
-                    -1: spazzy
-                <br />
-                    0: definitely harsh
-                <br />
-                    1: could be harsh
-                <br />
-                    2: could be lenient
-                <br />
-                    3: definitely lenient
-                <br />
-                    4: could be fair
-                <br />
-                    5: definitely fair
-                </Tooltip>
                 </div>
             )
         }
