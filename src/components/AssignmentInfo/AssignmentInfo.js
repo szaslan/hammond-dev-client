@@ -53,6 +53,7 @@ class AssignmentInfo extends Component {
                         break;
                     case 400:
                         res.json().then(res => {
+                            console.log(res)
                             history.push({
                                 pathname: '/error',
                                 state: {

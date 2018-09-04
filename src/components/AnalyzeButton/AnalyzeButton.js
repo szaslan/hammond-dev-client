@@ -5,7 +5,7 @@ import moment from 'moment';
 import React, { Component } from 'react';
 import { Row } from 'react-bootstrap';
 import { UncontrolledTooltip } from 'reactstrap';
-
+import { withRouter } from 'react-router-dom';
 import AnalyzeResults from '../AnalyzeResults/AnalyzeResults';
 import CustomizableParameters from '../CustomizableParameters/CustomizableParameters';
 import FinalizeResults from '../FinalizeResults/FinalizeResults';
@@ -459,6 +459,8 @@ class AnalyzeButton extends Component {
 	}
 
 	render() {
+		const { match, location, history } = this.props;
+		console.log(history)
     if (this.state.loaded) {
 		return (
 			<div>
@@ -607,5 +609,5 @@ class AnalyzeButton extends Component {
 	}
 }
 
-export default AnalyzeButton;
+export default withRouter(AnalyzeButton);
 export { benchmarkNames, defaultBenchmarks };

@@ -36,7 +36,7 @@ class Assignments extends Component {
             courseId: this.props.courseJSON.id,
             loaded: false,
             url: `/courses/${this.props.courseJSON.id}/assignments/`,
-            value: array[0],
+            value: '',
             ...props,
         }
 
@@ -111,6 +111,7 @@ class Assignments extends Component {
     }
 
     componentDidMount() {
+        // this.setState({value: []})
         this.pullAssignments()
     }
 
@@ -137,7 +138,7 @@ class Assignments extends Component {
                     </div>
                     {this.state.value ? <AssignmentInfo courseJSON={this.props.courseJSON} assignmentId={this.state.value} />
                         :
-                        null}
+                        console.log('null')}
                 </div>
             );
         }
