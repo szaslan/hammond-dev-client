@@ -48,7 +48,7 @@ class AnalyzeButton extends Component {
 			assignedNewPeerReviews: false,
 			currTime: null,
 			deletedIncompletePeerReviews: false,
-			nextClicked: false,
+			nextClicked: (localStorage.getItem("nextClicked_" + this.props.assignmentId) ? localStorage.getItem("nextClicked_" + this.props.assignmentId) : false ),
 			finalizeDisplayText: false,
 			finalizePressed: false,
 			loaded: false,
@@ -230,6 +230,7 @@ class AnalyzeButton extends Component {
 	}
 
 	render() {
+		{localStorage.setItem("nextClicked_" + this.assignmentId, this.state.nextClicked)}
 		if (this.state.loaded) {
 			return (
 				<div>

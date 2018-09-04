@@ -51,6 +51,8 @@
 }
 
 .switch-button{
+    position: absolute;
+    right: 180px;
     font-size:100%;
     padding:5px;
     padding-left:10px;
@@ -59,6 +61,12 @@
     border:none;
     border-radius:3px;
 }
+@media only screen and (max-width: 500px){
+    .switch-button{
+        position: absolute;
+        left:100px;
+    }
+  }
 
 .switch-button:hover{
     border-width:3px;
