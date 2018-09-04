@@ -5,7 +5,7 @@
   align-items: center;
   background-color: white;
   max-width:100vw;
-  margin-left: 18%;
+  /* margin-left: 18%; */
 }
 
 .assignment-info-content{
@@ -13,12 +13,12 @@
     margin-top: -1%;
     font-family: "Open Sans";
     text-align:left;
-    margin-left: -10%;
+    /* margin-left: -10%; */
 }
 
 .assignment-info-title{
     font-size: 30px;
-    margin-top: -1%;
+    /* margin-top: -1%; */
     font-family: "Open Sans";
 }
 
