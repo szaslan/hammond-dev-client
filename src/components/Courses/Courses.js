@@ -145,7 +145,6 @@ class Courses extends Component {
                                                         this.state.courses.map(course =>
                                                             <Link to={`/courses/${course.id}`}>
                                                                 {console.log(this.state.coursecount++)}
-                                                                this.state.coursecount++
                                                                 <CardComp name={course.name} coursecount={this.state.coursecount} />
                                                             </Link>)
                                                         :

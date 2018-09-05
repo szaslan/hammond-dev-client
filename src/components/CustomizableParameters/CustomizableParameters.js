@@ -127,8 +127,10 @@ class CustomizableParameters extends Component {
     render() {
         if (this.state.loaded) {
             return (
-                <Form className="parametersForm">
+                <Form className="parameters-form">
                     <FormGroup row>
+                            <h3 className="parameters-title"> Customizable Parameters for Grading</h3>
+                            <hr className="hr-3"></hr>
                         <FormGroup check>
                             {/* checkbox parameters for assignments */}
                             <Label className="check-text" check>
@@ -157,7 +159,7 @@ class CustomizableParameters extends Component {
                         <FormGroup check>
                             <Label className="check-text" check>
                                 <Input name="penalizingForReassignedIncompletes" type="checkbox" checked={this.state.penalizingForReassignedIncompletes} onChange={this.handleInputChange} />
-                                Penalize For Peer Reviews That Were Reassigned, But Not Completed?:
+                                Penalize For Peer Reviews That Were Reassigned, But Not Completed?
                             </Label>
                         </FormGroup>
                     </FormGroup>

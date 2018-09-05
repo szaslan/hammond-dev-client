@@ -19,7 +19,6 @@ class CardComp extends Component {
 					<CardImg tag="div" className="class-color" style={{ backgroundColor: assignColor(this.props.coursecount) }} />
 					<CardBody className="card-body">
 						<CardTitle className="card-title">
-							{console.log(this.props.name)}
 							{this.props.name}
 						</CardTitle>
 					</CardBody>

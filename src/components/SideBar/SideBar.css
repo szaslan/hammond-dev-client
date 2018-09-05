@@ -39,7 +39,7 @@ a:hover, a:visited, a:link, a:active{
     font-family: 'Material Icons';
     font-weight: normal;
     font-style: normal;
-    font-size: 40px;  
+    font-size: 40px;
     display: inline-block;
     line-height: 1;
     text-transform: none;
@@ -77,11 +77,12 @@ a:hover, a:visited, a:link, a:active{
     }
 }
 .success-alert{
-    position:relative!important;
-    left:-50%;
-    top:5px;
-    width:500px;
+    position: fixed !important;
+    left: 35%;
+    /* top: 5px; */
+    width: 500px;
 }
+
 .success-alert-div{
     position:absolute;
     left:50%;
