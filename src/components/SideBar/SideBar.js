@@ -51,6 +51,7 @@ class SidebarComp extends React.Component {
 								value = true;
 							}
 						}
+						console.log(field, value)
 						localStorage.setItem(field + "_" + assignmentId + "_" + courseId, value)
 					}
 				}

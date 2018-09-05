@@ -43,35 +43,47 @@ class StudentInfoGraph extends Component {
                     let value = this.props.peerReviewData[this.props.category + "History"][columnName]
                     dataHistory.datasets[0].data.push(value)
                     if (this.props.category === 'weight') {
-                        let redColor = 255;
-                        let greenColor = 255;
-                        let blueColor = 255;
+                        let green = {
+                            red: 14,
+                            green: 135,
+                            blue: 46,
+                        }
+                        let red = {
+                            red: 179,
+                            green: 0,
+                            blue: 12,
+                        }
+                        let white = {
+                            red: 255,
+                            green: 255,
+                            blue: 255,
+                        }
+
+                        let greenPercentage = 0;
+                        let redPercentage = 0;
+                        let whitePercentage = 1;
 
                         if (value > 1) {
-                            let whitePercentage = value / 3;
-                            let greenPercentage = 1 - (value / 3);
-
-                            redColor = (11 * greenPercentage) + (255 * whitePercentage);
-                            greenColor = (102 * greenPercentage) + (255 * whitePercentage);
-                            blueColor = (35 * greenPercentage) + (255 * whitePercentage);
+                            //weights in the range (1, 2.7] are linearlly interpolated between white and green
+                            //weights in the range (2.7, +inf) are green
+                            greenPercentage = value / 2.7;
+                            if (greenPercentage > 1) greenPercentage = 1;
                         }
                         else if (value < 1) {
-                            let whitePercentage = value;
-                            let redPercentage = 1 - value;
-
-                            redColor = (179 * redPercentage) + (255 * whitePercentage);;
-                            greenColor = (0 * redPercentage) + (255 * whitePercentage);;
-                            blueColor = (12 * redPercentage) + (255 * whitePercentage);;
+                            //weights in the range [0.3, 1) are linearlly interpolated between red and white
+                            //weights in the range (0, 0.3) are red
+                            redPercentage = (1 / (1 - 0.3)) - (value / (1 - 0.3));
+                            if (redPercentage > 1) redPercentage = 1;
                         }
 
-                        if (redColor > 255) redColor = 255;
-                        if (greenColor > 255) greenColor = 255;
-                        if (blueColor > 255) blueColor = 255;
-                        if (redColor < 0) redColor = 0;
-                        if (greenColor < 0) greenColor = 0;
-                        if (blueColor < 0) blueColor = 0;
-
-                        dataHistory.datasets[0].pointBackgroundColor.push(`rgb(${redColor}, ${greenColor}, ${blueColor})`);
+                        whitePercentage = 1 - redPercentage - greenPercentage;
+                        let pointColor = {
+                            red: (red.red * redPercentage) + (green.red * greenPercentage) + (white.red * whitePercentage),
+                            green: (red.green * redPercentage) + (green.green * greenPercentage) + (white.green * whitePercentage),
+                            blue: (red.blue * redPercentage) + (green.blue * greenPercentage) + (white.blue * whitePercentage),
+                        }
+                        
+                        dataHistory.datasets[0].pointBackgroundColor.push(`rgb(${pointColor.red}, ${pointColor.green}, ${pointColor.blue})`);
                     }
                 }
 

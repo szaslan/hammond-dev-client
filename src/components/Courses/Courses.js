@@ -139,9 +139,16 @@ class Courses extends Component {
     }
 
     componentDidMount() {
+        // console.log("mount")
         this.fetchCourses();
         this.createTables();
     }
+    // componentDidUpdate() {
+    //     console.log("update")
+    // }
+    // componentWillUnmount() {
+    //     console.log("unmount")
+    // }
 
     render() {
         // function blahfunction() {
@@ -167,7 +174,6 @@ class Courses extends Component {
                                                     this.state.courses.length > 0 ?
                                                         this.state.courses.map(course =>
                                                             <Link to={`/courses/${course.id}`}>
-                                                                {console.log(this.state.coursecount++)}
                                                                 this.state.coursecount++
                                                                 <CardComp name={course.name} coursecount={this.state.coursecount} />
                                                             </Link>)
