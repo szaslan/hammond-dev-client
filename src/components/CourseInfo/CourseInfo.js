@@ -18,32 +18,9 @@ class CourseInfo extends Component {
             ...props
         }
 
-        this.createTables = this.createTables.bind(this);
         this.fetchCourseInfo = this.fetchCourseInfo.bind(this);
         this.resetTables = this.resetTables.bind(this);
         this.send400Error = this.send400Error.bind(this);
-    }
-
-    createTables() {
-        fetch('/api/createTables', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-        })
-            .then(res => {
-                switch (res.status) {
-                    case 201:
-                        //no issues
-                        break;
-                    case 400:
-                        res.json().then(res => {
-                            this.send400Error("This function is called anytime a course is selected from the general homepage. This function ensures that every SQL table exists and has the necessary formatting.", res.error, "CourseInfo.js: createTables()", res.message)
-                        })
-                        break;
-                    default:
-                }
-            })
     }
 
     fetchCourseInfo() {
@@ -136,7 +113,6 @@ class CourseInfo extends Component {
 
     componentDidMount() {
         this.fetchCourseInfo();
-        this.createTables();
     }
 
     render() {
@@ -153,7 +129,6 @@ class CourseInfo extends Component {
                             </div>
                         }
                     />
-                    <div> test</div>
                 </div>
             )
         }

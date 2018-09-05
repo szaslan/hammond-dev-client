@@ -51,9 +51,11 @@ class AlgorithmBenchmarks extends Component {
         this.handleSubmit = this.handleSubmit.bind(this);
         this.toggle = this.toggle.bind(this);
 
-        this.assignmentId = this.props.assignmentId
-        this.benchmarks = this.props.benchmarks
-        this.originalBenchmarks = this.props.originalBenchmarks
+        this.assignmentId = this.props.assignmentId;
+        this.benchmarks = this.props.benchmarks;
+        this.courseId = this.props.courseId;
+        this.localStorageExtension = "_" + this.props.assignmentId + "_" + this.props.courseId;
+        this.originalBenchmarks = this.props.originalBenchmarks;
     }
 
     handleAdvancedClick() {
@@ -82,9 +84,9 @@ class AlgorithmBenchmarks extends Component {
         event.preventDefault();
         Object.keys(this.benchmarks).forEach(benchmark => {
             var value = this.state[benchmark];
-            localStorage.setItem(benchmark + "_" + this.assignmentId, value)
+            localStorage.setItem(benchmark + this.localStorageExtension, value)
         });
-        localStorage.setItem("customBenchmarksSaved_" + this.assignmentId, true)
+        localStorage.setItem("customBenchmarksSaved" + this.localStorageExtension, true)
         this.setState({
             saved: true
         })
@@ -113,13 +115,12 @@ class AlgorithmBenchmarks extends Component {
     }
 
     render() {
-        // if (this.state.loaded && (!localStorage.getItem("customBenchmarksSaved_" + this.assignmentId) || localStorage.getItem("customBenchmarksSaved_" + this.assignmentId) !== "true") ) {
         if (this.state.loaded) {
             return (
                 <div>
                     {/* list of basic benchmarks to be set by user */}
+                    <hr className="hr-7"></hr>
                     <Form className="parameters">
-                        <hr className="hr-4"></hr>
                         <FormGroup row>
                             <Col sm={8}>
                                 <Label className="parameter" >
@@ -194,6 +195,7 @@ class AlgorithmBenchmarks extends Component {
                                 <img src={upArrowIcon} width="20" alt="up arrow" />
                                 </span>
                                 <Form>
+                                <hr className="hr-7"></hr>
                                     <FormGroup row>
                                         <Col sm={5}>
                                             <Label className="parameter">
@@ -201,10 +203,10 @@ class AlgorithmBenchmarks extends Component {
                                             </Label>
                                         </Col>
                                         <Col sm={3}>
-                                            <Input type="number" name="SPAZZY_WIDTH" id="SPAZZY_WIDTH" onChange={this.handleChange} value={this.state.SPAZZY_WIDTH} min={0} step={0.01} />
+                                            <Input className="advanced-input" type="number" name="SPAZZY_WIDTH" id="SPAZZY_WIDTH" onChange={this.handleChange} value={this.state.SPAZZY_WIDTH} min={0} step={0.01} />
                                         </Col>
                                         <Col sm={1}>
-                                            <button className="reset-button" name="SPAZZY_WIDTH" onClick={this.handleReset}>Reset</button>
+                                            <button className="reset-button2" name="SPAZZY_WIDTH" onClick={this.handleReset}>Reset</button>
                                             <Tooltip placement="right" isOpen={this.state.SPAZZY_WIDTH_tooltipOpen} target={"SPAZZY_WIDTH"} toggle={this.toggle}>
                                                 {SPAZZY_WIDTH_message}
                                             </Tooltip>
@@ -217,10 +219,10 @@ class AlgorithmBenchmarks extends Component {
                                             </Label>
                                         </Col>
                                         <Col sm={3}>
-                                            <Input type="number" name="THRESHOLD" id="THRESHOLD" onChange={this.handleChange} value={this.state.THRESHOLD} min={0} step={.0001} />
+                                            <Input className="advanced-input" type="number" name="THRESHOLD" id="THRESHOLD" onChange={this.handleChange} value={this.state.THRESHOLD} min={0} step={.0001} />
                                         </Col>
                                         <Col sm={1}>
-                                            <button className="reset-button" name="THRESHOLD" onClick={this.handleReset}>Reset</button>
+                                            <button className="reset-button2" name="THRESHOLD" onClick={this.handleReset}>Reset</button>
                                             <Tooltip placement="right" isOpen={this.state.THRESHOLD_tooltipOpen} target={"THRESHOLD"} toggle={this.toggle}>
                                                 {THRESHOLD_message}
                                             </Tooltip>
@@ -233,10 +235,10 @@ class AlgorithmBenchmarks extends Component {
                                             </Label>
                                         </Col>
                                         <Col sm={3}>
-                                            <Input type="number" name="COULD_BE_LOWER_BOUND" id="COULD_BE_LOWER_BOUND" onChange={this.handleChange} value={this.state.COULD_BE_LOWER_BOUND} min={0} max={1} step={.01} />
+                                            <Input className="advanced-input" type="number" name="COULD_BE_LOWER_BOUND" id="COULD_BE_LOWER_BOUND" onChange={this.handleChange} value={this.state.COULD_BE_LOWER_BOUND} min={0} max={1} step={.01} />
                                         </Col>
                                         <Col sm={1}>
-                                            <button className="reset-button" name="COULD_BE_LOWER_BOUND" onClick={this.handleReset}>Reset</button>
+                                            <button className="reset-button2" name="COULD_BE_LOWER_BOUND" onClick={this.handleReset}>Reset</button>
                                             <Tooltip placement="right" isOpen={this.state.COULD_BE_LOWER_BOUND_tooltipOpen} target={"COULD_BE_LOWER_BOUND"} toggle={this.toggle}>
                                                 {COULD_BE_LOWER_BOUND_message}
                                             </Tooltip>
@@ -249,10 +251,10 @@ class AlgorithmBenchmarks extends Component {
                                             </Label>
                                         </Col>
                                         <Col sm={3}>
-                                            <Input type="number" name="COULD_BE_UPPER_BOUND" id="COULD_BE_UPPER_BOUND" onChange={this.handleChange} value={this.state.COULD_BE_UPPER_BOUND} min={1} max={5} step={.01} />
+                                            <Input className="advanced-input" type="number" name="COULD_BE_UPPER_BOUND" id="COULD_BE_UPPER_BOUND" onChange={this.handleChange} value={this.state.COULD_BE_UPPER_BOUND} min={1} max={5} step={.01} />
                                         </Col>
                                         <Col sm={1}>
-                                            <button className="reset-button" name="COULD_BE_UPPER_BOUND" onClick={this.handleReset}>Reset</button>
+                                            <button className="reset-button2" name="COULD_BE_UPPER_BOUND" onClick={this.handleReset}>Reset</button>
                                             <Tooltip placement="right" isOpen={this.state.COULD_BE_UPPER_BOUND_tooltipOpen} target={"COULD_BE_UPPER_BOUND"} toggle={this.toggle}>
                                                 {COULD_BE_UPPER_BOUND_message}
                                             </Tooltip>
@@ -278,4 +280,5 @@ class AlgorithmBenchmarks extends Component {
         )
     }
 }
+
 export default AlgorithmBenchmarks;

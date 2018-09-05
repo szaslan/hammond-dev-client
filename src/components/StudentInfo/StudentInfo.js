@@ -38,6 +38,7 @@ class StudentInfo extends Component {
             peerReviewsCompletedByCurrentStudent: [],
             selectedAssignment: '',
             selectedStudentId: this.props.studentId,
+            sortedAssignments: [],
             studentEvaluatingData: null,
             studentHasSavedHistory: false,
             value: 'Select an Assignment',
@@ -57,6 +58,7 @@ class StudentInfo extends Component {
         this.selectPeerReview = this.selectPeerReview.bind(this);
         this.send400Error = this.send400Error.bind(this);
         this.setMessage = this.setMessage.bind(this);
+        this.sortAssignmentsByFinalizedDate = this.sortAssignmentsByFinalizedDate.bind(this);
         this.toggleAssignment = this.toggleAssignment.bind(this);
         this.toggleReview = this.toggleReview.bind(this);
 
@@ -79,7 +81,8 @@ class StudentInfo extends Component {
 
     checkIfFinalizeHasBeenPressed() {
         let finalizeId = {
-            assignmentId: this.state.selectedAssignment
+            assignmentId: this.state.selectedAssignment,
+            courseId: this.state.courseId,
         }
 
         //if error, check if assignment has been finalized (error inevitable if assignment hasn't been finalized)
@@ -111,6 +114,7 @@ class StudentInfo extends Component {
 
     checkIfStudentHasSavedHistory() {
         let data = {
+            courseId: this.state.courseId,
             studentId: this.state.selectedStudentId,
         }
 
@@ -154,20 +158,24 @@ class StudentInfo extends Component {
                     fill: false,
                     data: [],
                     lineTension: 0,
-                    pointBackgroundColor: "#black",
+                    pointBackgroundColor: "black",
+                    pointBorderColor: "black",
+                    pointBorderWidth: 2,
                     pointRadius: 5,
                 }
             ],
             options: {
                 title: {
                     display: true,
-                    text: 'Bucket Data:',
+                    text: 'Bucket History',
+                    fontSize: 16,
                 },
                 scales: {
                     yAxes: [{
                         scaleLabel: {
                             display: true,
-                            labelString: 'Bucket Classifications:'
+                            labelString: 'Bucket Classifications',
+                            fontSize: 14,
                         },
                         ticks: {
                             min: -1,
@@ -196,12 +204,13 @@ class StudentInfo extends Component {
                                     return "5: definitely fair"
                                 }
                             }
-                        }
+                        },
                     }],
                     xAxes: [{
                         scaleLabel: {
                             display: true,
-                            labelString: 'Assignments'
+                            labelString: 'Assignments',
+                            fontSize: 14,
                         },
                     }],
                 }
@@ -215,45 +224,33 @@ class StudentInfo extends Component {
                     fill: false,
                     data: [],
                     lineTension: 0,
-                    pointBackgroundColor: "#black",
+                    pointBackgroundColor: [],
+                    pointBorderColor: "black",
+                    pointBorderWidth: 2,
                     pointRadius: 5,
                 }
             ],
             options: {
                 title: {
                     display: true,
-                    text: 'Weight History:',
+                    text: 'Weight History',
                 },
                 scales: {
                     yAxes: [{
                         scaleLabel: {
                             display: true,
-                            labelString: 'Weight:'
+                            labelString: 'Weight'
                         },
                         ticks: {
                             suggestedMin: 0,
                             suggestedMax: 3,
                             stepSize: .2,
-                            callback: function (value) {
-                                if (value === 1) {
-                                    return "Neutral <---------> 1.00"
-                                }
-                                else if (value.toFixed(2) === 2.00) {
-                                    return "Fair          ≈        2.00"
-                                }
-                                else if (value.toFixed(2) === 0.40) {
-                                    return "Harsh/Lenient         ≈        0.40"
-                                }
-                                else {
-                                    return value.toFixed(2)
-                                }
-                            }
                         }
                     }],
                     xAxes: [{
                         scaleLabel: {
                             display: true,
-                            labelString: 'Assignments:'
+                            labelString: 'Assignments'
                         },
                     }],
                 },
@@ -267,20 +264,22 @@ class StudentInfo extends Component {
                     fill: false,
                     data: [],
                     lineTension: 0,
-                    pointBackgroundColor: "#black",
+                    pointBackgroundColor: "black",
+                    pointBorderColor: "black",
+                    pointBorderWidth: 2,
                     pointRadius: 5,
                 }
             ],
             options: {
                 title: {
                     display: true,
-                    text: 'Peer Reviews Completed History:',
+                    text: 'Peer Reviews Completed History',
                 },
                 scales: {
                     yAxes: [{
                         scaleLabel: {
                             display: true,
-                            labelString: 'Number of Peer Reviews Completed:'
+                            labelString: 'Number of Peer Reviews Completed'
                         },
                         ticks: {
                             min: 0,
@@ -292,7 +291,7 @@ class StudentInfo extends Component {
                     xAxes: [{
                         scaleLabel: {
                             display: true,
-                            labelString: 'Assignments:'
+                            labelString: 'Assignments'
                         },
                     }],
                 }
@@ -327,9 +326,10 @@ class StudentInfo extends Component {
                         res.json().then(data => {
                             this.setState({
                                 assignments: data,
+                            }, () => {
+                                this.sortAssignmentsByFinalizedDate();
+                                this.checkIfStudentHasSavedHistory();
                             })
-                            console.log(this.state)
-                            this.checkIfStudentHasSavedHistory()
                         })
                         break;
                     case 400:
@@ -365,8 +365,9 @@ class StudentInfo extends Component {
 
     getPeerReviews() {
         let data = {
-            studentId: this.state.selectedStudentId,
             assignmentId: this.state.selectedAssignment,
+            courseId: this.state.courseId,
+            studentId: this.state.selectedStudentId,
         }
 
         fetch('/api/getPeerReviewsForStudent', {
@@ -401,6 +402,7 @@ class StudentInfo extends Component {
 
     pullStudentEvaluatingData() {
         let data = {
+            courseId: this.state.courseId,
             studentId: this.state.selectedStudentId,
         }
 
@@ -460,7 +462,7 @@ class StudentInfo extends Component {
     select(event) {
         this.setState({
             value: event.target.innerText,
-            selectedAssignment: Number(event.target.id),
+            selectedAssignment: event.target.id,
             value2: 'Select a Peer Review',
             peerReviewsCompletedByCurrentStudent: [],
             message: '',
@@ -479,7 +481,8 @@ class StudentInfo extends Component {
         let data = {
             assignmentId: this.state.selectedAssignment,
             assessorId: this.state.selectedStudentId,
-            userId: Number(event.target.id)
+            courseId: this.state.courseId,
+            userId: (event.target.id)
         }
 
         fetch('/api/peerReviewGrade', {
@@ -539,6 +542,43 @@ class StudentInfo extends Component {
         }
     }
 
+    sortAssignmentsByFinalizedDate() {
+        let sortedArray = this.state.assignments.slice(0);
+
+        sortedArray.sort((a, b) => {
+            let idA = a.id;
+            let idB = b.id;
+
+            let finalizedDateA = localStorage.getItem("finalized_" + idA + "_" + this.state.courseId);
+            let finalizedDateB = localStorage.getItem("finalized_" + idB + "_" + this.state.courseId);
+
+            if (!finalizedDateA) {
+                let data = {
+                    assignmentId: idA,
+                    courseId: this.state.courseId,
+                }
+
+                fetch('/api/pullFinalizedDateFromSQL', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                })
+            }
+
+            let timeA = new Date(localStorage.getItem("finalized_" + idA + "_" + this.state.courseId));
+            let timeB = new Date(localStorage.getItem("finalized_" + idB + "_" + this.state.courseId));
+            let secondsA = timeA.getTime();
+            let secondsB = timeB.getTime();
+            return secondsA - secondsB;
+        })
+
+        this.setState({
+            sortedAssignments: sortedArray
+        })
+    }
+
     toggleAssignment() {
         this.setState(prevState => ({
             dropdownOpen: !prevState.dropdownOpen,
@@ -560,7 +600,6 @@ class StudentInfo extends Component {
 
     //renders initially
     componentDidUpdate(prevProps) {
-        console.log(this.props, prevProps)
         if (this.props.studentId !== prevProps.studentId) {
             this.resetFieldsForNewStudent()
         }
@@ -569,7 +608,6 @@ class StudentInfo extends Component {
     render() {
         return (
             <div className="student-info">
-                <hr className="hr-6"></hr>
                 <h2 className="header-text">Peer Grading Details</h2>
                 <hr className="hr-2"></hr>
                 <Row>
@@ -624,9 +662,9 @@ class StudentInfo extends Component {
                             {
                                 this.state.studentHasSavedHistory ?
                                     <div>
-                                        <StudentInfoGraph className="graph" assignments={this.state.assignments} peerReviewData={this.state.studentEvaluatingData} category="bucket" data={this.bucketData} />
-                                        <StudentInfoGraph className="graph" assignments={this.state.assignments} peerReviewData={this.state.studentEvaluatingData} category="weight" data={this.weightData} />
-                                        <StudentInfoGraph className="graph" assignments={this.state.assignments} peerReviewData={this.state.studentEvaluatingData} category="completion" data={this.peerReviewCompletionData} />
+                                        <StudentInfoGraph className="graph" assignments={this.state.sortedAssignments} peerReviewData={this.state.studentEvaluatingData} category="bucket" data={this.bucketData} />
+                                        <StudentInfoGraph className="graph" assignments={this.state.sortedAssignments} peerReviewData={this.state.studentEvaluatingData} category="weight" data={this.weightData} />
+                                        <StudentInfoGraph className="graph" assignments={this.state.sortedAssignments} peerReviewData={this.state.studentEvaluatingData} category="completion" data={this.peerReviewCompletionData} />
                                     </div>
                                     :
                                     <div className="message1">

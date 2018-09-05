@@ -10,18 +10,18 @@ import '../DueDate/NewDueDate.css'
 
 //progress bar benchmarks
 var progress = 0;
-var progressNumSteps = 6;
+var progressNumSteps = 7;
 var progressBarMessage = "";
 
 // Steps When Analyze Is Clicked Assuming Everything Works Correctly:
-// 1 - progress bar reset (from render)
-// 2 - Remove all of the messages from local storage (would only exist if analyze has previously been clicked)
-// 3 - call to back-end to fetch peer reviews from canvas and save to SQL tables (from savePeerReviewsFromCanvasToDatabase)
-// 4 - call to back-end to run the algorithm and determine if there is enough data (from analyze)
-// 5 - local storage used to save completion statitstics
-// 6 - call to back-end to sync up students' names with their entries in the SQL tables (from attachNamesToDatabase)
-// 7 - call to back-end to pull students' names for anyone who doesn't have enough data (from pullNamesOfFlaggedStudents)
-// 8 - local storage used to save names of students who don't have enough data
+// 0 - progress bar reset (from render)
+// 1 - Remove all of the messages from local storage (would only exist if analyze has previously been clicked)
+// 2 - call to back-end to fetch peer reviews from canvas and save to SQL tables (from savePeerReviewsFromCanvasToDatabase)
+// 3 - call to back-end to run the algorithm and determine if there is enough data (from analyze)
+// 4 - local storage used to save completion statitstics
+// 5 - call to back-end to sync up students' names with their entries in the SQL tables (from attachNamesToDatabase)
+// 6 - call to back-end to pull students' names for anyone who doesn't have enough data (from pullNamesOfFlaggedStudents)
+// 7 - local storage used to save names of students who don't have enough data
 
 class AnalyzeResults extends Component {
     constructor(props) {
@@ -44,6 +44,7 @@ class AnalyzeResults extends Component {
         this.assignmentInfo = this.props.assignmentInfo;
         this.benchmarks = this.props.benchmarks;
         this.courseId = this.props.courseId;
+        this.localStorageExtension = "_" + this.props.assignmentId + "_" + this.props.courseId;
         this.missingDataIds = [];
         this.pressed = this.props.pressed;
 
@@ -54,6 +55,7 @@ class AnalyzeResults extends Component {
         var data = {
             assignmentId: this.assignmentId,
             benchmarks: this.benchmarks,
+            courseId: this.courseId,
         }
 
         //Step 4
@@ -73,9 +75,9 @@ class AnalyzeResults extends Component {
                             this.missingDataIds = res.missingDataIds;
 
                             //Step 5
-                            localStorage.setItem("analyzeDisplayTextNumCompleted_" + this.assignmentId, message.numCompleted);
-                            localStorage.setItem("analyzeDisplayTextNumAssigned_" + this.assignmentId, message.numAssigned);
-                            localStorage.setItem("analyzeDisplayTextMessage_" + this.assignmentId, message.message);
+                            localStorage.setItem("analyzeDisplayTextNumCompleted" + this.localStorageExtension, message.numCompleted);
+                            localStorage.setItem("analyzeDisplayTextNumAssigned" + this.localStorageExtension, message.numAssigned);
+                            localStorage.setItem("analyzeDisplayTextMessage" + this.localStorageExtension, message.message);
                             this.setProgress(4)
                             this.attachNamesToDatabase()
                         })
@@ -132,11 +134,12 @@ class AnalyzeResults extends Component {
 
     pullNamesOfFlaggedStudents() {
         let data = {
+            courseId: this.courseId,
             ids: this.missingDataIds,
         }
 
         //Step 7
-        fetch('/api/getNameFromId', {
+        fetch('/api/getNameFromIds', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -149,8 +152,8 @@ class AnalyzeResults extends Component {
                         this.setProgress(6)
                         res.json().then(res => {
                             //Step 8
-                            localStorage.setItem("analyzeDisplayTextNames_" + this.assignmentId, JSON.stringify(res));
-                            localStorage.setItem("analyzePressed_" + this.assignmentId, true);
+                            localStorage.setItem("analyzeDisplayTextNames" + this.localStorageExtension, JSON.stringify(res));
+                            localStorage.setItem("analyzePressed" + this.localStorageExtension, true);
                             this.setProgress(7)
                         })
                         break;
@@ -244,6 +247,13 @@ class AnalyzeResults extends Component {
         progressBarMessage = [progress.toFixed(0) + "%"]
     }
 
+    componentDidMount() {
+        if (this.pressed) {
+            //Step 1
+            this.setProgress(0)
+        }
+    }
+
     render() {
         if (this.state.error) {
             return (
@@ -255,12 +265,12 @@ class AnalyzeResults extends Component {
 
         if (this.pressed) {
             //Step 1
-            this.setProgress(0)
+            // this.setProgress(0)
             //Step 2
-            localStorage.setItem("analyzeDisplayTextNames_" + this.assignmentId, "N/A")
-            localStorage.setItem("analyzeDisplayTextNumCompleted_" + this.assignmentId, "N/A")
-            localStorage.setItem("analyzeDisplayTextNumAssigned_" + this.assignmentId, "N/A")
-            localStorage.setItem("analyzeDisplayTextMessage_" + this.assignmentId, "N/A")
+            localStorage.setItem("analyzeDisplayTextNames" + this.localStorageExtension, "N/A")
+            localStorage.setItem("analyzeDisplayTextNumCompleted" + this.localStorageExtension, "N/A")
+            localStorage.setItem("analyzeDisplayTextNumAssigned" + this.localStorageExtension, "N/A")
+            localStorage.setItem("analyzeDisplayTextMessage" + this.localStorageExtension, "N/A")
             this.setProgress(1)
             return (
                 <div>
@@ -269,25 +279,25 @@ class AnalyzeResults extends Component {
             )
         }
 
-        if (localStorage.getItem("analyzeDisplayTextNames_" + this.assignmentId) && localStorage.getItem("analyzeDisplayTextNames_" + this.assignmentId) !== "N/A") {
+        if (localStorage.getItem("analyzeDisplayTextNames" + this.localStorageExtension) && localStorage.getItem("analyzeDisplayTextNames" + this.localStorageExtension) !== "N/A") {
             return (
                 <div>
                     <hr className="hr-4"></hr>
                     <div className="text-message">
-                        {localStorage.getItem("analyzeDisplayTextMessage_" + this.assignmentId)}
+                        {localStorage.getItem("analyzeDisplayTextMessage" + this.localStorageExtension)}
                     </div>
                     <br />
                     <br />
                     <Row>
                         {/* results from analyze button */}
                         <Well className="analyze-text">
-                            <strong>Completed Peer Reviews:</strong> {localStorage.getItem("analyzeDisplayTextNumCompleted_" + this.assignmentId)} / {localStorage.getItem("analyzeDisplayTextNumAssigned_" + this.assignmentId)}
+                            <strong>Completed Peer Reviews:</strong> {localStorage.getItem("analyzeDisplayTextNumCompleted" + this.localStorageExtension)} / {localStorage.getItem("analyzeDisplayTextNumAssigned" + this.localStorageExtension)}
                         </Well>
-                        <Popup className="flagged-grades-modal" trigger={<button className="flag-button"> View Flagged Grades ({JSON.parse(localStorage.getItem("analyzeDisplayTextNames_" + this.assignmentId)).length})</button>} modal closeOnDocumentClick >
+                        <Popup className="flagged-grades-modal" trigger={<button className="flag-button"> View Flagged Grades ({JSON.parse(localStorage.getItem("analyzeDisplayTextNames" + this.localStorageExtension)).length})</button>} modal closeOnDocumentClick >
                             <span><h5>Flagged Grades</h5></span>
                             <hr />
                             <span className="student-list">
-                                {JSON.parse(localStorage.getItem("analyzeDisplayTextNames_" + this.assignmentId)).length == 0 ? "No flagged grades" : (JSON.parse(localStorage.getItem("analyzeDisplayTextNames_" + this.assignmentId))).join(", ")}
+                                {JSON.parse(localStorage.getItem("analyzeDisplayTextNames" + this.localStorageExtension)).length == 0 ? "No flagged grades" : (JSON.parse(localStorage.getItem("analyzeDisplayTextNames" + this.localStorageExtension))).join(", ")}
                             </span>
                         </Popup>
                     </Row>
@@ -296,7 +306,9 @@ class AnalyzeResults extends Component {
         }
 
         return (
-            <Progress className="progress-bar" value={progress}> {progressBarMessage} </Progress>
+            <div className="progress-bar">
+                <Progress value={progress}> {progressBarMessage} </Progress>
+            </div>
         )
     }
 }

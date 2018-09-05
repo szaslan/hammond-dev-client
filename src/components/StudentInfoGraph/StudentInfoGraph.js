@@ -13,6 +13,7 @@ class StudentInfoGraph extends Component {
                 labels: [],
                 datasets: [],
                 options: {},
+                tooltipOpen: false,
             },
             graphLoaded: false,
 
@@ -20,6 +21,7 @@ class StudentInfoGraph extends Component {
         }
 
         this.pullStudentEvaluatingData = this.pullStudentEvaluatingData.bind(this);
+        this.toggle = this.toggle.bind(this);
     }
 
     pullStudentEvaluatingData() {
@@ -37,7 +39,52 @@ class StudentInfoGraph extends Component {
 
                 if (this.props.peerReviewData[this.props.category + "History"][columnName] != null) {
                     dataHistory.labels.push(assignmentName)
-                    dataHistory.datasets[0].data.push(this.props.peerReviewData[this.props.category + "History"][columnName])
+
+                    let value = this.props.peerReviewData[this.props.category + "History"][columnName]
+                    dataHistory.datasets[0].data.push(value)
+                    if (this.props.category === 'weight') {
+                        let green = {
+                            red: 14,
+                            green: 135,
+                            blue: 46,
+                        }
+                        let red = {
+                            red: 179,
+                            green: 0,
+                            blue: 12,
+                        }
+                        let white = {
+                            red: 255,
+                            green: 255,
+                            blue: 255,
+                        }
+
+                        let greenPercentage = 0;
+                        let redPercentage = 0;
+                        let whitePercentage = 1;
+
+                        if (value > 1) {
+                            //weights in the range (1, 2.7] are linearlly interpolated between white and green
+                            //weights in the range (2.7, +inf) are green
+                            greenPercentage = value / 2.7;
+                            if (greenPercentage > 1) greenPercentage = 1;
+                        }
+                        else if (value < 1) {
+                            //weights in the range [0.3, 1) are linearlly interpolated between red and white
+                            //weights in the range (0, 0.3) are red
+                            redPercentage = (1 / (1 - 0.3)) - (value / (1 - 0.3));
+                            if (redPercentage > 1) redPercentage = 1;
+                        }
+
+                        whitePercentage = 1 - redPercentage - greenPercentage;
+                        let pointColor = {
+                            red: (red.red * redPercentage) + (green.red * greenPercentage) + (white.red * whitePercentage),
+                            green: (red.green * redPercentage) + (green.green * greenPercentage) + (white.green * whitePercentage),
+                            blue: (red.blue * redPercentage) + (green.blue * greenPercentage) + (white.blue * whitePercentage),
+                        }
+                        
+                        dataHistory.datasets[0].pointBackgroundColor.push(`rgb(${pointColor.red}, ${pointColor.green}, ${pointColor.blue})`);
+                    }
                 }
 
             }
@@ -51,15 +98,20 @@ class StudentInfoGraph extends Component {
         })
     }
 
+    toggle() {
+        this.setState({
+            tooltipOpen: !this.state.tooltipOpen
+        })
+    }
+
     componentDidMount() {
-        console.log(this.props.peerReviewData)
         this.pullStudentEvaluatingData();
     }
 
     render() {
         if (this.state.graphLoaded) {
             return (
-                <div className="graph">
+                <div className="graph" >
                     <ChartJS type='line' data={this.state.data} options={this.state.data.options} width="600" height="300" />
                 </div>
             )

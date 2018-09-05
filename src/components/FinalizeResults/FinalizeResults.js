@@ -21,7 +21,7 @@ var message = "";
 // 1 - progress bar reset (from componentDidMount)
 // 2 - call to back-end to fetch peer reviews from canvas and save to SQL tables (from savePeerReviewsFromCanvasToDatabase)
 // 3 - call to back-end to fetch rubric assessments from canvas and save the scores to SQL tables (from saveRubricScoresFromCanvasToDatabase)
-// 4 - call to back-end to save the number of reviews originally assigned/completed into SQL tables (from saveOriginallyAssignedNumbersToDatabase)
+// 4 - call to back-end to save the number of reviews originally assigned/completed into SQL tables (from saveOriginallyAssignedPeerReviewNumbers)
 // 5 - call to back-end to run the grading algorithm and save results to SQL tables (from finalizePeerReviewGrades)
 // 6 - local storage is used to save completion stats (from finalizePeerReviewGrades)
 // 7 - call to back-end to post calculated grades to canvas gradebook (from sendGradesToCanvas)
@@ -53,7 +53,7 @@ class FinalizeResults extends Component {
         this.findCompletedAllReviews = this.findCompletedAllReviews.bind(this); //Steps 15 & 16
         this.findFlaggedGrades = this.findFlaggedGrades.bind(this); //Steps 11 & 12
         this.pullBoxPlotFromCanvas = this.pullBoxPlotFromCanvas.bind(this); //Steps 13 & 14
-        this.saveOriginallyAssignedNumbersToDatabase = this.saveOriginallyAssignedNumbersToDatabase.bind(this); //Step 4
+        this.saveOriginallyAssignedPeerReviewNumbers = this.saveOriginallyAssignedPeerReviewNumbers.bind(this); //Step 4
         this.savePeerReviewsFromCanvasToDatabase = this.savePeerReviewsFromCanvasToDatabase.bind(this); //Step 2
         this.saveRubricScoresFromCanvasToDatabase = this.saveRubricScoresFromCanvasToDatabase.bind(this); //Step 3
         this.sendGradesToCanvas = this.sendGradesToCanvas.bind(this); //Step 7
@@ -63,9 +63,10 @@ class FinalizeResults extends Component {
         this.setProgress = this.setProgress.bind(this);
         this.toggle = this.toggle.bind(this);
 
-        this.assignmentId = this.props.assignmentId
-        this.assignmentInfo = this.props.assignmentInfo
-        this.courseId = this.props.courseId
+        this.assignmentId = this.props.assignmentId;
+        this.assignmentInfo = this.props.assignmentInfo;
+        this.courseId = this.props.courseId;
+        this.localStorageExtension = "_" + this.props.assignmentId + "_" + this.props.courseId;
     }
 
     attachNamesToDatabase() {
@@ -106,12 +107,17 @@ class FinalizeResults extends Component {
     }
 
     countStudentsInEachBucket() {
+        let data = {
+            courseId: this.courseId,
+        }
+
         //Step 9
         fetch('/api/countStudentsInEachBucket', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
+            body: JSON.stringify(data)
         })
             .then(res => {
                 switch (res.status) {
@@ -119,13 +125,13 @@ class FinalizeResults extends Component {
                         this.setProgress(8)
                         //Step 10
                         res.json().then(res => {
-                            localStorage.setItem("spazzy_" + this.assignmentId, JSON.stringify(res.spazzy))
-                            localStorage.setItem("definitelyHarsh_" + this.assignmentId, JSON.stringify(res.definitelyHarsh))
-                            localStorage.setItem("couldBeHarsh_" + this.assignmentId, JSON.stringify(res.couldBeHarsh))
-                            localStorage.setItem("couldBeLenient_" + this.assignmentId, JSON.stringify(res.couldBeLenient))
-                            localStorage.setItem("definitelyLenient_" + this.assignmentId, JSON.stringify(res.definitelyLenient))
-                            localStorage.setItem("couldBeFair_" + this.assignmentId, JSON.stringify(res.couldBeFair))
-                            localStorage.setItem("definitelyFair_" + this.assignmentId, JSON.stringify(res.definitelyFair))
+                            localStorage.setItem("spazzy" + this.localStorageExtension, JSON.stringify(res.spazzy))
+                            localStorage.setItem("definitelyHarsh" + this.localStorageExtension, JSON.stringify(res.definitelyHarsh))
+                            localStorage.setItem("couldBeHarsh" + this.localStorageExtension, JSON.stringify(res.couldBeHarsh))
+                            localStorage.setItem("couldBeLenient" + this.localStorageExtension, JSON.stringify(res.couldBeLenient))
+                            localStorage.setItem("definitelyLenient" + this.localStorageExtension, JSON.stringify(res.definitelyLenient))
+                            localStorage.setItem("couldBeFair" + this.localStorageExtension, JSON.stringify(res.couldBeFair))
+                            localStorage.setItem("definitelyFair" + this.localStorageExtension, JSON.stringify(res.definitelyFair))
                             this.setProgress(9)
                         })
                             .then(() => this.findFlaggedGrades())
@@ -143,10 +149,11 @@ class FinalizeResults extends Component {
     finalizePeerReviewGrades() {
         let data = {
             assignmentId: this.assignmentId,
-            pointsPossible: this.assignmentInfo.points_possible,
             benchmarks: this.state.benchmarks,
+            courseId: this.courseId,
             penalizingForOriginalIncompletes: this.props.penalizingForOriginalIncompletes,
             penalizingForReassignedIncompletes: this.props.penalizingForReassignedIncompletes,
+            pointsPossible: this.assignmentInfo.points_possible,
         }
 
         //Step 5
@@ -164,10 +171,10 @@ class FinalizeResults extends Component {
                         res.json().then(res => message = res)
                             //Step 6
                             .then(() => {
-                                localStorage.setItem("finalizeDisplayTextNumCompleted_" + this.assignmentId, message.numCompleted);
-                                localStorage.setItem("finalizeDisplayTextNumAssigned_" + this.assignmentId, message.numAssigned);
-                                localStorage.setItem("finalizeDisplayTextAverage_" + this.assignmentId, message.average);
-                                localStorage.setItem("finalizeDisplayTextOutOf_" + this.assignmentId, message.outOf);
+                                localStorage.setItem("finalizeDisplayTextNumCompleted" + this.localStorageExtension, message.numCompleted);
+                                localStorage.setItem("finalizeDisplayTextNumAssigned" + this.localStorageExtension, message.numAssigned);
+                                localStorage.setItem("finalizeDisplayTextAverage" + this.localStorageExtension, message.average);
+                                localStorage.setItem("finalizeDisplayTextOutOf" + this.localStorageExtension, message.outOf);
                             })
                             .then(() => this.setProgress(5))
                             .then(() => this.sendGradesToCanvas())
@@ -188,6 +195,7 @@ class FinalizeResults extends Component {
     findCompletedAllReviews() {
         let data = {
             assignmentId: this.assignmentId,
+            courseId: this.courseId,
         }
 
         //Step 15
@@ -204,9 +212,9 @@ class FinalizeResults extends Component {
                         this.setProgress(14)
                         //Step 16
                         res.json().then(res => {
-                            localStorage.setItem("completedAllReviews_" + this.assignmentId, res.completedAll)
-                            localStorage.setItem("completedSomeReviews_" + this.assignmentId, res.completedSome)
-                            localStorage.setItem("completedNoReviews_" + this.assignmentId, res.completedNone)
+                            localStorage.setItem("completedAllReviews" + this.localStorageExtension, res.completedAll)
+                            localStorage.setItem("completedSomeReviews" + this.localStorageExtension, res.completedSome)
+                            localStorage.setItem("completedNoReviews" + this.localStorageExtension, res.completedNone)
                             this.setProgress(15)
                         })
                         break;
@@ -223,6 +231,7 @@ class FinalizeResults extends Component {
     findFlaggedGrades() {
         let data = {
             assignmentId: this.assignmentId,
+            courseId: this.courseId,
         }
 
         //Step 11
@@ -239,7 +248,7 @@ class FinalizeResults extends Component {
                         this.setProgress(10)
                         //Step 12
                         res.json().then(res => {
-                            localStorage.setItem("flaggedStudents_" + this.assignmentId, JSON.stringify(res))
+                            localStorage.setItem("flaggedStudents" + this.localStorageExtension, JSON.stringify(res))
                             this.setProgress(11)
                         })
                             .then(() => this.pullBoxPlotFromCanvas())
@@ -248,7 +257,7 @@ class FinalizeResults extends Component {
                         //no flagged grades
                         this.setProgress(10)
                         //Step 12
-                        localStorage.setItem("flaggedStudents_" + this.assignmentId, JSON.stringify([]))
+                        localStorage.setItem("flaggedStudents" + this.localStorageExtension, JSON.stringify([]))
                         this.setProgress(11)
                         this.pullBoxPlotFromCanvas()
                         break;
@@ -282,11 +291,11 @@ class FinalizeResults extends Component {
                         this.setProgress(12)
                         //Step 14
                         res.json().then(data => {
-                            localStorage.setItem("min_" + this.assignmentId, data.min);
-                            localStorage.setItem("q1_" + this.assignmentId, data.q1);
-                            localStorage.setItem("median_" + this.assignmentId, data.median);
-                            localStorage.setItem("q3_" + this.assignmentId, data.q3);
-                            localStorage.setItem("max_" + this.assignmentId, data.max);
+                            localStorage.setItem("min" + this.localStorageExtension, data.min);
+                            localStorage.setItem("q1" + this.localStorageExtension, data.q1);
+                            localStorage.setItem("median" + this.localStorageExtension, data.median);
+                            localStorage.setItem("q3" + this.localStorageExtension, data.q3);
+                            localStorage.setItem("max" + this.localStorageExtension, data.max);
                             this.setProgress(13)
                         })
                             .then(() => this.findCompletedAllReviews())
@@ -309,13 +318,14 @@ class FinalizeResults extends Component {
             })
     }
 
-    saveOriginallyAssignedNumbersToDatabase() {
+    saveOriginallyAssignedPeerReviewNumbers() {
         let data = {
             assignmentId: this.assignmentId,
+            courseId: this.courseId,
         }
 
         //Step 4
-        fetch('/api/savePeerReviewNumbers', {
+        fetch('/api/saveOriginallyAssignedPeerReviewNumbers', {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json'
@@ -399,7 +409,7 @@ class FinalizeResults extends Component {
                 switch (res.status) {
                     case 204:
                         this.setProgress(2)
-                        this.saveOriginallyAssignedNumbersToDatabase();
+                        this.saveOriginallyAssignedPeerReviewNumbers();
                         break;
                     case 400:
                         res.json().then(res => {
@@ -509,46 +519,45 @@ class FinalizeResults extends Component {
             )
         }
 
-        if (localStorage.getItem("completedAllReviews_" + this.assignmentId)) {
+        if (localStorage.getItem("completedAllReviews" + this.localStorageExtension)) {
             return (
-                <div>
+                <div className="finalized-results-case">
                     {/* results and data after finalizing an assignment */}
-                    <hr className="hr-6"></hr>
                     <h2 className="header-text">Score Details</h2>
                     <hr className="hr-2"></hr>
-                    <p className="total-score"> -/{Number(localStorage.getItem("finalizeDisplayTextOutOf_" + this.assignmentId))}pts</p>
+                    <p className="total-score"> -/{Number(localStorage.getItem("finalizeDisplayTextOutOf" + this.localStorageExtension))}pts</p>
                     <Row className="score-dets">
-                        <p className="stats"> Mean: {Number(localStorage.getItem("finalizeDisplayTextAverage_" + this.assignmentId)).toFixed(1)}</p>
-                        <p className="stats"> High: {Number(localStorage.getItem("max_" + this.assignmentId)).toFixed(0)}</p>
-                        <p className="stats"> Low: {Number(localStorage.getItem("min_" + this.assignmentId)).toFixed(0)}</p>
+                        <p className="stats"> Mean: {Number(localStorage.getItem("finalizeDisplayTextAverage" + this.localStorageExtension)).toFixed(1)}</p>
+                        <p className="stats"> High: {Number(localStorage.getItem("max" + this.localStorageExtension)).toFixed(0)}</p>
+                        <p className="stats"> Low: {Number(localStorage.getItem("min" + this.localStorageExtension)).toFixed(0)}</p>
                         <span className="boxplot" id={"TooltipBoxplot"}>
                             <Boxplot
                                 width={400} height={25} orientation="horizontal"
                                 min={0} max={100}
                                 stats={{
-                                    whiskerLow: localStorage.getItem("min_" + this.assignmentId),
-                                    quartile1: localStorage.getItem("q1_" + this.assignmentId),
-                                    quartile2: localStorage.getItem("median_" + this.assignmentId),
-                                    quartile3: localStorage.getItem("q3_" + this.assignmentId),
-                                    whiskerHigh: localStorage.getItem("max_" + this.assignmentId),
+                                    whiskerLow: localStorage.getItem("min" + this.localStorageExtension),
+                                    quartile1: localStorage.getItem("q1" + this.localStorageExtension),
+                                    quartile2: localStorage.getItem("median" + this.localStorageExtension),
+                                    quartile3: localStorage.getItem("q3" + this.localStorageExtension),
+                                    whiskerHigh: localStorage.getItem("max" + this.localStorageExtension),
                                     outliers: [],
                                 }} />
                         </span>
                     </Row>
                     <hr className="hr-5"></hr>
                     <Row>
-                        <p className="page-text">Completed Peer Reviews: {localStorage.getItem("finalizeDisplayTextNumCompleted_" + this.assignmentId)} / {localStorage.getItem("finalizeDisplayTextNumAssigned_" + this.assignmentId)}</p>
-                        <p className="date">Date Finalized: {localStorage.getItem("finalized_" + this.assignmentId)}</p>
+                        <p className="page-text">Completed Peer Reviews: {localStorage.getItem("finalizeDisplayTextNumCompleted" + this.localStorageExtension)} / {localStorage.getItem("finalizeDisplayTextNumAssigned" + this.localStorageExtension)}</p>
+                        <p className="date">Date Finalized: {localStorage.getItem("finalized" + this.localStorageExtension)}</p>
                         {/* flagged grades button to modal */}
                         <Popup className="flagged-grades-modal"
-                            trigger={<button className="flagged-button"> View Flagged Grades ({JSON.parse(localStorage.getItem("flaggedStudents_" + this.assignmentId)).length})</button>}
+                            trigger={<button className="flagged-button"> View Flagged Grades ({JSON.parse(localStorage.getItem("flaggedStudents" + this.localStorageExtension)).length})</button>}
                             modal
                             closeOnDocumentClick
                         >
-                            <span><h5 className="modal-text">Flagged Grades</h5></span>
+                            <h5 className="modal-text">Flagged Grades</h5>
                             <hr />
                             <span className="student-list">
-                                {JSON.parse(localStorage.getItem("flaggedStudents_" + this.assignmentId)).length == 0 ? "No flagged grades" : (JSON.parse(localStorage.getItem("flaggedStudents_" + this.assignmentId))).join(", ")}
+                                {JSON.parse(localStorage.getItem("flaggedStudents" + this.localStorageExtension)).length == 0 ? "No flagged grades" : (JSON.parse(localStorage.getItem("flaggedStudents" + this.localStorageExtension))).join(", ")}
                             </span>
                         </Popup>
                     </Row>
@@ -556,25 +565,35 @@ class FinalizeResults extends Component {
                     <hr className="hr-5"></hr>
                     {/* boxplot from Canvas data */}
                     <Tooltip placement="right" isOpen={this.state.tooltipOpen} target={"TooltipBoxplot"} toggle={this.toggle}>
-                        <strong>Min Score:</strong> {localStorage.getItem("min_" + this.assignmentId)}
+                        <strong>Min Score:</strong> {localStorage.getItem("min" + this.localStorageExtension)}
                         <br />
-                        <strong>First Quartile:</strong> {localStorage.getItem("q1_" + this.assignmentId)}
+                        <strong>First Quartile:</strong> {localStorage.getItem("q1" + this.localStorageExtension)}
                         <br />
-                        <strong>Median Score:</strong> {localStorage.getItem("median_" + this.assignmentId)}
+                        <strong>Median Score:</strong> {localStorage.getItem("median" + this.localStorageExtension)}
                         <br />
-                        <strong>Third Quartile:</strong> {localStorage.getItem("q3_" + this.assignmentId)}
+                        <strong>Third Quartile:</strong> {localStorage.getItem("q3" + this.localStorageExtension)}
                         <br />
-                        <strong>Max Score:</strong> {localStorage.getItem("max_" + this.assignmentId)}
+                        <strong>Max Score:</strong> {localStorage.getItem("max" + this.localStorageExtension)}
                     </Tooltip>
                     <br />
                     <br />
-                    <PieCharts assignmentId={this.assignmentId} />
+                    <PieCharts assignmentId={this.assignmentId} courseId={this.courseId} />
+                </div>
+            )
+        }
+
+        if (localStorage.getItem("finalized" + this.localStorageExtension)) {
+            return (
+                <div className="progress-bar">
+                    <Progress value={progress}> {progressBarMessage} </Progress>
                 </div>
             )
         }
 
         return (
-            <Progress className="progress-bar" value={progress}> {progressBarMessage} </Progress>
+            <div>
+                It looks like you need to refresh your data. Please click the button on the sidebar.
+            </div>
         )
     }
 

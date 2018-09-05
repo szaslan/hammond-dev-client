@@ -1,10 +1,10 @@
 .student-drop{
   float: left;
   position: block;
-  margin-top: 1%;
+  
   /* background-color:#FFEFE2; */
   background-color: white;
-  margin-left: 15%;
+
 }
 
 .select-search-box {

@@ -7,8 +7,10 @@ import './Assignments.css';
 
 import AssignmentInfo from '../AssignmentInfo/AssignmentInfo';
 
+const arrow = require('../../img/arrow3.png');
+
 //array of options for dropdown menu
-const array = [];
+let array = [];
 
 //disable assignments with no peer reviews
 const FilterAssignments = currAssignment => {
@@ -48,6 +50,7 @@ class Assignments extends Component {
         let data = {
             courseId: this.state.courseId,
         }
+
         fetch('/api/assignments', {
             method: 'POST',
             headers: {
@@ -111,8 +114,9 @@ class Assignments extends Component {
     }
 
     componentDidMount() {
-        // this.setState({value: []})
-        this.pullAssignments()
+
+        array = [];
+        this.pullAssignments();
     }
 
     render() {
@@ -136,9 +140,13 @@ class Assignments extends Component {
                             isSearchable="true"
                         />
                     </div>
-                    {this.state.value ? <AssignmentInfo courseJSON={this.props.courseJSON} assignmentId={this.state.value} />
+                    {this.state.value ?
+                        <AssignmentInfo courseJSON={this.props.courseJSON} assignmentId={this.state.value} />
                         :
-                        console.log('null')}
+                        <div className="assignment-default">
+                            <img className="arrow-img" src={arrow}></img>
+                            Please select an assignment from the dropdown.
+                        </div>}
                 </div>
             );
         }

@@ -33,25 +33,16 @@ class CustomizableParameters extends Component {
         this.readInFromLocalStorage = this.readInFromLocalStorage.bind(this);
         this.toggle = this.toggle.bind(this);
 
-        // defaultBenchmarks = defaultBenchmarks;
-        // this.userInputBenchmarks = {
-        //     SPAZZY_WIDTH: defaultBenchmarks.SPAZZY_WIDTH,
-        //     THRESHOLD: defaultBenchmarks.THRESHOLD,
-        //     COULD_BE_LOWER_BOUND: defaultBenchmarks.COULD_BE_LOWER_BOUND,
-        //     COULD_BE_UPPER_BOUND: defaultBenchmarks.COULD_BE_UPPER_BOUND,
-        //     MIN_NUMBER_OF_REVIEWS_PER_STUDENT_FOR_CLASSIFICATION: defaultBenchmarks.MIN_NUMBER_OF_REVIEWS_PER_STUDENT_FOR_CLASSIFICATION,
-        //     MIN_NUMBER_OF_ASSIGNMENTS_IN_COURSE_FOR_CLASSIFICATION: defaultBenchmarks.MIN_NUMBER_OF_ASSIGNMENTS_IN_COURSE_FOR_CLASSIFICATION,
-        //     MIN_NUMBER_OF_REVIEWS_FOR_SINGLE_SUBMISSION_FOR_GRADING: defaultBenchmarks.MIN_NUMBER_OF_REVIEWS_FOR_SINGLE_SUBMISSION_FOR_GRADING,
-        //     MIN_REVIEW_COMPLETION_PERCENTAGE_PER_SUBMISSION: defaultBenchmarks.MIN_REVIEW_COMPLETION_PERCENTAGE_PER_SUBMISSION,
-        // }
+        this.courseId = this.props.courseId;
+        this.localStorageExtension = "_" + this.props.assignmentId + "_" + this.props.courseId;
         this.userInputBenchmarks = this.props.userInputBenchmarks;
     }
 
     clearCustomBenchmarks() {
-        localStorage.setItem("customBenchmarks_" + this.state.assignmentId, "N/A")
+        localStorage.setItem("customBenchmarks" + this.localStorageExtension, "N/A")
 
         benchmarkNames.forEach(benchmark => {
-            localStorage.setItem(benchmark + "_" + this.state.assignmentId, "N/A");
+            localStorage.setItem(benchmark + this.localStorageExtension, "N/A");
         })
 
         this.userInputBenchmarks = {
@@ -68,7 +59,7 @@ class CustomizableParameters extends Component {
 
     editingBenchmarks(event) {
         event.preventDefault();
-        localStorage.setItem("customBenchmarksSaved_" + this.state.assignmentId, "N/A")
+        localStorage.setItem("customBenchmarksSaved" + this.localStorageExtension, "N/A")
         this.setState({
             customBenchmarksSaved: false
         })
@@ -80,10 +71,10 @@ class CustomizableParameters extends Component {
         const name = target.name;
 
         if (value) {
-            localStorage.setItem(name + "_" + this.state.assignmentId, value)
+            localStorage.setItem(name + this.localStorageExtension, value)
         }
         else {
-            localStorage.setItem(name + "_" + this.state.assignmentId, "N/A")
+            localStorage.setItem(name + this.localStorageExtension, "N/A")
         }
 
         this.setState({
@@ -93,7 +84,7 @@ class CustomizableParameters extends Component {
 
     readInFromLocalStorage() {
         customizableOptions.forEach((variable, index, array) => {
-            let value = localStorage.getItem(variable + "_" + this.state.assignmentId);
+            let value = localStorage.getItem(variable + this.localStorageExtension);
             if (value === "true") {
                 if (!this.state[variable]) {
                     this.setState({
@@ -136,10 +127,13 @@ class CustomizableParameters extends Component {
     render() {
         if (this.state.loaded) {
             return (
-                <Form className="parametersForm">
+                <Form className="parameters-form">
                     <FormGroup row>
+                            <h3 className="parameters-title"> Customizable Parameters for Grading</h3>
+                            <hr className="hr-3"></hr>
                         <FormGroup check>
-                            <Label className="checktext" check>
+                            {/* checkbox parameters for assignments */}
+                            <Label className="check-text" check>
                                 <Input name="automaticallyFinalize" type="checkbox" checked={this.state.automaticallyFinalize} onChange={this.handleInputChange} />
                                 Automatically Finalize Before Due Date 3 If All Peer Reviews Are Completed?
                             </Label>
@@ -147,7 +141,6 @@ class CustomizableParameters extends Component {
                     </FormGroup>
                     <FormGroup row>
                         <FormGroup check>
-                            {/* checkbox parameters for assignments */}
                             <Label className="check-text" check>
                                 <Input name="sendIncompleteMessages" type="checkbox" checked={this.state.sendIncompleteMessages} onChange={this.handleInputChange} />
                                 Send Messages to All Students Who Have Incomplete Peer Reviews At Due Date 1?
@@ -166,7 +159,7 @@ class CustomizableParameters extends Component {
                         <FormGroup check>
                             <Label className="check-text" check>
                                 <Input name="penalizingForReassignedIncompletes" type="checkbox" checked={this.state.penalizingForReassignedIncompletes} onChange={this.handleInputChange} />
-                                Penalize For Peer Reviews That Were Reassigned, But Not Completed?:
+                                Penalize For Peer Reviews That Were Reassigned, But Not Completed?
                             </Label>
                         </FormGroup>
                     </FormGroup>
@@ -179,11 +172,11 @@ class CustomizableParameters extends Component {
                         </FormGroup>
                         {
                             this.state.customBenchmarks ?
-                                localStorage.getItem("customBenchmarksSaved_" + this.state.assignmentId) === "true" ?
+                                localStorage.getItem("customBenchmarksSaved" + this.localStorageExtension) === "true" ?
                                     <button onClick={this.editingBenchmarks}>Edit</button>
                                     :
                                     <div>
-                                        <AlgorithmBenchmarks originalBenchmarks={defaultBenchmarks} benchmarks={this.userInputBenchmarks} assignmentId={this.state.assignmentId} />
+                                        <AlgorithmBenchmarks originalBenchmarks={defaultBenchmarks} benchmarks={this.userInputBenchmarks} assignmentId={this.state.assignmentId} courseId={this.courseId}/>
                                         <button className="clear-all" onClick={this.clearCustomBenchmarks}> Clear All</button>
                                     </div>
                                 :

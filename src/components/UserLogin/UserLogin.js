@@ -7,7 +7,8 @@ import React, { Component } from 'react';
 
 import './UserLogin.css';
 
-let localStorageFields = ['assignment_id', 'COULD_BE_LOWER_BOUND', 'COULD_BE_UPPER_BOUND', 'MIN_NUMBER_OF_ASSIGNMENTS_IN_COURSE_FOR_CLASSIFICATION', 'MIN_NUMBER_OF_REVIEWS_FOR_SINGLE_SUBMISSION_FOR_GRADING', 'MIN_NUMBER_OF_REVIEWS_PER_STUDENT_FOR_CLASSIFICATION', 'MIN_REVIEW_COMPLETION_PERCENTAGE_PER_SUBMISSION', 'SPAZZY_WIDTH', 'THRESHOLD', 'analyzeDisplayTextNumCompleted', 'analyzeDisplayTextNumAssigned', 'analyzeDisplayTextMessage', 'analyzeDisplayTextNames', 'analyzePressed', 'sendIncompleteMessages', 'customBenchmarks', 'customBenchmarksSaved', 'penalizingForOriginalIncompletes', 'penalizingForReassignedIncompletes', 'dueDate1', 'dueDate2', 'dueDate3', 'spazzy', 'definitelyHarsh', 'couldBeHarsh', 'couldBeLenient', 'definitelyLenient', 'couldBeFair', 'definitelyFair', 'finalized', 'finalizeDisplayTextNumCompleted', 'finalizeDisplayTextNumAssigned', 'finalizeDisplayTextAverage', 'finalizeDisplayTextOutOf', 'completedAllReviews', 'completedSomeReviews', 'completedNoReviews', 'flaggedStudents', 'min', 'q1', 'median', 'q3', 'max', 'automaticallyFinalize']
+// let localStorageFields = ['assignment_id', 'COULD_BE_LOWER_BOUND', 'COULD_BE_UPPER_BOUND', 'MIN_NUMBER_OF_ASSIGNMENTS_IN_COURSE_FOR_CLASSIFICATION', 'MIN_NUMBER_OF_REVIEWS_FOR_SINGLE_SUBMISSION_FOR_GRADING', 'MIN_NUMBER_OF_REVIEWS_PER_STUDENT_FOR_CLASSIFICATION', 'MIN_REVIEW_COMPLETION_PERCENTAGE_PER_SUBMISSION', 'SPAZZY_WIDTH', 'THRESHOLD', 'analyzeDisplayTextNumCompleted', 'analyzeDisplayTextNumAssigned', 'analyzeDisplayTextMessage', 'analyzeDisplayTextNames', 'analyzePressed', 'sendIncompleteMessages', 'customBenchmarks', 'customBenchmarksSaved', 'penalizingForOriginalIncompletes', 'penalizingForReassignedIncompletes', 'dueDate1', 'dueDate2', 'dueDate3', 'spazzy', 'definitelyHarsh', 'couldBeHarsh', 'couldBeLenient', 'definitelyLenient', 'couldBeFair', 'definitelyFair', 'finalized', 'finalizeDisplayTextNumCompleted', 'finalizeDisplayTextNumAssigned', 'finalizeDisplayTextAverage', 'finalizeDisplayTextOutOf', 'completedAllReviews', 'completedSomeReviews', 'completedNoReviews', 'flaggedStudents', 'min', 'q1', 'median', 'q3', 'max', 'automaticallyFinalize']
+let localStorageFields = ['analyzeDisplayTextMessage', 'analyzeDisplayTextNames', 'analyzeDisplayTextNumAssigned', 'analyzeDisplayTextNumCompleted', 'analyzePressed', 'automaticallyFinalize', 'completedAllReviews', 'completedNoReviews', 'completedSomeReviews', 'couldBeFair', 'couldBeHarsh', 'couldBeLenient', 'customBenchmarks', 'customBenchmarksSaved', 'definitelyFair', 'definitelyHarsh', 'definitelyLenient', 'dueDate1', 'dueDate2', 'dueDate3', 'finalized', 'finalizeDisplayTextAverage', 'finalizeDisplayTextNumAssigned', 'finalizeDisplayTextNumCompleted', 'finalizeDisplayTextOutOf', 'flaggedStudents', 'max', 'median', 'min', 'nextClicked', 'penalizingForOriginalIncompletes', 'penalizingForReassignedIncompletes', 'q1', 'q3', 'sendIncompleteMessages', 'spazzy', 'COULD_BE_LOWER_BOUND', 'COULD_BE_UPPER_BOUND', 'MIN_NUMBER_OF_ASSIGNMENTS_IN_COURSE_FOR_CLASSIFICATION', 'MIN_NUMBER_OF_REVIEWS_FOR_SINGLE_SUBMISSION_FOR_GRADING', 'MIN_NUMBER_OF_REVIEWS_PER_STUDENT_FOR_CLASSIFICATION', 'MIN_REVIEW_COMPLETION_PERCENTAGE_PER_SUBMISSION', 'SPAZZY_WIDTH', 'THRESHOLD']
 let localStorageBooleanFields = ['automaticallyFinalize', 'customBenchmarks', 'customBenchmarksSaved', 'sendIncompleteMessages', 'penalizingForOriginalIncompletes', 'penalizingForReassignedIncompletes']
 
 class UserLogin extends Component {
@@ -36,10 +37,11 @@ class UserLogin extends Component {
 	handleLocalStorageData(data) {
 		data.forEach(assignmentLevelData => {
 			let assignmentId = assignmentLevelData["assignment_id"];
+			let courseId = assignmentLevelData["course_id"];
 			let dueDateRegex = /dueDate[0-9]+/
 
 			localStorageFields.forEach(field => {
-				if (field !== "assignment_id") {
+				if (field !== "assignment_id" && field !== "course_id") {
 					let value = assignmentLevelData[field];
 					if (value != null) {
 						if (value != "N/A") {
@@ -55,7 +57,7 @@ class UserLogin extends Component {
 								value = true;
 							}
 						}
-						localStorage.setItem(field + "_" + assignmentId, value)
+						localStorage.setItem(field + "_" + assignmentId + "_" + courseId, value)
 					}
 				}
 			})
@@ -114,6 +116,7 @@ class UserLogin extends Component {
 						})
 						break;
 					case 204:
+						// no data in database so just send to courses page
 						history.push("/courses");
 						break;
 					case 400:
@@ -129,6 +132,9 @@ class UserLogin extends Component {
 							})
 						})
 						break;
+					case 204:
+						history.push("/courses");
+                        break;
 					default:
 				}
 			})

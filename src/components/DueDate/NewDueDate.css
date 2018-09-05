@@ -1,18 +1,26 @@
 .analyze{
   margin-left: 100%;
 }
-  .dateTime{
-    margin-right:7% !important;
-    margin-bottom: 3%;
-    /* z-index: 1; */
-    /* margin-left: -5%; */
-  }
 
 .analyze-button{
   border-radius: 3px;
-  margin-left: 50%;
-  margin-top: 20%;
+  margin-left: 300%;
+  margin-top: 20.5%;
   margin-bottom: 20%;
+  font-size: 24px;
+  border: 3px solid #b7ddf7 !important;
+  border-radius: 5px;
+}
+
+.analyze-button:hover{
+  border-radius: 3px;
+  margin-left: 300%;
+  margin-top: 20.5%;
+  margin-bottom: 20%;
+  font-size: 24px;
+  background-color:	#b7ddf7;
+  border: 3px solid #b7ddf7 !important;
+  border-radius: 5px;
 }
 
 .analyze-text{
@@ -24,8 +32,8 @@
 
 .check-text{
   font-family: 'Open Sans';
-  color: #4B4A4A;
-  font-size: 15px;
+  color: #626262;
+  font-size: 16px;
 }
 
 .clear-all{
@@ -33,8 +41,9 @@
   color: #626262;
   border-radius: 3px;
   background-color: white;
-  margin-top: -4.5%;
+  margin-top: -4%;
   float: right;
+  font-size: 16px;
 }
 
 .clear-all:hover{
@@ -42,10 +51,58 @@
   color: #626262;
   border-radius: 3px;
   background-color:	#F8F8F8;
-  margin-top: -4.5%;
+  margin-top: -4%;
   float: right;
+  font-size: 16px;
 }
 
+.flag-button{
+  margin-left: 30% !important;
+  margin-top: 0% !important;
+}
+
+.hr-3{
+  border-top: 1px solid #a0a0a0;
+  width: 90%;
+  margin-left: -8%;
+}
+
+.hr-7{
+  border-top: 1px solid #a0a0a0;
+  width: 115%;
+  margin-left: -8%;
+}
+
+.parameters-form{
+  margin-left: 12%;
+}
+
+.parameters-title{
+  font-family: 'Open Sans';
+  color: #626262;
+  font-weight: 100;
+  margin-left: 12%;
+}
+
+.save-all{
+  font-family: 'Open Sans';
+  color: #626262;
+  border-radius: 3px;
+  background-color: white;
+  margin-top: 1%;
+  margin-left: 67%;
+  font-size: 16px;
+}
+
+.save-all:hover{
+  font-family: 'Open Sans';
+  color: #626262;
+  border-radius: 3px;
+  background-color:	#F8F8F8;
+  margin-top: 1%;
+  margin-left: 67%;
+  font-size: 16px;
+}
 /* -------changing border around calendars------ */
 .color-border-green {
 	border: 3px solid #85c464 !important;
@@ -60,9 +117,9 @@
 
 /* -------calendar component styling------ */
 .dateTime{
-    margin-right: 11% !important;
+    margin-right: 7% !important;
     margin-bottom: 3%;
-    margin-left: -5%;
+
 }
 
 .dateTimeForm{
@@ -73,8 +130,22 @@
 .finalize-button{
   border-radius: 3px;
   margin-top: 20%;
-  margin-left: 50%;
+  margin-left: 450%;
   margin-bottom: 20%;
+  font-size: 24px;
+  border: 3px solid #b7ddf7 !important;
+  border-radius: 5px;
+}
+
+.finalize-button:hover{
+  border-radius: 3px;
+  background-color:	#b7ddf7;
+  margin-top: 20%;
+  margin-left: 450%;
+  margin-bottom: 20%;
+  font-size: 24px;
+  border: 3px solid #b7ddf7 !important;
+  border-radius: 5px;
 }
 
 .flag-button{
@@ -110,6 +181,14 @@
 }
 
 /* --------customizable parameters-------- */
+.advanced-button{
+  margin-left: 40%;
+}
+
+.advanced-input{
+  margin-left: 100%;
+}
+
 .parameter{
   font-family: 'Open Sans';
   color: #626262;
@@ -118,9 +197,9 @@
 }
 
 .parameters{
-  width: 300%;
+  width: 100%;
   text-align: left;
-  margin-top: 10%;
+  /* margin-left: -8%; */
 }
 /* --------------------------------------- */
 
@@ -136,6 +215,22 @@
   color: #626262;
   border-radius: 3px;
   background-color:	#F8F8F8;
+}
+
+.reset-button2{
+  font-family: 'Open Sans';
+  color: #626262;
+  border-radius: 3px;
+  background-color: white;
+  margin-left: 300%;
+}
+
+.reset-button2:hover{
+  font-family: 'Open Sans';
+  color: #626262;
+  border-radius: 3px;
+  background-color:	#F8F8F8;
+  margin-left: 300%;
 }
 
 .text-message{
