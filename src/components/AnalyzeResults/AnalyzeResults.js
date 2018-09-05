@@ -10,7 +10,7 @@ import '../DueDate/NewDueDate.css'
 
 //progress bar benchmarks
 var progress = 0;
-var progressNumSteps = 7;
+var progressNumSteps = 6;
 var progressBarMessage = "";
 
 // Steps When Analyze Is Clicked Assuming Everything Works Correctly:
@@ -19,9 +19,8 @@ var progressBarMessage = "";
 // 2 - call to back-end to fetch peer reviews from canvas and save to SQL tables (from savePeerReviewsFromCanvasToDatabase)
 // 3 - call to back-end to run the algorithm and determine if there is enough data (from analyze)
 // 4 - local storage used to save completion statitstics
-// 5 - call to back-end to sync up students' names with their entries in the SQL tables (from attachNamesToDatabase)
-// 6 - call to back-end to pull students' names for anyone who doesn't have enough data (from pullNamesOfFlaggedStudents)
-// 7 - local storage used to save names of students who don't have enough data
+// 5 - call to back-end to pull students' names for anyone who doesn't have enough data (from pullNamesOfFlaggedStudents)
+// 6 - local storage used to save names of students who don't have enough data
 
 class AnalyzeResults extends Component {
     constructor(props) {
@@ -32,7 +31,6 @@ class AnalyzeResults extends Component {
         }
 
         this.analyze = this.analyze.bind(this);
-        this.attachNamesToDatabase = this.attachNamesToDatabase.bind(this);
         this.pullNamesOfFlaggedStudents = this.pullNamesOfFlaggedStudents.bind(this);
         this.savePeerReviewsFromCanvasToDatabase = this.savePeerReviewsFromCanvasToDatabase.bind(this);
         this.send400Error = this.send400Error.bind(this);
@@ -58,7 +56,7 @@ class AnalyzeResults extends Component {
             courseId: this.courseId,
         }
 
-        //Step 4
+        //Step 3
         fetch('/api/peerReviewsAnalyzing', {
             method: 'POST',
             headers: {
@@ -74,12 +72,12 @@ class AnalyzeResults extends Component {
                             let message = res.message;
                             this.missingDataIds = res.missingDataIds;
 
-                            //Step 5
+                            //Step 4
                             localStorage.setItem("analyzeDisplayTextNumCompleted" + this.localStorageExtension, message.numCompleted);
                             localStorage.setItem("analyzeDisplayTextNumAssigned" + this.localStorageExtension, message.numAssigned);
                             localStorage.setItem("analyzeDisplayTextMessage" + this.localStorageExtension, message.message);
                             this.setProgress(4)
-                            this.attachNamesToDatabase()
+                            this.pullNamesOfFlaggedStudents()
                         })
                         break;
                     case 400:
@@ -95,50 +93,13 @@ class AnalyzeResults extends Component {
             })
     }
 
-    attachNamesToDatabase() {
-        var data = {
-            courseId: this.courseId,
-        }
-
-        //Step 6
-        fetch('/api/attachNamesInDatabase', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(data),
-        })
-            .then(res => {
-                switch (res.status) {
-                    case 204:
-                        this.setProgress(5)
-                        this.pullNamesOfFlaggedStudents()
-                        break;
-                    case 400:
-                        res.json().then(res => {
-                            this.send400Error("This function is called after checking if there are enough peer reviews completed for each student. This function syncs syncs each student's actual name with all of their entries in the SQL tables", res.error, "AnalyzeResults.js: attachNamesToDatabase()", res.message)
-                        })
-                        break;
-                    case 401:
-                        res.json().then(res => {
-                            this.send401Error(res)
-                        })
-                        break;
-                    case 404:
-                        this.send404Error("This function is called after checking if there are enough peer reviews completed for each student. This function syncs syncs each student's actual name with all of their entries in the SQL tables", "AnalyzeResults.js: attachNamesToDatabase()", "There are no students enrolled in this course on Canvas.")
-                        break;
-                    default:
-                }
-            })
-    }
-
     pullNamesOfFlaggedStudents() {
         let data = {
             courseId: this.courseId,
             ids: this.missingDataIds,
         }
 
-        //Step 7
+        //Step 5
         fetch('/api/getNameFromIds', {
             method: 'POST',
             headers: {
@@ -151,7 +112,7 @@ class AnalyzeResults extends Component {
                     case 200:
                         this.setProgress(6)
                         res.json().then(res => {
-                            //Step 8
+                            //Step 6
                             localStorage.setItem("analyzeDisplayTextNames" + this.localStorageExtension, JSON.stringify(res));
                             localStorage.setItem("analyzePressed" + this.localStorageExtension, true);
                             this.setProgress(7)
@@ -177,7 +138,7 @@ class AnalyzeResults extends Component {
             pointsPossible: this.assignmentInfo.points_possible, //points_possible is JSON field returned from Canvas
         }
 
-        //Step 3
+        //Step 2
         fetch('/api/saveAllPeerReviews', {
             method: "POST",
             headers: {
@@ -249,7 +210,7 @@ class AnalyzeResults extends Component {
 
     componentDidMount() {
         if (this.pressed) {
-            //Step 1
+            //Step 0
             this.setProgress(0)
         }
     }
@@ -265,8 +226,6 @@ class AnalyzeResults extends Component {
 
         if (this.pressed) {
             //Step 1
-            // this.setProgress(0)
-            //Step 2
             localStorage.setItem("analyzeDisplayTextNames" + this.localStorageExtension, "N/A")
             localStorage.setItem("analyzeDisplayTextNumCompleted" + this.localStorageExtension, "N/A")
             localStorage.setItem("analyzeDisplayTextNumAssigned" + this.localStorageExtension, "N/A")

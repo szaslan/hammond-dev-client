@@ -57,10 +57,6 @@ class AnalyzeButton extends Component {
 			tooltipOpen1: false,
 			tooltipOpen2: false,
 		};
-		//localStorage.setItem("nextClicked_"+this.props.assignmentId, this.state.nextClicked);
-		if (localStorage.getItem("nextClicked_" + this.props.assignmentId) == null) {
-			localStorage.setItem("nextClicked_" + this.props.assignmentId, false)
-		}
 
 		this.backClick = this.backClick.bind(this);
 		this.checkForPreviousAnalyzeAndFinalizePresses = this.checkForPreviousAnalyzeAndFinalizePresses.bind(this);
