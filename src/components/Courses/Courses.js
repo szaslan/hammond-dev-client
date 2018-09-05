@@ -8,8 +8,26 @@ import React, { Component } from 'react';
 import CardComp from '../CourseCard/CourseCard';
 import JumbotronComp from '../JumbotronComp/JumbotronComp';
 import SidebarComp from '../SideBar/SideBar';
-
 import './Courses.css';
+
+// function CheckBrowser()
+// {
+//      // Check Browser Close [X] , Alt+F4 , File -> Close  
+//      if(window.event.clientX < 0 && window.event.clientY <0)
+//     {
+//           window.open("Operation.aspx", 
+//                 "Operation",'left=12000,top=1200,width=10,height=1');
+//     }
+// }
+
+// function handleWindowClose(e) {
+//     e = window.event || e; 
+//         if ((e.clientX < 0) || (e.clientY < 0))
+//         {
+//             e.returnValue = "Are You sure to leave this page";
+//         }
+// }
+// window.onbeforeunload = handleWindowClose;
 
 class Courses extends Component {
     constructor(props) {
@@ -133,6 +151,11 @@ class Courses extends Component {
     // }
 
     render() {
+        // function blahfunction() {
+        // 	return 'Do you really want to leave this page?';
+        // };
+        // window.onbeforeunload = blahfunction;
+
         if (this.state.loaded) {
             return (
                 <div>
@@ -165,7 +188,7 @@ class Courses extends Component {
                     </Container>
                 </div>
             );
-        }
+        };
         return (
             <Loader className="loader" type="TailSpin" color="black" height={80} width={80} />
         );

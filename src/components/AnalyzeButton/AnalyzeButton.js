@@ -34,6 +34,9 @@ const message1 = "Peer reviews submitted after this date are considered late. Au
 const message2 = "Peer reviews that are still incomplete after this date will be reassigned to students who have completed all of their reviews for this assignment.";
 const message3 = "Reassigned peer reviews must be submitted by this date. After this date, any unsubmitted peer reviews will be deleted from Canvas.";
 
+
+
+
 class AnalyzeButton extends Component {
 	constructor(props) {
 		super(props);
@@ -54,6 +57,10 @@ class AnalyzeButton extends Component {
 			tooltipOpen1: false,
 			tooltipOpen2: false,
 		};
+		//localStorage.setItem("nextClicked_"+this.props.assignmentId, this.state.nextClicked);
+		if (localStorage.getItem("nextClicked_" + this.props.assignmentId) == null) {
+			localStorage.setItem("nextClicked_" + this.props.assignmentId, false)
+		}
 
 		this.backClick = this.backClick.bind(this);
 		this.checkForPreviousAnalyzeAndFinalizePresses = this.checkForPreviousAnalyzeAndFinalizePresses.bind(this);
@@ -240,7 +247,7 @@ class AnalyzeButton extends Component {
 									</Flexbox>
 									<button className="switch-button next-button" disabled={!localStorage.getItem("dueDate3" + this.localStorageExtension) || localStorage.getItem("dueDate3" + this.localStorageExtension) == "N/A"} onClick={this.nextClick}>
 										Next
-								</button>
+									</button>
 
 								</div>
 
@@ -266,7 +273,7 @@ class AnalyzeButton extends Component {
 
 									<button className="switch-button back-button" onClick={this.backClick}>
 										Back
-								</button>
+									</button>
 								</div>
 
 							</div>

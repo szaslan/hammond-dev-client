@@ -181,6 +181,7 @@ class SidebarComp extends React.Component {
 	}
 
 	render() {
+
 		return (
 			<Sidebar
 				sidebar={
