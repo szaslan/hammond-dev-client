@@ -12,16 +12,16 @@ import './Courses.css';
 
 // function CheckBrowser()
 // {
-//      // Check Browser Close [X] , Alt+F4 , File -> Close  
+//      // Check Browser Close [X] , Alt+F4 , File -> Close
 //      if(window.event.clientX < 0 && window.event.clientY <0)
 //     {
-//           window.open("Operation.aspx", 
+//           window.open("Operation.aspx",
 //                 "Operation",'left=12000,top=1200,width=10,height=1');
 //     }
 // }
 
 // function handleWindowClose(e) {
-//     e = window.event || e; 
+//     e = window.event || e;
 //         if ((e.clientX < 0) || (e.clientY < 0))
 //         {
 //             e.returnValue = "Are You sure to leave this page";
@@ -174,7 +174,7 @@ class Courses extends Component {
                                                     this.state.courses.length > 0 ?
                                                         this.state.courses.map(course =>
                                                             <Link to={`/courses/${course.id}`}>
-                                                                this.state.coursecount++
+                                                                {console.log(this.state.coursecount++)}
                                                                 <CardComp name={course.name} coursecount={this.state.coursecount} />
                                                             </Link>)
                                                         :
