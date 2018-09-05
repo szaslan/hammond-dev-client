@@ -48,7 +48,6 @@ class AnalyzeButton extends Component {
 			assignedNewPeerReviews: false,
 			currTime: null,
 			deletedIncompletePeerReviews: false,
-			nextClicked: (localStorage.getItem("nextClicked_" + this.props.assignmentId) ? localStorage.getItem("nextClicked_" + this.props.assignmentId) : false ),
 			finalizeDisplayText: false,
 			finalizePressed: false,
 			loaded: false,
@@ -86,9 +85,7 @@ class AnalyzeButton extends Component {
 	}
 
 	backClick() {
-		this.setState({
-			nextClicked: false
-		});
+		localStorage.setItem("nextClicked" + this.localStorageExtension, "N/A")
 	}
 
 	checkForPreviousAnalyzeAndFinalizePresses() {
@@ -144,9 +141,7 @@ class AnalyzeButton extends Component {
 	}
 
 	nextClick() {
-		this.setState({
-			nextClicked: true
-		});
+		localStorage.setItem("nextClicked" + this.localStorageExtension, true)
 	}
 
 	pullSavedBenchmarksFromLocalStorage() {
@@ -230,14 +225,13 @@ class AnalyzeButton extends Component {
 	}
 
 	render() {
-		{localStorage.setItem("nextClicked_" + this.assignmentId, this.state.nextClicked)}
 		if (this.state.loaded) {
 			return (
 				<div>
 					{
 						!this.state.finalizePressed ?
 							<div className="assignment-info-content">
-								<div className={"calendar-case" + (this.state.nextClicked ? "-hidden" : "")}>
+								<div className={"calendar-case" + (localStorage.getItem("nextClicked" + this.localStorageExtension) === "true" ? "-hidden" : "")}>
 									<p className="header-text">Set Due Date:</p>
 									<Flexbox flexWrap="wrap">
 										<NewDueDate number="1" assignmentId={this.assignmentId} courseId={this.courseId} textDescription={message1} />
@@ -250,7 +244,7 @@ class AnalyzeButton extends Component {
 
 								</div>
 
-								<div className={"parameters-case" + (this.state.nextClicked ? "" : "-hidden")}>
+								<div className={"parameters-case" + (localStorage.getItem("nextClicked" + this.localStorageExtension) === "true" ? "" : "-hidden")}>
 									<CustomizableParameters assignmentId={this.assignmentId} courseId={this.courseId} userInputBenchmarks={this.userInputBenchmarks} />
 
 									<Flexbox className="flex-dropdown" width="100%" flexWrap="wrap" justify-content="space-around">
