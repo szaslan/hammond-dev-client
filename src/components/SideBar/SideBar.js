@@ -81,6 +81,9 @@ class SidebarComp extends React.Component {
 						// no data in database
 						this.onDismiss();
 						this.setState({downloadSuccessful:true});
+						setTimeout(() => {
+							this.setState({ downloadSuccessful: false })
+						}, 5000)
 						break;
 					case 400:
 						res.json().then(res => {
@@ -177,6 +180,7 @@ class SidebarComp extends React.Component {
 	}
 
 	render() {
+
 		return (
 			<Sidebar
 				sidebar={
