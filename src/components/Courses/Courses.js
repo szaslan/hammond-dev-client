@@ -2,9 +2,9 @@ import { Container } from 'reactstrap';
 import Flexbox from 'flexbox-react';
 import history from '../../history';
 import { Link } from "react-router-dom";
-import Loader from 'react-loader-spinner';
+// import Loader from 'react-loader-spinner';
 import React, { Component } from 'react';
-
+import Loader from '../Loader/Loader'
 import CardComp from '../CourseCard/CourseCard';
 import JumbotronComp from '../JumbotronComp/JumbotronComp';
 import SidebarComp from '../SideBar/SideBar';
@@ -188,10 +188,12 @@ class Courses extends Component {
                     </Container>
                 </div>
             );
-        };
+        }
+        else{
         return (
-            <Loader className="loader" type="TailSpin" color="black" height={80} width={80} />
+            <Loader />
         );
+        }
     }
 }
 

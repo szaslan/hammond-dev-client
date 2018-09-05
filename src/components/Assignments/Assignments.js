@@ -38,8 +38,7 @@ class Assignments extends Component {
             courseId: this.props.courseJSON.id,
             loaded: false,
             url: `/courses/${this.props.courseJSON.id}/assignments/`,
-            value: null,
-
+            value: '',
             ...props,
         }
 
@@ -115,6 +114,7 @@ class Assignments extends Component {
     }
 
     componentDidMount() {
+
         array = [];
         this.pullAssignments();
     }
@@ -128,7 +128,7 @@ class Assignments extends Component {
         }
 
         if (this.state.loaded && array.length === this.state.assignments.length) {
-            return (
+            return (        
                 <div>
                     {/* dropdown properties */}
                     <div className="assign-drop">
@@ -152,7 +152,7 @@ class Assignments extends Component {
         }
 
         return (
-            <Loader type="TailSpin" color="black" height={80} width={80} />
+            null
         )
     }
 }

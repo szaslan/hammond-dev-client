@@ -1,11 +1,10 @@
 import Flexbox from 'flexbox-react';
 import history from '../../history';
-import Loader from 'react-loader-spinner'
+import Loader from '../Loader/Loader'
 import moment from 'moment';
 import React, { Component } from 'react';
 import { Row } from 'react-bootstrap';
 import { UncontrolledTooltip } from 'reactstrap';
-
 import AnalyzeResults from '../AnalyzeResults/AnalyzeResults';
 import CustomizableParameters from '../CustomizableParameters/CustomizableParameters';
 import FinalizeResults from '../FinalizeResults/FinalizeResults';
@@ -232,6 +231,7 @@ class AnalyzeButton extends Component {
 	}
 
 	render() {
+
 		if (this.state.loaded) {
 			return (
 				<div>
@@ -358,7 +358,7 @@ class AnalyzeButton extends Component {
 		}
 
 		return (
-			<Loader type="TailSpin" color="black" height={80} width={80} />
+			<div className="assignment-info-content"></div>
 		)
 	}
 }

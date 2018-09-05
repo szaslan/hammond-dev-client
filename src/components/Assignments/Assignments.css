@@ -27,6 +27,7 @@
 }
 
 .select-search-box{
+	box-shadow: 0 3px 5px rgba(0,0,0,0.50);
 	background-color: white !important;
 }
 
@@ -48,6 +49,7 @@
 }
 /* ---------react select styling for dropdown--------- */
 /*searchbar*/
+
 .css-1aya2g8, .css-2o5izw{
 	background-color: white !important;
 	/* margin-left: -15% !important; */
