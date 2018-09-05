@@ -21,7 +21,7 @@ var message = "";
 // 1 - progress bar reset (from componentDidMount)
 // 2 - call to back-end to fetch peer reviews from canvas and save to SQL tables (from savePeerReviewsFromCanvasToDatabase)
 // 3 - call to back-end to fetch rubric assessments from canvas and save the scores to SQL tables (from saveRubricScoresFromCanvasToDatabase)
-// 4 - call to back-end to save the number of reviews originally assigned/completed into SQL tables (from saveOriginallyAssignedNumbersToDatabase)
+// 4 - call to back-end to save the number of reviews originally assigned/completed into SQL tables (from saveOriginallyAssignedPeerReviewNumbers)
 // 5 - call to back-end to run the grading algorithm and save results to SQL tables (from finalizePeerReviewGrades)
 // 6 - local storage is used to save completion stats (from finalizePeerReviewGrades)
 // 7 - call to back-end to post calculated grades to canvas gradebook (from sendGradesToCanvas)
@@ -53,7 +53,7 @@ class FinalizeResults extends Component {
         this.findCompletedAllReviews = this.findCompletedAllReviews.bind(this); //Steps 15 & 16
         this.findFlaggedGrades = this.findFlaggedGrades.bind(this); //Steps 11 & 12
         this.pullBoxPlotFromCanvas = this.pullBoxPlotFromCanvas.bind(this); //Steps 13 & 14
-        this.saveOriginallyAssignedNumbersToDatabase = this.saveOriginallyAssignedNumbersToDatabase.bind(this); //Step 4
+        this.saveOriginallyAssignedPeerReviewNumbers = this.saveOriginallyAssignedPeerReviewNumbers.bind(this); //Step 4
         this.savePeerReviewsFromCanvasToDatabase = this.savePeerReviewsFromCanvasToDatabase.bind(this); //Step 2
         this.saveRubricScoresFromCanvasToDatabase = this.saveRubricScoresFromCanvasToDatabase.bind(this); //Step 3
         this.sendGradesToCanvas = this.sendGradesToCanvas.bind(this); //Step 7
@@ -318,14 +318,14 @@ class FinalizeResults extends Component {
             })
     }
 
-    saveOriginallyAssignedNumbersToDatabase() {
+    saveOriginallyAssignedPeerReviewNumbers() {
         let data = {
             assignmentId: this.assignmentId,
             courseId: this.courseId,
         }
 
         //Step 4
-        fetch('/api/savePeerReviewNumbers', {
+        fetch('/api/saveOriginallyAssignedPeerReviewNumbers', {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json'
@@ -409,7 +409,7 @@ class FinalizeResults extends Component {
                 switch (res.status) {
                     case 204:
                         this.setProgress(2)
-                        this.saveOriginallyAssignedNumbersToDatabase();
+                        this.saveOriginallyAssignedPeerReviewNumbers();
                         break;
                     case 400:
                         res.json().then(res => {

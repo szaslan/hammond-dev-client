@@ -139,7 +139,7 @@ class AnalyzeResults extends Component {
         }
 
         //Step 7
-        fetch('/api/getNameFromId', {
+        fetch('/api/getNameFromIds', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'

@@ -18,8 +18,8 @@ class SidebarComp extends React.Component {
 		this.state = {
 			sidebarOpen: true,
 			downloadSuccessful: false,
+      emptyDownload: false,
 			uploadSuccessful: false,
-			emptyDownload: false,
 		};
 
 		this.handleLocalStorageData = this.handleLocalStorageData.bind(this);
@@ -52,6 +52,7 @@ class SidebarComp extends React.Component {
 								value = true;
 							}
 						}
+						console.log(field, value)
 						localStorage.setItem(field + "_" + assignmentId + "_" + courseId, value)
 					}
 				}
@@ -183,6 +184,7 @@ class SidebarComp extends React.Component {
 	}
 
 	render() {
+
 		return (
 			<Sidebar
 				sidebar={

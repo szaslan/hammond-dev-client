@@ -158,7 +158,9 @@ class StudentInfo extends Component {
                     fill: false,
                     data: [],
                     lineTension: 0,
-                    pointBackgroundColor: "#black",
+                    pointBackgroundColor: "black",
+                    pointBorderColor: "black",
+                    pointBorderWidth: 2,
                     pointRadius: 5,
                 }
             ],
@@ -223,6 +225,8 @@ class StudentInfo extends Component {
                     data: [],
                     lineTension: 0,
                     pointBackgroundColor: [],
+                    pointBorderColor: "black",
+                    pointBorderWidth: 2,
                     pointRadius: 5,
                 }
             ],
@@ -241,20 +245,6 @@ class StudentInfo extends Component {
                             suggestedMin: 0,
                             suggestedMax: 3,
                             stepSize: .2,
-                            // callback: function (value) {
-                            //     if (value.toFixed(2) === "1.00") {
-                            //         return "Neutral <---------> 1.00"
-                            //     }
-                            //     else if (value.toFixed(2) === "2.00") {
-                            //         return "Fair          ≈        2.00"
-                            //     }
-                            //     else if (value.toFixed(2) === "0.40") {
-                            //         return "Harsh/Lenient         ≈        0.40"
-                            //     }
-                            //     else {
-                            //         return value.toFixed(2)
-                            //     }
-                            // }
                         }
                     }],
                     xAxes: [{
@@ -274,7 +264,9 @@ class StudentInfo extends Component {
                     fill: false,
                     data: [],
                     lineTension: 0,
-                    pointBackgroundColor: "#black",
+                    pointBackgroundColor: "black",
+                    pointBorderColor: "black",
+                    pointBorderWidth: 2,
                     pointRadius: 5,
                 }
             ],
@@ -551,43 +543,39 @@ class StudentInfo extends Component {
     }
 
     sortAssignmentsByFinalizedDate() {
-        let sortedArray = [];
+        let sortedArray = this.state.assignments.slice(0);
 
-        this.state.assignments.forEach((assignment, index) => {
-            let assignmentId = assignment["id"];
-            let finalizedDate = new Date(localStorage.getItem("finalized_" + assignmentId + "_" + this.state.courseId));
-            let seconds = finalizedDate.getTime();
+        sortedArray.sort((a, b) => {
+            let idA = a.id;
+            let idB = b.id;
 
-            if (index === 0) {
-                sortedArray.push(assignment);
-            }
-            else {
-                sortedArray.splice(locationOf(this.state.courseId, seconds, sortedArray) + 1, 0, assignment);
-            }
+            let finalizedDateA = localStorage.getItem("finalized_" + idA + "_" + this.state.courseId);
+            let finalizedDateB = localStorage.getItem("finalized_" + idB + "_" + this.state.courseId);
 
-            if (index === this.state.assignments.length - 1) {
-                this.setState({
-                    sortedAssignments: sortedArray,
+            if (!finalizedDateA) {
+                let data = {
+                    assignmentId: idA,
+                    courseId: this.state.courseId,
+                }
+
+                fetch('/api/pullFinalizedDateFromSQL', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
                 })
             }
 
-            function locationOf(courseId, element, array, start, end) {
-                start = start || 0;
-                end = end || array.length;
+            let timeA = new Date(localStorage.getItem("finalized_" + idA + "_" + this.state.courseId));
+            let timeB = new Date(localStorage.getItem("finalized_" + idB + "_" + this.state.courseId));
+            let secondsA = timeA.getTime();
+            let secondsB = timeB.getTime();
+            return secondsA - secondsB;
+        })
 
-                var pivot = parseInt(start + (end - start) / 2, 10);
-
-                let newAssignmentId = array[pivot]["id"];
-                let newFinalizedDate = new Date(localStorage.getItem("finalized_" + newAssignmentId + "_" + courseId));
-                let newSeconds = newFinalizedDate.getTime();
-
-                if (end-start <= 1 || newSeconds === element) return pivot;
-                if (newSeconds < element) {
-                  return locationOf(courseId, element, array, pivot, end);
-                } else {
-                  return locationOf(courseId, element, array, start, pivot);
-                }
-              }
+        this.setState({
+            sortedAssignments: sortedArray
         })
     }
 
