@@ -19,6 +19,7 @@ class SidebarComp extends React.Component {
 			sidebarOpen: true,
 			downloadSuccessful: false,
 			uploadSuccessful: false,
+			emptyDownload: false,
 		};
 
 		this.handleLocalStorageData = this.handleLocalStorageData.bind(this);
@@ -80,7 +81,11 @@ class SidebarComp extends React.Component {
 					case 204:
 						// no data in database
 						this.onDismiss();
-						this.setState({downloadSuccessful:true});
+						// this.setState({downloadSuccessful:true});
+						this.setState({emptyDownload:true})
+						setTimeout(() => {
+							this.setState({ emptyDownload: false })
+						}, 5000)
 						break;
 					case 400:
 						res.json().then(res => {
@@ -103,7 +108,8 @@ class SidebarComp extends React.Component {
 	onDismiss() {
 		this.setState({
 			downloadSuccessful: false,
-			uploadSuccessful: false
+			uploadSuccessful: false,
+			emptyDownload: false
 		})
 	}
 
@@ -226,6 +232,11 @@ class SidebarComp extends React.Component {
 					<div className="success-alert-div">
 						<Alert className="success-alert" color="success" isOpen={this.state.downloadSuccessful} toggle={this.onDismiss}>
 							Data successfully downloaded from database!
+					</Alert>
+					</div>
+					<div className="success-alert-div">
+						<Alert className="success-alert" color="success" isOpen={this.state.emptyDownload} toggle={this.onDismiss}>
+							No data found in database!
 					</Alert>
 					</div>
 					<div className="success-alert-div">
