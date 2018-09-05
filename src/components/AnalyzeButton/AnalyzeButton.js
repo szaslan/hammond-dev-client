@@ -1,6 +1,6 @@
 import Flexbox from 'flexbox-react';
 import history from '../../history';
-import Loader from 'react-loader-spinner'
+import Loader from '../Loader/Loader'
 import moment from 'moment';
 import React, { Component } from 'react';
 import { Row } from 'react-bootstrap';
@@ -459,7 +459,6 @@ class AnalyzeButton extends Component {
 
 	render() {
 		const { match, location, history } = this.props;
-		console.log(history)
     if (this.state.loaded) {
 		return (
 			<div>
@@ -603,7 +602,7 @@ class AnalyzeButton extends Component {
 		}
 
 		return (
-			<Loader type="TailSpin" color="black" height={80} width={80} />
+			<div className="assignment-info-content"></div>
 		)
 	}
 }

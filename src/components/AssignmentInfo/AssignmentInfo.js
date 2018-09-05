@@ -1,5 +1,5 @@
 import history from '../../history';
-import Loader from 'react-loader-spinner';
+import Loader from '../Loader/Loader';
 import React, { Component } from 'react';
 import { Well } from 'react-bootstrap';
 
@@ -120,9 +120,12 @@ class AssignmentInfo extends Component {
         }
 
         return (
-            <Well className="assignment-info">
-                <Loader type="TailSpin" color="black" height={80} width={80} />
-            </Well>
+            // <Well className="assignment-info">
+            <div className="assignment-info">
+                <Loader />
+            </div>
+                
+            // </Well>
         )
     }
 }

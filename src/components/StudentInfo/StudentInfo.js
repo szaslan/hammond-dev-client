@@ -1,6 +1,6 @@
 import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 import history from '../../history';
-import Loader from 'react-loader-spinner'
+import Loader from '../Loader/Loader';
 import React, { Component } from 'react';
 import { Row, Col } from 'react-bootstrap';
 
@@ -635,7 +635,9 @@ class StudentInfo extends Component {
                             }
                         </div>
                         :
-                        <Loader type="TailSpin" color="black" height={80} width={80} />
+                        <div className="graph">
+                            <Loader />
+                        </div>
                 }
             </div>
         )

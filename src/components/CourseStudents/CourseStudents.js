@@ -1,5 +1,5 @@
 import history from '../../history';
-import Loader from 'react-loader-spinner';
+import Loader from '../Loader/Loader'
 import React, { Component } from 'react';
 import Select from 'react-select';
 
@@ -142,7 +142,7 @@ class CourseStudents extends Component {
             );
         }
         return (
-            <Loader type="TailSpin" color="black" height={80} width={80} />
+            <Loader  />
         )
     }
 }
