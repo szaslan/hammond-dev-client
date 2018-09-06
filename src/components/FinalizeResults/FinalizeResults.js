@@ -9,6 +9,7 @@ import PieCharts from '../PieCharts/PieCharts';
 
 import 'bootstrap/dist/css/bootstrap.css';
 import '../Assignments/Assignments.css'
+import { masterSetLocalStorage } from '../../App';
 
 //progress bar
 var progress = 0;
@@ -87,13 +88,13 @@ class FinalizeResults extends Component {
                         this.setProgress(8)
                         //Step 10
                         res.json().then(res => {
-                            localStorage.setItem("spazzy" + this.localStorageExtension, JSON.stringify(res.spazzy))
-                            localStorage.setItem("definitelyHarsh" + this.localStorageExtension, JSON.stringify(res.definitelyHarsh))
-                            localStorage.setItem("couldBeHarsh" + this.localStorageExtension, JSON.stringify(res.couldBeHarsh))
-                            localStorage.setItem("couldBeLenient" + this.localStorageExtension, JSON.stringify(res.couldBeLenient))
-                            localStorage.setItem("definitelyLenient" + this.localStorageExtension, JSON.stringify(res.definitelyLenient))
-                            localStorage.setItem("couldBeFair" + this.localStorageExtension, JSON.stringify(res.couldBeFair))
-                            localStorage.setItem("definitelyFair" + this.localStorageExtension, JSON.stringify(res.definitelyFair))
+                            masterSetLocalStorage("spazzy" + this.localStorageExtension, JSON.stringify(res.spazzy))
+                            masterSetLocalStorage("definitelyHarsh" + this.localStorageExtension, JSON.stringify(res.definitelyHarsh))
+                            masterSetLocalStorage("couldBeHarsh" + this.localStorageExtension, JSON.stringify(res.couldBeHarsh))
+                            masterSetLocalStorage("couldBeLenient" + this.localStorageExtension, JSON.stringify(res.couldBeLenient))
+                            masterSetLocalStorage("definitelyLenient" + this.localStorageExtension, JSON.stringify(res.definitelyLenient))
+                            masterSetLocalStorage("couldBeFair" + this.localStorageExtension, JSON.stringify(res.couldBeFair))
+                            masterSetLocalStorage("definitelyFair" + this.localStorageExtension, JSON.stringify(res.definitelyFair))
                             this.setProgress(9)
                         })
                             .then(() => this.findFlaggedGrades())
@@ -133,10 +134,10 @@ class FinalizeResults extends Component {
                         res.json().then(res => message = res)
                             //Step 6
                             .then(() => {
-                                localStorage.setItem("finalizeDisplayTextNumCompleted" + this.localStorageExtension, message.numCompleted);
-                                localStorage.setItem("finalizeDisplayTextNumAssigned" + this.localStorageExtension, message.numAssigned);
-                                localStorage.setItem("finalizeDisplayTextAverage" + this.localStorageExtension, message.average);
-                                localStorage.setItem("finalizeDisplayTextOutOf" + this.localStorageExtension, message.outOf);
+                                masterSetLocalStorage("finalizeDisplayTextNumCompleted" + this.localStorageExtension, message.numCompleted);
+                                masterSetLocalStorage("finalizeDisplayTextNumAssigned" + this.localStorageExtension, message.numAssigned);
+                                masterSetLocalStorage("finalizeDisplayTextAverage" + this.localStorageExtension, message.average);
+                                masterSetLocalStorage("finalizeDisplayTextOutOf" + this.localStorageExtension, message.outOf);
                             })
                             .then(() => this.setProgress(5))
                             .then(() => this.sendGradesToCanvas())
@@ -174,9 +175,9 @@ class FinalizeResults extends Component {
                         this.setProgress(14)
                         //Step 16
                         res.json().then(res => {
-                            localStorage.setItem("completedAllReviews" + this.localStorageExtension, res.completedAll)
-                            localStorage.setItem("completedSomeReviews" + this.localStorageExtension, res.completedSome)
-                            localStorage.setItem("completedNoReviews" + this.localStorageExtension, res.completedNone)
+                            masterSetLocalStorage("completedAllReviews" + this.localStorageExtension, res.completedAll)
+                            masterSetLocalStorage("completedSomeReviews" + this.localStorageExtension, res.completedSome)
+                            masterSetLocalStorage("completedNoReviews" + this.localStorageExtension, res.completedNone)
                             this.setProgress(15)
                         })
                         break;
@@ -210,7 +211,8 @@ class FinalizeResults extends Component {
                         this.setProgress(10)
                         //Step 12
                         res.json().then(res => {
-                            localStorage.setItem("flaggedStudents" + this.localStorageExtension, JSON.stringify(res))
+                            masterSetLocalStorage("flaggedStudents" + this.localStorageExtension, JSON.stringify(res))
+                            
                             this.setProgress(11)
                         })
                             .then(() => this.pullBoxPlotFromCanvas())
@@ -219,7 +221,8 @@ class FinalizeResults extends Component {
                         //no flagged grades
                         this.setProgress(10)
                         //Step 12
-                        localStorage.setItem("flaggedStudents" + this.localStorageExtension, JSON.stringify([]))
+                        masterSetLocalStorage("flaggedStudents" + this.localStorageExtension, JSON.stringify([]))
+                        
                         this.setProgress(11)
                         this.pullBoxPlotFromCanvas()
                         break;
@@ -254,11 +257,11 @@ class FinalizeResults extends Component {
                         this.setProgress(12)
                         //Step 14
                         res.json().then(data => {
-                            localStorage.setItem("min" + this.localStorageExtension, data.min);
-                            localStorage.setItem("q1" + this.localStorageExtension, data.q1);
-                            localStorage.setItem("median" + this.localStorageExtension, data.median);
-                            localStorage.setItem("q3" + this.localStorageExtension, data.q3);
-                            localStorage.setItem("max" + this.localStorageExtension, data.max);
+                            masterSetLocalStorage("min" + this.localStorageExtension, data.min);
+                            masterSetLocalStorage("q1" + this.localStorageExtension, data.q1);
+                            masterSetLocalStorage("median" + this.localStorageExtension, data.median);
+                            masterSetLocalStorage("q3" + this.localStorageExtension, data.q3);
+                            masterSetLocalStorage("max" + this.localStorageExtension, data.max);
                             this.setProgress(13)
                         })
                             .then(() => this.findCompletedAllReviews())

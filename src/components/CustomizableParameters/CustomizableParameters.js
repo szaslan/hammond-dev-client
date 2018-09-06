@@ -8,6 +8,7 @@ import 'bootstrap/dist/css/bootstrap.css';
 
 import '../Assignments/Assignments.css';
 import '../DueDate/NewDueDate.css';
+import { masterSetLocalStorage } from '../../App';
 
 const customizableOptions = ["automaticallyFinalize", "customBenchmarks", "penalizingForOriginalIncompletes", "penalizingForReassignedIncompletes", "sendIncompleteMessages"];
 
@@ -39,10 +40,11 @@ class CustomizableParameters extends Component {
     }
 
     clearCustomBenchmarks() {
-        localStorage.setItem("customBenchmarks" + this.localStorageExtension, "N/A")
+        masterSetLocalStorage("customBenchmarks" + this.localStorageExtension, "N/A")
 
         benchmarkNames.forEach(benchmark => {
-            localStorage.setItem(benchmark + this.localStorageExtension, "N/A");
+            masterSetLocalStorage(benchmark + this.localStorageExtension, "N/A");
+        
         })
 
         this.userInputBenchmarks = {
@@ -59,7 +61,8 @@ class CustomizableParameters extends Component {
 
     editingBenchmarks(event) {
         event.preventDefault();
-        localStorage.setItem("customBenchmarksSaved" + this.localStorageExtension, "N/A")
+        masterSetLocalStorage("customBenchmarksSaved" + this.localStorageExtension, "N/A")
+        
         this.setState({
             customBenchmarksSaved: false
         })
@@ -71,10 +74,12 @@ class CustomizableParameters extends Component {
         const name = target.name;
 
         if (value) {
-            localStorage.setItem(name + this.localStorageExtension, value)
+            masterSetLocalStorage(name + this.localStorageExtension, value)
+            
         }
         else {
-            localStorage.setItem(name + this.localStorageExtension, "N/A")
+            masterSetLocalStorage(name + this.localStorageExtension, "N/A")
+            
         }
 
         this.setState({

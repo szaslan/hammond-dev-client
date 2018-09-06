@@ -10,6 +10,7 @@ import { localStorageFields, localStorageBooleanFields } from '../UserLogin/User
 import logo from '../logo.png'
 
 import './SideBar.css'
+import { masterSetLocalStorage } from '../../App';
 
 class SidebarComp extends React.Component {
 	constructor(props) {
@@ -83,7 +84,6 @@ class SidebarComp extends React.Component {
 					case 204:
 						// no data in database
 						this.onDismiss();
-						// this.setState({downloadSuccessful:true});
 						this.setState({emptyDownload:true})
 						setTimeout(() => {
 							this.setState({ emptyDownload: false })
@@ -154,11 +154,12 @@ class SidebarComp extends React.Component {
 			.then(res => {
 				switch (res.status) {
 					case 204: /*everything worked*/
+						localStorage.setItem("pageSaved?", true);
 						this.onDismiss();
 						this.setState({ uploadSuccessful: true });
 						setTimeout(() => {
 							this.setState({ uploadSuccessful: false })
-						}, 5000)
+						}, 5000);
 						break;
 					case 400: /*something went wrong*/
 						res.json().then(res => {
@@ -221,9 +222,11 @@ class SidebarComp extends React.Component {
 							<p className="icon-text">Refresh Data</p>
 						</button>
 						<br />
-						<Link to="/logout">
+						{/* <Link to="/logout"> */}
+						<a href="/logout">
 							<button className="sign-out-button" onClick={this.signOut}>Sign Out</button>
-						</Link>
+						</a>
+						{/* </Link> */}
 					</ b>
 				}
 				docked={true}

@@ -5,6 +5,7 @@ import moment from 'moment';
 import React, { Component } from 'react';
 import { Row } from 'react-bootstrap';
 import { UncontrolledTooltip } from 'reactstrap';
+import { masterSetLocalStorage } from '../../App';
 
 import AnalyzeResults from '../AnalyzeResults/AnalyzeResults';
 import CustomizableParameters from '../CustomizableParameters/CustomizableParameters';
@@ -89,7 +90,7 @@ class AnalyzeButton extends Component {
 	}
 
 	backClick() {
-		localStorage.setItem("nextClicked" + this.localStorageExtension, "N/A")
+		masterSetLocalStorage("nextClicked" + this.localStorageExtension, "N/A");
 	}
 
 	checkForPreviousAnalyzeAndFinalizePresses() {
@@ -145,14 +146,16 @@ class AnalyzeButton extends Component {
 	}
 
 	handleFinalizeClick() {
-		localStorage.setItem("finalized" + this.localStorageExtension, this.state.currTime)
+		masterSetLocalStorage("finalized" + this.localStorageExtension, this.state.currTime)
+
 		this.setState({
 			finalizePressed: true,
 		})
 	}
 
 	nextClick() {
-		localStorage.setItem("nextClicked" + this.localStorageExtension, true)
+		masterSetLocalStorage("nextClicked" + this.localStorageExtension, true)
+
 	}
 
 	pullSavedBenchmarksFromLocalStorage() {
@@ -258,7 +261,7 @@ class AnalyzeButton extends Component {
 								<div className={"parameters-case" + (localStorage.getItem("nextClicked" + this.localStorageExtension) === "true" ? "" : "-hidden")}>
 									<CustomizableParameters assignmentId={this.assignmentId} courseId={this.courseId} userInputBenchmarks={this.userInputBenchmarks} />
 
-									<Flexbox className="flex-dropdown" width="100%" flexWrap="wrap" justify-content="space-around">
+									{/* <Flexbox className="flex-dropdown" width="100%" flexWrap="wrap" justify-content="space-around">
 										<Row className="analyze">
 											<span id="analyze-button-1">
 												<button onClick={this.handleAnalyzeClick} className="analyze-button">Analyze</button>
@@ -273,11 +276,32 @@ class AnalyzeButton extends Component {
 												Click to calculate grades and send to the Canvas gradebook
 										</UncontrolledTooltip>
 										</Row>
-									</Flexbox>
+									</Flexbox> */}
+									<div className="button-footer">
+										<Row className="button-row">
+											<Flexbox justifyContent="space-between" width="80vw" flexDirection="row">
+												<button className="switch-button back-button" onClick={this.backClick}>
+													Edit Dates
+												</button>
 
-									<button className="switch-button back-button" onClick={this.backClick}>
-										Back
-									</button>
+												<Flexbox>
+													<span id="analyze-button-1">
+														<button onClick={this.handleAnalyzeClick} className="analyze-button">Analyze</button>
+													</span>
+													<UncontrolledTooltip delay={{ show: "1200" }} placement="top" target="analyze-button-1">
+														Click to view statistics for submitted peer reviews
+													</UncontrolledTooltip>
+													<span id="finalize-button-1">
+														<button className="finalize-button" onClick={this.handleFinalizeClick}>Finalize</button>
+													</span>
+													<UncontrolledTooltip delay={{ show: "1200" }} placement="top" target="finalize-button-1">
+														Click to calculate grades and send to the Canvas gradebook
+													</UncontrolledTooltip>
+												</Flexbox>
+											</Flexbox>
+
+										</Row>
+									</div>
 								</div>
 
 							</div>
