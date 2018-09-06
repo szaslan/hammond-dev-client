@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Form, FormGroup, Input, Label } from 'reactstrap';
-
+import Flexbox from 'flexbox-react';
 import AlgorithmBenchmarks from '../AlgorithmBenchmarks/AlgorithmBenchmarks';
 import { benchmarkNames, defaultBenchmarks } from '../AnalyzeButton/AnalyzeButton';
 
@@ -44,7 +44,7 @@ class CustomizableParameters extends Component {
 
         benchmarkNames.forEach(benchmark => {
             masterSetLocalStorage(benchmark + this.localStorageExtension, "N/A");
-        
+
         })
 
         this.userInputBenchmarks = {
@@ -62,7 +62,7 @@ class CustomizableParameters extends Component {
     editingBenchmarks(event) {
         event.preventDefault();
         masterSetLocalStorage("customBenchmarksSaved" + this.localStorageExtension, "N/A")
-        
+
         this.setState({
             customBenchmarksSaved: false
         })
@@ -75,11 +75,11 @@ class CustomizableParameters extends Component {
 
         if (value) {
             masterSetLocalStorage(name + this.localStorageExtension, value)
-            
+
         }
         else {
             masterSetLocalStorage(name + this.localStorageExtension, "N/A")
-            
+
         }
 
         this.setState({
@@ -134,8 +134,8 @@ class CustomizableParameters extends Component {
             return (
                 <Form className="parameters-form">
                     <FormGroup row>
-                            <h3 className="parameters-title"> Customizable Parameters for Grading</h3>
-                            <hr className="hr-3"></hr>
+                        <h3 className="parameters-title"> Customizable Parameters for Grading</h3>
+                        <hr className="hr-3"></hr>
                         <FormGroup check>
                             {/* checkbox parameters for assignments */}
                             <Label className="check-text" check>
@@ -181,9 +181,12 @@ class CustomizableParameters extends Component {
                                     <button onClick={this.editingBenchmarks}>Edit</button>
                                     :
                                     <div>
-                                        <button className="save-all" onClick={this.handleSubmit}> Save All</button>
-                                        <AlgorithmBenchmarks originalBenchmarks={defaultBenchmarks} benchmarks={this.userInputBenchmarks} assignmentId={this.state.assignmentId} courseId={this.courseId}/>
-                                        <button className="clear-all" onClick={this.clearCustomBenchmarks}> Clear All</button>
+                                        {/* <button className="save-all" onClick={this.handleSubmit}> Save All</button> */}
+                                        <AlgorithmBenchmarks originalBenchmarks={defaultBenchmarks} benchmarks={this.userInputBenchmarks} assignmentId={this.state.assignmentId} courseId={this.courseId} />
+                                        <Flexbox className="custparam-flexbox" width="300px" justifyContent="space-between">
+                                            <button className="custparam-button" onClick={this.handleSubmit}> Save All</button>
+                                            <button className="custparam-button" onClick={this.clearCustomBenchmarks}> Clear All</button>
+                                        </Flexbox>
                                     </div>
                                 :
                                 null
