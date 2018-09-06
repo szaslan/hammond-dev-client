@@ -20,8 +20,8 @@
 
 </head>
 
-<body onbeforeunload = "return blahfunction()">
-
+<body onbeforeunload = "return helperWarnUser()">
+<!-- <body> -->
   <noscript>
     You need to enable JavaScript to run this app.
   </noscript>
@@ -38,10 +38,20 @@
     -->
   <script src="https://unpkg.com/ionicons@4.2.4/dist/ionicons.js"></script>
   <script>
-  function blahfunction() {
+  function warnUser() {
     return 'Do you really want to leave this page?';
+    //return false;
+  
   };
-  </script>
+  function helperWarnUser(){
+    if (localStorage.getItem("pageSaved?") !== "true"){
+      return warnUser();
+    }
+    else{
+      return null;
+    }
+  }
+   </script>
 </body>
 
 </html>

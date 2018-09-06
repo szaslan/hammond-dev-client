@@ -81,6 +81,7 @@ a:hover, a:visited, a:link, a:active{
     left: 35%;
     /* top: 5px; */
     width: 500px;
+    z-index:3;
 }
 
 .success-alert-div{

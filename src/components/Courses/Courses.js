@@ -10,24 +10,9 @@ import JumbotronComp from '../JumbotronComp/JumbotronComp';
 import SidebarComp from '../SideBar/SideBar';
 import './Courses.css';
 
-// function CheckBrowser()
-// {
-//      // Check Browser Close [X] , Alt+F4 , File -> Close
-//      if(window.event.clientX < 0 && window.event.clientY <0)
-//     {
-//           window.open("Operation.aspx",
-//                 "Operation",'left=12000,top=1200,width=10,height=1');
-//     }
-// }
-
-// function handleWindowClose(e) {
-//     e = window.event || e;
-//         if ((e.clientX < 0) || (e.clientY < 0))
-//         {
-//             e.returnValue = "Are You sure to leave this page";
-//         }
-// }
-// window.onbeforeunload = handleWindowClose;
+function warnUser() {
+    return 'Do you really want to leave this page?';
+}
 
 class Courses extends Component {
     constructor(props) {
@@ -45,6 +30,8 @@ class Courses extends Component {
         this.fetchCourses = this.fetchCourses.bind(this);
         this.send400Error = this.send400Error.bind(this);
         this.signOut = this.signOut.bind(this);
+
+        localStorage.setItem("pageSaved?", true);
     }
 
     createTables() {
@@ -139,22 +126,13 @@ class Courses extends Component {
     }
 
     componentDidMount() {
-        // console.log("mount")
         this.fetchCourses();
         this.createTables();
+
     }
-    // componentDidUpdate() {
-    //     console.log("update")
-    // }
-    // componentWillUnmount() {
-    //     console.log("unmount")
-    // }
+
 
     render() {
-        // function blahfunction() {
-        // 	return 'Do you really want to leave this page?';
-        // };
-        // window.onbeforeunload = blahfunction;
 
         if (this.state.loaded) {
             return (
@@ -187,6 +165,7 @@ class Courses extends Component {
                             } />
                     </Container>
                 </div>
+
             );
         };
         return (

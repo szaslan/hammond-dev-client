@@ -5,6 +5,7 @@ import Loader from 'react-loader-spinner'
 import '../Assignments/Assignments.css';
 import 'bootstrap/dist/css/bootstrap.css';
 import '../DueDate/NewDueDate.css'
+import {masterSetLocalStorage} from '../../App';
 
 var downArrowIcon = require('../downArrowIcon.svg')
 var upArrowIcon = require('../upArrowIcon.svg')
@@ -84,9 +85,9 @@ class AlgorithmBenchmarks extends Component {
         event.preventDefault();
         Object.keys(this.benchmarks).forEach(benchmark => {
             var value = this.state[benchmark];
-            localStorage.setItem(benchmark + this.localStorageExtension, value)
+            masterSetLocalStorage(benchmark + this.localStorageExtension, value);
         });
-        localStorage.setItem("customBenchmarksSaved" + this.localStorageExtension, true)
+        masterSetLocalStorage("customBenchmarksSaved" + this.localStorageExtension, true);        
         this.setState({
             saved: true
         })

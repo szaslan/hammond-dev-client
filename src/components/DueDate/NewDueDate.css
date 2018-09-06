@@ -3,24 +3,19 @@
 }
 
 .analyze-button{
-  border-radius: 3px;
-  margin-left: 300%;
+  position:relative;
+  /* margin-left: 300%;
   margin-top: 20.5%;
-  margin-bottom: 20%;
+  margin-bottom: 20%; */
   font-size: 24px;
   border: 3px solid #b7ddf7 !important;
   border-radius: 5px;
 }
 
 .analyze-button:hover{
-  border-radius: 3px;
-  margin-left: 300%;
-  margin-top: 20.5%;
-  margin-bottom: 20%;
-  font-size: 24px;
+
   background-color:	#b7ddf7;
-  border: 3px solid #b7ddf7 !important;
-  border-radius: 5px;
+ 
 }
 
 .analyze-text{
@@ -128,24 +123,17 @@
 /* --------------------------------------- */
 
 .finalize-button{
-  border-radius: 3px;
-  margin-top: 20%;
+  position:relative;
+  /* margin-top: 20%;
   margin-left: 450%;
-  margin-bottom: 20%;
+  margin-bottom: 20%; */
   font-size: 24px;
   border: 3px solid #b7ddf7 !important;
   border-radius: 5px;
 }
 
 .finalize-button:hover{
-  border-radius: 3px;
   background-color:	#b7ddf7;
-  margin-top: 20%;
-  margin-left: 450%;
-  margin-bottom: 20%;
-  font-size: 24px;
-  border: 3px solid #b7ddf7 !important;
-  border-radius: 5px;
 }
 
 .flag-button{

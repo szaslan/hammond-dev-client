@@ -6,6 +6,7 @@ import moment from 'moment';
 import React, { Component } from 'react';
 
 import './UserLogin.css';
+import { masterSetLocalStorage } from '../../App';
 
 // let localStorageFields = ['assignment_id', 'COULD_BE_LOWER_BOUND', 'COULD_BE_UPPER_BOUND', 'MIN_NUMBER_OF_ASSIGNMENTS_IN_COURSE_FOR_CLASSIFICATION', 'MIN_NUMBER_OF_REVIEWS_FOR_SINGLE_SUBMISSION_FOR_GRADING', 'MIN_NUMBER_OF_REVIEWS_PER_STUDENT_FOR_CLASSIFICATION', 'MIN_REVIEW_COMPLETION_PERCENTAGE_PER_SUBMISSION', 'SPAZZY_WIDTH', 'THRESHOLD', 'analyzeDisplayTextNumCompleted', 'analyzeDisplayTextNumAssigned', 'analyzeDisplayTextMessage', 'analyzeDisplayTextNames', 'analyzePressed', 'sendIncompleteMessages', 'customBenchmarks', 'customBenchmarksSaved', 'penalizingForOriginalIncompletes', 'penalizingForReassignedIncompletes', 'dueDate1', 'dueDate2', 'dueDate3', 'spazzy', 'definitelyHarsh', 'couldBeHarsh', 'couldBeLenient', 'definitelyLenient', 'couldBeFair', 'definitelyFair', 'finalized', 'finalizeDisplayTextNumCompleted', 'finalizeDisplayTextNumAssigned', 'finalizeDisplayTextAverage', 'finalizeDisplayTextOutOf', 'completedAllReviews', 'completedSomeReviews', 'completedNoReviews', 'flaggedStudents', 'min', 'q1', 'median', 'q3', 'max', 'automaticallyFinalize']
 let localStorageFields = ['analyzeDisplayTextMessage', 'analyzeDisplayTextNames', 'analyzeDisplayTextNumAssigned', 'analyzeDisplayTextNumCompleted', 'analyzePressed', 'automaticallyFinalize', 'completedAllReviews', 'completedNoReviews', 'completedSomeReviews', 'couldBeFair', 'couldBeHarsh', 'couldBeLenient', 'customBenchmarks', 'customBenchmarksSaved', 'definitelyFair', 'definitelyHarsh', 'definitelyLenient', 'dueDate1', 'dueDate2', 'dueDate3', 'finalized', 'finalizeDisplayTextAverage', 'finalizeDisplayTextNumAssigned', 'finalizeDisplayTextNumCompleted', 'finalizeDisplayTextOutOf', 'flaggedStudents', 'max', 'median', 'min', 'nextClicked', 'penalizingForOriginalIncompletes', 'penalizingForReassignedIncompletes', 'q1', 'q3', 'sendIncompleteMessages', 'spazzy', 'COULD_BE_LOWER_BOUND', 'COULD_BE_UPPER_BOUND', 'MIN_NUMBER_OF_ASSIGNMENTS_IN_COURSE_FOR_CLASSIFICATION', 'MIN_NUMBER_OF_REVIEWS_FOR_SINGLE_SUBMISSION_FOR_GRADING', 'MIN_NUMBER_OF_REVIEWS_PER_STUDENT_FOR_CLASSIFICATION', 'MIN_REVIEW_COMPLETION_PERCENTAGE_PER_SUBMISSION', 'SPAZZY_WIDTH', 'THRESHOLD']
@@ -57,7 +58,8 @@ class UserLogin extends Component {
 								value = true;
 							}
 						}
-						localStorage.setItem(field + "_" + assignmentId + "_" + courseId, value)
+						masterSetLocalStorage(field + "_" + assignmentId + "_" + courseId, value)
+						
 					}
 				}
 			})

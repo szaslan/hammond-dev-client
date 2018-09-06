@@ -133,7 +133,7 @@ text-align: center;
   
 .entire-screen{
     height:100vh;
-    background-image: url('../deering-interior-square3.jpg');
+    /* background-image: url('../deering-interior-square3.jpg'); */
     background-size: cover;
     background-repeat: no-repeat;
     background-attachment: fixed;

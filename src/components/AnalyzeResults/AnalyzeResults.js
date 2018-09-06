@@ -7,6 +7,7 @@ import { Row, Well } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.css';
 import '../Assignments/Assignments.css';
 import '../DueDate/NewDueDate.css'
+import { masterSetLocalStorage } from '../../App';
 
 //progress bar benchmarks
 var progress = 0;
@@ -75,9 +76,9 @@ class AnalyzeResults extends Component {
                             this.missingDataIds = res.missingDataIds;
 
                             //Step 5
-                            localStorage.setItem("analyzeDisplayTextNumCompleted" + this.localStorageExtension, message.numCompleted);
-                            localStorage.setItem("analyzeDisplayTextNumAssigned" + this.localStorageExtension, message.numAssigned);
-                            localStorage.setItem("analyzeDisplayTextMessage" + this.localStorageExtension, message.message);
+                            masterSetLocalStorage("analyzeDisplayTextNumCompleted" + this.localStorageExtension, message.numCompleted);
+                            masterSetLocalStorage("analyzeDisplayTextNumAssigned" + this.localStorageExtension, message.numAssigned);
+                            masterSetLocalStorage("analyzeDisplayTextMessage" + this.localStorageExtension, message.message);
                             this.setProgress(4)
                             this.attachNamesToDatabase()
                         })
@@ -152,8 +153,9 @@ class AnalyzeResults extends Component {
                         this.setProgress(6)
                         res.json().then(res => {
                             //Step 8
-                            localStorage.setItem("analyzeDisplayTextNames" + this.localStorageExtension, JSON.stringify(res));
-                            localStorage.setItem("analyzePressed" + this.localStorageExtension, true);
+                            masterSetLocalStorage("analyzeDisplayTextNames" + this.localStorageExtension, JSON.stringify(res));
+                            masterSetLocalStorage("analyzePressed" + this.localStorageExtension, true);
+
                             this.setProgress(7)
                         })
                         break;
@@ -267,10 +269,10 @@ class AnalyzeResults extends Component {
             //Step 1
             // this.setProgress(0)
             //Step 2
-            localStorage.setItem("analyzeDisplayTextNames" + this.localStorageExtension, "N/A")
-            localStorage.setItem("analyzeDisplayTextNumCompleted" + this.localStorageExtension, "N/A")
-            localStorage.setItem("analyzeDisplayTextNumAssigned" + this.localStorageExtension, "N/A")
-            localStorage.setItem("analyzeDisplayTextMessage" + this.localStorageExtension, "N/A")
+            masterSetLocalStorage("analyzeDisplayTextNames" + this.localStorageExtension, "N/A")
+            masterSetLocalStorage("analyzeDisplayTextNumCompleted" + this.localStorageExtension, "N/A")
+            masterSetLocalStorage("analyzeDisplayTextNumAssigned" + this.localStorageExtension, "N/A")
+            masterSetLocalStorage("analyzeDisplayTextMessage" + this.localStorageExtension, "N/A")
             this.setProgress(1)
             return (
                 <div>

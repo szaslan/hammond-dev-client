@@ -5,7 +5,6 @@ import history from './history'
 import Courses from './components/Courses/Courses';
 import CourseInfo from './components/CourseInfo/CourseInfo';
 import CourseStudents from './components/CourseStudents/CourseStudents';
-import Daddy from './components/Daddy/Daddy';
 import Landing from './components/Landing/Landing';
 import NotFound from './components/NotFound/NotFound';
 import OtherError from './components/OtherError/OtherError';
@@ -16,8 +15,17 @@ import UserRegistration from './components/UserRegistration/UserRegistration';
 
 import './App.css';
 
-class App extends Component {
+function masterSetLocalStorage(varName, value){
+    localStorage.setItem(varName, value);
+    localStorage.setItem("pageSaved?", false);
+}
 
+class App extends Component {
+	constructor(props) {
+        super(props);
+
+        localStorage.setItem("pageSaved?", true);
+    }
 
 	render() {
 		return (
@@ -26,7 +34,6 @@ class App extends Component {
 
 					{/*Landing Page*/}
 					<Route path="/" exact component={Landing} />
-					<Route path="/" component={Daddy} />
 
 					<Route path="/unauthorized" exact component={UnauthorizedError} />
 					<Route path="/notfound" exact component={NotFound} />
@@ -56,3 +63,4 @@ class App extends Component {
 }
 
 export default App;
+export {masterSetLocalStorage};

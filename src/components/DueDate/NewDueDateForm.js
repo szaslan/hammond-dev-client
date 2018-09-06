@@ -8,6 +8,7 @@ import TimePicker from 'rc-time-picker';
 import 'rc-time-picker/assets/index.css';
 
 import './NewDueDate.css';
+import { masterSetLocalStorage } from '../../App';
 
 const format = 'h:mm a';
 
@@ -59,7 +60,7 @@ class NewDueDateForm extends Component {
             if (laterDueDate && laterDueDate !== "N/A") {
                 //if the current due date is at the same time or after the later one, delete the later one
                 if (currentDueDate.isAfter(laterDueDate) || (!currentDueDate.isBefore(laterDueDate) && !laterDueDate.isBefore(currentDueDate))) {
-                    localStorage.setItem("dueDate" + i + this.localStorageExtension, "N/A")
+                    masterSetLocalStorage("dueDate" + i + this.localStorageExtension, "N/A")
                 }
             }
         }
@@ -79,7 +80,8 @@ class NewDueDateForm extends Component {
         this.isValidTime = true;
 
         var concatDateTime = (this.state.dateValue).format('ddd MMM DD YYYY') + " " + (this.state.timeValue).format('HH:mm:ss') + " GMT-0500";
-        localStorage.setItem("dueDate" + this.state.number + this.localStorageExtension, concatDateTime);
+        masterSetLocalStorage("dueDate" + this.state.number + this.localStorageExtension, concatDateTime);
+
 
         var currentTime = Datetime.moment();
         var chosenDueDate = Datetime.moment(concatDateTime);
@@ -116,7 +118,7 @@ class NewDueDateForm extends Component {
     }
 
     toggle() {
-        localStorage.setItem("dueDate" + this.state.number + this.localStorageExtension, "N/A");
+        masterSetLocalStorage("dueDate" + this.state.number + this.localStorageExtension, "N/A");
 
         this.setState({
             modal: !this.state.modal,
@@ -139,12 +141,6 @@ class NewDueDateForm extends Component {
                                         :
                                         "Select a Date")
                                 }}
-                            // viewDate={
-                            //     this.number == 2 || this.number == 3 ?
-                            //         moment(localStorage.getItem("dueDate" + this.state.number + this.localStorageExtension))
-                            //         :
-                            //         moment()
-                            // }
                             />
                             <Flexbox justifyContent="space-between">
                                 <TimePicker
