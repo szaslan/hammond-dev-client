@@ -67,6 +67,7 @@ class StudentInfo extends Component {
             datasets: [],
             options: {},
         };
+        this.canvasUserId = this.props.canvasUserId;
         this.peerReviewCompletionData = {
             labels: [],
             datasets: [],
@@ -94,21 +95,28 @@ class StudentInfo extends Component {
             body: JSON.stringify(finalizeId)
         })
             .then(res => {
-                res.json().then(res => {
-                    if (res.result === "not found") {
-                        this.setState({
-                            peerReviewsCompletedByCurrentStudent: [],
-                            errorMessage: "Assignment hasn't been finalized!"
+                switch (res.status) {
+                    case 200:
+                        res.json().then(res => {
+                            if (res.result === false) {
+                                this.setState({
+                                    peerReviewsCompletedByCurrentStudent: [],
+                                    errorMessage: "Assignment hasn't been finalized!"
+                                })
+                            }
+                            else if (res.result === true) {
+                                //assignment has been finalized so issue with searching for peer reviews
+                                this.setState({
+                                    peerReviewsCompletedByCurrentStudent: [],
+                                })
+                                console.log("there was an error when searching for the peer reviews completed by this student")
+                            }
                         })
-                    }
-                    else if (res.result === "found") {
-                        //assignment has been finalized so issue with searching for peer reviews
-                        this.setState({
-                            peerReviewsCompletedByCurrentStudent: [],
-                        })
-                        console.log("there was an error when searching for the peer reviews completed by this student")
-                    }
-                })
+                        break;
+                    case 400:
+                        break;
+                    default:
+                }
             })
     }
 
@@ -132,6 +140,8 @@ class StudentInfo extends Component {
                             studentHasSavedHistory: true
                         })
                         this.pullStudentEvaluatingData();
+                        break;
+                    case 206:
                         break;
                     case 400:
                         res.json().then(res => {
@@ -309,7 +319,8 @@ class StudentInfo extends Component {
     //fetches assignment data
     fetchAssignmentData() {
         let data = {
-            courseId: this.state.courseId
+            canvasUserId: this.props.canvasUserId,
+            courseId: this.state.courseId,
         }
 
         fetch('/api/assignments', {

@@ -21,10 +21,13 @@ class CourseInfo extends Component {
         this.fetchCourseInfo = this.fetchCourseInfo.bind(this);
         this.resetTables = this.resetTables.bind(this);
         this.send400Error = this.send400Error.bind(this);
+
+        this.canvasUserId = this.props.location.state.canvasUserId
     }
 
     fetchCourseInfo() {
         var data = {
+            canvasUserId: this.canvasUserId,
             courseId: this.state.courseId,
         }
 
@@ -124,10 +127,11 @@ class CourseInfo extends Component {
                         content={
                             <div>
                                 <JumbotronComp mainTitle={this.state.courseJSON.name}
-                                    tabs courseJSON={this.state.courseJSON} />
+                                    tabs courseJSON={this.state.courseJSON} canvasUserId={this.canvasUserId}/>
                                 <button onClick={this.resetTables}>Reset Database Tables</button>
                             </div>
                         }
+                        canvasUserId={this.canvasUserId}
                     />
                 </div>
             )

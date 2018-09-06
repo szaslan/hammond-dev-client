@@ -63,6 +63,7 @@ class FinalizeResults extends Component {
 
         this.assignmentId = this.props.assignmentId;
         this.assignmentInfo = this.props.assignmentInfo;
+        this.canvasUserId = this.props.canvasUserId;
         this.courseId = this.props.courseId;
         this.localStorageExtension = "_" + this.props.assignmentId + "_" + this.props.courseId;
     }
@@ -234,8 +235,9 @@ class FinalizeResults extends Component {
 
     pullBoxPlotFromCanvas() {
         let data = {
+            assignmentId: this.assignmentId,
+            canvasUserId: this.canvasUserId,
             courseId: this.courseId,
-            assignmentId: this.assignmentId
         }
 
         //Step 13
@@ -314,8 +316,9 @@ class FinalizeResults extends Component {
 
     savePeerReviewsFromCanvasToDatabase() {
         let data = {
-            courseId: this.courseId,
             assignmentId: this.assignmentId,
+            canvasUserId: this.canvasUserId,
+            courseId: this.courseId,
             pointsPossible: this.assignmentInfo.points_possible,
         }
 
@@ -353,8 +356,9 @@ class FinalizeResults extends Component {
 
     saveRubricScoresFromCanvasToDatabase() {
         let data = {
-            courseId: this.courseId,
             assignmentId: this.assignmentId,
+            canvasUserId: this.canvasUserId,
+            courseId: this.courseId,
             rubricSettings: this.assignmentInfo.rubric_settings.id
         }
 
@@ -392,8 +396,9 @@ class FinalizeResults extends Component {
 
     sendGradesToCanvas() {
         let data = {
-            courseId: this.courseId,
             assignmentId: this.assignmentId,
+            canvasUserId: this.canvasUserId,
+            courseId: this.courseId,
         }
 
         //Step 7

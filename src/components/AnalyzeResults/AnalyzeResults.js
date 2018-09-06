@@ -41,6 +41,7 @@ class AnalyzeResults extends Component {
         this.assignmentId = this.props.assignmentId;
         this.assignmentInfo = this.props.assignmentInfo;
         this.benchmarks = this.props.benchmarks;
+        this.canvasUserId = this.props.canvasUserId;
         this.courseId = this.props.courseId;
         this.localStorageExtension = "_" + this.props.assignmentId + "_" + this.props.courseId;
         this.missingDataIds = [];
@@ -133,8 +134,9 @@ class AnalyzeResults extends Component {
 
     savePeerReviewsFromCanvasToDatabase() {
         let data = {
-            courseId: this.courseId,
             assignmentId: this.assignmentId,
+            canvasUserId: this.canvasUserId,
+            courseId: this.courseId,
             pointsPossible: this.assignmentInfo.points_possible, //points_possible is JSON field returned from Canvas
         }
 

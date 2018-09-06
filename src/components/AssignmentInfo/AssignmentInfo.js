@@ -21,6 +21,8 @@ class AssignmentInfo extends Component {
         }
 
         this.fetchAssignmentData = this.fetchAssignmentData.bind(this);
+
+        this.canvasUserId = this.props.canvasUserId;
     }
 
     //fetches assigment data
@@ -31,6 +33,7 @@ class AssignmentInfo extends Component {
 
         let data = {
             assignmentId: this.state.assignmentId,
+            canvasUserId: this.canvasUserId,
             courseId: this.state.courseId,
         }
 
@@ -113,7 +116,7 @@ class AssignmentInfo extends Component {
         if (this.state.loaded) {
             return (
                 <div className="assignment-info">
-                    <AnalyzeButton assignmentId={this.state.assignmentId} assignmentInfo={this.state.assignmentJSON} courseId={this.state.courseId} />
+                    <AnalyzeButton assignmentId={this.state.assignmentId} assignmentInfo={this.state.assignmentJSON} canvasUserId={this.canvasUserId} courseId={this.state.courseId} />
                 </div>
             )
         }

@@ -99,7 +99,6 @@ class AlgorithmBenchmarks extends Component {
     }
 
     componentDidMount() {
-        console.log(this.benchmarks)
         Object.keys(this.benchmarks).forEach((benchmark, index, array) => {
             var value = this.benchmarks[benchmark];
             this.setState({
