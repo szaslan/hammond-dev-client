@@ -1,3 +1,5 @@
+@import 'http://weloveiconfonts.com/api/?family=fontawesome';
+
 .assign-drop{
 	float: left;
 	position: block;
@@ -76,6 +78,10 @@
 	font-weight: 100;
 	font-family: 'Open Sans';
 	color: #626262;
+}
+
+select{
+  font-family: FontAwesome, sans-serif;
 }
 
 /* ------------Finalize Results settings------------ */

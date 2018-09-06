@@ -24,7 +24,7 @@ const FilterAssignments = currAssignment => {
         array.push({
             label: currAssignment.name,
             value: null,
-            isDisabled: true,
+            isDisabled: true
         })
     }
 }
