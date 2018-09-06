@@ -116,8 +116,8 @@ class CourseStudents extends Component {
             this.state.students.map(students => {
                 //create array of students for dropdown
                 array.push({
-                    label: students.name,
-                    value: students.id,
+                    label: students.student_name,
+                    value: students.student_id,
                 });
             }
 

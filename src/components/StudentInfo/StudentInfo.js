@@ -144,8 +144,6 @@ class StudentInfo extends Component {
                         })
                         this.pullStudentEvaluatingData();
                         break;
-                    case 206:
-                        break;
                     case 400:
                         res.json().then(res => {
                             this.send400Error("This function is called when a specific student has been clicked on from the dropdown under the students tab after all of the assignments have been successfully pulled from Canvas. This function checks if a student has any saved evaluating data in the SQL tables. This data will only exist after an assignment has been finalized.", res.error, "StudentInfo.js checkIfStudentHasSavedHistory()", res.message)
