@@ -35,7 +35,6 @@ class Courses extends Component {
 
         this.state = {
             courses: [],
-            coursecount: -1,
             loaded: false,
             url: '/courses',
             user: [],
@@ -47,6 +46,7 @@ class Courses extends Component {
         this.signOut = this.signOut.bind(this);
 
         this.canvasUserId = this.props.location.state.canvasUserId;
+        this.coursecount = -1;
     }
 
     createTables() {
@@ -184,9 +184,8 @@ class Courses extends Component {
                                                                 pathname: `/courses/${course.id}`,
                                                                 state: { canvasUserId: this.canvasUserId }
                                                             }}>
-                                                                {console.log(this.state.coursecount++)}
-                                                                /*this.state.coursecount++*/
-                                                                <CardComp name={course.name} coursecount={this.state.coursecount} />
+                                                                {this.coursecount++}
+                                                                <CardComp name={course.name} coursecount={this.coursecount} />
                                                             </Link>)
                                                         :
                                                         <h1>No classes as a teacher</h1>
