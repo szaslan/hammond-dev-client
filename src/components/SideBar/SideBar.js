@@ -144,6 +144,8 @@ class SidebarComp extends React.Component {
 			data.localStorage[field] = value
 		}
 
+		delete data.localStorage["pageSaved?"]
+
 		fetch('/api/saveAllLocalStorageData', {
 			method: 'POST',
 			headers: {
