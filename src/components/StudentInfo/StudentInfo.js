@@ -115,6 +115,9 @@ class StudentInfo extends Component {
                         break;
                     case 400:
                         break;
+                    case 404:
+                        //no assignments have been finalized for course
+                        break;
                     default:
                 }
             })

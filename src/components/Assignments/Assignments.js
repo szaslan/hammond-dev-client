@@ -37,7 +37,6 @@ class Assignments extends Component {
             assignments: [],
             courseId: this.props.courseJSON.id,
             loaded: false,
-            url: `/courses/${this.props.courseJSON.id}/assignments/`,
             value: null,
 
             ...props,

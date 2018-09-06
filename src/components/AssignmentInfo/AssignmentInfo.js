@@ -15,7 +15,6 @@ class AssignmentInfo extends Component {
             assignmentJSON: null,
             courseId: this.props.courseJSON.id,
             loaded: false,
-            url: `/courses/${this.props.courseId}/assignments/`,
 
             ...props,
         }

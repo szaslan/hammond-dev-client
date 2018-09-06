@@ -21,7 +21,6 @@ class Courses extends Component {
         this.state = {
             courses: [],
             loaded: false,
-            url: '/courses',
             user: [],
         }
 
@@ -30,7 +29,7 @@ class Courses extends Component {
         this.send400Error = this.send400Error.bind(this);
         this.signOut = this.signOut.bind(this);
 
-        this.canvasUserId = this.props.location.state.canvasUserId;
+        this.canvasUserId = this.props.match.params.user_id;
         this.coursecount = -1;
       
         localStorage.setItem("pageSaved?", true);
@@ -159,7 +158,7 @@ class Courses extends Component {
                                                     this.state.courses.length > 0 ?
                                                         this.state.courses.map(course =>
                                                             <Link to={{
-                                                                pathname: `/courses/${course.id}`,
+                                                                pathname: `./courses/${course.id}`,
                                                                 state: { canvasUserId: this.canvasUserId }
                                                             }}>
                                                                 {this.coursecount++}

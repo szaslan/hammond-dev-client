@@ -44,17 +44,17 @@ class App extends Component {
 					<Route path="/register" exact component={UserRegistration} />
 
 					{/*List of Courses*/}
-					<Route path="/courses" exact component={Courses} />
-					<Route path="/courses/:course_id" exact component={CourseInfo} />
+					<Route path="/:user_id/courses" exact component={Courses} />
+					<Route path="/:user_id/courses/:course_id" exact component={CourseInfo} />
 
 					{/*Show assignments and students*/}
 					{/* <Route path="/courses/:course_id/assignments" component={Assignments} /> */}
 					{/* <Route path="/courses/:course_id/assignments/:assignment_id" exact component={AssignmentInfo} /> */}
 
 					{/* <Route path="/courses/:course_id/:course_name/students" component={CourseStudents} /> */}
-					<Route path="/courses/:course_id/students" component={CourseStudents} />
+					<Route path="/:user_id/courses/:course_id/students" component={CourseStudents} />
 					{/* <Route path="/courses/:course_id/:course_name/students/:student_id" exact component={StudentInfo} /> */}
-					<Route path="/courses/:course_id/students/:student_id" exact component={StudentInfo} />
+					<Route path="/:user_id/courses/:course_id/students/:student_id" exact component={StudentInfo} />
 				</div>
 			</Router>
 

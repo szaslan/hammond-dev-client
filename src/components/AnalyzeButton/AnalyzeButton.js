@@ -134,6 +134,9 @@ class AnalyzeButton extends Component {
 					case 400:
 						this.send400Error("", res.error, "", res.message)
 						break;
+					case 404:
+						//no assignments have been finalized for course
+						break;
 					default:
 				}
 			})

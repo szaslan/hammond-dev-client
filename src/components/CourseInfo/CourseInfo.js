@@ -13,7 +13,6 @@ class CourseInfo extends Component {
             courseId: this.props.match.params.course_id,
             courseJSON: null,
             loaded: false,
-            url: `/courses/${this.props.match.params.course_id}`,
 
             ...props
         }
@@ -22,7 +21,7 @@ class CourseInfo extends Component {
         this.resetTables = this.resetTables.bind(this);
         this.send400Error = this.send400Error.bind(this);
 
-        this.canvasUserId = this.props.location.state.canvasUserId
+        this.canvasUserId = this.props.match.params.user_id;
     }
 
     fetchCourseInfo() {

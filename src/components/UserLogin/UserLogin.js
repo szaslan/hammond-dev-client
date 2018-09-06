@@ -66,7 +66,7 @@ class UserLogin extends Component {
 		})
 		// history.push("/courses");
 		history.push({
-			pathname: '/courses',
+			pathname: `${this.canvasUserId}/courses`,
 			state: { canvasUserId: this.canvasUserId }
 		})
 	}
@@ -131,7 +131,7 @@ class UserLogin extends Component {
 						// no data in database so just send to courses page
 						// history.push("/courses");
 						history.push({
-							pathname: '/courses',
+							pathname: `${this.canvasUserId}/courses`,
 							state: { canvasUserId: this.canvasUserId }
 						})
 						break;

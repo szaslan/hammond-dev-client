@@ -21,7 +21,6 @@ class CourseStudents extends Component {
             studentId: '',
             studentName: '',
             students: [],
-            url: `/courses/${this.props.courseId}/students/`,
             value: null,
 
             ...props,

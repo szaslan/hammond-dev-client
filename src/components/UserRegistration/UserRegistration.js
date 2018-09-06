@@ -118,7 +118,7 @@ class UserRegistration extends Component {
 								this.state.reDirect ?
 									// <Redirect to='/courses' />
 									<Redirect to={{
-										pathname: '/courses',
+										pathname: `${this.canvasUserId}/courses`,
 										state: { canvasUserId: this.canvasUserId }
 									}} />
 									:
