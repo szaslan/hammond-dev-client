@@ -29,11 +29,14 @@ class CourseStudents extends Component {
 
         this.fetchStudentsFromCanvas = this.fetchStudentsFromCanvas.bind(this);
         this.select = this.select.bind(this);
+
+        this.canvasUserId = this.props.canvasUserId;
     }
 
     fetchStudentsFromCanvas() {
         let data = {
-            courseId: this.state.courseId
+            canvasUserId: this.canvasUserId,
+            courseId: this.state.courseId,
         }
 
         fetch('/api/courseStudents', {
@@ -135,7 +138,7 @@ class CourseStudents extends Component {
                         />
                     </div>
                     {this.state.studentName ?
-                        <StudentInfo courseId={this.state.courseId} studentId={this.state.studentId} studentName={this.state.studentName} />
+                        <StudentInfo courseId={this.state.courseId} studentId={this.state.studentId} studentName={this.state.studentName} canvasUserId={this.canvasUserId}/>
                         :
                         <div className="assignment-default">
                             <img className="arrow-img" src={arrow}></img>

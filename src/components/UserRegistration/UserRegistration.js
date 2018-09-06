@@ -19,11 +19,13 @@ class UserRegistration extends Component {
 		this.handleChange = this.handleChange.bind(this);
 		this.handleSubmit = this.handleSubmit.bind(this);
 
+		this.apiKey = '';
 		this.email = '';
 		this.firstName = '';
 		this.lastName = '';
 		this.password = '';
 		this.password2 = '';
+		this.canvasUserId = '';
 	}
 
 	handleChange(e) {
@@ -39,11 +41,13 @@ class UserRegistration extends Component {
 		})
 
 		var data = {
+			apiKey: this.apiKey,
+			email: this.email,
 			firstName: this.firstName,
 			lastName: this.lastName,
-			email: this.email,
 			password: this.password,
-			password2: this.password2
+			password2: this.password2,
+			canvasUserId: this.canvasUserId,
 		}
 
 		fetch('/register', {
@@ -62,6 +66,7 @@ class UserRegistration extends Component {
 							loaded: true,
 							reDirect: true,
 						})
+						console.log(this.canvasUserId)
 						break;
 					case 400:
 						res.json().then(errors => {
@@ -91,6 +96,10 @@ class UserRegistration extends Component {
 							<Input type="password" placeholder="Password" name="password" className="register-input" onChange={this.handleChange} />
 							<Input type="password" placeholder="Re-enter your password" className="register-input" name="password2" onChange={this.handleChange} />
 						</FormGroup>
+						<FormGroup>
+							<Input type="text" placeholder="User Id" name="canvasUserId" className="register-input" onChange={this.handleChange} />
+							<Input type="text" placeholder="API Key" name="apiKey" className="register-input" onChange={this.handleChange} />
+						</FormGroup>
 						<button className="new-button">Submit</button>
 						<Well>
 							{
@@ -107,7 +116,11 @@ class UserRegistration extends Component {
 							}
 							{
 								this.state.reDirect ?
-									<Redirect to='/courses' />
+									// <Redirect to='/courses' />
+									<Redirect to={{
+										pathname: '/courses',
+										state: { canvasUserId: this.canvasUserId }
+									}} />
 									:
 									null
 							}

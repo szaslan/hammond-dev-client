@@ -1,17 +1,8 @@
-:root{
-    --apricot: #ffb997;
-    --light-peach: #efd9ce;
-    --grapefruit: #f67e7d;
-    --violet:#843b62;
-    --navy-plum:#0b032d;
-    --dark-lavendar:#74546a;
-    --light-lavendar:#a37494;
-  }
-
 .entire-screen-login{
     height:100vh;
-    background-color: #efd9ce;;
-    min-width: 500px;
+    background-color: #efd9ce;
+    /* min-width: 500px; */
+    overflow: scroll;
 }
 
 .flexbox-login{
@@ -26,7 +17,7 @@
 .login-group{
     width:500px;
     padding-top:30vh;
-    height:80vh;
+    /* height:80vh; */
     margin:auto;
 }
 

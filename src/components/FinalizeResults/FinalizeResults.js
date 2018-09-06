@@ -13,28 +13,27 @@ import { masterSetLocalStorage } from '../../App';
 
 //progress bar
 var progress = 0;
-var progressNumSteps = 15;
+var progressNumSteps = 14;
 var progressBarMessage = "";
 
 var message = "";
 
 // Steps When Finalize Is Clicked Assuming Everything Works Correctly:
-// 1 - progress bar reset (from componentDidMount)
-// 2 - call to back-end to fetch peer reviews from canvas and save to SQL tables (from savePeerReviewsFromCanvasToDatabase)
-// 3 - call to back-end to fetch rubric assessments from canvas and save the scores to SQL tables (from saveRubricScoresFromCanvasToDatabase)
-// 4 - call to back-end to save the number of reviews originally assigned/completed into SQL tables (from saveOriginallyAssignedPeerReviewNumbers)
-// 5 - call to back-end to run the grading algorithm and save results to SQL tables (from finalizePeerReviewGrades)
-// 6 - local storage is used to save completion stats (from finalizePeerReviewGrades)
-// 7 - call to back-end to post calculated grades to canvas gradebook (from sendGradesToCanvas)
-// 8 - call to back-end to sync up students' names with their entries in the SQL tables (from attachNamesToDatabase)
-// 9 - call to back-end to count the number of students in each bucket (from countStudentsInEachBucket)
-// 10 - local storage is used to save each count (from countStudentsInEachBucket)
-// 11 - call to back-end to determine names of all students whose grades may be inaccurrate (from findFlaggedGrades)
-// 12 - local storage is used to save array of students and their received grades (from findFlaggedGrades)
-// 13 - call to back-end to fetch boxplot of grade breakdown from canvas (from pullBoxPlotFromCanvas)
-// 14 - local storage is used to save five data points (from pullBoxPlotFromCanvas)
-// 15 - call to back-end to count the number of students in each completion category (from findCompletedAllReviews)
-// 16 - local storage is used to save each count (from findCompletedAllReviews)
+// 0 - progress bar reset (from componentDidMount)
+// 1 - call to back-end to fetch peer reviews from canvas and save to SQL tables (from savePeerReviewsFromCanvasToDatabase)
+// 2 - call to back-end to fetch rubric assessments from canvas and save the scores to SQL tables (from saveRubricScoresFromCanvasToDatabase)
+// 3 - call to back-end to save the number of reviews originally assigned/completed into SQL tables (from saveOriginallyAssignedPeerReviewNumbers)
+// 4 - call to back-end to run the grading algorithm and save results to SQL tables (from finalizePeerReviewGrades)
+// 5 - local storage is used to save completion stats (from finalizePeerReviewGrades)
+// 6 - call to back-end to post calculated grades to canvas gradebook (from sendGradesToCanvas)
+// 7 - call to back-end to count the number of students in each bucket (from countStudentsInEachBucket)
+// 8 - local storage is used to save each count (from countStudentsInEachBucket)
+// 9 - call to back-end to determine names of all students whose grades may be inaccurrate (from findFlaggedGrades)
+// 10 - local storage is used to save array of students and their received grades (from findFlaggedGrades)
+// 11 - call to back-end to fetch boxplot of grade breakdown from canvas (from pullBoxPlotFromCanvas)
+// 12 - local storage is used to save five data points (from pullBoxPlotFromCanvas)
+// 13 - call to back-end to count the number of students in each completion category (from findCompletedAllReviews)
+// 14 - local storage is used to save each count (from findCompletedAllReviews)
 
 class FinalizeResults extends Component {
     constructor(props) {
@@ -48,16 +47,15 @@ class FinalizeResults extends Component {
             tooltipOpen: false,
         };
 
-        this.attachNamesToDatabase = this.attachNamesToDatabase.bind(this); //Step 8
-        this.countStudentsInEachBucket = this.countStudentsInEachBucket.bind(this); //Steps 9 & 10
-        this.finalizePeerReviewGrades = this.finalizePeerReviewGrades.bind(this); //Steps 5 & 6
-        this.findCompletedAllReviews = this.findCompletedAllReviews.bind(this); //Steps 15 & 16
-        this.findFlaggedGrades = this.findFlaggedGrades.bind(this); //Steps 11 & 12
-        this.pullBoxPlotFromCanvas = this.pullBoxPlotFromCanvas.bind(this); //Steps 13 & 14
-        this.saveOriginallyAssignedPeerReviewNumbers = this.saveOriginallyAssignedPeerReviewNumbers.bind(this); //Step 4
-        this.savePeerReviewsFromCanvasToDatabase = this.savePeerReviewsFromCanvasToDatabase.bind(this); //Step 2
-        this.saveRubricScoresFromCanvasToDatabase = this.saveRubricScoresFromCanvasToDatabase.bind(this); //Step 3
-        this.sendGradesToCanvas = this.sendGradesToCanvas.bind(this); //Step 7
+        this.countStudentsInEachBucket = this.countStudentsInEachBucket.bind(this); //Steps 7 & 8
+        this.finalizePeerReviewGrades = this.finalizePeerReviewGrades.bind(this); //Steps 4 & 5
+        this.findCompletedAllReviews = this.findCompletedAllReviews.bind(this); //Steps 13 & 14
+        this.findFlaggedGrades = this.findFlaggedGrades.bind(this); //Steps 9 & 10
+        this.pullBoxPlotFromCanvas = this.pullBoxPlotFromCanvas.bind(this); //Steps 11 & 12
+        this.saveOriginallyAssignedPeerReviewNumbers = this.saveOriginallyAssignedPeerReviewNumbers.bind(this); //Step 3
+        this.savePeerReviewsFromCanvasToDatabase = this.savePeerReviewsFromCanvasToDatabase.bind(this); //Step 1
+        this.saveRubricScoresFromCanvasToDatabase = this.saveRubricScoresFromCanvasToDatabase.bind(this); //Step 2
+        this.sendGradesToCanvas = this.sendGradesToCanvas.bind(this); //Step 6
         this.send400Error = this.send400Error.bind(this);
         this.send401Error = this.send401Error.bind(this);
         this.send404Error = this.send404Error.bind(this);
@@ -66,45 +64,9 @@ class FinalizeResults extends Component {
 
         this.assignmentId = this.props.assignmentId;
         this.assignmentInfo = this.props.assignmentInfo;
+        this.canvasUserId = this.props.canvasUserId;
         this.courseId = this.props.courseId;
         this.localStorageExtension = "_" + this.props.assignmentId + "_" + this.props.courseId;
-    }
-
-    attachNamesToDatabase() {
-        let data = {
-            courseId: this.courseId,
-        }
-
-        //Step 8
-        fetch('/api/attachNamesInDatabase', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(data),
-        })
-            .then(res => {
-                switch (res.status) {
-                    case 204:
-                        this.setProgress(7)
-                        this.countStudentsInEachBucket()
-                        break;
-                    case 400:
-                        res.json().then(res => {
-                            this.send400Error("This function is called in Step 8 of the grading process. This function syncs syncs each student's actual name with all of their entries in the SQL tables", res.error, "FinalizeResults.js: attachNamesToDatabase()", res.message)
-                        })
-                        break;
-                    case 401:
-                        res.json().then(res => {
-                            this.send401Error(res)
-                        })
-                        break;
-                    case 404:
-                        this.send404Error("This function is called in Step 8 of the grading process. This function syncs syncs each student's actual name with all of their entries in the SQL tables", "FinalizeResults.js: attachNamesToDatabase()", "No students enrolled in this course on Canvas.")
-                        break;
-                    default:
-                }
-            })
     }
 
     countStudentsInEachBucket() {
@@ -276,8 +238,9 @@ class FinalizeResults extends Component {
 
     pullBoxPlotFromCanvas() {
         let data = {
+            assignmentId: this.assignmentId,
+            canvasUserId: this.canvasUserId,
             courseId: this.courseId,
-            assignmentId: this.assignmentId
         }
 
         //Step 13
@@ -356,8 +319,9 @@ class FinalizeResults extends Component {
 
     savePeerReviewsFromCanvasToDatabase() {
         let data = {
-            courseId: this.courseId,
             assignmentId: this.assignmentId,
+            canvasUserId: this.canvasUserId,
+            courseId: this.courseId,
             pointsPossible: this.assignmentInfo.points_possible,
         }
 
@@ -395,8 +359,9 @@ class FinalizeResults extends Component {
 
     saveRubricScoresFromCanvasToDatabase() {
         let data = {
-            courseId: this.courseId,
             assignmentId: this.assignmentId,
+            canvasUserId: this.canvasUserId,
+            courseId: this.courseId,
             rubricSettings: this.assignmentInfo.rubric_settings.id
         }
 
@@ -434,8 +399,9 @@ class FinalizeResults extends Component {
 
     sendGradesToCanvas() {
         let data = {
-            courseId: this.courseId,
             assignmentId: this.assignmentId,
+            canvasUserId: this.canvasUserId,
+            courseId: this.courseId,
         }
 
         //Step 7
@@ -450,7 +416,7 @@ class FinalizeResults extends Component {
                 switch (res.status) {
                     case 204:
                         this.setProgress(6)
-                        this.attachNamesToDatabase()
+                        this.countStudentsInEachBucket()
                         break;
                     case 400:
                         res.json().then(res => {

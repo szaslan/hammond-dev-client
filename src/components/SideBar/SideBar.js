@@ -28,6 +28,8 @@ class SidebarComp extends React.Component {
 		this.pullAllLocalStorageData = this.pullAllLocalStorageData.bind(this);
 		this.saveLocalStorage = this.saveLocalStorage.bind(this);
 		this.onDismiss = this.onDismiss.bind(this);
+
+		this.canvasUserId = this.props.canvasUserId;
 	}
 
 	handleLocalStorageData(data) {
@@ -37,7 +39,7 @@ class SidebarComp extends React.Component {
 			let dueDateRegex = /dueDate[0-9]+/
 
 			localStorageFields.forEach(field => {
-				if (field !== "assignment_id") {
+				if (field !== "assignment_id" && field !== "course_id" && field !== "canvas_user_id") {
 					let value = assignmentLevelData[field];
 					if (value != null) {
 						if (value != "N/A") {
@@ -53,9 +55,7 @@ class SidebarComp extends React.Component {
 								value = true;
 							}
 						}
-						console.log(field, value)
-						masterSetLocalStorage(field + "_" + assignmentId + "_" + courseId, value)
-					
+						localStorage.setItem(field + "_" + assignmentId + "_" + courseId, value)
 					}
 				}
 			})
@@ -123,6 +123,7 @@ class SidebarComp extends React.Component {
 
 	saveLocalStorage() {
 		let data = {
+			canvasUserId: this.canvasUserId,
 			localStorage: {},
 		};
 

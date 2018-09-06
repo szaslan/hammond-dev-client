@@ -181,6 +181,7 @@ class CustomizableParameters extends Component {
                                     <button onClick={this.editingBenchmarks}>Edit</button>
                                     :
                                     <div>
+                                        <button className="save-all" onClick={this.handleSubmit}> Save All</button>
                                         <AlgorithmBenchmarks originalBenchmarks={defaultBenchmarks} benchmarks={this.userInputBenchmarks} assignmentId={this.state.assignmentId} courseId={this.courseId}/>
                                         <button className="clear-all" onClick={this.clearCustomBenchmarks}> Clear All</button>
                                     </div>
