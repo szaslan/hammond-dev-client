@@ -268,9 +268,6 @@ class AlgorithmBenchmarks extends Component {
                                 <img src={downArrowIcon} width="20" alt="down arrow" />
                             </span>
                     }
-                    <FormGroup row>
-                        <button className="save-all" onClick={this.handleSubmit}> Save All</button>
-                    </FormGroup>
                 </div>
             );
         }
