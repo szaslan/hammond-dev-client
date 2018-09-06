@@ -57,10 +57,6 @@ class AnalyzeButton extends Component {
 			tooltipOpen1: false,
 			tooltipOpen2: false,
 		};
-		//localStorage.setItem("nextClicked_"+this.props.assignmentId, this.state.nextClicked);
-		// if (localStorage.getItem("nextClicked_" + this.props.assignmentId) == null) {
-			// localStorage.setItem("nextClicked_" + this.props.assignmentId, false)
-		// }
 
 		this.backClick = this.backClick.bind(this);
 		this.checkForPreviousAnalyzeAndFinalizePresses = this.checkForPreviousAnalyzeAndFinalizePresses.bind(this);
@@ -75,6 +71,7 @@ class AnalyzeButton extends Component {
 
 		this.assignmentId = this.props.assignmentId;
 		this.assignmentInfo = this.props.assignmentInfo;
+		this.canvasUserId = this.props.canvasUserId;
 		this.courseId = this.props.courseId;
 		this.localStorageExtension = "_" + this.props.assignmentId + "_" + this.props.courseId;
 		this.minutesInterval = null;
@@ -109,28 +106,35 @@ class AnalyzeButton extends Component {
 			body: JSON.stringify(data)
 		})
 			.then(res => {
-				res.json().then(res => {
-					if (res.result === "not found") {
-						//column in gradebook not found, so assignment has not been finalized
-						if (localStorage.getItem("analyzePressed" + this.localStorageExtension) === "true") {
-							this.setState({
-								analyzeDisplayText: true,
-							})
+				switch (res.status) {
+					case 200:
+						res.json().then(res => {
+							if (res.result === false) {
+								//column in gradebook not found, so assignment has not been finalized
+								if (localStorage.getItem("analyzePressed" + this.localStorageExtension) === "true") {
+									this.setState({
+										analyzeDisplayText: true,
+									})
 
-							//To automatically finalize if all peer reviews are in
-							if (localStorage.getItem("analyzeDisplayTextMessage" + this.localStorageExtension) === "All reviews accounted for" && localStorage.getItem("automaticallyFinalize" + this.localStorageExtension) === "true") {
-								console.log("all peer reviews are in, so we can finalize this assignment")
-								this.handleFinalizeClick()
+									//To automatically finalize if all peer reviews are in
+									if (localStorage.getItem("analyzeDisplayTextMessage" + this.localStorageExtension) === "All reviews accounted for" && localStorage.getItem("automaticallyFinalize" + this.localStorageExtension) === "true") {
+										this.handleFinalizeClick()
+									}
+								}
 							}
-						}
-					}
-					else if (res.result === "found") {
-						this.setState({
-							finalizeDisplayText: true,
-							finalizePressed: true,
+							else if (res.result === true) {
+								this.setState({
+									finalizeDisplayText: true,
+									finalizePressed: true,
+								})
+							}
 						})
-					}
-				})
+						break;
+					case 400:
+						this.send400Error("", res.error, "", res.message)
+						break;
+					default:
+				}
 			})
 	}
 
@@ -292,6 +296,7 @@ class AnalyzeButton extends Component {
 										assignmentId={this.assignmentId}
 										assignmentInfo={this.assignmentInfo}
 										benchmarks={localStorage.getItem("customBenchmarks" + this.localStorageExtension) === "true" ? this.userInputBenchmarks : defaultBenchmarks}
+										canvasUserId={this.canvasUserId}
 										courseId={this.courseId}
 										penalizingForOriginalIncompletes={localStorage.getItem("penalizingForOriginalIncompletes" + this.localStorageExtension) === "true" ? true : false}
 										penalizingForReassignedIncompletes={localStorage.getItem("penalizingForReassignedIncompletes" + this.localStorageExtension) === "true" ? true : false}
@@ -304,6 +309,7 @@ class AnalyzeButton extends Component {
 										assignmentId={this.assignmentId}
 										assignmentInfo={this.assignmentInfo}
 										benchmarks={localStorage.getItem("customBenchmarks" + this.localStorageExtension) === "true" ? this.userInputBenchmarks : defaultBenchmarks}
+										canvasUserId={this.canvasUserId}
 										courseId={this.courseId}
 										penalizingForOriginalIncompletes={localStorage.getItem("penalizingForOriginalIncompletes" + this.localStorageExtension) === "true" ? true : false}
 										penalizingForReassignedIncompletes={localStorage.getItem("penalizingForReassignedIncompletes" + this.localStorageExtension) === "true" ? true : false}
@@ -326,6 +332,7 @@ class AnalyzeButton extends Component {
 												assignmentId={this.assignmentId}
 												assignmentInfo={this.assignmentInfo}
 												benchmarks={localStorage.getItem("customBenchmarks" + this.localStorageExtension) === "true" ? this.userInputBenchmarks : defaultBenchmarks}
+												canvasUserId={this.canvasUserId}
 												courseId={this.courseId}
 												pressed={true}
 											/>
@@ -345,6 +352,7 @@ class AnalyzeButton extends Component {
 											assignmentId={this.assignmentId}
 											assignmentInfo={this.assignmentInfo}
 											benchmarks={localStorage.getItem("customBenchmarks" + this.localStorageExtension) === "true" ? this.userInputBenchmarks : defaultBenchmarks}
+											canvasUserId={this.canvasUserId}
 											courseId={this.courseId}
 											pressed={false}
 										/>

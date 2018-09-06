@@ -17,6 +17,8 @@ class TabsComp extends Component {
         };
 
         this.toggle = this.toggle.bind(this);
+
+        this.canvasUserId = this.props.canvasUserId;
     }
 
     toggle(tab) {
@@ -55,13 +57,13 @@ class TabsComp extends Component {
                     {/* render pages within tabs */}
                     <TabPane tabId="1">
                         <div>
-                            <Assignments courseJSON={courseJSON} />
+                            <Assignments courseJSON={courseJSON} canvasUserId={this.canvasUserId}/>
                         </div>
                     </TabPane>
 
                     <TabPane tabId="2">
                         <div>
-                            <CourseStudents courseId={courseJSON.id} />
+                            <CourseStudents courseId={courseJSON.id} canvasUserId={this.canvasUserId}/>
                         </div>
                     </TabPane>
                 </TabContent>

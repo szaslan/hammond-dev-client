@@ -45,10 +45,13 @@ class Assignments extends Component {
 
         this.pullAssignments = this.pullAssignments.bind(this);
         this.select = this.select.bind(this);
+
+        this.canvasUserId = this.props.canvasUserId;
     }
 
     pullAssignments() {
         let data = {
+            canvasUserId: this.canvasUserId,
             courseId: this.state.courseId,
         }
 
@@ -141,7 +144,7 @@ class Assignments extends Component {
                         />
                     </div>
                     {this.state.value ?
-                        <AssignmentInfo courseJSON={this.props.courseJSON} assignmentId={this.state.value} />
+                        <AssignmentInfo courseJSON={this.props.courseJSON} assignmentId={this.state.value} canvasUserId={this.canvasUserId}/>
                         :
                         <div className="assignment-default">
                             <img className="arrow-img" src={arrow}></img>

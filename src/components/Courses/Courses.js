@@ -45,6 +45,8 @@ class Courses extends Component {
         this.fetchCourses = this.fetchCourses.bind(this);
         this.send400Error = this.send400Error.bind(this);
         this.signOut = this.signOut.bind(this);
+
+        this.canvasUserId = this.props.location.state.canvasUserId;
     }
 
     createTables() {
@@ -70,13 +72,18 @@ class Courses extends Component {
     }
 
     fetchCourses() {
+        let data = {
+            canvasUserId: this.canvasUserId,
+        }
+
         fetch('/api/courses', {
             method: 'POST',
             credentials: 'include',
             headers: {
                 'Content-Type': 'application/json'
             },
-            redirect: 'follow'
+            redirect: 'follow',
+            body: JSON.stringify(data),
         })
             .then(res => {
                 switch (res.status) {
@@ -164,7 +171,7 @@ class Courses extends Component {
                             content={
                                 <div>
                                     {/* course cards for dashboard */}
-                                    <JumbotronComp mainTitle={this.state.user} />
+                                    <JumbotronComp mainTitle={this.state.user} canvasUserId={this.canvasUserId} />
                                     <Container className="well1-container" fluid>
                                         <Flexbox className="well1-flexbox" minWidth="700px" width="90vw"
                                             flexWrap="wrap" inline="true">
@@ -173,8 +180,12 @@ class Courses extends Component {
                                                 {
                                                     this.state.courses.length > 0 ?
                                                         this.state.courses.map(course =>
-                                                            <Link to={`/courses/${course.id}`}>
+                                                            <Link to={{
+                                                                pathname: `/courses/${course.id}`,
+                                                                state: { canvasUserId: this.canvasUserId }
+                                                            }}>
                                                                 {console.log(this.state.coursecount++)}
+                                                                /*this.state.coursecount++*/
                                                                 <CardComp name={course.name} coursecount={this.state.coursecount} />
                                                             </Link>)
                                                         :
@@ -184,7 +195,9 @@ class Courses extends Component {
                                         </Flexbox>
                                     </Container>
                                 </div>
-                            } />
+                            }
+                            canvasUserId={this.canvasUserId}
+                        />
                     </Container>
                 </div>
             );

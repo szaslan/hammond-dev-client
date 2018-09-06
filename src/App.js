@@ -26,7 +26,7 @@ class App extends Component {
 
 					{/*Landing Page*/}
 					<Route path="/" exact component={Landing} />
-					<Route path="/" component={Daddy} />
+					{/* <Route path="/" component={Daddy} /> */}
 
 					<Route path="/unauthorized" exact component={UnauthorizedError} />
 					<Route path="/notfound" exact component={NotFound} />
