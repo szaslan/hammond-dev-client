@@ -10,6 +10,7 @@
   font-size: 24px;
   border: 3px solid #b7ddf7 !important;
   border-radius: 5px;
+  margin-right:10px;
 }
 
 .analyze-button:hover{
@@ -195,20 +196,22 @@
 .reset-button{
   font-family: 'Open Sans';
   color: #626262;
-  border-radius: 3px;
+  border: 2px solid lightgray !important;
+  border-radius:3px;
   background-color: white;
 }
 
 .reset-button:hover{
   font-family: 'Open Sans';
   color: #626262;
-  border-radius: 3px;
   background-color:	#F8F8F8;
 }
 
 .reset-button2{
   font-family: 'Open Sans';
   color: #626262;
+  
+  border: 2px solid lightgray !important;
   border-radius: 3px;
   background-color: white;
   margin-left: 300%;
@@ -221,7 +224,19 @@
   background-color:	#F8F8F8;
   margin-left: 300%;
 }
-
+.custparam-button{
+  background-color:white;
+  min-width:100px;
+  border: 2px solid lightgray !important;
+  border-radius: 3px;
+}
+.custparam-button:hover{
+  background-color:#e6e6e6;
+}
+.custparam-flexbox{
+  padding:20px;
+  margin:auto;
+}
 .text-message{
   margin-top: 3%;
   margin-left: -25%;

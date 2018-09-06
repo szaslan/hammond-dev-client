@@ -131,9 +131,7 @@ class CourseStudents extends Component {
          this.state.students.map(students => {
              //create array of students for dropdown
              FilterStudents(students)
-         }
-
-         )
+         })
         }
         if (this.state.loaded && array.length === this.state.students.length) {
             return (

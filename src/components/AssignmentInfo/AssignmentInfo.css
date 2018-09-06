@@ -47,6 +47,7 @@
 .parameters-case{
     display:inline-block;
     width:100%;
+    padding-bottom:70px;
 }
 
 .parameters-case-hidden{
@@ -57,25 +58,26 @@
     position:fixed;
     background-color:#e6e6e6!important;
     bottom:0px;
-    width:95vw;
+    width:100vw;
     min-width:600px;
-    height:60px;
+    height:70px;
     padding:10px;
     right:17px;
-    padding-left:300px;
+    padding-left:310px;
+ 
 }
 .button-row{
-
-
 }
-@media only screen and (max-width:600px){
+@media only screen and (max-width:700px){
     .button-footer{
         left:0px;
+        height:70px;
         right:normal;
         overflow-x:scroll;
+        overflow-y:hidden;
     }
     .button-row{
-        width:500px;
+        width:550px;
     }
 }
 
@@ -92,10 +94,15 @@
 }
 .back-button{
     position:relative;
+    flex:nowrap!important;
+    min-width: 120px;
     background-color: lightgray!important;
 }
 .next-button{
     background-color: lightgray!important;
+}
+.next-button:disabled {
+    cursor: default;   
 }
 .flex-dropdown{
     position:absolute!important;
