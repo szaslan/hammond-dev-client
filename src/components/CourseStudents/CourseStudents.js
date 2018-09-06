@@ -11,6 +11,21 @@ import StudentInfo from '../StudentInfo/StudentInfo';
 const array = [];
 const arrow = require('../../img/arrow3.png');
 
+const FilterStudents = currStudent => {
+   if (currStudent.still_in_course == 1) {
+       array.push({
+           label: currStudent.student_name,
+           value: currStudent.student_id,
+       })
+   }
+   else {
+       array.push({
+           label: currStudent.student_name + " (dropped)",
+           value: null
+       })
+   }
+}
+
 class CourseStudents extends Component {
     constructor(props) {
         super(props);
@@ -112,16 +127,13 @@ class CourseStudents extends Component {
     }
 
     render() {
-        if (this.state.students && array.length < this.state.students.length) {
-            this.state.students.map(students => {
-                //create array of students for dropdown
-                array.push({
-                    label: students.name,
-                    value: students.id,
-                });
-            }
+      if (this.state.students && array.length < this.state.students.length) {
+         this.state.students.map(students => {
+             //create array of students for dropdown
+             FilterStudents(students)
+         }
 
-            )
+         )
         }
         if (this.state.loaded && array.length === this.state.students.length) {
             return (

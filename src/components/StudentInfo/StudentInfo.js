@@ -137,6 +137,7 @@ class StudentInfo extends Component {
             body: JSON.stringify(data),
         })
             .then(res => {
+              console.log(res.status)
                 switch (res.status) {
                     case 204:
                         this.setState({
@@ -145,6 +146,7 @@ class StudentInfo extends Component {
                         this.pullStudentEvaluatingData();
                         break;
                     case 206:
+
                         break;
                     case 400:
                         res.json().then(res => {
