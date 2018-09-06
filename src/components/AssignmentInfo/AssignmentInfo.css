@@ -14,6 +14,7 @@
     font-family: "Open Sans";
     text-align:left;
     margin-left: -10%;
+    min-width: 1000px;
 }
 
 .assignment-info-title{
@@ -66,7 +67,6 @@
  
 }
 .button-row{
-    
 }
 @media only screen and (max-width:700px){
     .button-footer{

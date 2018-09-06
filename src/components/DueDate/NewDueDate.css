@@ -16,7 +16,7 @@
 .analyze-button:hover{
 
   background-color:	#b7ddf7;
- 
+
 }
 
 .analyze-text{
@@ -71,6 +71,7 @@
 
 .parameters-form{
   margin-left: 12%;
+  min-width: 1000px;
 }
 
 .parameters-title{
