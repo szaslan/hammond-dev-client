@@ -263,10 +263,12 @@ class AnalyzeButton extends Component {
 								</div>
 
 								<div className={"parameters-case" + (localStorage.getItem("nextClicked" + this.localStorageExtension) === "true" ? "" : "-hidden")}>
-										<p>Due Date 1: {moment(new Date(localStorage.getItem("dueDate1" + this.localStorageExtension))).format('llll')}</p>
-										<p>Due Date 2: {moment(new Date(localStorage.getItem("dueDate2" + this.localStorageExtension))).format('llll')}</p>
-										<p>Due Date 3: {moment(new Date(localStorage.getItem("dueDate3" + this.localStorageExtension))).format('llll')}</p>
-
+									<Row className="due-date-case">
+										<p className="set-due-dates"><b>Due Date 1:</b> {moment(new Date(localStorage.getItem("dueDate1" + this.localStorageExtension))).format('llll')}</p>
+										<p className="set-due-dates"><b>Due Date 2:</b> {moment(new Date(localStorage.getItem("dueDate2" + this.localStorageExtension))).format('llll')}</p>
+										<p className="set-due-dates"><b>Due Date 3:</b> {moment(new Date(localStorage.getItem("dueDate3" + this.localStorageExtension))).format('llll')}</p>
+									</Row>
+									<hr className="hr-8"></hr>
 									<CustomizableParameters assignmentId={this.assignmentId} courseId={this.courseId} userInputBenchmarks={this.userInputBenchmarks} />
 									{/* footer */}
 									<div className="button-footer">
