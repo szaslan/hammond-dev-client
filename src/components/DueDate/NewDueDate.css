@@ -4,19 +4,15 @@
 
 .analyze-button{
   position:relative;
-  /* margin-left: 300%;
-  margin-top: 20.5%;
-  margin-bottom: 20%; */
   font-size: 24px;
   border: 3px solid #b7ddf7 !important;
   border-radius: 5px;
-  margin-right:10px;
+  margin-right:20px;
+  background-color: white !important;
 }
 
 .analyze-button:hover{
-
-  background-color:	#b7ddf7;
-
+  background-color:	#b7ddf7 !important;
 }
 
 .analyze-text{
@@ -74,6 +70,11 @@
   min-width: 1000px;
 }
 
+.param-row{
+  width: 1000px !important;
+  flex: nowrap !important;
+}
+
 .parameters-title{
   font-family: 'Open Sans';
   color: #626262;
@@ -95,7 +96,7 @@
   font-family: 'Open Sans';
   color: #626262;
   border-radius: 3px;
-  background-color:	#F8F8F8;
+  background-color:	#F8F8F8 !important;
   margin-top: 1%;
   margin-left: 67%;
   font-size: 16px;
@@ -126,16 +127,15 @@
 
 .finalize-button{
   position:relative;
-  /* margin-top: 20%;
-  margin-left: 450%;
-  margin-bottom: 20%; */
   font-size: 24px;
   border: 3px solid #b7ddf7 !important;
   border-radius: 5px;
+  margin-right: 40px;
+  background-color: white !important;
 }
 
 .finalize-button:hover{
-  background-color:	#b7ddf7;
+  background-color:	#b7ddf7 !important;
 }
 
 .flag-button{
@@ -196,7 +196,7 @@
 .reset-button{
   font-family: 'Open Sans';
   color: #626262;
-  border: 2px solid lightgray !important;
+  border: 1px solid lightgray !important;
   border-radius:3px;
   background-color: white;
 }
@@ -210,8 +210,8 @@
 .reset-button2{
   font-family: 'Open Sans';
   color: #626262;
-  
-  border: 2px solid lightgray !important;
+
+  border: 1px solid lightgray !important;
   border-radius: 3px;
   background-color: white;
   margin-left: 300%;
@@ -227,15 +227,15 @@
 .custparam-button{
   background-color:white;
   min-width:100px;
-  border: 2px solid lightgray !important;
+  border: 1px solid lightgray !important;
   border-radius: 3px;
 }
 .custparam-button:hover{
-  background-color:#e6e6e6;
+  background-color:#F8F8F8;
 }
 .custparam-flexbox{
   padding:20px;
-  margin:auto;
+  margin-left: 200px;
 }
 .text-message{
   margin-top: 3%;

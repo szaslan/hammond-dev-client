@@ -127,7 +127,7 @@ class CourseInfo extends Component {
                             <div>
                                 <JumbotronComp mainTitle={this.state.courseJSON.name}
                                     tabs courseJSON={this.state.courseJSON} canvasUserId={this.canvasUserId}/>
-                                <button onClick={this.resetTables}>Reset Database Tables</button>
+                                {/* <button onClick={this.resetTables}>Reset Database Tables</button> */}
                             </div>
                         }
                         canvasUserId={this.canvasUserId}
@@ -135,7 +135,7 @@ class CourseInfo extends Component {
                 </div>
             )
         }
-        
+
         return (<Loader type="TailSpin" color="black" height={80} width={80} />)
     }
 }

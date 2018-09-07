@@ -15,6 +15,7 @@
     text-align:left;
     margin-left: -10%;
     min-width: 1000px;
+    height: 70vh;
 }
 
 .assignment-info-title{
@@ -56,28 +57,33 @@
 
 .button-footer{
     position:fixed;
-    background-color:#e6e6e6!important;
+    background-color: white;
+    /* border-top: .5px solid rgba(0, 0, 0, 0.2); */
+    box-shadow: 0 -8px 8px -8px rgba(0, 0, 0, 0.15);
     bottom:0px;
-    width:100vw;
-    min-width:600px;
-    height:70px;
+    width: 90vw;
+    /* min-width:600px; */
+    height:65px;
     padding:10px;
     right:17px;
+    margin-left: 20px;
     padding-left:310px;
- 
+
 }
+
 .button-row{
 }
+
 @media only screen and (max-width:700px){
     .button-footer{
-        left:0px;
-        height:70px;
+        left:100px;
+        height:65px;
         right:normal;
         overflow-x:scroll;
         overflow-y:hidden;
     }
     .button-row{
-        width:550px;
+        width:90vw;
     }
 }
 
@@ -94,15 +100,28 @@
 }
 .back-button{
     position:relative;
+    margin-left: -80px;
     flex:nowrap!important;
     min-width: 120px;
-    background-color: lightgray!important;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    border-radius: 5px;
 }
+
+ .back-button:hover{
+   position:relative;
+   margin-left: -80px;
+   flex:nowrap!important;
+   min-width: 120px;
+   border: 1px solid rgba(0, 0, 0, 0.2) !important;
+   border-radius: 5px;
+   background-color: #F8F8F8;
+ }
+
 .next-button{
-    background-color: lightgray!important;
+    /* background-color: lightgray!important; */
 }
 .next-button:disabled {
-    cursor: default;   
+    cursor: default;
 }
 .flex-dropdown{
     position:absolute!important;

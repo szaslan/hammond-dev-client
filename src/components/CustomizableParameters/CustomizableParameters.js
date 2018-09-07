@@ -133,7 +133,7 @@ class CustomizableParameters extends Component {
         if (this.state.loaded) {
             return (
                 <Form className="parameters-form">
-                    <FormGroup row>
+                    <FormGroup row className="param-row">
                         <h3 className="parameters-title"> Customizable Parameters for Grading</h3>
                         <hr className="hr-3"></hr>
                         <FormGroup check>
@@ -144,7 +144,7 @@ class CustomizableParameters extends Component {
                             </Label>
                         </FormGroup>
                     </FormGroup>
-                    <FormGroup row>
+                    <FormGroup row className="param-row">
                         <FormGroup check>
                             <Label className="check-text" check>
                                 <Input name="sendIncompleteMessages" type="checkbox" checked={this.state.sendIncompleteMessages} onChange={this.handleInputChange} />
@@ -152,7 +152,7 @@ class CustomizableParameters extends Component {
                             </Label>
                         </FormGroup>
                     </FormGroup>
-                    <FormGroup row>
+                    <FormGroup row className="param-row">
                         <FormGroup check>
                             <Label className="check-text" check>
                                 <Input name="penalizingForOriginalIncompletes" type="checkbox" checked={this.state.penalizingForOriginalIncompletes} onChange={this.handleInputChange} />
@@ -160,7 +160,7 @@ class CustomizableParameters extends Component {
                             </Label>
                         </FormGroup>
                     </FormGroup>
-                    <FormGroup row>
+                    <FormGroup row className="param-row">
                         <FormGroup check>
                             <Label className="check-text" check>
                                 <Input name="penalizingForReassignedIncompletes" type="checkbox" checked={this.state.penalizingForReassignedIncompletes} onChange={this.handleInputChange} />
@@ -168,7 +168,7 @@ class CustomizableParameters extends Component {
                             </Label>
                         </FormGroup>
                     </FormGroup>
-                    <FormGroup row>
+                    <FormGroup row className="param-row">
                         <FormGroup check>
                             <Label className="check-text" check>
                                 <Input name="customBenchmarks" type="checkbox" checked={this.state.customBenchmarks} onChange={this.handleInputChange} />

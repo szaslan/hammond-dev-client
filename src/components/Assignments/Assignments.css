@@ -54,7 +54,8 @@
 	background-color: white !important;
 	/* margin-left: -15% !important; */
 	/* border: none !important; */
-	border: 1px solid grey !important;
+	border: 1px solid #F8F8F8 !important;
+	box-shadow: 1px 1px 3px 1px rgba(0, 0, 0, 0.2);
 }
 
 .css-15k3avv{
