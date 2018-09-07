@@ -341,43 +341,49 @@ class AnalyzeButton extends Component {
 								</div>
 							:
 							//finalize has not yet been clicked (if finalize has been clicked, none of the analyze results will show)
-							<div>
-								{
-									this.state.analyzePressed ?
-										//analyze has been clicked
-										<div>
+
+							(localStorage.getItem("nextClicked"+this.localStorageExtension) === "true" ?
+								<div>
+
+									{
+										this.state.analyzePressed ?
+											//analyze has been clicked
+											<div>
+												<AnalyzeResults
+													assignmentId={this.assignmentId}
+													assignmentInfo={this.assignmentInfo}
+													benchmarks={localStorage.getItem("customBenchmarks" + this.localStorageExtension) === "true" ? this.userInputBenchmarks : defaultBenchmarks}
+													canvasUserId={this.canvasUserId}
+													courseId={this.courseId}
+													pressed={true}
+												/>
+												{
+													this.setState({
+														analyzeDisplayText: true,
+														analyzePressed: false,
+													})
+												}
+											</div>
+											:
+											null
+									}
+									{
+										this.state.analyzeDisplayText ?
 											<AnalyzeResults
 												assignmentId={this.assignmentId}
 												assignmentInfo={this.assignmentInfo}
 												benchmarks={localStorage.getItem("customBenchmarks" + this.localStorageExtension) === "true" ? this.userInputBenchmarks : defaultBenchmarks}
 												canvasUserId={this.canvasUserId}
 												courseId={this.courseId}
-												pressed={true}
+												pressed={false}
 											/>
-											{
-												this.setState({
-													analyzeDisplayText: true,
-													analyzePressed: false,
-												})
-											}
-										</div>
-										:
-										null
-								}
-								{
-									this.state.analyzeDisplayText ?
-										<AnalyzeResults
-											assignmentId={this.assignmentId}
-											assignmentInfo={this.assignmentInfo}
-											benchmarks={localStorage.getItem("customBenchmarks" + this.localStorageExtension) === "true" ? this.userInputBenchmarks : defaultBenchmarks}
-											canvasUserId={this.canvasUserId}
-											courseId={this.courseId}
-											pressed={false}
-										/>
-										:
-										null
-								}
-							</div>
+											:
+											null
+									}
+								</div>
+								:
+								null
+							)
 					}
 				</div>
 			)
