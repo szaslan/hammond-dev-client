@@ -1,6 +1,5 @@
 import history from '../../history';
 import moment from 'moment';
-import { Link } from "react-router-dom";
 import React from "react";
 import Sidebar from "react-sidebar";
 import { Alert } from 'reactstrap';
@@ -30,8 +29,6 @@ class SidebarComp extends React.Component {
 		this.onDismiss = this.onDismiss.bind(this);
 
 		this.canvasUserId = this.props.canvasUserId;
-
-		console.log(this.canvasUserId)
 	}
 
 	handleLocalStorageData(data) {
@@ -135,16 +132,14 @@ class SidebarComp extends React.Component {
 		for (var i = 0; i < localStorage.length; i++) {
 			let field = localStorage.key(i)
 			let value = localStorage.getItem(field);
-			let newDate = new Date(value)
 
-			if (field.match(finalizedRegex)) {
-				value = moment(newDate).format('YYYY[-]MM[-]DD HH:mm:ss');
-			}
-			else if (field.match(dueDateRegex) && value !== "N/A") {
+			if (field.match(finalizedRegex) || (field.match(dueDateRegex) && value !== "N/A")) {
+                let newDate = new Date(value)
 				value = moment(newDate).format('YYYY[-]MM[-]DD HH:mm:ss');
 			}
 			data.localStorage[field] = value
 		}
+
 
 		delete data.localStorage["pageSaved?"]
 

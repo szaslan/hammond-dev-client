@@ -97,8 +97,8 @@ class UserRegistration extends Component {
 							<Input type="password" placeholder="Re-enter your password" className="register-input" name="password2" onChange={this.handleChange} />
 						</FormGroup>
 						<FormGroup>
-							<Input type="text" placeholder="User Id" name="canvasUserId" className="register-input" onChange={this.handleChange} />
-							<Input type="text" placeholder="API Key" name="apiKey" className="register-input" onChange={this.handleChange} />
+							<Input type="text" placeholder="Canvas User Id" name="canvasUserId" className="register-input" onChange={this.handleChange} />
+							<Input type="text" placeholder="Canvas API Key" name="apiKey" className="register-input" onChange={this.handleChange} />
 						</FormGroup>
 						<button className="new-button">Submit</button>
 						<Well>

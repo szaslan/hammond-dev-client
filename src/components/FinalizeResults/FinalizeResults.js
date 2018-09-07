@@ -4,6 +4,7 @@ import Popup from 'reactjs-popup';
 import { Progress, Tooltip } from 'reactstrap';
 import React, { Component } from 'react';
 import { Row } from 'react-bootstrap';
+import moment from 'moment';
 
 import PieCharts from '../PieCharts/PieCharts';
 
@@ -13,7 +14,7 @@ import { masterSetLocalStorage } from '../../App';
 
 //progress bar
 var progress = 0;
-var progressNumSteps = 14;
+var progressNumSteps = 15;
 var progressBarMessage = "";
 
 var message = "";
@@ -34,6 +35,7 @@ var message = "";
 // 12 - local storage is used to save five data points (from pullBoxPlotFromCanvas)
 // 13 - call to back-end to count the number of students in each completion category (from findCompletedAllReviews)
 // 14 - local storage is used to save each count (from findCompletedAllReviews)
+// 15 - call to back-end to save local storage data for this assignment (from saveAssignmentLocalStorageData)
 
 class FinalizeResults extends Component {
     constructor(props) {
@@ -52,6 +54,7 @@ class FinalizeResults extends Component {
         this.findCompletedAllReviews = this.findCompletedAllReviews.bind(this); //Steps 13 & 14
         this.findFlaggedGrades = this.findFlaggedGrades.bind(this); //Steps 9 & 10
         this.pullBoxPlotFromCanvas = this.pullBoxPlotFromCanvas.bind(this); //Steps 11 & 12
+        this.saveAssignmentLocalStorageData = this.saveAssignmentLocalStorageData.bind(this); //Step 15
         this.saveOriginallyAssignedPeerReviewNumbers = this.saveOriginallyAssignedPeerReviewNumbers.bind(this); //Step 3
         this.savePeerReviewsFromCanvasToDatabase = this.savePeerReviewsFromCanvasToDatabase.bind(this); //Step 1
         this.saveRubricScoresFromCanvasToDatabase = this.saveRubricScoresFromCanvasToDatabase.bind(this); //Step 2
@@ -74,7 +77,7 @@ class FinalizeResults extends Component {
             courseId: this.courseId,
         }
 
-        //Step 9
+        //Step 7
         fetch('/api/countStudentsInEachBucket', {
             method: 'POST',
             headers: {
@@ -85,8 +88,8 @@ class FinalizeResults extends Component {
             .then(res => {
                 switch (res.status) {
                     case 200:
-                        this.setProgress(8)
-                        //Step 10
+                        this.setProgress(7)
+                        //Step 8
                         res.json().then(res => {
                             masterSetLocalStorage("spazzy" + this.localStorageExtension, JSON.stringify(res.spazzy))
                             masterSetLocalStorage("definitelyHarsh" + this.localStorageExtension, JSON.stringify(res.definitelyHarsh))
@@ -95,7 +98,7 @@ class FinalizeResults extends Component {
                             masterSetLocalStorage("definitelyLenient" + this.localStorageExtension, JSON.stringify(res.definitelyLenient))
                             masterSetLocalStorage("couldBeFair" + this.localStorageExtension, JSON.stringify(res.couldBeFair))
                             masterSetLocalStorage("definitelyFair" + this.localStorageExtension, JSON.stringify(res.definitelyFair))
-                            this.setProgress(9)
+                            this.setProgress(8)
                         })
                             .then(() => this.findFlaggedGrades())
                         break;
@@ -119,7 +122,7 @@ class FinalizeResults extends Component {
             pointsPossible: this.assignmentInfo.points_possible,
         }
 
-        //Step 5
+        //Step 4
         fetch('/api/peerReviewsFinalizing', {
             method: 'POST',
             headers: {
@@ -132,7 +135,7 @@ class FinalizeResults extends Component {
                     case 200:
                         this.setProgress(4)
                         res.json().then(res => message = res)
-                            //Step 6
+                            //Step 5
                             .then(() => {
                                 masterSetLocalStorage("finalizeDisplayTextNumCompleted" + this.localStorageExtension, message.numCompleted);
                                 masterSetLocalStorage("finalizeDisplayTextNumAssigned" + this.localStorageExtension, message.numAssigned);
@@ -161,7 +164,7 @@ class FinalizeResults extends Component {
             courseId: this.courseId,
         }
 
-        //Step 15
+        //Step 13
         fetch('/api/findCompletedAllReviews', {
             method: 'POST',
             headers: {
@@ -172,13 +175,14 @@ class FinalizeResults extends Component {
             .then(res => {
                 switch (res.status) {
                     case 200:
-                        this.setProgress(14)
-                        //Step 16
+                        this.setProgress(13)
+                        //Step 14
                         res.json().then(res => {
                             masterSetLocalStorage("completedAllReviews" + this.localStorageExtension, res.completedAll)
                             masterSetLocalStorage("completedSomeReviews" + this.localStorageExtension, res.completedSome)
                             masterSetLocalStorage("completedNoReviews" + this.localStorageExtension, res.completedNone)
-                            this.setProgress(15)
+                            this.setProgress(14)
+                            this.saveAssignmentLocalStorageData()
                         })
                         break;
                     case 400:
@@ -197,7 +201,7 @@ class FinalizeResults extends Component {
             courseId: this.courseId,
         }
 
-        //Step 11
+        //Step 9
         fetch('/api/findFlaggedGrades', {
             method: 'POST',
             headers: {
@@ -208,22 +212,21 @@ class FinalizeResults extends Component {
             .then(res => {
                 switch (res.status) {
                     case 200:
-                        this.setProgress(10)
-                        //Step 12
+                        this.setProgress(9)
+                        //Step 10
                         res.json().then(res => {
                             masterSetLocalStorage("flaggedStudents" + this.localStorageExtension, JSON.stringify(res))
-                            
-                            this.setProgress(11)
+
+                            this.setProgress(10)
                         })
                             .then(() => this.pullBoxPlotFromCanvas())
                         break;
                     case 204:
                         //no flagged grades
-                        this.setProgress(10)
-                        //Step 12
+                        this.setProgress(9)
+                        //Step 10
                         masterSetLocalStorage("flaggedStudents" + this.localStorageExtension, JSON.stringify([]))
-                        
-                        this.setProgress(11)
+                        this.setProgress(10)
                         this.pullBoxPlotFromCanvas()
                         break;
                     case 400:
@@ -243,7 +246,7 @@ class FinalizeResults extends Component {
             courseId: this.courseId,
         }
 
-        //Step 13
+        //Step 11
         fetch('/api/pullBoxPlotFromCanvas', {
             method: "POST",
             headers: {
@@ -254,15 +257,15 @@ class FinalizeResults extends Component {
             .then(res => {
                 switch (res.status) {
                     case 200:
-                        this.setProgress(12)
-                        //Step 14
+                        this.setProgress(11)
+                        //Step 12
                         res.json().then(data => {
                             masterSetLocalStorage("min" + this.localStorageExtension, data.min);
                             masterSetLocalStorage("q1" + this.localStorageExtension, data.q1);
                             masterSetLocalStorage("median" + this.localStorageExtension, data.median);
                             masterSetLocalStorage("q3" + this.localStorageExtension, data.q3);
                             masterSetLocalStorage("max" + this.localStorageExtension, data.max);
-                            this.setProgress(13)
+                            this.setProgress(12)
                         })
                             .then(() => this.findCompletedAllReviews())
                         break;
@@ -284,13 +287,61 @@ class FinalizeResults extends Component {
             })
     }
 
+    saveAssignmentLocalStorageData() {
+        console.log("saving local storage data")
+        let data = {
+            assignmentId: this.assignmentId,
+            canvasUserId: this.canvasUserId,
+            courseId: this.courseId,
+            localStorage: {},
+        };
+
+        let finalizedRegex = /finalized_/
+        let dueDateRegex = /dueDate/
+
+        for (var i = 0; i < localStorage.length; i++) {
+            let field = localStorage.key(i)
+            let value = localStorage.getItem(field);
+
+            if (field.match(finalizedRegex) || (field.match(dueDateRegex) && value !== "N/A")) {
+                let newDate = new Date(value)
+                value = moment(newDate).format('YYYY[-]MM[-]DD HH:mm:ss');
+            }
+            data.localStorage[field] = value
+        }
+
+        delete data.localStorage["pageSaved?"]
+
+        //Step 15
+        fetch('/api/saveAssignmentLocalStorageData', {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        })
+            .then(res => {
+                switch (res.status) {
+                    case 204:
+                        this.setProgress(15)
+                        break;
+                    case 400:
+                        res.json().then(res => {
+                            this.send400Error("This function is called in Step 15 of the grading process. This function saves all of the data for the assignment just finalized to the SQL database", res.error, "FinalizeResults.js: saveAssignmentLocalStorageData()", res.message)
+                        })
+                        break;
+                    default:
+                }
+            })
+    }
+
     saveOriginallyAssignedPeerReviewNumbers() {
         let data = {
             assignmentId: this.assignmentId,
             courseId: this.courseId,
         }
 
-        //Step 4
+        //Step 3
         fetch('/api/saveOriginallyAssignedPeerReviewNumbers', {
             method: "POST",
             headers: {
@@ -325,7 +376,7 @@ class FinalizeResults extends Component {
             pointsPossible: this.assignmentInfo.points_possible,
         }
 
-        //Step 2
+        //Step 1
         fetch('/api/saveAllPeerReviews', {
             method: "POST",
             headers: {
@@ -365,7 +416,7 @@ class FinalizeResults extends Component {
             rubricSettings: this.assignmentInfo.rubric_settings.id
         }
 
-        //Step 3
+        //Step 2
         fetch('/api/saveAllRubrics', {
             method: "POST",
             headers: {
@@ -404,7 +455,7 @@ class FinalizeResults extends Component {
             courseId: this.courseId,
         }
 
-        //Step 7
+        //Step 6
         fetch('/api/sendGradesToCanvas', {
             method: 'POST',
             headers: {
@@ -567,6 +618,5 @@ class FinalizeResults extends Component {
     }
 
 }
-
 
 export default FinalizeResults;
