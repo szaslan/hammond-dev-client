@@ -268,7 +268,7 @@ class AnalyzeButton extends Component {
 										<p>Due Date 3: {moment(new Date(localStorage.getItem("dueDate3" + this.localStorageExtension))).format('llll')}</p>
 
 									<CustomizableParameters assignmentId={this.assignmentId} courseId={this.courseId} userInputBenchmarks={this.userInputBenchmarks} />
-
+									{/* footer */}
 									<div className="button-footer">
 										<Row className="button-row">
 											<Flexbox justifyContent="space-between" width="80vw" flexDirection="row">
