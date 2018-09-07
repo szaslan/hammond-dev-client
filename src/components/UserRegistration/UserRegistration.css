@@ -21,3 +21,11 @@
     display: flex;
     border:none;
 }
+.submit-button-row{
+    width:150px;
+    margin:auto!important;
+    
+}
+.help-modal{
+    min-width:70vw;
+}

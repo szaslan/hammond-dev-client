@@ -101,6 +101,7 @@
 }
 .back-button{
     position:relative;
+    background-color:white;
     margin-left: -80px;
     flex:nowrap!important;
     min-width: 120px;
@@ -115,11 +116,23 @@
    min-width: 120px;
    border: 1px solid rgba(0, 0, 0, 0.2) !important;
    border-radius: 5px;
-   background-color: #F8F8F8;
+   background-color: lightgray;
  }
 
 .next-button{
-    /* background-color: lightgray!important; */
+   
+    background-color:white;
+    margin-bottom:15px;
+    margin-top:5px;
+    flex:nowrap!important;
+    /* min-width: 120px; */
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    border-radius: 5px;
+
+}
+.next-button:hover{
+    background-color: lightgray;
+
 }
 .next-button:disabled {
     cursor: default;
@@ -135,7 +148,3 @@
     }
   }
 
-.switch-button:hover{
-    border-width:3px;
-    border:black;
-}

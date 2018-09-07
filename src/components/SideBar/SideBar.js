@@ -62,51 +62,51 @@ class SidebarComp extends React.Component {
 	}
 
 	pullAllLocalStorageData() {
-		if(localStorage.getItem("pageSaved?") === "true" || 
-		(localStorage.getItem("pageSaved?") === "false" && 
-		window.confirm("If you don't save your data before refreshing it, some of your data may be overwritten by the contents of our database. Click 'OK' to refresh anyway"))){
-		fetch('/api/pullAllLocalStorageData', {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json'
-			},
-		})
-			.then(res => {
-				switch (res.status) {
-					case 200:
-						res.json().then(data => {
-							this.handleLocalStorageData(data);
-						})
-						this.onDismiss();
-						this.setState({ downloadSuccessful: true });
-						setTimeout(() => {
-							this.setState({ downloadSuccessful: false })
-						}, 5000)
-						break;
-					case 204:
-						// no data in database
-						this.onDismiss();
-						this.setState({ emptyDownload: true })
-						setTimeout(() => {
-							this.setState({ emptyDownload: false })
-						}, 5000)
-						break;
-					case 400:
-						res.json().then(res => {
-							history.push({
-								pathname: '/error',
-								state: {
-									context: "This function is called when the Pull Saved Data From Local Storage button is clicked from the side bar. This function takes all of the local storage data saved to the SQL table and saves it in local storage.",
-									error: res.error,
-									location: "SideBar.js: pullAllLocalStorageData()",
-									message: res.message,
-								}
-							})
-						})
-						break;
-					default:
-				}
+		if (localStorage.getItem("pageSaved?") === "true" ||
+			(localStorage.getItem("pageSaved?") === "false" &&
+				window.confirm("If you don't save your data before refreshing it, some of your data may be overwritten by the contents of our database. Click 'OK' to refresh anyway"))) {
+			fetch('/api/pullAllLocalStorageData', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json'
+				},
 			})
+				.then(res => {
+					switch (res.status) {
+						case 200:
+							res.json().then(data => {
+								this.handleLocalStorageData(data);
+							})
+							this.onDismiss();
+							this.setState({ downloadSuccessful: true });
+							setTimeout(() => {
+								this.setState({ downloadSuccessful: false })
+							}, 5000)
+							break;
+						case 204:
+							// no data in database
+							this.onDismiss();
+							this.setState({ emptyDownload: true })
+							setTimeout(() => {
+								this.setState({ emptyDownload: false })
+							}, 5000)
+							break;
+						case 400:
+							res.json().then(res => {
+								history.push({
+									pathname: '/error',
+									state: {
+										context: "This function is called when the Pull Saved Data From Local Storage button is clicked from the side bar. This function takes all of the local storage data saved to the SQL table and saves it in local storage.",
+										error: res.error,
+										location: "SideBar.js: pullAllLocalStorageData()",
+										message: res.message,
+									}
+								})
+							})
+							break;
+						default:
+					}
+				})
 		}
 	}
 
@@ -138,7 +138,7 @@ class SidebarComp extends React.Component {
 			let value = localStorage.getItem(field);
 
 			if (field.match(finalizedRegex) || (field.match(dueDateRegex) && value !== "N/A")) {
-                let newDate = new Date(value)
+				let newDate = new Date(value)
 				value = moment(newDate).format('YYYY[-]MM[-]DD HH:mm:ss');
 			}
 			data.localStorage[field] = value
@@ -266,8 +266,43 @@ class SidebarComp extends React.Component {
 				<Modal isOpen={this.state.modalVisible} toggle={this.showHelpModal} className="help-modal">
 					<ModalHeader toggle={this.showHelpModal}>Help Page</ModalHeader>
 					<ModalBody>
-						Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-          			</ModalBody>
+						<strong>How does the assignment timeline with Peerify differ from Canvas?</strong>
+						<p>Peerify is used to set due dates for peer reviews and automatically grade assignment submissions, both of which are features that Canvas has not implemented. Here is our foreseen timeline:
+							<ol>
+								<li>Create a new assignment on Canvas and mark it as peer reviewable</li>
+								<li>Attach a rubric to the assignment for students to use when peer reviewing</li>
+								<li>Log into Peerify and select the corresponding course and assignment</li>
+								<li>Set the three due dates (all three should be after the assignment deadline on Canvas)</li>
+								<li>Set any customizable parameters</li>
+								<li>(Optional) Regularly analyze the assignment to check if there is enough data to accurately grade assignments</li>
+								<li>(Optional) Manually finalize the assignment if you are comfortable with the amount of data obtained, or wait until the assignment automatically finalizes</li>
+								<li>Look at the results displayed for the assignment, as well as the results and grading history in the Students tab</li>
+							</ol>
+						</p>
+						<strong>What do the three due dates do?</strong>
+						<ul>
+							<li>Due Date 1 is the date that peer reviews are due. You have the option to send a reminder email to students with incomplete peer reviews at Due Date 1. </li>
+							<li>Due Date 2 is the cutoff for late peer reviews to be submitted by. After Due Date 2, any incomplete peer review will be automatically reassigned to a different student. </li>
+							<li>Due Date 3 is when reassigned peer reviews are due. At Due Date 3, all grades will be calculated and sent to the Canvas gradebook.</li>
+						</ul>
+						<strong>Do I have to set the due dates?</strong>
+						<p>Yes. However, you can always choose to manually finalize an assignment before Due Date 3 occus. </p>
+						<strong>What happens when I analyze an assignment?</strong>
+						<p>Analyzing an assignment gives you information about the completion progress of the peer reviews. Analyzing will inform you if there is enough data to accurately calculate each student’s grade, and if not, which students need more data. By modifying the custom benchmarks, you can adjust the criteria used to determine accuracy.</p>
+						<strong>What happens when I finalize an assignment?</strong>
+						<p>Finalizing an assignment calculates each student’s grade and sends it to the Canvas gradebook. If you do not want the grades to be posted immediately, make sure you mute the assignment on Canvas before finalizing. Finalizing will automatically occur when Due Date 3 is reached, but it can also be manually done at any time.</p>
+						<strong>How exactly are peer review grades calculated?</strong>
+						<p>Each calculated grade is a weighted average of all peer reviews completed for that submission. The weight of each peer review corresponds to how fair, harsh, or lenient the reviewer is. To determine the fairness of a reviewer, we compare the grade they gave on a peer review to the average grade given across all peer reviews for that submission. The closer the grade given is to the average grade, the more fair the reviewer is deemed to be.</p>
+						<strong>What does Save Data and Refresh Data do?</strong>
+						<p>Some of the data that we obtain (including the due dates you set and any customizable parameters) are originally only saved in local storage in your browser. If you happen to switch computers, browsers, clear your browsing history, etc, some of the data might be lost. As such, the ‘Save Data’ button allows you to save the browser data to our master database. ‘Refresh Data’ will then gather all of the data in the master database and resave it to your browser. So if you switch computers, all you need to do is refresh the data, and all displayed and saved data will be current. We recommend you save your data often to ensure you don’t lose important information.</p>
+						<strong>Why are some assignments greyed out in the dropdown menu?</strong>
+						<p>You can only select assignments that are able to be peer reviewed. Any non-peer reviewable assignment will appear in the dropdown, but cannot be selected.</p>
+						<strong>What is the purpose of the 'students' tab?</strong>
+						<p>The students tab is used to view peer review history and tendencies for each student in a course. When you select a student from the dropdown, three graphs will appear, showing which classification they fell into for each assignment, what their weight is, and how many peer reviews they completed for each assignment. The data points in the graph are ordered chronologically by when the assignment was finalized. <br></br>
+						To view the grade given for individual peer reviews, you may select a student, then an assignment in the blue dropdown, and the author of the assignment submission. This will tell you the grade given by the student reviewer, and the actual grade received for the submission.</p>
+
+
+					</ModalBody>
 					<ModalFooter>
 						<button onClick={this.showHelpModal}>Done</button>
 					</ModalFooter>

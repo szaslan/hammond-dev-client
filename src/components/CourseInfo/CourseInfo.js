@@ -124,7 +124,7 @@ class CourseInfo extends Component {
                     {/* sidebar holds headers and tabs, containing main assignment and student pages */}
                     <SidebarComp
                         content={
-                            <div>
+                            <div className="sidebar-content-div">
                                 <JumbotronComp mainTitle={this.state.courseJSON.name}
                                     tabs courseJSON={this.state.courseJSON} canvasUserId={this.canvasUserId}/>
                                 {/* <button onClick={this.resetTables}>Reset Database Tables</button> */}

@@ -58,7 +58,9 @@
 }
 
 .due-date-case{
-  min-width: 1300px;
+  min-width: 1200px!important;
+
+  /* width:100vw; */
 }
 
 .flag-button{
