@@ -242,6 +242,7 @@ class AnalyzeButton extends Component {
 	}
 
 	render() {
+
 		if (this.state.loaded) {
 			return (
 				<div>
@@ -262,6 +263,10 @@ class AnalyzeButton extends Component {
 								</div>
 
 								<div className={"parameters-case" + (localStorage.getItem("nextClicked" + this.localStorageExtension) === "true" ? "" : "-hidden")}>
+										<p>Due Date 1: {moment(new Date(localStorage.getItem("dueDate1" + this.localStorageExtension))).format('llll')}</p>
+										<p>Due Date 2: {moment(new Date(localStorage.getItem("dueDate2" + this.localStorageExtension))).format('llll')}</p>
+										<p>Due Date 3: {moment(new Date(localStorage.getItem("dueDate3" + this.localStorageExtension))).format('llll')}</p>
+
 									<CustomizableParameters assignmentId={this.assignmentId} courseId={this.courseId} userInputBenchmarks={this.userInputBenchmarks} />
 									{/* footer */}
 									<div className="button-footer">

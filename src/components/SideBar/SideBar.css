@@ -18,8 +18,16 @@ a:hover, a:visited, a:link, a:active{
     color:black;
     font-size: 12px;
     width:90%;
-    margin-top: 10%;
+    margin-top: 5%;
+    /* margin-bottom:5%; */
     font-family: 'Open Sans';
+}
+.help-button{
+    margin-top:0%;
+}
+
+.help-modal{
+    min-width:70vw;
 }
 .icon-cloud{
     width:40px;

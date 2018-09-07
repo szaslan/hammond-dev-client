@@ -156,7 +156,7 @@ class CustomizableParameters extends Component {
                         <FormGroup check>
                             <Label className="check-text" check>
                                 <Input name="penalizingForOriginalIncompletes" type="checkbox" checked={this.state.penalizingForOriginalIncompletes} onChange={this.handleInputChange} />
-                                Penalize Students Weights For Incomplete Peer Reviews?
+                                Penalize Students Weights For Originally Incomplete Peer Reviews?
                             </Label>
                         </FormGroup>
                     </FormGroup>

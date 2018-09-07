@@ -69,11 +69,14 @@
   }
 } */
 
-@media only screen and (max-width: 900px){
+@media only screen and (max-width: 970px){
   .tabs{
     right:normal;
-    left:470px;
+    left:550px;
     top:77px;
+  }
+  .nav{
+    width:780px!important;
   }
 }
 
