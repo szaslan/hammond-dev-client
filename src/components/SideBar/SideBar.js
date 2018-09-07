@@ -62,6 +62,9 @@ class SidebarComp extends React.Component {
 	}
 
 	pullAllLocalStorageData() {
+		if(localStorage.getItem("pageSaved?") === "true" || 
+		(localStorage.getItem("pageSaved?") === "false" && 
+		window.confirm("If you don't save your data before refreshing it, some of your data may be overwritten by the contents of our database. Click 'OK' to refresh anyway"))){
 		fetch('/api/pullAllLocalStorageData', {
 			method: 'POST',
 			headers: {
@@ -104,6 +107,7 @@ class SidebarComp extends React.Component {
 					default:
 				}
 			})
+		}
 	}
 
 	onDismiss() {
