@@ -137,7 +137,6 @@ class StudentInfo extends Component {
             body: JSON.stringify(data),
         })
             .then(res => {
-              console.log(res.status)
                 switch (res.status) {
                     case 204:
                         this.setState({
@@ -562,29 +561,80 @@ class StudentInfo extends Component {
             let idA = a.id;
             let idB = b.id;
 
-            let finalizedDateA = localStorage.getItem("finalized_" + idA + "_" + this.state.courseId);
-            let finalizedDateB = localStorage.getItem("finalized_" + idB + "_" + this.state.courseId);
+            let finalizedDateA = null;
+            let finalizedDateB = null;
 
-            if (!finalizedDateA) {
-                let data = {
-                    assignmentId: idA,
-                    courseId: this.state.courseId,
-                }
-
-                fetch('/api/pullFinalizedDateFromSQL', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(data)
-                })
+            let data = {
+                assignmentId: idA,
+                canvasUserId: Number(this.canvasUserId),
+                courseId: this.state.courseId,
             }
 
-            let timeA = new Date(localStorage.getItem("finalized_" + idA + "_" + this.state.courseId));
-            let timeB = new Date(localStorage.getItem("finalized_" + idB + "_" + this.state.courseId));
-            let secondsA = timeA.getTime();
-            let secondsB = timeB.getTime();
-            return secondsA - secondsB;
+            fetch('/api/pullFinalizedDateFromSQL', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            })
+                .then(res => {
+                    switch (res.status) {
+                        case 200:
+                            res.json().then(res => {
+                                finalizedDateA = res;
+                            })
+                            break;
+                        case 204:
+                            //assignment not finalized
+                            break;
+                        case 400:
+                            res.json().then(res => {
+                                this.send400Error("", res.error, "StudentInfo.js sortAssignmentsByFinalizedDate()", res.message)
+                            })
+                            break;
+                        default:
+                    }
+                })
+                .then(() => {
+                    let data = {
+                        assignmentId: idB,
+                        canvasUserId: Number(this.canvasUserId),
+                        courseId: this.state.courseId,
+                    }
+
+                    fetch('/api/pullFinalizedDateFromSQL', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(data)
+                    })
+                        .then(res => {
+                            switch (res.status) {
+                                case 200:
+                                    res.json().then(res => {
+                                        finalizedDateB = res;
+                                    })
+                                    break;
+                                case 204:
+                                    //assignment not finalized
+                                    break;
+                                case 400:
+                                    res.json().then(res => {
+                                        this.send400Error("", res.error, "StudentInfo.js sortAssignmentsByFinalizedDate()", res.message)
+                                    })
+                                    break;
+                                default:
+                            }
+                        })
+                })
+                .then(() => {
+                    let timeA = new Date(localStorage.getItem("finalized_" + idA + "_" + this.state.courseId));
+                    let timeB = new Date(localStorage.getItem("finalized_" + idB + "_" + this.state.courseId));
+                    let secondsA = timeA.getTime();
+                    let secondsB = timeB.getTime();
+                    return secondsA - secondsB;
+                })
         })
 
         this.setState({

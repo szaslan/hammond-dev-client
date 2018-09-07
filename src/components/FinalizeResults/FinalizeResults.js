@@ -288,7 +288,6 @@ class FinalizeResults extends Component {
     }
 
     saveAssignmentLocalStorageData() {
-        console.log("saving local storage data")
         let data = {
             assignmentId: this.assignmentId,
             canvasUserId: this.canvasUserId,
