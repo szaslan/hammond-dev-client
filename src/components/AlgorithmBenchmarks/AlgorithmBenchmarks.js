@@ -11,7 +11,7 @@ var downArrowIcon = require('../downArrowIcon.svg')
 var upArrowIcon = require('../upArrowIcon.svg')
 
 //tooltip messages for setting benchmarks
-const SPAZZY_WIDTH_message = "";
+const SPAZZY_WIDTH_message = "The range of weights to be classified as spazzy before being classified as either Definitely Harsh or Lenient, once the weight has already been classified into one of the three extreme buckets. Recommended value: .1";
 const THRESHOLD_message = "The maximum amount that a calculated grade can vary between two iterations of the grading algorithm, without requiring another iteration. Recommended value: 0.001";
 const COULD_BE_LOWER_BOUND_message = "The minimum weight before being classified into one of the three extreme buckets. Recommended value: 0.70";
 const COULD_BE_UPPER_BOUND_message = "The maximum weight before being classified as Definitely Fair. Recommended value: 2.00";
@@ -87,7 +87,7 @@ class AlgorithmBenchmarks extends Component {
             var value = this.state[benchmark];
             masterSetLocalStorage(benchmark + this.localStorageExtension, value);
         });
-        masterSetLocalStorage("customBenchmarksSaved" + this.localStorageExtension, true);        
+        masterSetLocalStorage("customBenchmarksSaved" + this.localStorageExtension, true);
         this.setState({
             saved: true
         })
