@@ -12,6 +12,7 @@ const array = [];
 const arrow = require('../../img/arrow3.png');
 
 const FilterStudents = currStudent => {
+    console.log(currStudent)
    if (currStudent.still_in_course == 1) {
        array.push({
            label: currStudent.student_name,

@@ -3,8 +3,7 @@ import moment from 'moment';
 import { Link } from "react-router-dom";
 import React from "react";
 import Sidebar from "react-sidebar";
-import { Alert } from 'reactstrap';
-
+import { Alert, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import { localStorageFields, localStorageBooleanFields } from '../UserLogin/UserLogin';
 
 import logo from '../logo.png'
@@ -21,6 +20,7 @@ class SidebarComp extends React.Component {
 			downloadSuccessful: false,
 			emptyDownload: false,
 			uploadSuccessful: false,
+			modalVisible: false,
 		};
 
 		this.handleLocalStorageData = this.handleLocalStorageData.bind(this);
@@ -28,7 +28,7 @@ class SidebarComp extends React.Component {
 		this.pullAllLocalStorageData = this.pullAllLocalStorageData.bind(this);
 		this.saveLocalStorage = this.saveLocalStorage.bind(this);
 		this.onDismiss = this.onDismiss.bind(this);
-
+		this.showHelpModal = this.showHelpModal.bind(this);
 		this.canvasUserId = this.props.canvasUserId;
 
 		console.log(this.canvasUserId)
@@ -189,6 +189,10 @@ class SidebarComp extends React.Component {
 		})
 	}
 
+	showHelpModal() {
+		this.setState({ modalVisible: !this.state.modalVisible });
+	}
+
 	render() {
 
 		return (
@@ -200,15 +204,9 @@ class SidebarComp extends React.Component {
 							<img className="logo" src={logo} width={"60px"} alt="Peerify logo" />
 						</a>
 						<br />
-						{/* <a href="/courses" className="side-bar-content">Courses</a> */}
-						{/* <br /> */}
-						{/* <button className="local-storage-save-button" onClick={this.saveLocalStorage}>Save Data</button> */}
-						{/*<a href="" className="sidebarcontent">Account</a>
-						<br />
-						<br />*/}
 
 						<a href="../courses" className="sidebarcontent">
-							<svg xmlns="http://www.w3.org/2000/svg" class="ic-icon-svg ic-icon-svg--dashboard" version="1.1" x="0" y="0" viewBox="-280 -60 850 300" /*enable-background="new 0 0 280 200"*/>
+							<svg xmlns="http://www.w3.org/2000/svg" class="ic-icon-svg ic-icon-svg--dashboard" version="1.1" x="0" y="0" viewBox="-300 -60 900 300" /*enable-background="new 0 0 280 200"*/>
 								<path d="M273.09,180.75H197.47V164.47h62.62A122.16,122.16,0,1,0,17.85,142a124,124,0,0,0,2,22.51H90.18v16.29H6.89l-1.5-6.22A138.51,138.51,0,0,1,1.57,142C1.57,65.64,63.67,3.53,140,3.53S278.43,65.64,278.43,142a137.67,137.67,0,0,1-3.84,32.57ZM66.49,87.63,50.24,71.38,61.75,59.86,78,76.12Zm147,0L202,76.12l16.25-16.25,11.51,11.51ZM131.85,53.82v-23h16.29v23Zm15.63,142.3a31.71,31.71,0,0,1-28-16.81c-6.4-12.08-15.73-72.29-17.54-84.25a8.15,8.15,0,0,1,13.58-7.2c8.88,8.21,53.48,49.72,59.88,61.81a31.61,31.61,0,0,1-27.9,46.45ZM121.81,116.2c4.17,24.56,9.23,50.21,12,55.49A15.35,15.35,0,1,0,161,157.3C158.18,152,139.79,133.44,121.81,116.2Z"></path>
 							</svg>
 							<p className="icon-text">Dashboard</p>
@@ -225,6 +223,16 @@ class SidebarComp extends React.Component {
 							<p className="icon-text">Refresh Data</p>
 						</button>
 						<br />
+
+						<button className="icon-button help-button" onClick={this.showHelpModal}>
+							<svg xmlns="http://www.w3.org/2000/svg" class="ic-icon-svg menu-item__icon svg-icon-help" version="1.1" x="0" y="0" viewBox="-155 -60 500 290" >
+								<path d="M100,127.88A11.15,11.15,0,1,0,111.16,139,11.16,11.16,0,0,0,100,127.88Zm8.82-88.08a33.19,33.19,0,0,1,23.5,23.5,33.54,33.54,0,0,1-24,41.23,3.4,3.4,0,0,0-2.74,3.15v9.06H94.42v-9.06a14.57,14.57,0,0,1,11.13-14,22.43,22.43,0,0,0,13.66-10.27,22.73,22.73,0,0,0,2.31-17.37A21.92,21.92,0,0,0,106,50.59a22.67,22.67,0,0,0-19.68,3.88,22.18,22.18,0,0,0-8.65,17.64H66.54a33.25,33.25,0,0,1,13-26.47A33.72,33.72,0,0,1,108.82,39.8ZM100,5.2A94.8,94.8,0,1,0,194.8,100,94.91,94.91,0,0,0,100,5.2m0,178.45A83.65,83.65,0,1,1,183.65,100,83.73,83.73,0,0,1,100,183.65" transform="translate(-5.2 -5.2)"></path>
+							</svg>
+							<p className="icon-text">Help</p>
+						</button>
+						<br />
+
+
 						{/* <Link to="/logout"> */}
 						<a href="/logout">
 							<button className="sign-out-button" onClick={this.signOut}>Sign Out</button>
@@ -256,6 +264,15 @@ class SidebarComp extends React.Component {
 					{this.props.content}
 
 				</div>
+				<Modal isOpen={this.state.modalVisible} toggle={this.showHelpModal} className="help-modal">
+					<ModalHeader toggle={this.showHelpModal}>Help Page</ModalHeader>
+					<ModalBody>
+						Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+          			</ModalBody>
+					<ModalFooter>
+						<button onClick={this.showHelpModal}>Done</button>
+					</ModalFooter>
+				</Modal>
 
 			</Sidebar >
 		);

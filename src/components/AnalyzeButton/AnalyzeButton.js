@@ -242,6 +242,7 @@ class AnalyzeButton extends Component {
 	}
 
 	render() {
+
 		if (this.state.loaded) {
 			return (
 				<div>
@@ -262,24 +263,12 @@ class AnalyzeButton extends Component {
 								</div>
 
 								<div className={"parameters-case" + (localStorage.getItem("nextClicked" + this.localStorageExtension) === "true" ? "" : "-hidden")}>
+										<p>Due Date 1: {moment(new Date(localStorage.getItem("dueDate1" + this.localStorageExtension))).format('llll')}</p>
+										<p>Due Date 2: {moment(new Date(localStorage.getItem("dueDate2" + this.localStorageExtension))).format('llll')}</p>
+										<p>Due Date 3: {moment(new Date(localStorage.getItem("dueDate3" + this.localStorageExtension))).format('llll')}</p>
+
 									<CustomizableParameters assignmentId={this.assignmentId} courseId={this.courseId} userInputBenchmarks={this.userInputBenchmarks} />
 
-									{/* <Flexbox className="flex-dropdown" width="100%" flexWrap="wrap" justify-content="space-around">
-										<Row className="analyze">
-											<span id="analyze-button-1">
-												<button onClick={this.handleAnalyzeClick} className="analyze-button">Analyze</button>
-											</span>
-											<UncontrolledTooltip delay={{ show: "1200" }} placement="top" target="analyze-button-1">
-												Click to view statistics for submitted peer reviews
-										</UncontrolledTooltip>
-											<span id="finalize-button-1">
-												<button className="finalize-button" onClick={this.handleFinalizeClick}>Finalize</button>
-											</span>
-											<UncontrolledTooltip delay={{ show: "1200" }} placement="top" target="finalize-button-1">
-												Click to calculate grades and send to the Canvas gradebook
-										</UncontrolledTooltip>
-										</Row>
-									</Flexbox> */}
 									<div className="button-footer">
 										<Row className="button-row">
 											<Flexbox justifyContent="space-between" width="80vw" flexDirection="row">
