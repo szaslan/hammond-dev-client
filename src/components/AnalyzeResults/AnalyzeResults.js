@@ -243,8 +243,8 @@ class AnalyzeResults extends Component {
 
         if (localStorage.getItem("analyzeDisplayTextNames" + this.localStorageExtension) && localStorage.getItem("analyzeDisplayTextNames" + this.localStorageExtension) !== "N/A") {
             return (
-                <div>
-                    <hr className="hr-4"></hr>
+                <div className="analyze-results">
+                    <hr className="hr-9"></hr>
                     <div className="text-message">
                         {localStorage.getItem("analyzeDisplayTextMessage" + this.localStorageExtension)}
                     </div>

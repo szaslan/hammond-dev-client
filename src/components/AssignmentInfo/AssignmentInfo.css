@@ -48,7 +48,7 @@
 .parameters-case{
     display:inline-block;
     width:100%;
-    padding-bottom:70px;
+    padding-bottom:200px;
 }
 
 .parameters-case-hidden{
@@ -68,7 +68,7 @@
     right:17px;
     margin-left: 20px;
     padding-left:310px;
-
+    z-index: 999;
 }
 
 .button-row{
@@ -81,6 +81,7 @@
         right:normal;
         overflow-x:scroll;
         overflow-y:hidden;
+        z-index: 999;
     }
     .button-row{
         width:90vw;

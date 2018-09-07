@@ -20,6 +20,15 @@
   color: #626262;
   margin-left: 0%;
   font-size: 18px;
+  /* position: relative !important; */
+}
+
+.analyze-results{
+  min-width: 1000px;
+  position:  fixed !important;
+  margin-top: -200px;
+  z-index: 900;
+  background-color: white;
 }
 
 .check-text{
@@ -48,6 +57,10 @@
   font-size: 16px;
 }
 
+.due-date-case{
+  min-width: 1300px;
+}
+
 .flag-button{
   margin-left: 30% !important;
   margin-top: 0% !important;
@@ -61,8 +74,20 @@
 
 .hr-7{
   border-top: 1px solid #a0a0a0;
-  width: 115%;
-  margin-left: -8%;
+  width: 117%;
+  margin-left: -10%;
+}
+
+.hr-8{
+  border-top: 1px solid #a0a0a0;
+  width: 78.5%;
+  margin-left: 5%;
+}
+
+.hr-9{
+  border-top: 1px solid #a0a0a0;
+  width: 87%;
+  margin-left: -4%;
 }
 
 .parameters-form{
@@ -179,6 +204,22 @@
   margin-left: 100%;
 }
 
+.custparam-button{
+  background-color:white;
+  min-width:100px;
+  border: 1px solid lightgray !important;
+  border-radius: 3px;
+}
+
+.custparam-button:hover{
+  background-color:#F8F8F8;
+}
+
+.custparam-flexbox{
+  padding:20px;
+  margin-left: 200px;
+}
+
 .parameter{
   font-family: 'Open Sans';
   color: #626262;
@@ -224,19 +265,18 @@
   background-color:	#F8F8F8;
   margin-left: 300%;
 }
-.custparam-button{
-  background-color:white;
-  min-width:100px;
-  border: 1px solid lightgray !important;
-  border-radius: 3px;
+
+.set-due-dates{
+  font-family: 'Open Sans';
+  color: #626262;
+  border: 1.5px solid #add6ae;
+  padding-left: 3px;
+  padding-right: 5px;
+  border-radius: 5px;
+  font-size: 16px;
+  margin-right: 70px;
 }
-.custparam-button:hover{
-  background-color:#F8F8F8;
-}
-.custparam-flexbox{
-  padding:20px;
-  margin-left: 200px;
-}
+
 .text-message{
   margin-top: 3%;
   margin-left: -25%;
