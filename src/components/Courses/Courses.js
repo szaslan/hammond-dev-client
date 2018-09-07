@@ -173,6 +173,7 @@ class Courses extends Component {
                                 </div>
                             }
                             canvasUserId={this.canvasUserId}
+                            location={"courses"}
                         />
                     </Container>
                 </div>
